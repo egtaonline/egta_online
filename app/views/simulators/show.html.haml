@@ -1,0 +1,19 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } #{ link_to 'Simulators', simulators_path } Show Simulator: #{@simulator.name}
+%h3 Simulator Information
+%table
+  %tr
+    %th Name:
+    %td= @simulator.name
+  %tr
+    %th Version:
+    %td= @simulator.version
+  %tr
+    %th Description:
+    %td= @simulator.description
+  %tr
+    %th Default Account:
+    %td= @name
+%p= link_to 'Edit simulator', edit_simulator_path(@simulator)
+

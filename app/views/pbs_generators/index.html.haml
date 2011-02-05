@@ -1,0 +1,21 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path }  PBS Generators
+%h3 PBS Generators
+%p= link_to 'New PBS Generator', new_pbs_generator_path
+%table{:width => "90%"}
+  %tr
+    %th Time per Sample
+    %th Jobs per Request
+    %th Process Memory
+    %th QoS
+  -@pbs_generators.each do |f|
+    %tr{:class => "= cycle('','altrow') "}
+      %td= link_to f.time_per_sample, f
+      %td= link_to f.jobs_per_request, f
+      %td= link_to f.process_memory, f
+      %td= link_to f.qos, f
+      %td= link_to 'Destroy', f, :confirm => 'Are you sure?', :method => :delete
+%p= will_paginate(@pbs_generators)
+
+

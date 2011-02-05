@@ -1,0 +1,22 @@
+.breadcrumb
+  .bc
+    #{link_to 'Home', root_path} #{link_to 'Accounts', accounts_path} Show Account
+%h3 Account Information
+%table
+  %tr
+    %th Username:
+    %td= @account.username
+  %tr
+    %th Host:
+    %td= @account.host
+  %tr
+    %th Max Concurrent Simulations:
+    %td= pluralize(@account.max_concurrent_simulations, "simulation")
+  %tr
+    %th Flux?
+    -if @account.flux == 0
+      %td= "No"
+    -else
+      %td= "Yes"
+
+%p= link_to 'Edit account', edit_account_path(@account)

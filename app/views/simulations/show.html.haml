@@ -1,0 +1,35 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } #{ link_to 'Simulations', simulations_path } Show Simulation
+%h3 Simulation Information
+%table{:width => "90%"}
+  %tr{:class => "= cycle('','altrow') "}
+    %th Account:
+    %td= h Account.find(@simulation.account_id).username
+  %tr{:class => "= cycle('','altrow') "}
+    %th Profile:
+    %td= link_to h(@simulation.profile.name), [:analysis, @simulation.profile]
+  %tr{:class => "= cycle('','altrow') "}
+    %th Size:
+    %td=h @simulation.size
+  %tr{:class => "= cycle('','altrow') "}
+    %th :
+    %td=h @simulation.
+  %tr{:class => "= cycle('','altrow') "}
+    %th State:
+    %td=h @simulation.state
+  %tr{:class => "= cycle('','altrow') "}
+    %th Error Messages:
+    %td=h @simulation.err_message
+%h3 Samples
+%table{:width => "90%"}
+  %tr
+    %th
+    %th File
+  -@simulation.samples.each do |sample|
+    %tr{:class => "= cycle('','altrow') "}
+      %td= link_to "Sample", [:analysis, @simulation, sample]
+      %td= link_to 'Destroy', [:analysis, @simulation, sample], :confirm => 'Are you sure?', :method => :delete
+%p= link_to 'Manage Samples', simulation_sample_path(@simulation)
+%p= link_to 'New sample', new_simulation_sample_path(@simulation)
+

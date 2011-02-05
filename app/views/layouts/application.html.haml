@@ -1,0 +1,61 @@
+!!!
+%head
+  %title Home - MAS Analysis
+
+  =stylesheet_link_tag 'screen'
+  =javascript_include_tag :defaults
+  =csrf_meta_tag
+
+%body
+  #header-wrap
+    #header.container_16
+      %h1#logo-text
+        =link_to 'MAS Analysis', '/'
+      %p#intro Game-theoretic analysis of <b>Many Agent Systems</b>
+      #user_nav
+        -if user_signed_in?
+          Signed in as #{current_user.email}. Not you?
+          = link_to "Sign out", destroy_user_session_path
+        -else
+          #{link_to "sign in", new_user_session_path}
+
+  #content-outer
+    #content-wrapper.container_16
+      #main.grid_14.alpha
+        %p.notice= notice
+        %p.alert= alert
+        =yield
+      #left-columns.grid_2.omega
+        -@sidemenu = Array.new
+        -if user_signed_in?
+          -if current_user.admin?
+            -@sidemenu = [["Admin", [["Accounts", accounts_path], |
+              ["Users", users_path]]]]
+        -@sidemenu << ["Analysis Menu", [["Simulators", simulators_path], |
+          ["Simulations", simulations_path], ["Features", features_path], |
+          ["PBS Generators", pbs_generators_path]]]
+        -@sidemenu << ["Game Menu", [["Games", games_path], |
+          ["Profiles", profiles_path]]]
+        -@sidemenu << ["Schedulers", [["Game Schedulers", game_schedulers_path], |
+          ["Profile Schedulers", profile_schedulers_path], |
+          ["Deviation Schedulers", deviation_schedulers_path]]]
+        .sidemenu
+          -@sidemenu.each do |x|
+            %h3= x[0]
+            %ul
+              -x[1].each do |y|
+                %li= link_to y[0], y[1]
+  #footer-wrapper.container_12
+    #footer-content
+      .grid_4
+        %h3 Schedulers
+        %p MAS Analysis currently has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
+        #footer-bottom
+          .bottom-left
+            &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;
+      .grid_4
+        %h3 Simulations
+        %p MAS Analysis has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
+      .grid_4
+        %h3 Samples
+        %p MAS Analysis has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.

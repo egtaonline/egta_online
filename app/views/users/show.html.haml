@@ -1,0 +1,10 @@
+.breadcrumb
+  .bc
+    #{link_to 'Home', root_path} #{link_to 'Users', users_path} Show User
+%h3 User Information
+%table{:width => "90%"}
+  %tr{:class => "<%= cycle('','altrow') %>"}
+    %th Email:
+    %td=h @user.email
+
+%p= link_to 'Edit user', edit_user_path(@account)

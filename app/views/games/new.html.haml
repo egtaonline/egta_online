@@ -1,0 +1,23 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } #{ link_to 'Games', games_path } Create Game
+%h3 New Game
+=form_for @game do |f|
+  = f.error_messages
+  %table
+    %tr
+      %td= f.label :size, "Size"
+      %td= f.select :size, 2..16
+    %tr
+      %td= f.label :name
+      %td= f.text_field :name
+    %tr
+      %td= f.label :simulator, "Simulator"
+      %td= f.collection_select :simulator, Simulator.all, :id, :name
+    %tr
+      %td= f.label :description
+      %td= f.text_area :description, :cols=>27, :rows=>10
+  #param=render :partial => 'parameters', :object => @game.parameters, :locals => {:f => f}
+  %p
+    = f.submit 'Create'
+

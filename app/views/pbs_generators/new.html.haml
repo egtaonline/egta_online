@@ -1,0 +1,22 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } #{link_to 'PBS Generators', pbs_generators_path} Create PBS Generator
+%h3 New PBS generator
+-form_for @pbs_generator do |f|
+  = f.error_messages
+  %table
+    %tr
+      %td= f.label :time_per_sample
+      %td= f.text_field :time_per_sample
+    %tr
+      %td= f.label :process_memory, 'Process Memory (in MB)'
+      %td= f.text_field :process_memory
+    %tr
+      %td= f.label :jobs_per_request, "Concurrent Jobs per Request"
+      %td= f.text_field :jobs_per_request
+    %tr
+      %td= f.label :qos, 'QoS'
+      %td= f.text_field :qos, :value => "cac"
+  %p
+    = f.submit 'Create'
+

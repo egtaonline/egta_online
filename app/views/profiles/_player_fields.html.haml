@@ -1,0 +1,7 @@
+%p.fields
+  = f.label :strategy_id 
+  %br
+  = f.select :strategy_id, @strategy_options 
+  %br
+  = link_to_remove_fields "remove", f 
+  = f.hidden_field :profile_index, :value => 1

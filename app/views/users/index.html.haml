@@ -1,0 +1,13 @@
+.breadcrumb
+  .bc
+    #{link_to 'Home', root_path} Users
+%h3 Users
+%p= link_to 'New user', new_user_path
+%table{:width => "90%"}
+  %tr
+    %th email
+  -@users.each do |user|
+    %tr{:class => "= cycle('','altrow')"}
+      %td= link_to user.email, [:admin, user]
+      %td= link_to 'Destroy', [:admin, user], :confirm => 'Are you sure?', :method => :delete
+%p= will_paginate(@users)

@@ -1,0 +1,14 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path }  N Player Profiles
+%h3 N Player profiles
+%table
+  %tr
+    %th Name
+    -@profiles.each do |profile| 
+      %tr{:class => "= cycle('','altrow') "}
+        %td= link_to profile.name, [:analysis, profile] 
+        %td
+      = link_to 'Destroy', [:analysis, profile], :confirm => 'Are you sure?', :method => :delete 
+= link_to 'New profile', new_profile_path 
+
