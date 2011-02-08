@@ -2,7 +2,7 @@
   .bc
     #{ link_to 'Home', root_path } #{link_to 'Games', games_path} #{link_to @game.name, @game} Edit Game
 %h3 Edit Game
--form_for [@game.simulator, @game] do |f|
+-form_for @game do |f|
   = f.error_messages
   %table
     %tr
