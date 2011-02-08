@@ -12,8 +12,8 @@
       %td= f.label :name
       %td= f.text_field :name
     %tr
-      %td= f.label :simulator, "Simulator"
-      %td= f.collection_select :simulator, Simulator.all, :id, :name
+      %td= f.label :simulator_id, "Simulator"
+      %td= f.collection_select :simulator_id, Simulator.all, :id, :name
     %tr
       %td= f.label :description
       %td= f.text_area :description, :cols=>27, :rows=>10

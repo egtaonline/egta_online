@@ -43,7 +43,7 @@ def edit
 end
 
 def create
-  simulator = Simulator.find(params[:game][:simulator])
+  simulator = Simulator.find(params[:game][:simulator_id])
   @game = Game.new
   @game[:parameters] = Array.new
   YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| @game[x] = y; @game[:parameters] << x}
