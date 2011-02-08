@@ -43,12 +43,17 @@ def edit
 end
 
 def create
-  @game = Game.new(params[:game])
+  simulator = Simulator.find(params[:game][:simulator])
+  @game = Game.new
+  @game[:parameters] = Array.new
+  YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| @game[x] = y; @game[:parameters] << x}
+  @game.update_attributes(params[:game])
+
   respond_to do |format|
     if @game.save
       flash[:notice] = 'Game was successfully created.'
       format.html { redirect_to @game }
-      format.xml  { render :xml => @game, :status => :created, :location => [:analysis, @game] }
+      format.xml  { render :xml => @game, :status => :created, :location => @game }
       format.json  { render :json => @game }
     else
       format.html { render :action => "new" }
