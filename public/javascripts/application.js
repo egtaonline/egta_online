@@ -5,7 +5,7 @@ jQuery(function($) {
   $("#game_simulator").change(function() {
     // make a POST call and replace the content
     var simulator = $('select#game_simulator_id :selected').val();
-    jQuery.post('/analysis/games/update_parameters', {simulator_id: simulator})
+    jQuery.post('/games/update_parameters', {simulator_id: simulator})
   });
   $("#source_val_0").click(function() {
     jQuery.post(location.pathname.replace("new","")+"update_choice", {source: 0})
