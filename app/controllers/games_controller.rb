@@ -43,10 +43,7 @@ def edit
 end
 
 def create
-  @simulator = Simulator.find(params[:game][:simulator])
   @game = Game.new(params[:game])
-  @game[:parameters] = Array.new
-  YAML.load(@simulator.parameters)["web parameters"].each_pair {|x, y| @game[x] = y; @game[:parameters] << x}
   respond_to do |format|
     if @game.save
       flash[:notice] = 'Game was successfully created.'
@@ -61,7 +58,7 @@ def create
 end
 
 def update
-  @game = Simulator.find(params[:simulator_id]).games.find(params[:id])
+  @game = Game.find(params[:id])
   respond_to do |format|
     if @game.update_attributes(params[:game])
       flash[:notice] = 'Game was successfully updated.'
@@ -77,7 +74,8 @@ end
 def update_parameters
   @game = Game.new
   simulator = Simulator.find(params[:simulator_id])
-  @game[:parameters] = YAML.load(simulator.parameters)["web parameters"]
+  @game[:parameters] = Array.new
+  YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| @game[x] = y; @game[:parameters] << x}
   respond_to do |format|
     format.js
   end
