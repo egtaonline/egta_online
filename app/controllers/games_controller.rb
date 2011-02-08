@@ -104,7 +104,7 @@ def remove_strategy
 end
 
 def destroy
-  @game = Simulator.find(params[:simulator_id]).games.find(params[:id])
+  @game = Game.find(params[:id])
   @game.destroy
 
   redirect_to(games_path)
