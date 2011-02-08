@@ -39,7 +39,7 @@ def new
 end
 
 def edit
-  @game = Simulator.find(params[:simulator_id]).games.find(params[:id])
+  @game = Game.find(params[:id])
 end
 
 def create
