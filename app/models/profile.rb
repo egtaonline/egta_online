@@ -27,7 +27,7 @@ class Profile
   def strategy_array=(array)
     array.each do |x|
       self.players.create(:strategy => x)
-      y = x.tr(".", "_")
+      y = x.tr(".", "|")
       if self[y] == nil || self[y] == 0
         self[y] = 1
       else
