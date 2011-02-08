@@ -2,7 +2,7 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery(function($) {
   // when the #simulator_id field changes
-  $("#game_simulator_id").change(function() {
+  $("#game_simulator").change(function() {
     // make a POST call and replace the content
     var simulator = $('select#game_simulator_id :selected').val();
     jQuery.post('/analysis/games/update_parameters', {simulator_id: simulator})
