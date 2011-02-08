@@ -200,10 +200,10 @@ class ServerProxy
       @job = ""
       Net::SCP::upload!(account.host, account.username, "#{ROOT_DIR}/wrapper", "#{root_path}/script/")
       Net::SSH.start(account.host, account.username) do |ssh|
-  f = ssh.exec!("cd #{root_path}/script; chmod g+wrx wrapper")
+        puts ssh.exec!("cd #{root_path}/script; chmod g+wrx wrapper")
         f = ssh.exec!("#{submission.command}") if submission
         job_return = f
-
+        puts job_return
         job_return.strip! if job_return
         @job = job_return[/^(\d+)/] if job_return && job_return =~ /^(\d+)/
       end
