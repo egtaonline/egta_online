@@ -1,1 +1,1 @@
-$("#param").html("<%= escape_javascript(render(:partial => 'parameters', :object => @game[:parameters], :locals => {:f => f}))%>");
+$("#param").html("<%= escape_javascript(render(:partial => 'parameters', :locals => {:game => @game}))%>");

@@ -1,5 +1,5 @@
 %table
-  -parameters.each do |x|
+  -game.parameters.each do |x|
     %tr
-      %td= f.label x
-      %td= f.text_field x
+      %td= label :game, x
+      %td= text_field :game, x
