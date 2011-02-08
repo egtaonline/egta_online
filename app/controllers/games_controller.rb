@@ -67,7 +67,7 @@ def update
   respond_to do |format|
     if @game.update_attributes(params[:game])
       flash[:notice] = 'Game was successfully updated.'
-      format.html { redirect_to([@game.simulator,@game]) }
+      format.html { redirect_to(@game) }
       format.xml  { head :ok }
     else
       format.html { render :action => "edit" }
