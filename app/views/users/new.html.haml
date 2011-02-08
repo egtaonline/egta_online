@@ -1,7 +1,7 @@
 .breadcrumb
   .bc
     #{link_to 'Home', root_path} #{link_to 'Users', users_path} Create User
-=form_for [:admin, @user] do |f|
+=form_for @user do |f|
   = f.error_messages
   %table
     %tr

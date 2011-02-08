@@ -8,6 +8,6 @@
     %th email
   -@users.each do |user|
     %tr{:class => "= cycle('','altrow')"}
-      %td= link_to user.email, [:admin, user]
-      %td= link_to 'Destroy', [:admin, user], :confirm => 'Are you sure?', :method => :delete
+      %td= link_to user.email, user
+      %td= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete
 %p= will_paginate(@users)
