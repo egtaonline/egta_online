@@ -5,7 +5,7 @@ set :rvm_ruby_string, '1.9.2'
 
 set :application, "EGTMAS Web Interface"
 set :repository,  "git@github.com:bcassell/EGTMAS-Web-Interface.git"
-
+set :branch, "mongoid"
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
