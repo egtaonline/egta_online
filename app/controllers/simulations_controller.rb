@@ -21,7 +21,7 @@ class SimulationsController < AnalysisController
   end
 
   def purge
-    Simulation.destroy_all :state =>'failed'
+    Simulation.failed.destroy_all
 
     redirect_to :simulations
   end
