@@ -1,71 +1,56 @@
 .breadcrumb
   .bc
-    #{ link_to 'Home', root_path } #{ link_to 'N Player Profiles', profiles_path } Show N-Player Profile
+    #{ link_to 'Home', root_path } #{ link_to 'Profiles', [@profile.game, @profile] } Show Profile
 %h3 Profile Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Simulator:
-    %td=link_to h(@profile.game.simulator.name), [:analysis,@profile.game.simulator]
-  -@profile.players.sort_by{|p| p.profile_index}.each do |player| 
+    %td=link_to @profile.game.simulator.name, @profile.game.simulator
+  -@profile.players.each do |player|
     %tr{:class => "= cycle('','altrow') "}
-      %th Strategy #{h player.profile_index}:
-      %td=link_to h(player.strategy.name), [:analysis, player.strategy]
-%h3 New simulation
--form_for([:analysis, @simulation]) do |f| 
-  = f.error_messages 
-  = f.hidden_field :profile_id 
-  %table
-    %tr
-      %td= f.label :account 
-      %td= f.select :account_id, @account_options 
-    %tr
-      %td= f.label :size 
-      %td= f.text_field :size 
-  %p
-  = f.submit 'Create' 
+      %th Strategy
+      %td= player.strategy
 %h3 Payoff Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Strategy
     %th Count
     %th Payoff
-  -@profile.strategies.uniq.each do |strategy| 
-    %tr{:class => "= cycle('','altrow') "}
-      %td= link_to h(strategy.name), [:analysis, strategy] 
-      %td= @profile.strategy_count(strategy) 
-      %td= @profile.payoff_to_strategy(strategy) 
+  -@profile.game.strategies.each do |strategy|
+    -if @profile[strategy.name.tr(".", "_")]
+      %tr{:class => "= cycle('','altrow') "}
+        %td= strategy.name
+        %td= @profile[strategy.name.tr(".", "_")]
+        %td= @profile.payoff_to_strategy(strategy)
 %h3 Adjusted Payoff Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Strategy
     %th Count
     %th Payoff
-  -@profile.strategies.uniq.each do |strategy| 
-    %tr{:class => "= cycle('','altrow') "}
-      %td= link_to h(strategy.name), [:analysis, strategy] 
-      %td= @profile.strategy_count(strategy) 
-      %td= @profile.adjusted_payoff_to_strategy(strategy) 
+  -@profile.game.strategies.each do |strategy|
+    -if @profile[strategy.name.tr(".", "_")]
+      %tr{:class => "= cycle('','altrow') "}
+        %td= strategy.name
+        %td= @profile[strategy.name.tr(".", "_")]
+        %td= @profile.adjusted_payoff_to_strategy(strategy)
 %h3 Sample Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Total
-    %td= pluralize(@total_samples, "sample") 
-  %tr{:class => "= cycle('','altrow') "}
-    %th Clean
-    %td= pluralize(@clean_samples, "sample") 
+    %td= pluralize(@total_samples, "sample")
+
 %h3 Simulation Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Queued
-    %td= pluralize(@queued_simulations, "simulation") 
+    %td= pluralize(@queued_simulations, "simulation")
   %tr{:class => "= cycle('','altrow') "}
     %th Running
-    %td= pluralize(@running_simulations, "simulation") 
+    %td= pluralize(@running_simulations, "simulation")
   %tr{:class => "= cycle('','altrow') "}
     %th Complete
-    %td= pluralize(@complete_simulations, "simulation") 
+    %td= pluralize(@complete_simulations, "simulation")
   %tr{:class => "= cycle('','altrow') "}
     %th Failed
-    %td= pluralize(@failed_simulations, "simulation") 
-= link_to 'Back', profiles_path 
-
+    %td= pluralize(@failed_simulations, "simulation")

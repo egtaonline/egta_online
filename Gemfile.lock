@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/jsmestad/aasm.git
-  revision: d7261a9a54400372a17775f83945a641f12f56ed
-  branch: master
-  tag: mongoid_support
-  specs:
-    aasm (2.1.5)
-
-GIT
   remote: git://github.com/mislav/will_paginate.git
   revision: b1a5beeec9f56ecbe3594fcdca76d92b6767ce50
   branch: rails3
@@ -92,7 +84,7 @@ GEM
     mime-types (1.16)
     mongo (1.2.0)
       bson (>= 1.2.0)
-    mongoid (2.0.0.rc.6)
+    mongoid (2.0.0.rc.7)
       activemodel (~> 3.0)
       mongo (~> 1.2)
       tzinfo (~> 0.3.22)
@@ -137,6 +129,16 @@ GEM
     stalker (0.7.0)
       beanstalk-client
       json_pure
+    state_machine (0.9.4)
+    state_machine-mongoid (0.1.5)
+      activemodel (>= 3.0.0)
+      activemodel (>= 3.0.0)
+      bson_ext (>= 1.0.4)
+      bson_ext (>= 1.0.4)
+      mongoid (>= 2.0.0.beta.16)
+      mongoid (>= 2.0.0.beta.16)
+      state_machine (>= 0.9.2)
+      state_machine (>= 0.9.2)
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -148,7 +150,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aasm!
   beanstalk-client
   bson_ext
   capistrano
@@ -159,11 +160,13 @@ DEPENDENCIES
   haml
   haml-rails
   jquery-rails
-  mongoid (= 2.0.0.rc.6)
+  mongoid (= 2.0.0.rc.7)
   net-scp
   net-ssh
   passenger
   rails (= 3.0.3)
   ruby_parser
   stalker
+  state_machine
+  state_machine-mongoid
   will_paginate!

@@ -15,8 +15,6 @@ class PbsGenerator
   validates_presence_of :jobs_per_request
   validates_numericality_of :jobs_per_request, :only_integer => true
 
-  key :time_per_sample, :process_memory, :qos
-
   def name
     "#{self.time_per_sample}-#{self.process_memory}-#{self.qos}"
   end

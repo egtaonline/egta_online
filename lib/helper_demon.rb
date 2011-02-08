@@ -5,12 +5,12 @@ class HelperDemon
     GameScheduler.active.each do |game_scheduler|
       game_scheduler.schedule(30)
     end
-    ProfileScheduler.active.each do |profile_scheduler|
-      profile_scheduler.schedule
-    end
-    DeviationScheduler.active.each do |deviation_scheduler|
-      deviation_scheduler.schedule
-    end
+    # ProfileScheduler.active.each do |profile_scheduler|
+    #   profile_scheduler.schedule
+    # end
+    # DeviationScheduler.active.each do |deviation_scheduler|
+    #   deviation_scheduler.schedule
+    # end
   end
 
   def self.queue_simulations

@@ -2,12 +2,12 @@
   .bc
     #{ link_to 'Home', root_path } #{link_to 'Game Schedulers', game_schedulers_path} #{link_to "Game Scheduler", @game_scheduler} Edit Game Scheduler
 %h3 Edit game scheduler
--form_for @game_scheduler do |f|
+-form_for [@game, @game_scheduler] do |f|
   = f.error_messages
   %table
     %tr
       %td= f.label :active
-      %td= f.check_box :active
+      %td= f.check_box :active, {}, true, false
     %tr
       %td= f.label :max_samples, "Max Samples Per Profile"
       %td= f.text_field :max_samples
@@ -16,8 +16,8 @@
       %td= f.text_field :samples_per_simulation
 
     %tr
-      %td= f.label :pbs_generator, 'PBS Generator'
-      %td= f.collection_select :pbs_generator, PbsGenerator.all, :id, :name
+      %td= f.label :pbs_generator_id, 'PBS Generator'
+      %td= f.collection_select :pbs_generator_id, PbsGenerator.all, :id, :name
   %p
     = f.submit 'Update'
 

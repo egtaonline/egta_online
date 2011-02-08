@@ -10,16 +10,15 @@ EgtMongoid::Application.routes.draw do
   resources :simulators
   resources :game_schedulers
   resources :games do
-
+    resources :profiles, :only => [:index, :show, :destroy]
+    resources :game_schedulers
     collection do
       post 'update_parameters'
     end
     member do
       post 'add_strategy', 'remove_strategy'
     end
-    resources :profiles
-    resources :features
-    resources :game_schedulers
+  end
     resources :feature_samples
     resources :simulations, :only => [:index, :show] do
       resources :samples
@@ -30,10 +29,7 @@ EgtMongoid::Application.routes.draw do
         post 'add_feature', 'remove_feature', 'update_choice'
       end
     end
-  end
-  resources :simulations
   resources :features
-  resources :profiles
   resources :profile_schedulers
   resources :deviation_schedulers
   resources :pbs_generators

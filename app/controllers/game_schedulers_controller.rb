@@ -1,11 +1,7 @@
 class GameSchedulersController < AnalysisController
 
   def index
-    @game_schedulers = Array.new
-    Simulator.all.each do |x|
-      x.games.all.each {|y| @game_schedulers.concat(y.game_schedulers)}
-    end
-    @game_schedulers = @game_schedulers.paginate :per_page => 15, :page => (params[:page] || 1)
+    @game_schedulers = GameScheduler.paginate :per_page => 15, :page => (params[:page] || 1)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @game_schedulers }
@@ -14,9 +10,7 @@ class GameSchedulersController < AnalysisController
   end
 
   def show
-    @simulator = Simulator.find(params[:simulator_id])
-    @game = @simulator.games.find(params[:game_id])
-    @game_scheduler = @game.game_schedulers.find(params[:id])
+    @game_scheduler = GameScheduler.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @game_scheduler }
@@ -36,21 +30,18 @@ class GameSchedulersController < AnalysisController
   end
 
   def edit
-    @simulator = Simulator.find(params[:simulator_id])
-    @game = @simulator.games.find(params[:game_id])
-    @game_scheduler = @game.game_schedulers.find(params[:id])
+
+    @game_scheduler = GameScheduler.find(params[:id])
   end
 
   def create
-    ids = params[:parm][:game_info]
-    @simulator = Simulator.find(ids.split(":")[0])
-    @game = @simulator.games.find(ids.split(":")[1])
+    @game = Game.find(params[:parm][:game_id])
     @game_scheduler = GameScheduler.new(params[:game_scheduler])
-    @game.game_schedulers << @game_scheduler
+    @game_scheduler.game = @game
     respond_to do |format|
       if @game_scheduler.save!
         flash[:notice] = 'Game scheduler was successfully created.'
-        format.html { redirect_to [@simulator, @game, @game_scheduler] }
+        format.html { redirect_to @game_scheduler }
         format.xml  { render :xml => @game_scheduler, :status => :created, :location => [@simulator, @game, @game_scheduler] }
         format.json  { render :json => @game_scheduler }
       else
@@ -61,13 +52,11 @@ class GameSchedulersController < AnalysisController
   end
 
   def update
-    @simulator = Simulator.find(params[:simulator_id])
-    @game = @simulator.games.find(params[:game_id])
-    @game_scheduler = @game.game_schedulers.find(params[:id])
+    @game_scheduler = GameScheduler.find(params[:id])
     respond_to do |format|
       if @game_scheduler.update_attributes(params[:game_scheduler])
         flash[:notice] = 'Game scheduler was successfully updated.'
-        format.html { redirect_to([:analysis, @game_scheduler]) }
+        format.html { redirect_to([@game,@game_scheduler]) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -77,8 +66,7 @@ class GameSchedulersController < AnalysisController
   end
 
   def destroy
-    @simulator = Simulator.find(params[:simulator_id])
-    @game = @simulator.games.find(params[:game_id])
+    @game = Game.find(params[:game_id])
     @game_scheduler = @game.game_schedulers.find(params[:id])
     @game_scheduler.destroy
 

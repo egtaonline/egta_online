@@ -6,11 +6,12 @@ class Account
 
   field :username
   field :host
-
+  field :flux, :type => Boolean
   validates_presence_of :username, :host
+  field :max_concurrent_simulations, :type => Integer
 
-  referenced_in :simulations
-  referenced_in :simulators
+  references_many :simulations
+  references_many :simulators
 
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it

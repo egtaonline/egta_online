@@ -2,10 +2,10 @@
 
 class FeatureSample
   include Mongoid::Document
-
+  field :feature_name
   field :value
   embedded_in :feature
-  embedded_in :sample
+  field :sample_id
 
   validates_numericality_of :value
 end

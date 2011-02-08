@@ -9,12 +9,11 @@ class Simulator
   field :name
   field :description
   field :version
-  key :name, :version
 
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
 
-  referenced_in :games
+  references_many :games
 
   referenced_in :account
 

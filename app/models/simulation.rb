@@ -3,7 +3,9 @@
 
 class Simulation
   include Mongoid::Document
-  include AASM
+  include Mongoid::Timestamps
+
+  class << self; attr_accessor :current_id end
 
   field :size, :type => Integer
   field :state
@@ -11,9 +13,14 @@ class Simulation
   field :error_message
   field :flux, :type => Boolean
   field :pbs_generator_id
+  field :created_at
+  field :serial_id, :type => Integer
 
-  referenced_in :account
-  embedded_in :profile
+  @current_id = Simulation.last == nil ? 0 : Simulation.last.serial_id+1
+
+  referenced_in :account, :inverse_of => :simulations
+  referenced_in :profile, :inverse_of => :simulations
+  referenced_in :game, :inverse_of => :simulations
   embeds_many :samples
 
   scope :pending, where(:state=>'pending')
@@ -21,34 +28,40 @@ class Simulation
   scope :running, where(:state=>'running')
   scope :complete, where(:state=>'complete')
   scope :failed, where(:state=>'failed')
-  scope :active, where(:state=>['queued','running'])
-  scope :scheduled, where(:state=>['pending','queued','running'])
+  scope :active, where(:state.in=>['queued','running'])
+  scope :scheduled, where(:state.in=>['pending','queued','running'])
 
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
 
-  aasm_column :state
-  aasm_initial_state :pending
+  state_machine :state, :initial => :pending do
+    state :pending
+    state :queued
+    state :running
+    state :complete
+    state :failed
 
-  aasm_state :pending
-  aasm_state :queued
-  aasm_state :running
-  aasm_state :complete
-  aasm_state :failed
+    event :queue do
+      transition :pending => :queued
+    end
 
-  aasm_event :queue do
-    transitions :to => :queued, :from => [:pending]
+    event :fail do
+      transition [:pending, :queued, :running] => :failed
+    end
+
+    event :start do
+      transition :queued => :running
+    end
+
+    event :finish do
+      transition [:pending, :queued, :running, :failed] => :complete
+    end
+
   end
 
-  aasm_event :fail do
-    transitions :to => :failed, :from => [:pending, :queued, :running]
-  end
+  before_create :setup_id
 
-  aasm_event :start do
-    transitions :to => :running, :from => [:queued]
+  def setup_id
+    self.serial_id = Simulation.current_id
+    Simulation.current_id += 1
   end
-
-  aasm_event :finish do
-    transitions :to => :complete, :from => [:pending, :queued, :running, :failed]
-  end
-
 end

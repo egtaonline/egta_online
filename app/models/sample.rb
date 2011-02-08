@@ -5,9 +5,16 @@ class Sample
   include Mongoid::Document
 
   embedded_in :simulation
-  embeds_many :payoffs, :dependent=>:destroy
-  embeds_many :adjusted_payoffs, :dependent=>:destroy
-  embeds_many :feature_samples, :dependent=>:destroy
-
   field :clean, :type => Boolean
+  field :file_name
+  field :file_index, :type => Integer
+  before_destroy :kill_payoffs
+
+  def kill_payoffs
+    simulation.game.profile.find(simulation.profile_id).players.each do |x|
+      x.payoffs.where(:sample_id => id).destroy_all
+      x.adjusted_payoffs.where(:sample_id => id).destroy_all
+    end
+    game.features.each {|x| x.feature_samples.where(:sample_id => id).destroy_all}
+  end
 end

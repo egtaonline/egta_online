@@ -9,18 +9,17 @@ class Game
   field :name
   validates_presence_of :name
   validates_uniqueness_of :name
-  key :name
   field :size, :type => Integer
   validates_numericality_of :size, :integer_only => true
 
-  references_one :simulator
+  referenced_in :simulator
   embeds_many :strategies
-  embeds_many :profiles
-  embeds_many :game_schedulers
-  embeds_many :deviation_schedulers
-  embeds_many :profile_schedulers
+  embeds_many :profiles, :inverse_of => :game
+  references_many :game_schedulers
+  references_many :deviation_schedulers
+  references_many :profile_schedulers
   embeds_many :features
-  embeds_many :simulations
+  references_many :simulations, :inverse_of => :game
 
   # Add Strategy to a Game
   def add_strategy(strategy)
@@ -33,7 +32,6 @@ class Game
   # Remove Strategy from a Game
   def remove_strategy(strategy)
     if strategies.any? {|s| s == strategy}
-      prune_profile(strategy)
       strategy.destroy
     end
   end
@@ -47,10 +45,7 @@ class Game
       p_strategies.sort!
       profile = profiles.detect {|x| x.strategy_array == p_strategies}
       unless profile
-        profile = Profile.new
-        profiles << profile
-        profile.save
-        profile.strategy_array = p_strategies
+        profiles.create(:strategy_array => p_strategies)
       end
 
       p = next_profile(p, strategies.length, self.size)
@@ -68,18 +63,5 @@ class Game
       a.concat(Array.new(profile_size - a.length, a[-1]))
       a
     end
-  end
-
-  def prune_profile(strategy)
-    p = profiles.select{|x| x.contains_strategy?(strategy.name) == false}
-    to_delete = profiles - p
-    while to_delete.length > 0
-      to_delete[0].destroy
-      to_delete.delete_at(0)
-    end
-  end
-
-  def full_id
-    "#{simulator.id}:#{self.id}"
   end
 end

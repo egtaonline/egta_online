@@ -20,7 +20,7 @@
       %tr
         %td= x
         %td= @game[x]
-%p= link_to 'Edit game', edit_simulator_game_path(@game.simulator, @game)
+%p= link_to 'Edit game', edit_game_path(@game)
 / %p= link_to 'Control Variates', new_game_control_variate_path(@game)
 %h3 Game Data
 %table
@@ -46,7 +46,7 @@
     %th Samples
   -@game.profiles.each do |profile|
     %tr{:class => "= cycle('','altrow') "}
-      %td= link_to profile.name, profile
+      %td= link_to profile.name, [@game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")
 
 %p= will_paginate(@profiles)

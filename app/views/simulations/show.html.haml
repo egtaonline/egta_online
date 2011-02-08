@@ -3,24 +3,24 @@
     #{ link_to 'Home', root_path } #{ link_to 'Simulations', simulations_path } Show Simulation
 %h3 Simulation Information
 %table{:width => "90%"}
-  %tr{:class => "= cycle('','altrow') "}
+  %tr
     %th Account:
-    %td= h Account.find(@simulation.account_id).username
-  %tr{:class => "= cycle('','altrow') "}
+    %td= Account.find(@simulation.account_id).username
+  %tr
     %th Profile:
-    %td= link_to h(@simulation.profile.name), [:analysis, @simulation.profile]
-  %tr{:class => "= cycle('','altrow') "}
+    %td= link_to @simulation.game.profiles.find(@simulation.profile_id).name, [@simulation.game, @simulation.game.profiles.find(@simulation.profile_id)]
+  %tr
     %th Size:
     %td=h @simulation.size
-  %tr{:class => "= cycle('','altrow') "}
-    %th :
-    %td=h @simulation.
-  %tr{:class => "= cycle('','altrow') "}
+  %tr
+    %th Job Id:
+    %td= @simulation.job_id
+  %tr
     %th State:
-    %td=h @simulation.state
-  %tr{:class => "= cycle('','altrow') "}
+    %td= @simulation.state
+  %tr
     %th Error Messages:
-    %td=h @simulation.err_message
+    %td= @simulation.error_message
 %h3 Samples
 %table{:width => "90%"}
   %tr

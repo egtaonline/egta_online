@@ -8,7 +8,8 @@ gem 'capistrano'
 
 gem 'haml'
 gem 'haml-rails'
-gem 'aasm', :git => 'git://github.com/jsmestad/aasm.git', :branch => 'master', :tag => 'mongoid_support'
+gem 'state_machine'
+gem 'state_machine-mongoid'
 gem 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :branch => 'rails3', :require => 'will_paginate'
 gem 'devise'
 gem 'ruby_parser'
@@ -21,5 +22,5 @@ gem 'beanstalk-client'
 gem 'stalker'
 gem 'daemons'
 gem 'jquery-rails'
-gem 'mongoid', "2.0.0.rc.6"
+gem 'mongoid', "2.0.0.rc.7"
 gem 'bson_ext'

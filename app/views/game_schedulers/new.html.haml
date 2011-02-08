@@ -7,10 +7,10 @@
   %table
     %tr
       %td= f.label "Game"
-      %td= grouped_collection_select :parm, :game_info, Simulator.all, :games, :name, :full_id, :name
+      %td= grouped_collection_select :parm, :game_id, Simulator.all, :games, :name, :id, :name
     %tr
       %td= f.label :active
-      %td= f.check_box :active, :checked => true
+      %td= f.check_box :active, {:checked => true}, true, false
     %tr
       %td= f.label :max_samples, "Max Samples Per Profile"
       %td= f.text_field :max_samples, :value => 30

@@ -3,34 +3,58 @@
 class Profile
   include Mongoid::Document
 
-  embedded_in :game
+  embedded_in :game, :inverse_of => :profiles
   embeds_many :players
-  embeds_many :simulations
-
+  references_many :simulations, :inverse_of => :profile
 
   def scheduled_count
-    counter = Simulation.scheduled.where(:profile_id => self.id).inject(0) {|result, element| result + element.size}
-    counter ||= 0
-    self.samples.count+counter
+    counter = game.simulations.scheduled.where(:profile_id => self.id).size == 0 ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)
+    counter += game.simulations.complete.where(:profile_id => self.id).size == 0 ? 0 : game.simulations.complete.where(:profile_id => self.id).sum(:size)
   end
 
-  def contains_strategy?(strategy_name)
-    if players.detect {|x| x.strategy == strategy_name}
-      return true
-    end
-    return false
+  scope :contains_strategy, lambda{|strategy_name| where(strategy_name.to_sym.gt => 0)}
+
+  def size
+    players.size
   end
 
   def strategy_array
-    pl = self.players.collect{|x| x.strategy}
-    pl.sort
+    strat = Array.new
+    players.each {|x| strat.concat([x.strategy])}
+    strat.sort
   end
 
   def strategy_array=(array)
-    array.each{|x| self.players.create(:strategy => x)}
+    array.each do |x|
+      self.players.create(:strategy => x)
+      y = x.tr(".", "_")
+      if self[y] == nil || self[y] == 0
+        self[y] = 1
+      else
+        self[y] = self[y]+1
+      end
+    end
   end
 
   def name
     strategy_array.join(", ")
+  end
+
+  def payoff_to_strategy(strategy)
+    pay = 0.0
+    players.where(:strategy => strategy.name).each {|x| pay += x.payoffs.count == 0 ? 0 : x.payoffs.avg(:payoff)}
+    pay /= players.where(:strategy => strategy.name).count
+  end
+
+  def adjusted_payoff_to_strategy(strategy)
+    pay = 0.0
+    players.where(:strategy => strategy.name).each {|x| pay += x.adjusted_payoffs.count == 0 ? 0 : x.adjusted_payoffs.avg(:payoff)}
+    pay /= players.where(:strategy => strategy.name).count
+  end
+
+  before_destroy :kill_simulations
+
+  def kill_simulations
+    simulations.destroy_all
   end
 end

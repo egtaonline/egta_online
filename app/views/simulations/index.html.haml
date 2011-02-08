@@ -8,9 +8,10 @@
     %th State
     %th Profile
   -@simulations.each do |simulation|
+    -@profile = simulation.game.profiles.find(simulation.profile_id)
     %tr{:class => "= cycle('','altrow') "}
-      %td= link_to simulation.state, [:analysis, simulation]
-      %td= link_to simulation.profile.name, [:analysis, simulation.profile]
--#      %td= link_to 'Destroy', [:analysis, simulation], :confirm => 'Are you sure?', :method => :delete
+      %td= link_to simulation.state, simulation
+      %td= link_to @profile.name, [simulation.game, @profile]
+/      %td= link_to 'Destroy', [:analysis, simulation], :confirm => 'Are you sure?', :method => :delete
 %p= will_paginate(@simulations)
 

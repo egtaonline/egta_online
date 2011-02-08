@@ -4,8 +4,8 @@
 class DeviationScheduler
   include Mongoid::Document
 
-  embeds_one :pbs_generator
-  embedded_in :game
+  referenced_in :pbs_generator
+  referenced_in :game
   field :strategy_id
 
   scope :active, where(:active=>true)

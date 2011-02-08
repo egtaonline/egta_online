@@ -3,8 +3,8 @@
 class ProfileScheduler
   include Mongoid::Document
   field :profile_id
-  embedded_in :game
-  embeds_one :pbs_generator
+  referenced_in :game
+  referenced_in :pbs_generator
 
   scope :active, where(:active=>true)
 

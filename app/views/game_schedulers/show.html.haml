@@ -1,11 +1,11 @@
 .breadcrumb
   .bc
-    #{ link_to 'Home', root_path } #{link_to 'Game Schedulers', analysis_game_schedulers_path} Show Game Scheduler
+    #{ link_to 'Home', root_path } #{link_to 'Game Schedulers', game_schedulers_path} Show Game Scheduler
 %h3 Game Scheduler Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow')"}
     %th Game:
-    %td= link_to h(@game_scheduler.game.name), [:analysis, @game_scheduler.game]
+    %td= link_to h(@game_scheduler.game.name), @game_scheduler.game
   %tr{:class => "= cycle('','altrow')"}
     %th Active:
     %td=h @game_scheduler.active
@@ -14,6 +14,6 @@
     %td=h @game_scheduler.max_samples
   %tr{:class => "= cycle('','altrow')"}
     %th PBS Info:
-    %td= h(PbsProxy.find(@game_scheduler.pbs_proxy_id).name)
-%p= link_to 'Edit game scheduler', edit_analysis_game_scheduler_path(@game_scheduler)
+    %td= PbsGenerator.find(@game_scheduler.pbs_generator_id).name
+%p= link_to 'Edit game scheduler', edit_game_scheduler_path(@game_scheduler)
 

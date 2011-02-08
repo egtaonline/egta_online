@@ -10,10 +10,10 @@
     %th Description
   - @games.each do |game|
     %tr
-      %td= link_to game.name, [game.simulator, game]
+      %td= link_to game.name, game
       %td= link_to game.simulator.name, game.simulator
-      %td= link_to game.description, [game.simulator, game]
-      %td= link_to 'Destroy', [game.simulator, game], :confirm => 'Are you sure?', :method => :delete
+      %td= link_to game.description, game
+      %td= link_to 'Destroy', game, :confirm => 'Are you sure?', :method => :delete
 
 %p= will_paginate(@games)
 
