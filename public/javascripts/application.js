@@ -4,7 +4,7 @@ jQuery(function($) {
   // when the #simulator_id field changes
   $("#game_simulator").change(function() {
     // make a POST call and replace the content
-    var simulator = $('select#game_simulator_id :selected').val();
+    var simulator = $('select#game_simulator :selected').val();
     jQuery.post('/games/update_parameters', {simulator_id: simulator})
   });
   $("#source_val_0").click(function() {
