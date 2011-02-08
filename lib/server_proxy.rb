@@ -8,7 +8,7 @@ class ServerProxy
     root_path = "#{DEPLOY_PATH}/#{simulator.name}-#{simulator.version}/#{simulator.name}"
     Net::SSH.start(account.host, account.username) do |ssh|
       simulations.each do |simulation|
-        puts ssh.exec!("cd #{root_path}/../; cp #{DEPLOY_PATH}/setup_hierarchy.rb .; ruby setup_hierarchy.rb #{simulation.serial_id}")
+        puts ssh.exec!("cd #{root_path}/../; cp -u #{DEPLOY_PATH}/setup_hierarchy.rb .; ruby setup_hierarchy.rb #{simulation.serial_id}")
         File.open( "#{ROOT_DIR}/temp.yaml", 'w' ) do |out|
           YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out )
           p = Hash.new
