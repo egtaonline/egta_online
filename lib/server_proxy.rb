@@ -203,7 +203,6 @@ class ServerProxy
         puts ssh.exec!("cd #{root_path}/script; chmod g+wrx wrapper")
         f = ssh.exec!("#{submission.command}") if submission
         job_return = f
-        puts job_return
         job_return.strip! if job_return
         @job = job_return[/^(\d+)/] if job_return && job_return =~ /^(\d+)/
       end
@@ -236,7 +235,7 @@ class ServerProxy
         file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
         str = "\#PBS -t #{simulations[0].serial_id}"
         for i in 1...simulations.size
-          str += ",#{simulations[i].id}"
+          str += ",#{simulations[i].serial_id}"
         end
         str += "\n"
         file.syswrite(str)
