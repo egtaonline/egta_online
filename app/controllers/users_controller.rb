@@ -19,7 +19,7 @@ class UsersController < AdminController
     @user = User.new(params[:user])
     if @user.save
       flash[:notice] = 'User was successfully created.'
-      redirect_to [:admin,@user]
+      redirect_to @user
     else
       render :action => "new"
     end
@@ -29,7 +29,7 @@ class UsersController < AdminController
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User was successfully updated.'
-      redirect_to [:admin,@user]
+      redirect_to @user
     else
       render :action => "edit"
     end
