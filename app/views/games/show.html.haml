@@ -44,7 +44,7 @@
   %tr
     %th Name
     %th Samples
-  -@game.profiles.each do |profile|
+  -@profiles.each do |profile|
     %tr{:class => "= cycle('','altrow') "}
       %td= link_to profile.name, [@game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")

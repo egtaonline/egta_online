@@ -34,6 +34,7 @@
         %td= strategy.name
         %td= @profile[strategy.name.tr(".", "|")]
         %td= @profile.adjusted_payoff_to_strategy(strategy)
+
 %h3 Sample Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
