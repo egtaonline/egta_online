@@ -42,14 +42,14 @@ class Profile
 
   def payoff_to_strategy(strategy)
     pay = 0.0
-    players.where(:strategy => strategy.name).each {|x| pay += x.payoffs.count == 0 ? 0 : x.payoffs.avg(:payoff)}
-    pay /= players.where(:strategy => strategy.name).count
+    players.where(:strategy => strategy).each {|x| pay += x.payoffs.count == 0 ? 0 : x.payoffs.avg(:payoff)}
+    pay /= players.where(:strategy => strategy).count
   end
 
   def adjusted_payoff_to_strategy(strategy)
     pay = 0.0
-    players.where(:strategy => strategy.name).each {|x| pay += x.adjusted_payoffs.count == 0 ? 0 : x.adjusted_payoffs.avg(:payoff)}
-    pay /= players.where(:strategy => strategy.name).count
+    players.where(:strategy => strategy).each {|x| pay += x.adjusted_payoffs.count == 0 ? 0 : x.adjusted_payoffs.avg(:payoff)}
+    pay /= players.where(:strategy => strategy).count
   end
 
   before_destroy :kill_simulations

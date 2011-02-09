@@ -21,7 +21,7 @@
       %tr{:class => "= cycle('','altrow') "}
         %td= strategy.name
         %td= @profile[strategy.name.tr(".", "|")]
-        %td= @profile.payoff_to_strategy(strategy)
+        %td= @profile.payoff_to_strategy(strategy.name)
 %h3 Adjusted Payoff Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
@@ -33,7 +33,7 @@
       %tr{:class => "= cycle('','altrow') "}
         %td= strategy.name
         %td= @profile[strategy.name.tr(".", "|")]
-        %td= @profile.adjusted_payoff_to_strategy(strategy)
+        %td= @profile.adjusted_payoff_to_strategy(strategy.name)
 
 %h3 Sample Information
 %table{:width => "90%"}
