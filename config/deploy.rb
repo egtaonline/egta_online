@@ -36,19 +36,25 @@ namespace :daemons do
 
   desc "Start Daemons"
   task :start, :roles => :app do
+    run "rvm 1.9.2"
     run "#{current_release}/lib/daemons/periodic_daemon_ctl start"
     run "#{current_release}/lib/daemons/stalker_daemon.rb start"
+    run "rvm jruby-1.6.0.RC2"
   end
 
   desc "Stop Daemons"
   task :stop, :roles => :app do
+    run "rvm 1.9.2"
     run "#{current_release}/lib/daemons/periodic_daemon_ctl stop"
     run "#{current_release}/lib/daemons/stalker_daemon.rb stop"
+    run "rvm jruby-1.6.0.RC2"
   end
 
   desc "Restart Daemons"
   task :restart, :roles => :app do
+    run "rvm 1.9.2"
     run "#{current_release}/lib/daemons/periodic_daemon_ctl restart"
     run "#{current_release}/lib/daemons/stalker_daemon.rb restart"
+    run "rvm jruby-1.6.0.RC2"
   end
 end
