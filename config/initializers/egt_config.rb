@@ -5,6 +5,7 @@ require 'yaml'
 require 'fileutils'
 require 'pbs'
 require 'helper_demon'
+require 'transformation'
 
 FLUX_CORES = 10
 DEPLOY_PATH = "/home/wellmangroup/many-agent-simulations"

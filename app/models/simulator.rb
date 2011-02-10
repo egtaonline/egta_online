@@ -9,6 +9,7 @@ class Simulator
   field :name
   field :description
   field :version
+  embeds_many :adjustment_coefficient_records
 
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name

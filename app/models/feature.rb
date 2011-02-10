@@ -5,6 +5,7 @@ class Feature
   include Mongoid::Document
 
   field :name
+  field :expected_value, :type => Float
   embeds_many :feature_samples
 
   embedded_in :game

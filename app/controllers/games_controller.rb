@@ -16,6 +16,8 @@ class GamesController < AnalysisController
 def show
   @game = Game.find(params[:id])
   @profiles = @game.profiles.paginate :per_page => 15, :page => (params[:page] || 1)
+  @transformations = Array.new
+  @transformations.concat(@game.control_variates.where(:source_id => @game.id).all)
   respond_to do |format|
     format.html # show.html.erb
     format.xml

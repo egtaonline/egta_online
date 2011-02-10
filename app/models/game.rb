@@ -13,6 +13,8 @@ class Game
   validates_numericality_of :size, :integer_only => true
 
   referenced_in :simulator
+  referenced_in :adjustment_coefficient_record
+  embeds_many :control_variates
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
   references_many :game_schedulers

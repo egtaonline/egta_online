@@ -13,7 +13,6 @@ class Sample
   def kill_payoffs
     simulation.game.profile.find(simulation.profile_id).players.each do |x|
       x.payoffs.where(:sample_id => id).destroy_all
-      x.adjusted_payoffs.where(:sample_id => id).destroy_all
     end
     game.features.each {|x| x.feature_samples.where(:sample_id => id).destroy_all}
   end

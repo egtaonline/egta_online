@@ -1,0 +1,17 @@
+%h1 Listing analysis_control_variates
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @control_variates.each do |analysis_control_variate|
+    %tr
+      %td= link_to 'Show', analysis_control_variate
+      %td= link_to 'Edit', edit_analysis_control_variate_path(analysis_control_variate)
+      %td= link_to 'Destroy', analysis_control_variate, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Control variate', new_analysis_control_variate_path

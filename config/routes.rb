@@ -12,6 +12,12 @@ EgtMongoid::Application.routes.draw do
   resources :games do
     resources :profiles, :only => [:index, :show, :destroy]
     resources :game_schedulers
+    resources :features
+    resources :control_variates do
+      collection do
+        post 'add_feature', 'remove_feature', 'update_choice'
+      end
+    end
     collection do
       post 'update_parameters'
     end
@@ -23,11 +29,6 @@ EgtMongoid::Application.routes.draw do
     resources :simulations, :only => [:index, :show] do
       resources :samples
       get 'purge', :on => :collection
-    end
-    resources :control_variates do
-      collection do
-        post 'add_feature', 'remove_feature', 'update_choice'
-      end
     end
   resources :features
   resources :profile_schedulers

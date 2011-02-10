@@ -1,0 +1,21 @@
+%h4 Select Control Variables
+%table
+  %tr
+    %th Name
+  %tr
+    =form_tag "add_feature", :method=>:post, :remote => true do
+      %tr{:class => "= cycle('','altrow') "}
+        %td= select_tag :feature_id, options_for_select(@feature_options)
+        %td= submit_tag "Add"
+      -@cv_features.each do |feature|
+        %tr
+          %td= link_to feature[0], [@game, @game.features.find(feature[1])]
+          %td= link_to 'Remove', "/games/#{@game.id}/control_variates/remove_feature?feature_id=#{feature[1]}", :method => :post, :remote => true
+%h4 Enter Adjustment Coefficients
+%p
+  = radio_button :source, "val", "0", :checked => true
+  = label :val, "Enter coefficients manually"
+%p
+  = radio_button :source, "val", "1", :checked => false
+  = label :val, "Calculate coefficients from training data"
+#entry= render :partial => 'coefficients', :local => {:source => @source}

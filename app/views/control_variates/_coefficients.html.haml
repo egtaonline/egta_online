@@ -1,0 +1,16 @@
+=form_for [@game, @control_variate], :remote => true do |f|
+  -if @source == 0
+    %table
+      %tr
+        %th Name
+        %th Coefficient
+      -@cv_features.each do |feature|
+        %tr{:class => "= cycle('','altrow') "}
+          %td= link_to feature[0], [@game, @game.features.find(feature[1])]
+          %td= text_field :features, feature[0].to_sym, :value => 0.0
+  -elsif @source == "1"
+    =label :acr, :source_id, "Training Data Source"
+    =collection_select :acr, :source_id, @game.simulator.games, :id, :name
+  -else
+    =@source
+  %p= f.submit 'Apply Adjustments'

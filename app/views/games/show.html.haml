@@ -21,7 +21,7 @@
         %td= x
         %td= @game[x]
 %p= link_to 'Edit game', edit_game_path(@game)
-/ %p= link_to 'Control Variates', new_game_control_variate_path(@game)
+
 %h3 Game Data
 %table
   %tr{:class => "= cycle('','altrow') "}
@@ -50,3 +50,16 @@
       %td= pluralize(profile.players.first.payoffs.count, "sample")
 
 %p= will_paginate(@profiles)
+
+%h3 Transformations
+%table{:width => "90%"}
+  %tr
+    %th Type
+    %th Result
+  -@transformations.each do |trans|
+    -game = Game.find(trans.destination_id)
+    %tr
+      %td= trans.type
+      %td= link_to game.name, game
+      %td= link_to 'Destroy', trans, :confirm => 'Are you sure?', :method => :delete
+%p= link_to 'New Control Variates', new_game_control_variate_path(@game)
