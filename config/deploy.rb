@@ -7,6 +7,8 @@ set :application, "EGTMAS Web Interface"
 set :repository,  "git@github.com:bcassell/EGTMAS-Web-Interface.git"
 set :branch, "mongoid"
 set :scm, :git
+set :deploy_via, :remote_cache
+set :scm_verbose, true
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :deploy_to, "/home/bcassell/Deployment"
