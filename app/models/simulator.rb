@@ -15,7 +15,6 @@ class Simulator
   validates_uniqueness_of :version, :scope => :name
 
   references_many :games
-
   referenced_in :account
 
   def setup_simulator

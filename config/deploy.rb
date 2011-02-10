@@ -1,6 +1,6 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
-set :rvm_ruby_string, 'jruby-1.6.0.RC2'
+set :rvm_ruby_string, '1.9.2'
 
 
 set :application, "EGTMAS Web Interface"
@@ -36,19 +36,19 @@ namespace :daemons do
 
   desc "Start Daemons"
   task :start, :roles => :app do
-    run "rvm 1.9.2 #{current_release}/lib/daemons/periodic_daemon_ctl start"
-    run "rvm 1.9.2 #{current_release}/lib/daemons/stalker_daemon.rb start"
+    run "#{current_release}/lib/daemons/periodic_daemon_ctl start"
+    run "#{current_release}/lib/daemons/stalker_daemon.rb start"
   end
 
   desc "Stop Daemons"
   task :stop, :roles => :app do
-    run "rvm 1.9.2 #{current_release}/lib/daemons/periodic_daemon_ctl stop"
-    run "rvm 1.9.2 #{current_release}/lib/daemons/stalker_daemon.rb stop"
+    run "#{current_release}/lib/daemons/periodic_daemon_ctl stop"
+    run "#{current_release}/lib/daemons/stalker_daemon.rb stop"
   end
 
   desc "Restart Daemons"
   task :restart, :roles => :app do
-    run "rvm 1.9.2 #{current_release}/lib/daemons/periodic_daemon_ctl restart"
-    run "rvm 1.9.2 #{current_release}/lib/daemons/stalker_daemon.rb restart"
+    run "#{current_release}/lib/daemons/periodic_daemon_ctl restart"
+    run "#{current_release}/lib/daemons/stalker_daemon.rb restart"
   end
 end

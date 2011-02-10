@@ -144,7 +144,8 @@ class ServerProxy
           end
           count = 0
           YAML.load_documents(out) do |yf|
-            @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => @sample.id)
+            @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
+            count += 1
           end
         end
       end

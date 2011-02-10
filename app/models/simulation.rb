@@ -59,9 +59,14 @@ class Simulation
   end
 
   before_create :setup_id
+  before_destroy :kill_payoffs
 
   def setup_id
     self.serial_id = Simulation.current_id
     Simulation.current_id += 1
+  end
+
+  def kill_payoffs
+    samples.each {|x| x.kill_payoffs}
   end
 end

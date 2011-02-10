@@ -31,7 +31,6 @@ class ControlVariatesController < AnalysisController
     @adjustment_coefficient_record.save!
     @adjustment_coefficient_record.calculate_coefficients(session_features)
 
-
     @control_variates = ControlVariate.new(params[:control_variate])
     @game.control_variates << @control_variates
     if @control_variates.save!
