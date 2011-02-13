@@ -63,6 +63,7 @@ class Simulation
   end
 
   def kill_payoffs
+    profile.destroy
     samples.each {|x| x.kill_payoffs}
   end
 end
