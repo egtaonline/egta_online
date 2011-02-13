@@ -2,7 +2,7 @@ class SimulationsController < AnalysisController
   protect_from_forgery :except => [:create,:update]
 
   def index
-    @simulations = Simulation.paginate :per_page => 15, :page => (params[:page] || 1)
+    @simulations = Simulation.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1), :order => 'created_at'
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @simulations }

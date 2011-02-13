@@ -1,0 +1,19 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } Simulators
+%h3 Features
+= link_to 'New feature', new_analysis_feature_path
+%table{:width => "90%"}
+  %tr
+    %th Name
+    %th Expected Value
+    %th Game
+  -@features.each do |feature|
+    %tr{:class => "<%= cycle('','altrow') %>"}
+      %td= link_to feature.name, [:analysis, feature]
+      %td= link_to feature.expected_value, [:analysis, feature]
+      %td= link_to feature.game.name, [:analysis, feature.game]
+      %td= link_to 'Destroy', [:analysis, feature], :confirm => 'Are you sure?', :method => :delete
+%br
+
+

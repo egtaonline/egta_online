@@ -19,8 +19,7 @@ class ProfilesController < AnalysisController
 
     @account_options = Account.all.collect {|s| [s.name, s.id]}
     @simulation = @profile.simulations.build :profile_id=>params[:id]
-    @total_samples = 0
-    @profile.simulations.all.each {|x| @total_samples += x.samples.count}
+    @total_samples = @profile.players.first.payoffs.count
 
     @queued_simulations = @profile.simulations.queued.count
     @running_simulations = @profile.simulations.running.count

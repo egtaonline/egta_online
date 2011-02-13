@@ -5,8 +5,6 @@ class Simulation
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  class << self; attr_accessor :current_id end
-
   field :size, :type => Integer
   field :state
   field :job_id
@@ -15,8 +13,6 @@ class Simulation
   field :pbs_generator_id
   field :created_at
   field :serial_id, :type => Integer
-
-  @current_id = Simulation.last == nil ? 0 : Simulation.last.serial_id+1
 
   referenced_in :account, :inverse_of => :simulations
   referenced_in :profile, :inverse_of => :simulations
@@ -62,8 +58,8 @@ class Simulation
   before_destroy :kill_payoffs
 
   def setup_id
-    self.serial_id = Simulation.current_id
-    Simulation.current_id += 1
+    self.serial_id = SimCount.first.counter
+    SimCount.first.update_attributes(:counter => SimCount.first.counter+1)
   end
 
   def kill_payoffs

@@ -15,36 +15,29 @@ class ControlVariate
   end
 
   def apply_cv
-    destination_id = transform_game(game, ":cv").id
-    self.save!
+    g = transform_game(game, ":cv")
+    self.update_attributes(:destination_id => g.id)
   end
 
-  def apply_transformation(game)
-    adjustment_coefficient_record = game.simulator.adjustment_coefficient_records.find(adjustment_coefficient_record_id)
-    game.profiles.each do |x|
+  def apply_transformation(g)
+    adjustment_coefficient_record = AdjustmentCoefficientRecord.find(adjustment_coefficient_record_id)
+    g.profiles.each do |x|
       x.players.each do |y|
         y.payoffs.each do |z|
           adjusted = z.payoff
-          game.features.each do |f|
+          g.features.each do |f|
             if adjustment_coefficient_record.feature_hash[f.name] != nil
-              adjusted += adjustment_coefficient_record.feature_hash[z.name].to_f*(f.feature_samples.where(:sample_id => z.sample_id).first.value - f.expected_value)
+              adjusted += adjustment_coefficient_record.feature_hash[f.name].to_f*(f.feature_samples.where(:sample_id => z.sample_id).first.value - (f.expected_value ? f.expected_value : f.sample_avg))
             end
           end
           z.update_attributes(:payoff => adjusted)
         end
       end
     end
-  end
-
-  def perform_adjustments
-    Stalker.enqueue 'apply_cv', :control_variate => self.id
-  end
-
-  def calculate_adjustment_coefficients
-    Stalker.enqueue 'calculate_adjustment_coefficients', :control_variate => self.id
-  end
-
-  def calculate
-
+    if g.save!
+      return g
+    else
+      nil
+    end
   end
 end

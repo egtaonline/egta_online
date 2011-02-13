@@ -43,6 +43,8 @@ module EgtMongoid
     config.filter_parameters += [:password]
     config.generators do |g|
       g.template_engine :haml
+      g.test_framework  :rspec, :fixture => true
+      g.fixture_replacement :machinist
     end
   end
 end

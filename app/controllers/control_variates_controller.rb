@@ -1,23 +1,15 @@
 class ControlVariatesController < AnalysisController
+  respond_to :html, :js
 
   def show
     @control_variate = ControlVariate.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @control_variate }
-    end
   end
 
-  # GET /analysis/control_variates/new
-  # GET /analysis/control_variates/new.xml
   def new
-    @variable_holder = Array.new
     @control_variate = ControlVariate.new
     @game = Game.find(params[:game_id])
-    @cv_features = session_features.collect{|s| [@game.features.find(s).name, s]}
+    @cv_features = []
     @feature_options = @game.features.collect {|s| [s.name, s.id]} - @cv_features
-    @source = session_source
     respond_to do |format|
       format.html
     end
@@ -25,17 +17,18 @@ class ControlVariatesController < AnalysisController
 
   def create
     @game = Game.find(params[:game_id])
-    @adjustment_coefficient_record = AdjustmentCoefficientRecord.new
-    @game.adjustment_coefficient_records << @adjustment_coefficient_record
+    @adjustment_coefficient_record = AdjustmentCoefficientRecord.new(:game_id => params[:acr][:source_id])
     @game.simulator.adjustment_coefficient_records << @adjustment_coefficient_record
     @adjustment_coefficient_record.save!
-    @adjustment_coefficient_record.calculate_coefficients(session_features)
-
+    @adjustment_coefficient_record.calculate_coefficients(params[:feature_ids].collect {|x| @game.features.find(BSON::ObjectId.from_string(x))})
     @control_variates = ControlVariate.new(params[:control_variate])
     @game.control_variates << @control_variates
+    @control_variates.adjustment_coefficient_record_id = @adjustment_coefficient_record.id
+    @control_variates.apply_cv
     if @control_variates.save!
       respond_to do |format|
-        format.html{ redirect_to(game_control_variate_path(@control_variate), :notice => 'Adjustments have been scheduled')}
+        format.html{ redirect_to(game_path(Game.find(@control_variates.destination_id)), :notice => 'Adjustments have been scheduled')}
+        format.js{ redirect_to(game_path(Game.find(@control_variates.destination_id)), :notice => 'Adjustments have been scheduled')}
       end
     end
   end
@@ -67,14 +60,16 @@ class ControlVariatesController < AnalysisController
   end
 
   def add_feature
+    if params[:feature_ids] == nil
+      params[:feature_ids] = Array.new
+    end
     @control_variate = ControlVariate.new
     @game = Game.find(params[:game_id])
     @feature = @game.features.find(params[:feature_id])
-    session_features << @feature.id
     features = @game.features.collect {|s| [s.name, s.id]}
-    @cv_features = session_features.collect{|s| [@game.features.find(s).name, s]}
+    @cv_features = params[:feature_ids].collect{|s| [@game.features.find(BSON::ObjectId.from_string(s)).name, @game.features.find(BSON::ObjectId.from_string(s)).id]}
+    @cv_features << [@feature.name, @feature.id]
     @feature_options = features - @cv_features
-    @source = session_source
     respond_to do |format|
       format.js
     end
@@ -84,28 +79,15 @@ class ControlVariatesController < AnalysisController
     @control_variate = ControlVariate.new
     @game = Game.find(params[:game_id])
     @feature = @game.features.find(params[:feature_id])
-    session_features.delete(@feature.id)
+    params[:feature_ids].delete("#{@feature.id}")
     features = @game.features.collect {|s| [s.name, s.id]}
-    @cv_features = session_features.collect{|s| [@game.features.find(s).name, s]}
+    @cv_features = params[:feature_ids].collect{|s| [@game.features.find(s).name, @game.features.find(s).id]}
     @feature_options = features - @cv_features
-    @source = session_source
     respond_to do |format|
       format.js
     end
   end
 
-  def update_choice
-    @game = Game.find(params[:game_id])
-    @control_variate = ControlVariate.new
-    session_source = params[:source]
-    features = @game.features.collect {|s| [s.name, s.id]}
-    @cv_features = session_features.collect{|s| [@game.features.find(s).name, s]}
-    @feature_options = features - @cv_features
-    @source = session_source
-    respond_to do |format|
-      format.js
-    end
-  end
   # DELETE /analysis/control_variates/1
   # DELETE /analysis/control_variates/1.xml
   def destroy
@@ -115,23 +97,6 @@ class ControlVariatesController < AnalysisController
     respond_to do |format|
       format.html { redirect_to(control_variates_url) }
       format.xml  { head :ok }
-    end
-  end
-
-  private
-
-  def session_source
-    session[:source] ||= "0"
-  end
-
-  def session_features
-    session[:features] ||= Array.new
-    @game = Game.find(params[:game_id])
-    session[:features].each do |x|
-      if @game.features.find(x) == nil
-        session[:features] = Array.new
-        break
-      end
     end
   end
 end
