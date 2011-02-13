@@ -23,6 +23,15 @@ class Game
   embeds_many :features
   references_many :simulations, :inverse_of => :game
 
+  before_destroy :kill_references
+
+  def kill_references
+    adjustment_coefficient_records.destroy_all
+    game_schedulers.destroy_all
+    deviation_schedulers.destroy_all
+    profile_schedulers.destroy_all
+  end
+
   # Add Strategy to a Game
   def add_strategy(strategy)
     unless strategies.any? {|s| s == strategy}
