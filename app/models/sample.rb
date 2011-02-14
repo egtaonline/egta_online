@@ -11,7 +11,7 @@ class Sample
   before_destroy :kill_payoffs
 
   def kill_payoffs
-    if game != nil
+    if simulation.game != nil
       simulation.game.features.each do |x|
         x.feature_samples.where(:sample_id => id).destroy_all
       end
