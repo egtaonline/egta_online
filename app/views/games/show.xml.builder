@@ -11,7 +11,7 @@ xml.nfg(:name=>@game.name, :description=>@game.description) do |nfg|
       payoffs.payoff do |payoff|
         profile.strategy_array.uniq.each do |strategy|
           payoff.outcome(:action=>strategy,
-                         :count=>profile[strategy],
+                         :count=>profile[strategy.tr(".", "|")],
                          :value=>profile.payoff_to_strategy(strategy))
         end
       end
