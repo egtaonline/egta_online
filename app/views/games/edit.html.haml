@@ -11,6 +11,6 @@
     %tr
       %td= f.label :description
       %td= f.text_area :description, :cols=>27, :rows=>10
-    =render :partial => 'parameters', :object => @game.parameters, :locals => {:f => f}
+    =render :partial => 'parameters', :locals => {:game => @game}
   %p
     = f.submit 'Update'
