@@ -1,6 +1,11 @@
 xml.instruct! :xml, :version=>"1.0"
 xml.nfg(:name=>@game.name, :description=>@game.description) do |nfg|
 
+  nfg.players do |players|
+    for i in 1..@game.size do
+      players.player(:id=>"player#{i}")
+    end
+  end
   nfg.actions do |actions|
     @game.strategies.each do |strategy|
       actions.action(:id=>strategy.name)
