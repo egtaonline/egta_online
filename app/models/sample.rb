@@ -11,11 +11,13 @@ class Sample
   before_destroy :kill_payoffs
 
   def kill_payoffs
-    simulation.game.features.each do |x|
-      x.feature_samples.where(:sample_id => id).destroy_all
-    end
-    simulation.game.profiles.find(simulation.profile_id).players.each do |x|
-      x.payoffs.where(:sample_id => id).destroy_all
+    if game != nil
+      simulation.game.features.each do |x|
+        x.feature_samples.where(:sample_id => id).destroy_all
+      end
+      simulation.game.profiles.find(simulation.profile_id).players.each do |x|
+        x.payoffs.where(:sample_id => id).destroy_all
+      end
     end
   end
 end

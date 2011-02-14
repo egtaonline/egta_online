@@ -27,6 +27,7 @@ class Game
 
   def kill_references
     AdjustmentCoefficientRecord.where(:game_id => self.id).destroy_all
+    Simulation.where(:game_id => self.id).destroy_all
     game_schedulers.destroy_all
     deviation_schedulers.destroy_all
     profile_schedulers.destroy_all
