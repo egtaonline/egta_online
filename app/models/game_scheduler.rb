@@ -32,9 +32,10 @@ class GameScheduler
         end
         simulation.state = 'pending'
         scheduled_profile.simulations << simulation
-        scheduled_profile.game.simulations << simulation
-        puts simulation
         simulation.save!
+        scheduled_profile.game.simulations << simulation
+        simulation.save!
+        puts simulation
       else
         break
       end

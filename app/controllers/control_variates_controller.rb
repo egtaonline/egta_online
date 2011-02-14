@@ -1,5 +1,4 @@
 class ControlVariatesController < AnalysisController
-  respond_to :html, :js
 
   def show
     @control_variate = ControlVariate.find(params[:id])
@@ -20,7 +19,7 @@ class ControlVariatesController < AnalysisController
     @adjustment_coefficient_record = AdjustmentCoefficientRecord.new(:game_id => params[:acr][:source_id])
     @game.simulator.adjustment_coefficient_records << @adjustment_coefficient_record
     @adjustment_coefficient_record.save!
-    @adjustment_coefficient_record.calculate_coefficients(params[:feature_ids].collect {|x| @game.features.find(BSON::ObjectId.from_string(x))})
+    @adjustment_coefficient_record.calculate_coefficients(params[:feature_names].collect {|x| Game.find(params[:acr][:source_id]).features.where(:name => x).first})
     @control_variates = ControlVariate.new(params[:control_variate])
     @game.control_variates << @control_variates
     @control_variates.adjustment_coefficient_record_id = @adjustment_coefficient_record.id
@@ -60,14 +59,14 @@ class ControlVariatesController < AnalysisController
   end
 
   def add_feature
-    if params[:feature_ids] == nil
-      params[:feature_ids] = Array.new
+    if params[:feature_names] == nil
+      params[:feature_names] = Array.new
     end
     @control_variate = ControlVariate.new
     @game = Game.find(params[:game_id])
     @feature = @game.features.find(params[:feature_id])
     features = @game.features.collect {|s| [s.name, s.id]}
-    @cv_features = params[:feature_ids].collect{|s| [@game.features.find(BSON::ObjectId.from_string(s)).name, @game.features.find(BSON::ObjectId.from_string(s)).id]}
+    @cv_features = params[:feature_names].collect{|s| [s, @game.features.where(:name => s).first.id]}
     @cv_features << [@feature.name, @feature.id]
     @feature_options = features - @cv_features
     respond_to do |format|
@@ -79,9 +78,9 @@ class ControlVariatesController < AnalysisController
     @control_variate = ControlVariate.new
     @game = Game.find(params[:game_id])
     @feature = @game.features.find(params[:feature_id])
-    params[:feature_ids].delete("#{@feature.id}")
+    params[:feature_names].delete("#{@feature.name}")
     features = @game.features.collect {|s| [s.name, s.id]}
-    @cv_features = params[:feature_ids].collect{|s| [@game.features.find(s).name, @game.features.find(s).id]}
+    @cv_features = params[:feature_names].collect{|s| [s, @game.features.where(:name => s).first.id]}
     @feature_options = features - @cv_features
     respond_to do |format|
       format.js

@@ -4,7 +4,7 @@
 #PBS -A wellman_flux
 #PBS -q flux
 #PBS -N mas-epp_sim
-#PBS -t 12
+#PBS -t 21
 #PBS -o /home/wellmangroup/many-agent-simulations/epp_sim-test2/epp_sim/../simulations/${PBS_ARRAYID}/out
 #PBS -e /home/wellmangroup/many-agent-simulations/epp_sim-test2/epp_sim/../simulations/${PBS_ARRAYID}/out
 mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r /home/wellmangroup/many-agent-simulations/epp_sim-test2/epp_sim/* .; cp -r /home/wellmangroup/many-agent-simulations/epp_sim-test2/epp_sim/../simulations/${PBS_ARRAYID} .

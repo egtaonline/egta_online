@@ -5,9 +5,22 @@ require 'faker'
 Sham.define do
   sim_name { |index| "Sim#{index}" }
   game_name { |index| "Game#{index}" }
+  account_name { |index| "Account#{index}" }
   strategy_name { |index| "Strategy#{index}" }
   feature_name { |index| "Feature#{index}" }
   version { Faker::Lorem.words(1) }
+end
+
+Account.blueprint do
+  username { Sham.account_name }
+  flux { true }
+  host { Sham.account_name }
+  max_concurrent_simulations { 10 }
+end
+
+GameScheduler.blueprint do
+  max_samples { 30 }
+  samples_per_simulation { 30 }
 end
 
 Simulator.blueprint do
@@ -15,9 +28,14 @@ Simulator.blueprint do
   version
 end
 
+SimCount.blueprint do
+  counter { 30 }
+end
+
 def make_simulator_with_game(attributes = {})
   simulator = Simulator.make(attributes)
   simulator.games << make_game_with_descendents
+  SimCount.make
   simulator
 end
 
