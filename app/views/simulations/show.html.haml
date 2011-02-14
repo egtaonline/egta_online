@@ -21,15 +21,4 @@
   %tr
     %th Error Messages:
     %td= @simulation.error_message
-%h3 Samples
-%table{:width => "90%"}
-  %tr
-    %th
-    %th File
-  -@simulation.samples.each do |sample|
-    %tr{:class => "= cycle('','altrow') "}
-      %td= link_to "Sample", [:analysis, @simulation, sample]
-      %td= link_to 'Destroy', [:analysis, @simulation, sample], :confirm => 'Are you sure?', :method => :delete
-%p= link_to 'Manage Samples', simulation_sample_path(@simulation)
-%p= link_to 'New sample', new_simulation_sample_path(@simulation)
 
