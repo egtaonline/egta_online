@@ -2,16 +2,7 @@
   .bc
     #{ link_to 'Home', root_path }  Simulations
 %h3 Simulations
-%p= link_to 'Purge Failed Simulations', purge_simulations_path
-%table
-  %tr
-    %th State
-    %th Profile
-  -@simulations.each do |simulation|
-    -@profile = simulation.game.profiles.find(simulation.profile_id)
-    %tr{:class => "= cycle('','altrow') "}
-      %td= link_to simulation.state, simulation
-      %td= link_to @profile.name, [simulation.game, @profile]
-/      %td= link_to 'Destroy', [:analysis, simulation], :confirm => 'Are you sure?', :method => :delete
-%p= will_paginate(@simulations)
-
+%p
+  = label :game_id, "Choose a game"
+  = collection_select :simulation, :game_id, Game.all, :id, :name
+#simulation=render :partial => 'simulations'

@@ -2,7 +2,11 @@ class SimulationsController < AnalysisController
   protect_from_forgery :except => [:create,:update]
 
   def index
-    @simulations = Simulation.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+    if params[:game_id] == nil
+      params[:game_id] = Game.first.id
+    end
+    @game = Game.find(params[:game_id])
+    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @simulations }
@@ -58,6 +62,14 @@ class SimulationsController < AnalysisController
         format.html { render :action => "edit" }
         format.xml  { render :xml => @simulation.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+
+  def update_game
+    @game = Game.find(params[:game_id])
+    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+    respond_to do |format|
+      format.js
     end
   end
 

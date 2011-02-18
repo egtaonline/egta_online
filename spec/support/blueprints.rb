@@ -5,16 +5,15 @@ require 'faker'
 Sham.define do
   sim_name { |index| "Sim#{index}" }
   game_name { |index| "Game#{index}" }
-  account_name { |index| "Account#{index}" }
   strategy_name { |index| "Strategy#{index}" }
   feature_name { |index| "Feature#{index}" }
   version { Faker::Lorem.words(1) }
 end
 
 Account.blueprint do
-  username { Sham.account_name }
+  username { "bcassell" }
   flux { true }
-  host { Sham.account_name }
+  host { "nyx-login.engin.umich.edu"  }
   max_concurrent_simulations { 10 }
 end
 
@@ -26,6 +25,7 @@ end
 Simulator.blueprint do
   name { Sham.sim_name }
   version
+  parameters {["a", "b"]}
 end
 
 SimCount.blueprint do
@@ -39,14 +39,28 @@ def make_simulator_with_game(attributes = {})
   simulator
 end
 
+def make_full_game(attributes = {})
+  SimCount.make
+  game = Game.make(attributes)
+  game.strategies << Strategy.make
+  game.strategies << Strategy.make
+  game.ensure_profiles
+  game.features << Feature.make
+  game.features << Feature.make
+  game[game.parameters[0]] = 0.5
+  game[game.parameters[1]] = 1.5
+  game
+end
+
 Game.blueprint do
   name { Sham.game_name }
   size { 2 }
-  parameters { ["a", "b"]}
+  parameters {["a", "b"]}
 end
 
 def make_game_with_descendents(attributes = {})
   game = Game.make(attributes)
+  SimCount.make
   game.strategies << Strategy.make(:name => "Strategy0")
   game.features << make_feature_with_samples
   game.profiles << make_profile_with_players

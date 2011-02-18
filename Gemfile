@@ -27,12 +27,15 @@ gem 'bson_ext'
 gem 'statsample-optimization'
 
 group :development, :test do
+  gem 'rcov'
+  gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "autotest"
-  gem "webrat"
+  gem "autotest-rails-pure"
+  gem "capybara"
+  gem "autotest-fsevent"
   gem "autotest-growl"
   gem "machinist"
   gem 'machinist_mongo', :require => 'machinist/mongoid'
   gem 'faker'
-  gem 'selenium-client'
 end

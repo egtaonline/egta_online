@@ -2,8 +2,7 @@ class ControlVariate
   include Mongoid::Document
   include Transformation
   field :destination_id
-  field :adjustment_coefficient_record_id
-  field :feature_ids, :type => Array, :default => []
+  embeds_one :adjustment_coefficient_record
   embedded_in :game
 
   def features
@@ -20,7 +19,6 @@ class ControlVariate
   end
 
   def apply_transformation(g)
-    adjustment_coefficient_record = AdjustmentCoefficientRecord.find(adjustment_coefficient_record_id)
     g.profiles.each do |x|
       x.players.each do |y|
         y.payoffs.each do |z|

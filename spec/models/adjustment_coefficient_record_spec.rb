@@ -5,7 +5,10 @@ module Model
     describe "#calculate_coefficients" do
       before(:each) do
         @simulator = make_simulator_with_game
-        @acr = AdjustmentCoefficientRecord.new(:game_id => @simulator.games.first.id)
+        @simulator.games.first.control_variates.create
+        @acr = AdjustmentCoefficientRecord.new
+        @simulator.games.first.control_variates.first.adjustment_coefficient_record = @acr
+        @acr.save!
         @acr.calculate_coefficients([@simulator.games.first.features.first])
       end
 

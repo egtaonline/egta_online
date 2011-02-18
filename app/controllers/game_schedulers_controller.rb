@@ -37,7 +37,7 @@ class GameSchedulersController < AnalysisController
   def create
     @game = Game.find(params[:parm][:game_id])
     @game_scheduler = GameScheduler.new(params[:game_scheduler])
-    @game_scheduler.game = @game
+    @game.game_schedulers << @game_scheduler
     respond_to do |format|
       if @game_scheduler.save!
         flash[:notice] = 'Game scheduler was successfully created.'

@@ -9,7 +9,7 @@ class Simulator
   field :name
   field :description
   field :version
-  references_many :adjustment_coefficient_records
+  field :strategies, :type => Array, :default => Array.new
 
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
@@ -26,5 +26,9 @@ class Simulator
     self.parameters = Net::SCP::download!(account.host, account.username, "#{DEPLOY_PATH}/#{name}-#{version}/#{name}/simulation_spec.yaml")
     self.save
     return output
+  end
+
+  def strategy_exists?(strategy_name)
+    strategies.include?(strategy_name)
   end
 end

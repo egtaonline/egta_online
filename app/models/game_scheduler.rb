@@ -4,7 +4,7 @@
 class GameScheduler
   include Mongoid::Document
 
-  referenced_in :game, :inverse_of => :game_schedulers
+  embedded_in :game
   field :pbs_generator_id
   field :active, :type => Boolean
 
@@ -22,7 +22,6 @@ class GameScheduler
       scheduled_profile = find_profile if account
 
       if scheduled_profile
-        puts scheduled_profile.id
         simulation = Simulation.new
         simulation.account = account
         simulation.pbs_generator_id = pbs_generator_id
@@ -31,8 +30,7 @@ class GameScheduler
           simulation.flux = true
         end
         simulation.state = 'pending'
-        scheduled_profile.simulations << simulation
-        simulation.save!
+        simulation.profile_id = scheduled_profile.id
         scheduled_profile.game.simulations << simulation
         simulation.save!
         puts simulation
@@ -46,7 +44,7 @@ class GameScheduler
 
   def find_account
     account = nil
-    Account.all.each do |a|
+    Account.all.shuffle.each do |a|
       if a.schedulable?
         account = a
         break

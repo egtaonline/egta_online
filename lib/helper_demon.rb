@@ -2,8 +2,10 @@ class HelperDemon
 
   def self.process_schedulers
     puts "process_schedulers"
-    GameScheduler.active.each do |game_scheduler|
-      game_scheduler.schedule(30)
+    Game.all.each do |game|
+      game.game_schedulers.active.each do |game_scheduler|
+        game_scheduler.schedule(30)
+      end
     end
     # ProfileScheduler.active.each do |profile_scheduler|
     #   profile_scheduler.schedule

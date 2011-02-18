@@ -13,24 +13,18 @@ class Game
   validates_numericality_of :size, :integer_only => true
 
   referenced_in :simulator
-  referenced_in :adjustment_coefficient_record
+  embeds_many :adjustment_coefficient_records
   embeds_many :control_variates, :inverse_of => :game
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
-  references_many :game_schedulers
-  references_many :deviation_schedulers
-  references_many :profile_schedulers
+  embeds_many :game_schedulers
   embeds_many :features
-  references_many :simulations, :inverse_of => :game
+  embeds_many :simulations
 
-  before_destroy :kill_references
-
-  def kill_references
-    AdjustmentCoefficientRecord.where(:game_id => self.id).destroy_all
-    Simulation.where(:game_id => self.id).destroy_all
-    game_schedulers.destroy_all
-    deviation_schedulers.destroy_all
-    profile_schedulers.destroy_all
+  def add_strategy_from_name(name)
+    self.strategies.create(:name => name)
+    simulator.strategies << name
+    Stalker.enqueue 'update_profiles', :game => self.id
   end
 
   # Add Strategy to a Game

@@ -4,11 +4,12 @@ module Model
   describe ControlVariate do
     before(:each) do
       @simulator = make_simulator_with_game
-      @acr = AdjustmentCoefficientRecord.new(:game_id => @simulator.games.first.id)
+      @simulator.games.first.control_variates.create
+      @control_variate = @simulator.games.first.control_variates.first
+      @acr = AdjustmentCoefficientRecord.new
+      @simulator.games.first.control_variates.first.adjustment_coefficient_record = @acr
+      @acr.save!
       @acr.calculate_coefficients([@simulator.games.first.features.first])
-      @control_variate = ControlVariate.new(:adjustment_coefficient_record_id => @acr.id)
-      @simulator.games.first.control_variates << @control_variate
-      @control_variate.save!
     end
     describe "#copy_game" do
       it "should copy a game" do

@@ -5,17 +5,19 @@ class Profile
 
   embedded_in :game, :inverse_of => :profiles
   embeds_many :players
-  references_many :simulations, :inverse_of => :profile
 
   def scheduled_count
-    counter = game.simulations.scheduled.where(:profile_id => self.id).size == 0 ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)
-    counter += game.simulations.complete.where(:profile_id => self.id).size == 0 ? 0 : game.simulations.complete.where(:profile_id => self.id).sum(:size)
+    game.simulations.scheduled.where(:profile_id => self.id) == [] ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)
   end
 
   scope :contains_strategy, lambda{|strategy_name| where(strategy_name.to_sym.gt => 0)}
 
   def size
     players.size
+  end
+
+  def contains_strategy?(name)
+    players.where(:strategy => name).count != 0
   end
 
   def strategy_array
@@ -49,6 +51,6 @@ class Profile
   before_destroy :kill_simulations
 
   def kill_simulations
-    simulations.destroy_all
+    game.simulations.where(:profile_id => self.id).destroy_all
   end
 end

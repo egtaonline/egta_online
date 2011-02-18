@@ -13,10 +13,10 @@ class Simulation
   field :pbs_generator_id
   field :created_at
   field :serial_id, :type => Integer
+  field :profile_id
 
   referenced_in :account, :inverse_of => :simulations
-  referenced_in :profile, :inverse_of => :simulations
-  referenced_in :game, :inverse_of => :simulations
+  embedded_in :game, :inverse_of => :simulations
   embeds_many :samples
 
   scope :pending, where(:state=>'pending')

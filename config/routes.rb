@@ -28,7 +28,10 @@ EgtMongoid::Application.routes.draw do
     resources :feature_samples
     resources :simulations, :only => [:index, :show] do
       resources :samples
-      get 'purge', :on => :collection
+      collection do
+        get 'purge'
+        post 'update_game'
+      end
     end
   resources :features
   resources :profile_schedulers
