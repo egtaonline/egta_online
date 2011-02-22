@@ -27,7 +27,7 @@ gem 'bson_ext'
 gem 'statsample-optimization'
 
 group :development, :test do
-  gem 'rcov'
+  gem 'simplecov', :require => false
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "autotest"

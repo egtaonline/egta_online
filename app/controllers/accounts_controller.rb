@@ -1,11 +1,12 @@
+#Controller for cluster login accounts
 class AccountsController < AdminController
+  before_filter :find_account, :only => [:show, :edit, :update, :destroy]
 
   def index
     @accounts = Account.all
   end
 
   def show
-    @account = Account.find(params[:id])
   end
 
   def new
@@ -13,7 +14,6 @@ class AccountsController < AdminController
   end
 
   def edit
-    @account = Account.find(params[:id])
   end
 
   def create
@@ -27,7 +27,6 @@ class AccountsController < AdminController
   end
 
   def update
-    @account = Account.find(params[:id])
     if @account.update_attributes(params[:account])
       flash[:notice] = 'Account was successfully updated.'
       redirect_to @account
@@ -37,9 +36,14 @@ class AccountsController < AdminController
   end
 
   def destroy
-    @account = Account.find(params[:id])
     @account.destroy
 
     redirect_to accounts_url
+  end
+
+  protected
+
+  def find_account
+    @account = Account.find(params[:id])
   end
 end

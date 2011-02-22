@@ -4,30 +4,26 @@ module Transformation
   end
 
   def copy_game(game, name)
-    g = Game.create(:simulator_id => game.simulator_id, :name => game.name+name, :size => game.size, :parameters => game.parameters)
-    game.parameters.each {|x| g[x] = game[x]}
-    game.strategies.each {|x| g.strategies.create(:name => x.name)}
-    g.ensure_profiles
-    game.profiles.each do |x|
-      profile = g.profiles.detect{|z| z.strategy_array == x.strategy_array}
-      1.upto(x.players.count) do |y|
-        player = profile.players[y-1]
-        x.players[y-1].payoffs.each {|z| player.payoffs.create(:sample_id => z.sample_id, :payoff => z.payoff)}
+    game_copy = Game.create(:simulator_id => game.simulator_id, :name => game.name+name, :size => game.size, :parameters => game.parameters)
+    game.parameters.each {|param| game_copy[param] = game[param]}
+    game.strategies.each {|strategy| game_copy.strategies.create(:name => strategy.name)}
+    game_copy.ensure_profiles
+    game.profiles.each do |prof|
+      profile = game_copy.profiles.detect{|copy_prof| copy_prof.strategy_array == prof.strategy_array}
+      1.upto(prof.players.count) do |index|
+        player = profile.players[index-1]
+        prof.players[index-1].payoffs.each {|payoff| player.payoffs.create(:sample_id => payoff.sample_id, :payoff => payoff.payoff)}
       end
     end
-    game.features.each do |x|
-      g.features.create(:name => x.name, :expected_value => x.expected_value)
-      feature = g.features.where(:name => x.name).first
-      x.feature_samples.each {|y| feature.feature_samples.create(:feature_name => x.name, :sample_id => y.sample_id, :value => y.value)}
+    game.features.each do |feature|
+      game_copy.features.create(:name => feature.name, :expected_value => feature.expected_value)
+      copy_feature = game_copy.features.where(:name => feature.name).first
+      feature.feature_samples.each {|sample| copy_feature.feature_samples.create(:feature_name => feature.name, :sample_id => sample.sample_id, :value => sample.value)}
     end
-    if g.save!
-      return g
-    else
-      nil
-    end
+    return game_copy.save! ? game_copy : nil
   end
 
-  def apply_transformation(g)
-    g
+  def apply_transformation(game)
+    game
   end
 end

@@ -11,7 +11,6 @@ class Account
   validates_presence_of :username, :host, :max_concurrent_simulations
   validate :username_can_connect_to_host
   references_many :simulators
-  key :name
 
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it

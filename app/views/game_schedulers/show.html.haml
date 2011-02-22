@@ -14,6 +14,6 @@
     %td=h @game_scheduler.max_samples
   %tr{:class => "= cycle('','altrow')"}
     %th PBS Info:
-    %td= PbsGenerator.find(@game_scheduler.pbs_generator_id).name
+    %td= @pbs_name
 %p= link_to 'Edit game scheduler', edit_game_scheduler_path(@game_scheduler)
 

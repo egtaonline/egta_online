@@ -1,10 +1,11 @@
 class UsersController < AdminController
+  before_filter :find_user, :except => [:index, :new, :create]
+
   def index
     @users = User.paginate :per_page=>15, :page=>(params[:page] || 1)
   end
 
   def show
-    @user = User.find(params[:id])
   end
 
   def new
@@ -12,7 +13,6 @@ class UsersController < AdminController
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def create
@@ -26,7 +26,6 @@ class UsersController < AdminController
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User was successfully updated.'
       redirect_to @user
@@ -36,9 +35,14 @@ class UsersController < AdminController
   end
 
   def destroy
-    @user = User.find(params[:id])
     @user.destroy
 
     redirect_to users_url
+  end
+
+  protected
+
+  def find_user
+    @user = User.find(params[:id])
   end
 end

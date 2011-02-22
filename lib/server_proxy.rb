@@ -1,30 +1,21 @@
 class ServerProxy
   ROOT_DIR = File.dirname(File.expand_path(__FILE__))
-
   QSTAT_CMD = "/usr/local/torque/bin/qstat"
+
   def submit_simulations(simulations)
     account = simulations[0].account
     simulator = simulations[0].game.simulator
     root_path = "#{DEPLOY_PATH}/#{simulator.name}-#{simulator.version}/#{simulator.name}"
     Net::SSH.start(account.host, account.username) do |ssh|
       simulations.each do |simulation|
-        puts ssh.exec!("cd #{root_path}/../; cp -u #{DEPLOY_PATH}/setup_hierarchy.rb .; ruby setup_hierarchy.rb #{simulation.serial_id}")
+        ssh.exec!("cd #{root_path}/../; cp -u #{DEPLOY_PATH}/setup_hierarchy.rb .; ruby setup_hierarchy.rb #{simulation.serial_id}")
         File.open( "#{ROOT_DIR}/temp.yaml", 'w' ) do |out|
-          YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out )
-          p = Hash.new
-          simulation.game.parameters.each do |x|
-            if is_a_number?(simulation.game[x])
-              p[x] = simulation.game[x].to_f
-            else
-              p[x] = simulation.game[x]
-            end
-          end
-          YAML.dump(p, out)
+          YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out)
+          YAML.dump(numeralize(simulation.game.parameters), out)
         end
         Net::SCP::upload!(account.host, account.username, "#{ROOT_DIR}/temp.yaml", "#{root_path}/../simulations/#{simulation.serial_id}/simulation_spec.yaml")
       end
     end
-
     if account.host =~ /nyx/
       nyx_processing(simulations)
     else
@@ -33,31 +24,6 @@ class ServerProxy
       end
     end
   end
-
-#  def check_simulation(simulation)
-
-#    account = simulation.account
-
-#    Net::SSH.start(account.host, account.username) do |ssh|
-#      puts simulation.job
-#      if simulation.job
-#        output = ssh.exec!("#{QSTAT_CMD} -f -1 #{simulation.job}")
-#        if output =~ /Unknown Job Id/
-#          simulation.fail!
-#        elsif output =~ /Job Id:/
-#          # Simulation still good
-#        else
-#          simulation.fail!
-#        end
-
-#      end
-
-#    end
-
-#  end
-
-
-
 
   def check_simulation_new
     account = Account.all.shuffle.first
@@ -74,48 +40,47 @@ class ServerProxy
             state_info << job.split(/\s+/)
           end
         end
-        simulations.each do |simulation|
-          account = Account.find(simulation.account_id)
-          simulator = simulator = simulations[0].game.simulator
-          root_path = "#{DEPLOY_PATH}/#{simulator.name}-#{simulator.version}/#{simulator.name}"
-          if job_id.include?(simulation.job_id)
-            state = state_info[job_id.index(simulation.job_id)][9]
-            if state == "C"
-              output = ssh.exec!("if test -e #{root_path}/../simulations/#{simulation.serial_id}/out-#{simulation.serial_id}; then printf \"exists\"; fi")
-              if output == "exists"
-                Net::SCP.download!(account.host, account.username, "#{root_path}/../simulations/#{simulation.serial_id}", "#{ROOT_DIR}/../db/", :recursive => true)
-                if FileUtils.compare_file "#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}", "#{ROOT_DIR}/empty"
-                  gather_samples simulation
-                  simulation.finish!
-                else
-                  simulation.error_message = File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}").readline
-                  simulation.fail!
-                end
-              end
-            elsif state == "R" && simulation.state != "running"
-              simulation.start!
-            end
-          elsif state != "Q"
-            output = ssh.exec!("if test -e #{root_path}/../simulations/#{simulation.serial_id}/out-#{simulation.serial_id}; then printf \"exists\"; fi")
-            if output == "exists"
-              Net::SCP.download!(account.host, account.username, "#{root_path}/../simulations/#{simulation.serial_id}", "#{ROOT_DIR}/../db/", :recursive => true)
-              if FileUtils.compare_file "#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}", "#{ROOT_DIR}/empty"
-                gather_samples simulation
-                simulation.finish!
-              else
-                simulation.error_message = File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}").readline
-                simulation.fail!
-              end
-            else
-              simulation.fail!
-            end
-          end
-
-        end
+        simulations.each {|simulation| check_status(ssh, simulation, job_id, state_info) }
       end
     end
+  end
 
+  def check_existance(root_path, simulation)
+    output = ssh.exec!("if test -e #{root_path}/../simulations/#{simulation.serial_id}/out-#{simulation.serial_id}; then printf \"exists\"; fi")
+    output == "exists"
+  end
 
+  def check_for_errors(simulation)
+    if FileUtils.compare_file "#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}", "#{ROOT_DIR}/empty"
+      gather_samples simulation
+      simulation.finish!
+    else
+      simulation.error_message = File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}").readline
+      simulation.fail!
+    end
+  end
+
+  def check_status(ssh, simulation, job_id, state_info)
+    simulator = simulation.game.simulator
+    root_path = "#{DEPLOY_PATH}/#{simulator.name}-#{simulator.version}/#{simulator.name}"
+    if job_id.include?(simulation.job_id)
+      state = state_info[job_id.index(simulation.job_id)][9]
+      if state == "C"
+        if check_existance(root_path, simulation)
+          Net::SCP.download!(account.host, account.username, "#{root_path}/../simulations/#{simulation.serial_id}", "#{ROOT_DIR}/../db/", :recursive => true)
+          check_for_errors(simulation)
+        end
+      elsif state == "R" && simulation.state != "running"
+        simulation.start!
+      end
+    elsif state != "Q"
+      if check_existance(root_path, simulation)
+        Net::SCP.download!(account.host, account.username, "#{root_path}/../simulations/#{simulation.serial_id}", "#{ROOT_DIR}/../db/", :recursive => true)
+        check_for_errors(simulation)
+      else
+        simulation.fail!
+      end
+    end
   end
 
   def gather_samples(simulation)
@@ -124,29 +89,18 @@ class ServerProxy
     File.open( "#{ROOT_DIR}/../db/#{simulation.serial_id}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
         @sample = simulation.samples.build(:profile_id => simulation.profile_id, :filename => "#{ROOT_DIR}/../db/#{simulation.serial_id}/payoff_data", :file_index => count)
-        if !@sample.save
-          puts "saving failed"
-        end
         count += 1
         players = simulation.game.profiles.find(simulation.profile_id).players
-        players.each do |player|
-          player.payoffs.create(:sample_id => @sample.id, :payoff => yf[player.strategy])
-        end
+        players.each{|player| player.payoffs.create(:sample_id => @sample.id, :payoff => yf[player.strategy])}
       end
     end
-
     Dir.foreach("#{ROOT_DIR}/../db/#{simulation.serial_id}/features") do |x|
-      if !File.directory?("#{ROOT_DIR}/../db/#{simulation.serial_id}/features/"+x)
-        File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/features/"+x) do |out|
-          @feature = simulation.game.features.where(:name => x).first
-          if @feature == nil
-            @feature = simulation.game.features.create(:name => x)
-          end
-          count = 0
-          YAML.load_documents(out) do |yf|
-            @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
-            count += 1
-          end
+      File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/features/"+x) do |out|
+        @feature = simulation.game.features.where(:name => x).first ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
+        count = 0
+        YAML.load_documents(out) do |yf|
+          @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
+          count += 1
         end
       end
     end
@@ -187,37 +141,34 @@ class ServerProxy
   end
 
   private
+    def get_job(account, root_path, submission)
+      job = ""
+      Net::SSH.start(account.host, account.username) do |ssh|
+        job_return = ssh.exec!("cd #{root_path}/script; chmod g+wrx wrapper; #{submission.command}") if submission
+        job_return.strip! if job_return
+        job = job_return[/^(\d+)/] if job_return =~ /^(\d+)/
+      end
+      return job
+    end
 
     def nyx_processing(simulations)
       simulator = simulations[0].game.simulator
       root_path = "#{DEPLOY_PATH}/#{simulator.name}-#{simulator.version}/#{simulator.name}"
       account = simulations[0].account
       submission = PBS::MASSubmission.new(PbsGenerator.find(simulations[0].pbs_generator_id), simulations[0].size, simulations[0].serial_id, "#{root_path}/script/wrapper")
-      if simulations[0].flux?
-        submission.qos = "wellman_flux"
-      end
-#        submission.players = strategies.collect {|s| s['id'] } if strategies
+      submission.qos = "wellman_flux" if simulations[0].flux?
       create_wrapper(simulations)
-      @job = ""
       Net::SCP::upload!(account.host, account.username, "#{ROOT_DIR}/wrapper", "#{root_path}/script/")
-      Net::SSH.start(account.host, account.username) do |ssh|
-        puts ssh.exec!("cd #{root_path}/script; chmod g+wrx wrapper")
-        f = ssh.exec!("#{submission.command}") if submission
-        job_return = f
-        job_return.strip! if job_return
-        @job = job_return[/^(\d+)/] if job_return && job_return =~ /^(\d+)/
-      end
+      @job = get_job(account, root_path, submission)
       if submission
-        if @job != "" && @job != nil
+        if submission && @job != "" && @job != nil
           simulations.each do |simulation|
             simulation.send('queue!')
             simulation.job_id = @job+"[]"
             simulation.save
           end
         else
-          simulations.each do |simulation|
-            simulation.send('fail!')
-          end
+          simulations.each{|simulation| simulation.send('fail!')}
         end
       end
     end
@@ -228,16 +179,13 @@ class ServerProxy
       FileUtils.cp(ROOT_DIR + "/wrapper-template", File.dirname(__FILE__) + "/wrapper")
       File.open(ROOT_DIR + "/wrapper", "a") do |file|
         if simulations[0].flux?
-          file.syswrite("\n\#PBS -A wellman_flux")
-          file.syswrite("\n\#PBS -q flux")
+          file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
         else
           file.syswrite("\n\#PBS -q route")
         end
         file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
         str = "\#PBS -t #{simulations[0].serial_id}"
-        for i in 1...simulations.size
-          str += ",#{simulations[i].serial_id}"
-        end
+        simulations.size.times {|i| str += ",#{simulations[i].serial_id}"}
         str += "\n"
         file.syswrite(str)
         file.syswrite("\#PBS -o #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
@@ -248,7 +196,21 @@ class ServerProxy
       end
     end
 
+    private
+
     def is_a_number?(s)
       s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+    end
+
+    def numeralize(params)
+      p = Hash.new
+      params.each do |x|
+        if is_a_number?(game[x])
+          p[x] = simulation.game[x].to_f
+        else
+          p[x] = simulation.game[x]
+        end
+      end
+      p
     end
 end

@@ -1,78 +1,47 @@
-class FeaturesController < AnalysisController
+#Controls the CRUD of Features
+class FeaturesController < GameDescendentsController
+  before_filter :find_feature, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @features = Feature.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @features }
-      format.json  { render :json => @features }
-    end
+    @features = @game.features.all
   end
 
   def show
-    @feature = Feature.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @feature }
-      format.json  { render :json => @feature }
-    end
   end
 
   def new
     @feature = Feature.new
-    @game_options = Game.all.collect {|s| [s.name, s.id]}
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @feature }
-      format.json  { render :json => @feature }
-    end
+    @game_options = Game.all.collect {|feature| [feature.name, feature.id]}
   end
 
   def edit
-    @feature = Feature.find(params[:id])
   end
 
   def create
-    @feature = Feature.new(params[:feature])
-    @game_options = Game.all.collect {|s| [s.name, s.id]}
-    respond_to do |format|
-      if @feature.save
-        flash[:notice] = 'Feature was successfully created.'
-        format.html { redirect_to([@game, @feature]) }
-        format.xml  { render :xml => @feature, :status => :created, :location => [:analysis, @feature] }
-        format.json  { render :json => @feature }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @feature.errors, :status => :unprocessable_entity }
-      end
-    end
+    @feature = @game.features.create(params[:feature])
+
+    flash[:notice] = 'Feature was successfully created.'
+    redirect_to([@game, @feature])
   end
 
   def update
-    @feature = Feature.find(params[:id])
-
-    respond_to do |format|
-      if @feature.update_attributes(params[:feature])
-        flash[:notice] = 'Feature was successfully updated.'
-        format.html { redirect_to([:analysis, @feature]) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @feature.errors, :status => :unprocessable_entity }
-      end
+    if @feature.update_attributes(params[:feature])
+      flash[:notice] = 'Feature was successfully updated.'
+      redirect_to([@game, @feature])
+    else
+      render :action => "edit"
     end
   end
 
   def destroy
-    @feature = Feature.find(params[:id])
     @feature.destroy
+    redirect_to(features_url)
+  end
 
-    respond_to do |format|
-      format.html { redirect_to(analysis_features_url) }
-      format.xml  { head :ok }
-    end
+  protected
+
+  def find_feature
+    @feature = @game.features.find(params[:id])
   end
 
 end

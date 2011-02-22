@@ -1,4 +1,5 @@
 class PbsGeneratorsController < AnalysisController
+  before_filter :find_pbs, :only => [:show, :edit, :update, :destroy]
   # GET /pbs_generators
   # GET /pbs_generators.xml
   def index
@@ -13,8 +14,6 @@ class PbsGeneratorsController < AnalysisController
   # GET /pbs_generators/1
   # GET /pbs_generators/1.xml
   def show
-    @pbs_generator = PbsGenerator.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @pbs_generator }
@@ -34,7 +33,6 @@ class PbsGeneratorsController < AnalysisController
 
   # GET /pbs_generators/1/edit
   def edit
-    @pbs_generator = PbsGenerator.find(params[:id])
   end
 
   # POST /pbs_generators
@@ -57,7 +55,6 @@ class PbsGeneratorsController < AnalysisController
   # PUT /pbs_generators/1
   # PUT /pbs_generators/1.xml
   def update
-    @pbs_generator = PbsGenerator.find(params[:id])
 
     respond_to do |format|
       if @pbs_generator.update_attributes(params[:pbs_generator])
@@ -74,12 +71,17 @@ class PbsGeneratorsController < AnalysisController
   # DELETE /pbs_generators/1
   # DELETE /pbs_generators/1.xml
   def destroy
-    @pbs_generator = PbsGenerator.find(params[:id])
     @pbs_generator.destroy
 
     respond_to do |format|
       format.html { redirect_to pbs_generators_path}
       format.xml  { head :ok }
     end
+  end
+
+  protected
+
+  def find_pbs
+    @pbs_generator = PbsGenerator.find(params[:id])
   end
 end

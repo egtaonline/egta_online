@@ -162,7 +162,6 @@ GEM
     rake (0.8.7)
     rake-compiler (0.7.6)
       rake
-    rcov (0.9.9)
     reportbuilder (1.4.1)
       clbustos-rtf (~> 0.4.0)
       prawn (~> 0.8.4)
@@ -192,6 +191,9 @@ GEM
       json_pure
       rubyzip
     sexp_processor (3.0.5)
+    simplecov (0.4.0)
+      simplecov-html (~> 0.4.0)
+    simplecov-html (0.4.3)
     spreadsheet (0.6.5.1)
       ruby-ole (>= 1.0)
     spruz (0.2.5)
@@ -265,9 +267,9 @@ DEPENDENCIES
   net-ssh
   passenger
   rails (= 3.0.4)
-  rcov
   rspec-rails (~> 2.4)
   ruby_parser
+  simplecov
   stalker
   state_machine
   state_machine-mongoid

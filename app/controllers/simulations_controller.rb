@@ -1,73 +1,20 @@
-class SimulationsController < AnalysisController
-  protect_from_forgery :except => [:create,:update]
+class SimulationsController < GameDescendentsController
+  before_filter :gather_simulations, :only => [:index, :update_game]
 
   def index
-    if params[:game_id] == nil
-      params[:game_id] = Game.first.id
-    end
-    @game = Game.find(params[:game_id])
-    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @simulations }
-      format.json  { render :json => @simulations }
-    end
   end
 
   def show
-    @simulation = Simulation.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @simulation }
-      format.json  { render :json => @simulation }
-    end
+    @username = Account.find(@simulation.account_id).username
+    @simulation = @game.simulations.find(params[:id])
   end
 
   def purge
-    Simulation.failed.destroy_all
-
+    @game.simulations.failed.destroy_all
     redirect_to :simulations
   end
 
-  def edit
-    @simulation = Simulation.find(params[:id])
-  end
-
-  def create
-    @simulation = Simulation.new(params[:simulation])
-
-    respond_to do |format|
-      if @simulation.save
-        flash[:notice] = 'Simulation was successfully created.'
-        format.html { redirect_to([:analysis, @simulation]) }
-        format.xml  { render :xml => @simulation, :status => :created, :location => [:analysis, @simulation] }
-        format.json  { render :json => @simulation }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @simulation.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  def update
-    @simulation = Simulation.find(params[:id])
-
-    respond_to do |format|
-      if @simulation.update_attributes(params[:simulation])
-        flash[:notice] = 'Simulation was successfully updated.'
-        format.html { redirect_to([:analysis, @simulation]) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @simulation.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
   def update_game
-    @game = Game.find(params[:game_id])
-    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
     respond_to do |format|
       format.js
     end
@@ -90,19 +37,20 @@ class SimulationsController < AnalysisController
   end
 
   def destroy
-    @simulation = Simulation.find(params[:id])
+    @simulation = @game.simulations.find(params[:id])
     @simulation.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(simulations_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to([@game, simulations_url])
   end
 
   private
 
+  def gather_simulations
+    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+  end
+
   def event_transition(event)
-    @simulation = Simulation.find(params[:id])
+    @simulation = @game.simulations.find(params[:id])
 
     respond_to do |format|
       if @simulation.send("#{event}!")

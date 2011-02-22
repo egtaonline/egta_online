@@ -1,3 +1,4 @@
+#Updates application statistics in the view
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :checkup

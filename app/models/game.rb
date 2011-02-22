@@ -13,13 +13,27 @@ class Game
   validates_numericality_of :size, :integer_only => true
 
   referenced_in :simulator
-  embeds_many :adjustment_coefficient_records
   embeds_many :control_variates, :inverse_of => :game
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
   embeds_many :game_schedulers
   embeds_many :features
   embeds_many :simulations
+
+  def setup_parameters(simulator)
+    self.parameters = Array.new
+    YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| self[x] = y; self.parameters << x}
+  end
+
+  def calculate_cv_features(params, add=true)
+    feature = features.find(params[:feature_id])
+    if add
+      params[:feature_names] << feature.name
+    else
+      params[:feature_names].delete("#{feature.name}")
+    end
+    params[:feature_names].collect{|s| [s, features.where(:name => s).first.id]}
+  end
 
   def add_strategy_from_name(name)
     self.strategies.create(:name => name)

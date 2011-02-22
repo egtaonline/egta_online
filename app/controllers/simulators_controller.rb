@@ -1,10 +1,10 @@
 class SimulatorsController < AnalysisController
+  before_filter :find_simulator, :except => [:index, :new, :create]
   def index
     @simulators = Simulator.all
   end
 
   def show
-    @simulator = Simulator.find(params[:id])
     @name = Account.find(@simulator.account_id).name
   end
 
@@ -13,7 +13,6 @@ class SimulatorsController < AnalysisController
   end
 
   def edit
-    @simulator = Simulator.find(params[:id])
   end
 
   def create
@@ -28,7 +27,6 @@ class SimulatorsController < AnalysisController
   end
 
   def update
-    @simulator = Simulator.find(params[:id])
     if @simulator.update_attributes(params[:simulator])
       flash[:notice] = 'Simulator was successfully updated.'
       redirect_to @simulator
@@ -38,9 +36,13 @@ class SimulatorsController < AnalysisController
   end
 
   def destroy
-    @simulator = Simulator.find(params[:id])
     @simulator.destroy
     redirect_to(simulators_path)
   end
 
+  protected
+
+  def find_simulator
+    @simulator = Simulator.find(params[:id])
+  end
 end
