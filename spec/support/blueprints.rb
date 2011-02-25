@@ -75,6 +75,13 @@ Profile.blueprint do
   size { 2 }
 end
 
+def make_profile_with_descendents(attributes = {})
+  profile = Profile.make(attributes)
+  profile.simulations << make_simulation_with_sample
+  2.times { profile.players << make_players_with_payoffs }
+  profile
+end
+
 def make_profile_with_players(attributes = {})
   profile = Profile.make(attributes)
   2.times { profile.players << make_players_with_payoffs }
@@ -91,8 +98,22 @@ def make_players_with_payoffs(attributes = {})
   player
 end
 
+Simulation.blueprint do
+end
+
+def make_simulation_with_sample
+  simulation = Simulation.make
+  simulation.samples << Sample.make
+  simulation
+end
+
+Sample.blueprint do
+  id {1}
+end
+
 Payoff.blueprint do
   payoff { rand }
+  sample_id {1}
 end
 
 Feature.blueprint do

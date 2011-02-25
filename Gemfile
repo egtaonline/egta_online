@@ -27,6 +27,8 @@ gem 'bson_ext'
 gem 'statsample-optimization'
 
 group :development, :test do
+	gem 'cucumber'
+	gem 'cucumber-rails'
   gem 'simplecov', :require => false
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"

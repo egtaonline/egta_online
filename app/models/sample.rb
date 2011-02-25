@@ -3,21 +3,18 @@
 
 class Sample
   include Mongoid::Document
-
   embedded_in :simulation
+
   field :clean, :type => Boolean
   field :file_name
   field :file_index, :type => Integer
+  
   before_destroy :kill_payoffs
-
+  
   def kill_payoffs
-    if simulation.game != nil
-      simulation.game.features.each do |x|
-        x.feature_samples.where(:sample_id => id).destroy_all
-      end
-      simulation.game.profiles.find(simulation.profile_id).players.each do |x|
-        x.payoffs.where(:sample_id => id).destroy_all
-      end
+    simulation.profile.players.each do |player|
+      player.payoffs.where(:sample_id => self.id).destroy_all
     end
   end
+
 end
