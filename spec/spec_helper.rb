@@ -23,10 +23,4 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
-
-  config.after :suite do
-    Mongoid.master.collections.select do |collection|
-      collection.name !~ /system/
-    end.each(&:drop)
-  end
 end

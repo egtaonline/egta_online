@@ -1,5 +1,5 @@
 #Controller for cluster login accounts
-class AccountsController < AdminController
+class AccountsController < AnalysisController
   before_filter :find_account, :only => [:show, :edit, :update, :destroy]
 
   def index

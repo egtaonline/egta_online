@@ -37,7 +37,6 @@ EgtMongoid::Application.routes.draw do
   resources :profile_schedulers
   resources :deviation_schedulers
   resources :pbs_generators
-  resources :users
   root :to => 'home#index'
 
 end

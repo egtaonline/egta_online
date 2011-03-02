@@ -4,19 +4,16 @@
 class Simulation
   include Mongoid::Document
   include Mongoid::Timestamps
+  referenced_in :account, :inverse_of => :simulations
+  embedded_in :profile, :inverse_of => :simulations
 
   field :size, :type => Integer
   field :state
   field :job_id
   field :error_message
   field :flux, :type => Boolean
-  field :pbs_generator_id
   field :created_at
   field :serial_id, :type => Integer
-  field :profile_id
-
-  referenced_in :account, :inverse_of => :simulations
-  embedded_in :game, :inverse_of => :simulations
   embeds_many :samples
 
   scope :pending, where(:state=>'pending')
@@ -27,8 +24,16 @@ class Simulation
   scope :active, where(:state.in=>['queued','running'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
 
+  validates_presence_of :state, :flux, :serial_id, :on => :create, :message => "can't be blank"
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
+  before_destroy :kill_payoffs
 
+  def kill_payoffs
+    if profile != nil
+      samples.all.each {|sample| sample.kill_payoffs}
+    end
+  end
+  
   state_machine :state, :initial => :pending do
     state :pending
     state :queued
@@ -55,14 +60,9 @@ class Simulation
   end
 
   before_create :setup_id
-  before_destroy :kill_payoffs
 
   def setup_id
     self.serial_id = SimCount.first.counter
     SimCount.first.update_attributes(:counter => SimCount.first.counter+1)
-  end
-
-  def kill_payoffs
-    samples.each {|x| x.kill_payoffs}
   end
 end
