@@ -1,7 +1,7 @@
 EgtMongoid::Application.routes.draw do
 
   devise_for :users
-  resources :users
+
   resources :pbs_generators
   resources :home
   resources :yaml

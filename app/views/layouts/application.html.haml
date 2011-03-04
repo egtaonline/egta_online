@@ -27,8 +27,6 @@
         =yield
       #left-columns.grid_2.omega
         -@sidemenu = Array.new
-        -if current_user.admin?
-          -@sidemenu << ["Admin Menu", [["Accounts", accounts_path], ["Users", users_path]]]
         -@sidemenu << ["Analysis Menu", [["Simulators", simulators_path], |
           ["Simulations", simulations_path], ["Features", features_path], |
           ["PBS Generators", pbs_generators_path], ["Games", games_path]]]

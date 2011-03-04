@@ -4,7 +4,7 @@ class AdjustmentCoefficientRecord
   include Mongoid::Document
 
   field :feature_hash, :type => Hash
-  embedded_in :simulator
+  embedded_in :control_variate
 
   def calculate_coefficients(features)
     game = control_variate.game

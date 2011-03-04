@@ -10,12 +10,10 @@ class Simulator
   field :description
   field :version
   field :strategies, :type => Array, :default => Array.new
-
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
-  embeds_many :strategies
-  embeds_many :games
-  embeds_many :adjustment_coefficient_records
+
+  references_many :games
   referenced_in :account
 
   def setup_simulator
