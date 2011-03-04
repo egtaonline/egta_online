@@ -12,9 +12,8 @@ class Game
   field :size, :type => Integer
   validates_numericality_of :size, :integer_only => true
 
-  referenced_in :simulator
+  embedded_in :simulator
   embeds_many :control_variates, :inverse_of => :game
-  embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
   embeds_many :game_schedulers
   embeds_many :features

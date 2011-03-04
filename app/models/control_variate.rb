@@ -2,7 +2,7 @@ class ControlVariate
   include Mongoid::Document
   include Transformation
   field :destination_id
-  embeds_one :adjustment_coefficient_record
+  references_one :adjustment_coefficient_record
   embedded_in :game
 
   def features
