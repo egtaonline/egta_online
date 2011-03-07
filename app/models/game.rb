@@ -12,7 +12,7 @@ class Game
   field :size, :type => Integer
   validates_numericality_of :size, :integer_only => true
 
-  referenced_in :simulator
+  embedded_in :simulator
   embeds_many :control_variates, :inverse_of => :game
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
@@ -45,7 +45,8 @@ class Game
   def add_strategy(strategy)
     unless strategies.any? {|s| s == strategy}
       self.strategies << strategy
-      Stalker.enqueue 'update_profiles', :game => self.id
+      self.save!
+      Stalker.enqueue 'update_profiles', :simulator => self.simulator.id, :game => self.id
     end
   end
 

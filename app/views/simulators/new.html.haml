@@ -18,8 +18,8 @@
       %td= f.label :simulator, "Zipped Simulator"
       %td= f.file_field :simulator
     %tr
-      %td= f.label :account_id, "Default Account"
-      %td= f.collection_select :account_id, Account.all, :id, :name
+      %td= label :account, :account_id, "Default Account"
+      %td= collection_select :account, :account_id, Account.all, :id, :name
   %p
   = f.submit
 

@@ -25,10 +25,12 @@ gem 'will_paginate'
 gem 'mongoid', "2.0.0.rc.7"
 gem 'bson_ext'
 gem 'statsample-optimization'
-gem 'barista'
+gem 'hpricot'
+gem 'simple_form'
 
 group :development, :test do
   gem 'cucumber'
+  gem 'compass'
   gem 'cucumber-rails'
   gem 'simplecov', :require => false
   gem "database_cleaner"

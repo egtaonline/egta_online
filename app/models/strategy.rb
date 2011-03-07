@@ -7,7 +7,8 @@ class Strategy
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :game
-  embedded_in :game, :inverse_of => :strategies
+  embedded_in :simulator, :inverse_of => :strategies
+  embedded_in :game
 
   before_destroy :kill_profiles
 

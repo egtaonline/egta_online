@@ -10,7 +10,6 @@ class Account
   field :max_concurrent_simulations, :type => Integer
   validates_presence_of :username, :host, :max_concurrent_simulations
   validate :username_can_connect_to_host
-  references_many :simulators
 
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it
@@ -35,7 +34,7 @@ class Account
     sum = 0
     Game.all.each do |x|
       x.profiles.all.each do |y|
-        sum += x.simulations.where(:profile_id => y.id).count
+        sum += y.simulations.where(:account_id => self.id).count
       end
     end
     sum

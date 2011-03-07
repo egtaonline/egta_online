@@ -3,6 +3,7 @@ include Stalker
 require File.expand_path("../environment", __FILE__)
 
 job 'update_profiles' do |args|
-  game = Game.find(BSON::ObjectId.from_string(args["game"]))
+  simulator = Simulator.find(BSON::ObjectId.from_string(args["simulator"]))
+  game = simulator.games.find(BSON::ObjectId.from_string(args["game"]))
   game.ensure_profiles
 end

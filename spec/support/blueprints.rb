@@ -111,6 +111,12 @@ Sample.blueprint do
   id {1}
 end
 
+User.blueprint do
+  email { "test@test.com" }
+  password { "stuff1" }
+  password_confirmation { "stuff1" }
+end
+
 Payoff.blueprint do
   payoff { rand }
   sample_id {1}

@@ -3,18 +3,10 @@
     #{ link_to 'Home', root_path }  Games
 %h3 Games
 %p= link_to 'New game', new_game_path
-%table
-  %tr
-    %th Name
-    %th Simulator
-    %th Description
-  - @games.each do |game|
-    %tr
-      %td= link_to game.name, game
-      %td= link_to game.simulator.name, game.simulator
-      %td= link_to game.description, game
-      %td= link_to 'Destroy', game, :confirm => 'Are you sure?', :method => :delete
+%p
+  = label :simulator, :id, "Simulator"
+  = collection_select :simulator, :id, Simulator.all, :id, :name
+#game=render :partial => 'games'
 
-%p= will_paginate(@games)
 
 

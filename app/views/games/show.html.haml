@@ -1,6 +1,6 @@
 .breadcrumb
   .bc
-    #{ link_to 'Home', root_path } #{ link_to 'Games', games_path } Game: #{@game.name}
+    #{ link_to 'Home', root_path } #{ link_to 'Games', simulator_games_path } Game: #{@game.name}
 %h3 Game Information
 %table
   %tr
@@ -20,13 +20,13 @@
       %tr
         %td= x
         %td= @game[x]
-%p= link_to 'Edit game', edit_game_path(@game)
+%p= link_to 'Edit game', edit_simulator_game_path(@game.simulator, @game)
 
 %h3 Game Data
 %table
   %tr{:class => "= cycle('','altrow') "}
     %th EGAT XML Format:
-    %td= link_to "Download", game_path(@game, :xml)
+    %td= link_to "Download", simulator_game_path(@game.simulator, @game, :xml)
 %h3 Schedulers
 %table
   %tr
@@ -46,7 +46,7 @@
     %th Samples
   -@profiles.each do |profile|
     %tr{:class => "= cycle('','altrow') "}
-      %td= link_to profile.name, [@game, profile]
+      %td= link_to profile.name, [@game.simulator, @game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")
 
 %p= will_paginate(@profiles)
@@ -62,4 +62,4 @@
       %td= trans.type
       %td= link_to game.name, game
       %td= link_to 'Destroy', trans, :confirm => 'Are you sure?', :method => :delete
-%p= link_to 'New Control Variates', new_game_control_variate_path(@game)
+/%p= link_to 'New Control Variates', new_game_control_variate_path(@game)

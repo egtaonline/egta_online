@@ -12,11 +12,11 @@ class Simulator
   field :strategies, :type => Array, :default => Array.new
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
+  embeds_many :strategies
+  embeds_many :games
 
-  references_many :games
-  referenced_in :account
-
-  def setup_simulator
+  def setup_simulator(account_id)
+    account = Account.find(account_id)
     Net::SCP::upload!(account.host, account.username, simulator.path, "#{DEPLOY_PATH}/#{name}-#{version}.zip")
     output = ""
     Net::SSH.start(account.host, account.username) do |ssh|

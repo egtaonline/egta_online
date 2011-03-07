@@ -1,5 +1,7 @@
 Given /^a profile with a simulation with a single sample$/ do
-  @game = Game.make
+  @simulator = Simulator.make
+  @simulator.games << Game.make
+  @game = @simulator.games.first
   @game.profiles << make_profile_with_descendents
   @sample_id = @game.profiles.first.simulations.first.samples.first.id
 end

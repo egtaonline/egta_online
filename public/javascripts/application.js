@@ -10,4 +10,9 @@ $(document).ready(function() {
         jQuery.post('/simulations/update_game', {game_id: game})
     });
 
+    $("#simulator_id").change(function() {
+        var simulator = $('select#simulator_id :selected').val();
+        jQuery.post('/games/select_simulator', {simulator_id: simulator})
+    });
+
 });

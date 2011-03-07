@@ -5,7 +5,6 @@ class SimulatorsController < AnalysisController
   end
 
   def show
-    @name = Account.find(@simulator.account_id).name
   end
 
   def new
@@ -16,9 +15,9 @@ class SimulatorsController < AnalysisController
   end
 
   def create
-    @simulator = Simulator.new(params[:simulator])
+    @simulator = Simulator.create(params[:simulator])
     if @simulator.save!
-      @simulator.setup_simulator
+      @simulator.setup_simulator params[:account][:account_id]
       flash[:notice] = 'Simulator was successfully created.'
       redirect_to @simulator
     else
@@ -38,6 +37,22 @@ class SimulatorsController < AnalysisController
   def destroy
     @simulator.destroy
     redirect_to(simulators_path)
+  end
+
+  def add_strategy
+    @simulator.strategies.create(:name => params[:strategy])
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def remove_strategy
+    @simulator.strategies.find(params[:strategy_id]).destroy
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   protected

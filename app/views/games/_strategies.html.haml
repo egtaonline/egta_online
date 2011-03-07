@@ -5,8 +5,8 @@
     -game.strategies.each do |strategy|
       %tr{:class => "= cycle('','altrow') "}
         %td= strategy.name
-        %td= link_to 'Remove', url_for(:action => :remove_strategy, :strategy_id => strategy.id, :simulator_id => game.simulator.id), :method => :post, :remote => true
-    =form_tag url_for(:action=>:add_strategy, :simulator_id => game.simulator.id, :id=>game.id), :method=>:post, :remote => true do
+        %td= link_to 'Remove', url_for(:action => :remove_strategy, :strategy_id => strategy.id, :simulator_id => game.simulator.id, :game_id => game.id), :method => :post, :remote => true
+    =form_tag url_for(:action=>:add_strategy, :simulator_id => game.simulator.id, :id => game.id), :method=>:post, :remote => true do
       %tr{:class => "= cycle('','altrow') "}
-        %td= text_field_tag :strategy
+        %td= select_tag :strategy_id, options_for_select(@strategy_options)
         %td= submit_tag "Add"

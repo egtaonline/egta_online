@@ -3,6 +3,6 @@
     #{ link_to 'Home', root_path }  Simulations
 %h3 Simulations
 %p
-  = label :game_id, "Choose a game"
-  = collection_select :simulation, :game_id, Game.all, :id, :name
-#simulation=render :partial => 'simulations'
+  = label :game_id, :select, "Choose a game"
+  = grouped_collection_select :parm, :game_id, Simulator.all, :games, :name, :id, :name
+#simulation=render :partial => 'simulations', :locals => {:simulations => @simulations}

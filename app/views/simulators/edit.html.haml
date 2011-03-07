@@ -14,9 +14,6 @@
     %tr
       %td= f.label :description
       %td= f.text_area :description, :cols=>27, :rows=>10
-    %tr
-      %td= f.label :account_id, "Default Account"
-      %td= f.collection_select :account_id, Account.all, :id, :name
   %p
   = f.submit
 

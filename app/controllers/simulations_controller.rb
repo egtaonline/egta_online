@@ -46,7 +46,11 @@ class SimulationsController < GameDescendentsController
   private
 
   def gather_simulations
-    @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+    if @game == nil
+      @simulations = [].paginate :per_page => 15, :page => (params[:page] || 1)
+    else
+      @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+    end
   end
 
   def event_transition(event)

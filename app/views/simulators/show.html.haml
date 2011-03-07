@@ -12,8 +12,7 @@
   %tr
     %th Description:
     %td= @simulator.description
-  %tr
-    %th Default Account:
-    %td= @name
 %p= link_to 'Edit simulator', edit_simulator_path(@simulator)
 
+%h3 Strategies
+#strategies=render :partial => 'strategies', :locals => {:simulator => @simulator}
