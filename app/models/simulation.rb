@@ -5,7 +5,8 @@ class Simulation
   include Mongoid::Document
   include Mongoid::Timestamps
   referenced_in :account, :inverse_of => :simulations
-  embedded_in :profile, :inverse_of => :simulations
+  referenced_in :profile, :inverse_of => :simulations
+  references_one :game
 
   field :size, :type => Integer
   field :state
@@ -24,16 +25,18 @@ class Simulation
   scope :active, where(:state.in=>['queued','running'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
 
-  validates_presence_of :state, :flux, :serial_id, :on => :create, :message => "can't be blank"
+  validates_presence_of :state, :flux, :on => :create, :message => "can't be blank"
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
-  before_destroy :kill_payoffs
+  before_destroy :kill_feature_samples, :kill_payoffs
+
+  def kill_feature_samples
+    samples.each {|sample| sample.kill_feature_samples}
+  end
 
   def kill_payoffs
-    if profile != nil
-      samples.all.each {|sample| sample.kill_payoffs}
-    end
+    samples.each {|sample| sample.kill_payoffs}
   end
-  
+
   state_machine :state, :initial => :pending do
     state :pending
     state :queued

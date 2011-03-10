@@ -4,7 +4,7 @@
 class GameScheduler
   include Mongoid::Document
 
-  embedded_in :game
+  references_one :game
   field :pbs_generator_id
   field :active, :type => Boolean
 

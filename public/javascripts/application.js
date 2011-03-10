@@ -12,7 +12,7 @@ $(document).ready(function() {
 
     $("#simulator_id").change(function() {
         var simulator = $('select#simulator_id :selected').val();
-        jQuery.post('/games/select_simulator', {simulator_id: simulator})
+        jQuery.post(location.pathname+'/select_simulator', {simulator_id: simulator})
     });
 
 });

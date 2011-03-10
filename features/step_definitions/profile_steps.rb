@@ -1,21 +1,22 @@
-Given /^a profile with a simulation with a single sample$/ do
-  @simulator = Simulator.make
-  @simulator.games << Game.make
-  @game = @simulator.games.first
-  @game.profiles << make_profile_with_descendents
-  @sample_id = @game.profiles.first.simulations.first.samples.first.id
+Given /^the Game has a Profile$/ do
+  @profile = Profile.make
+  @game.profiles << @profile
 end
 
-When /^I delete the simulation$/ do
-  @game.profiles.first.simulations.first.destroy
+Given /^the Profile has a Player$/ do
+  @player = Player.make
+  @profile.players << @player
 end
 
-When /^I delete the sample$/ do
-  @game.profiles.first.simulations.first.samples.first.destroy
+Given /^the Player has a Payoff$/ do
+  @payoff = Payoff.make
+  @player.payoffs << @payoff
 end
 
-Then /^no players in the profile will have payoffs that reference that sample$/ do
-  @game.profiles.first.players.each do |player|
-    player.payoffs.where(:sample_id => @sample_id).count.should == 0
-  end
+Given /^the Sample is referenced in the Payoff$/ do
+  @payoff.update_attributes(:sample_id => @sample.id)
+end
+
+Then /^the Payoff is deleted$/ do
+  @player.payoffs.count.should == 0
 end

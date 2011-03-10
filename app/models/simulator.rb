@@ -13,7 +13,7 @@ class Simulator
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   embeds_many :strategies
-  embeds_many :games
+  references_many :games, :dependent => :destroy
 
   def setup_simulator(account_id)
     account = Account.find(account_id)

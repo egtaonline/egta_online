@@ -32,39 +32,10 @@ SimCount.blueprint do
   counter { 30 }
 end
 
-def make_simulator_with_game(attributes = {})
-  simulator = Simulator.make(attributes)
-  simulator.games << make_game_with_descendents
-  SimCount.make
-  simulator
-end
-
-def make_full_game(attributes = {})
-  SimCount.make
-  game = Game.make(attributes)
-  game.strategies << Strategy.make
-  game.strategies << Strategy.make
-  game.ensure_profiles
-  game.features << Feature.make
-  game.features << Feature.make
-  game[game.parameters[0]] = 0.5
-  game[game.parameters[1]] = 1.5
-  game
-end
-
 Game.blueprint do
   name { Sham.game_name }
   size { 2 }
   parameters {["a", "b"]}
-end
-
-def make_game_with_descendents(attributes = {})
-  game = Game.make(attributes)
-  SimCount.make
-  game.strategies << Strategy.make(:name => "Strategy0")
-  game.features << make_feature_with_samples
-  game.profiles << make_profile_with_players
-  game
 end
 
 Strategy.blueprint do
@@ -75,36 +46,14 @@ Profile.blueprint do
   size { 2 }
 end
 
-def make_profile_with_descendents(attributes = {})
-  profile = Profile.make(attributes)
-  profile.simulations << make_simulation_with_sample
-  2.times { profile.players << make_players_with_payoffs }
-  profile
-end
-
-def make_profile_with_players(attributes = {})
-  profile = Profile.make(attributes)
-  2.times { profile.players << make_players_with_payoffs }
-  profile
-end
-
 Player.blueprint do
   strategy { "Strategy0" }
 end
 
-def make_players_with_payoffs(attributes = {})
-  player = Player.make(attributes)
-  1.upto(30) {|x| player.payoffs << Payoff.make(:sample_id => x) }
-  player
-end
-
 Simulation.blueprint do
-end
-
-def make_simulation_with_sample
-  simulation = Simulation.make
-  simulation.samples << Sample.make
-  simulation
+  state { "queued" }
+  flux { "true" }
+  size { 1 }
 end
 
 Sample.blueprint do
@@ -125,12 +74,6 @@ end
 Feature.blueprint do
   name { Sham.feature_name }
   expected_value { 0.5 }
-end
-
-def make_feature_with_samples(attributes = {})
-  feature = Feature.make(attributes)
-  1.upto(30) { |x| feature.feature_samples << FeatureSample.make(:feature_name => feature.name, :sample_id => x) }
-  feature
 end
 
 FeatureSample.blueprint do
