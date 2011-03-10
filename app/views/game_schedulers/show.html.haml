@@ -5,7 +5,7 @@
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow')"}
     %th Game:
-    %td= link_to h(@game_scheduler.game.name), @game_scheduler.game
+    %td= link_to @game_scheduler.game.name, @game_scheduler.game
   %tr{:class => "= cycle('','altrow')"}
     %th Active:
     %td=h @game_scheduler.active

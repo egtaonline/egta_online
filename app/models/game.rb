@@ -16,7 +16,7 @@ class Game
   embeds_many :control_variates, :inverse_of => :game
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
-  referenced_in :game_schedulers, :dependent => :destroy
+  references_many :game_schedulers, :dependent => :destroy, :autosave => true
   embeds_many :features
   referenced_in :simulations
 

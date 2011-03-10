@@ -10,7 +10,14 @@ module NavigationHelpers
 
     when /the home\s?page/
       "/"
-
+    when /the show page for the new account/
+      account_path(@account)
+    when /the show page for the new simulator/
+      simulator_path(@simulator)
+    when /the show page for the new game/
+      game_path(@game)
+    when /the show page for the new game scheduler/
+      game_scheduler_path(@game_scheduler)
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

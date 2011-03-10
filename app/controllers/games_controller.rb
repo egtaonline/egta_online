@@ -2,7 +2,7 @@ require 'net/scp'
 require 'inject'
 require 'stalker'
 
-class GamesController < SimulatorDescendentsController
+class GamesController < AnalysisController
   before_filter :find_game, :only => [:show, :edit, :update, :add_strategy, :remove_strategy, :destroy]
   before_filter :new_game, :only => [:new, :create, :update_parameters]
 
@@ -131,8 +131,7 @@ class GamesController < SimulatorDescendentsController
   protected
 
   def find_game
-    @simulator = Simulator.find(params[:simulator_id])
-    @game = @simulator.games.find(params[:id])
+    @game = Game.find(params[:id])
     @strategy_options = @game.simulator.strategies.collect do |x|
       @game.strategies.where(:name => x.name).count == 0 ? [x.name, x.id] : []
     end

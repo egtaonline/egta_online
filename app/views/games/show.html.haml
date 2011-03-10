@@ -1,6 +1,6 @@
 .breadcrumb
   .bc
-    #{ link_to 'Home', root_path } #{ link_to 'Games', simulator_games_path } Game: #{@game.name}
+    #{ link_to 'Home', root_path } #{ link_to 'Games', games_path } Game: #{@game.name}
 %h3 Game Information
 %table
   %tr
@@ -20,19 +20,19 @@
       %tr
         %td= x
         %td= @game[x]
-%p= link_to 'Edit game', edit_simulator_game_path(@game.simulator, @game)
+%p= link_to 'Edit game', edit_game_path(@game)
 
 %h3 Game Data
 %table
   %tr{:class => "= cycle('','altrow') "}
     %th EGAT XML Format:
-    %td= link_to "Download", simulator_game_path(@game.simulator, @game, :xml)
+    %td= link_to "Download", @game
 %h3 Schedulers
 %table
   %tr
     %th Active?
   %tr
-    -@game.game_schedulers.each do |game_scheduler|
+    -GameScheduler.where(:game_id => @game.id).each do |game_scheduler|
       %tr{:class => "= cycle('','altrow') "}
         %td= link_to "Show", game_scheduler
         %td= h game_scheduler.active
@@ -46,7 +46,7 @@
     %th Samples
   -@profiles.each do |profile|
     %tr{:class => "= cycle('','altrow') "}
-      %td= link_to profile.name, [@game.simulator, @game, profile]
+      %td= link_to profile.name, [@game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")
 
 %p= will_paginate(@profiles)

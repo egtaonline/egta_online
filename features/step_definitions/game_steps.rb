@@ -1,5 +1,7 @@
 Given /^a Game$/ do
   @game = Game.make
+  @simulator = Simulator.make
+  @simulator.games << @game
 end
 
 Given /^the Game has a Feature$/ do
@@ -18,4 +20,9 @@ end
 
 When /^I delete the Game$/ do
   @game.destroy
+end
+
+Then /^the game is created$/ do
+  @game = Game.first
+  @game.should_not == nil
 end

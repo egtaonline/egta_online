@@ -17,6 +17,13 @@ Account.blueprint do
   max_concurrent_simulations { 10 }
 end
 
+PbsGenerator.blueprint do
+  process_memory { 1000 }
+  qos { "cac" }
+  time_per_sample { 10 }
+  jobs_per_request { 10 }
+end
+
 GameScheduler.blueprint do
   max_samples { 30 }
   samples_per_simulation { 30 }
@@ -25,7 +32,7 @@ end
 Simulator.blueprint do
   name { Sham.sim_name }
   version
-  parameters {["a", "b"]}
+  parameters { "---\nweb parameters:\n    number of agents: 120" }
 end
 
 SimCount.blueprint do

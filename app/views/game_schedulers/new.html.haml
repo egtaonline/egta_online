@@ -2,11 +2,11 @@
   .bc
     #{ link_to 'Home', root_path } #{link_to 'Game Schedulers', game_schedulers_path} Create Game Scheduler
 %h3 New game scheduler
--form_for(@game_scheduler) do |f|
+=form_for(@game_scheduler) do |f|
   = f.error_messages
   %table
     %tr
-      %td= f.label "Game"
+      %td= label :parm, :game_id
       %td= grouped_collection_select :parm, :game_id, Simulator.all, :games, :name, :id, :name
     %tr
       %td= f.label :active
@@ -21,5 +21,5 @@
       %td= f.label :pbs_generator_id, 'PBS Generator'
       %td= f.collection_select :pbs_generator_id, PbsGenerator.all, :id, :name
   %p
-    = f.submit 'Create'
+    = f.submit 'Create Game Scheduler'
 
