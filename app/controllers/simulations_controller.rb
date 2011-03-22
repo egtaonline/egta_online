@@ -1,4 +1,4 @@
-class SimulationsController < GameDescendentsController
+class SimulationsController < AnalysisController
   before_filter :gather_simulations, :only => [:index, :update_game]
 
   def index
@@ -6,11 +6,13 @@ class SimulationsController < GameDescendentsController
 
   def show
     @username = Account.find(@simulation.account_id).username
-    @simulation = @game.simulations.find(params[:id])
+    @simulation = Simulation.find(params[:id])
   end
 
   def purge
-    @game.simulations.failed.destroy_all
+    if params[:simulation] != nil and params[:simulation][:game_id] != nil
+      Simulation.where(:game_id => params[:simulation][:game_id]).failed.destroy_all
+    end
     redirect_to :simulations
   end
 
@@ -37,24 +39,29 @@ class SimulationsController < GameDescendentsController
   end
 
   def destroy
-    @simulation = @game.simulations.find(params[:id])
+    @simulation = Simulation.find(params[:id])
     @simulation.destroy
 
-    redirect_to([@game, simulations_url])
+    redirect_to(simulations_url)
   end
 
   private
 
   def gather_simulations
-    if @game == nil
+    if Game.count == 0
       @simulations = [].paginate :per_page => 15, :page => (params[:page] || 1)
     else
+      if params[:simulation] == nil or params[:simulation][:game_id] == nil
+        @game = Game.first
+      else
+        @game = Game.find(params[:simulation][:game_id])
+      end
       @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
     end
   end
 
   def event_transition(event)
-    @simulation = @game.simulations.find(params[:id])
+    @simulation = Simulation.find(params[:id])
 
     respond_to do |format|
       if @simulation.send("#{event}!")

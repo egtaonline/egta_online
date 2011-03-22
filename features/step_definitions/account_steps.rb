@@ -1,4 +1,4 @@
-Given /an Account$/ do
+Given /an account$/ do
   @account = Account.make
 end
 

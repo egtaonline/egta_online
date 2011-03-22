@@ -18,7 +18,7 @@ class Game
   embeds_many :profiles, :inverse_of => :game
   references_many :game_schedulers, :dependent => :destroy, :autosave => true
   embeds_many :features
-  referenced_in :simulations
+  references_many :simulations, :dependent => :destroy
 
   def setup_parameters(simulator)
     self.parameters = Array.new
@@ -46,7 +46,7 @@ class Game
     unless strategies.any? {|s| s == strategy}
       self.strategies << strategy
       self.save!
-      Stalker.enqueue 'update_profiles', :simulator => self.simulator.id, :game => self.id
+      ensure_profiles
     end
   end
 

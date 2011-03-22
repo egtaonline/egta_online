@@ -1,18 +1,18 @@
-Given /^a Simulator$/ do
+Given /^a simulator$/ do
   @simulator = Simulator.make
   Simulator.all.count.should == 1
   puts @simulator.parameters
 end
 
-Given /^the Game references the Simulator$/ do
+Given /^the game references the simulator$/ do
   @simulator.games << @game
 end
 
-When /^I delete the Simulator$/ do
+When /^I delete the simulator$/ do
   @simulator.destroy
 end
 
-Then /^the Game is deleted$/ do
+Then /^the game is deleted$/ do
   Game.all.count.should == 0
 end
 

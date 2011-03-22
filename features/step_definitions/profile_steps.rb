@@ -1,22 +1,22 @@
-Given /^the Game has a Profile$/ do
+Given /^the game has a profile$/ do
   @profile = Profile.make
   @game.profiles << @profile
 end
 
-Given /^the Profile has a Player$/ do
+Given /^the profile has a player$/ do
   @player = Player.make
   @profile.players << @player
 end
 
-Given /^the Player has a Payoff$/ do
+Given /^the player has a payoff$/ do
   @payoff = Payoff.make
   @player.payoffs << @payoff
 end
 
-Given /^the Sample is referenced in the Payoff$/ do
+Given /^the sample is referenced in the payoff$/ do
   @payoff.update_attributes(:sample_id => @sample.id)
 end
 
-Then /^the Payoff is deleted$/ do
+Then /^the payoff is deleted$/ do
   @player.payoffs.count.should == 0
 end

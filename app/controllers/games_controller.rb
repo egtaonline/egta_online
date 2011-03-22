@@ -54,7 +54,7 @@ class GamesController < AnalysisController
     @simulator.games << @game
 
     respond_to do |format|
-      if @game.save
+      if @game.save!
         flash[:notice] = 'Game was successfully created.'
         redirect_to @game
       else

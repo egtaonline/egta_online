@@ -1,24 +1,24 @@
-Given /^a Game$/ do
+Given /^a game$/ do
   @game = Game.make
   @simulator = Simulator.make
   @simulator.games << @game
 end
 
-Given /^the Game has a Feature$/ do
+Given /^the game has a feature$/ do
   @feature = Feature.make
   @game.features << @feature
 end
 
-Given /^the Feature has a FeatureSample$/ do
+Given /^the feature has a feature sample$/ do
   @feature_sample = FeatureSample.make
   @feature.feature_samples << @feature_sample
 end
 
-Then /^the FeatureSample is deleted$/ do
+Then /^the feature sample is deleted$/ do
   @feature.feature_samples.count.should == 0
 end
 
-When /^I delete the Game$/ do
+When /^I delete the game$/ do
   @game.destroy
 end
 

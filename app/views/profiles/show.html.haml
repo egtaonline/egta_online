@@ -1,6 +1,6 @@
 .breadcrumb
   .bc
-    #{ link_to 'Home', root_path } #{ link_to 'Profiles', [@profile.game.simulator, @profile.game, @profile] } Show Profile
+    #{ link_to 'Home', root_path } #{ link_to 'Profiles', [@profile.game, @profile] } Show Profile
 %h3 Profile Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}

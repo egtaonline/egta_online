@@ -6,7 +6,7 @@ class Simulation
   include Mongoid::Timestamps
   referenced_in :account, :inverse_of => :simulations
   referenced_in :profile, :inverse_of => :simulations
-  references_one :game
+  referenced_in :game
 
   field :size, :type => Integer
   field :state

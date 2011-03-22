@@ -22,12 +22,12 @@ class GameScheduler
       scheduled_profile = find_profile if account
 
       if scheduled_profile
-        scheduled_profile.game.simulations.create(:account => account,
+        @game.simulations.create!(:account => account,
           :pbs_generator_id => pbs_generator_id,
           :size => samples_per_simulation,
           :state => 'pending',
           :profile_id => scheduled_profile.id,
-          :flux => (account.flux? and game.simulations.where(:flux => true, :state => 'queued').count < FLUX_CORES))
+          :flux => (account.flux? and Simulation.where(:game_id => game.id, :flux => true, :state => 'queued').count < FLUX_CORES))
       else
         break
       end
