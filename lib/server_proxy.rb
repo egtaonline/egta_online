@@ -53,6 +53,7 @@ class ServerProxy
   def check_for_errors(simulation)
     if FileUtils.compare_file "#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}", "#{ROOT_DIR}/empty"
       gather_samples simulation
+      gather_features simulation
       simulation.finish!
     else
       simulation.error_message = File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/out-#{simulation.serial_id}").readline
@@ -85,15 +86,17 @@ class ServerProxy
 
   def gather_samples(simulation)
     count = 0
-    @sample
     File.open( "#{ROOT_DIR}/../db/#{simulation.serial_id}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
-        @sample = simulation.samples.build(:profile_id => simulation.profile_id, :filename => "#{ROOT_DIR}/../db/#{simulation.serial_id}/payoff_data", :file_index => count)
+        sample = simulation.samples.create(:profile_id => simulation.profile_id, :filename => "#{ROOT_DIR}/../db/#{simulation.serial_id}/payoff_data", :file_index => count)
         count += 1
         players = simulation.game.profiles.find(simulation.profile_id).players
-        players.each{|player| player.payoffs.create(:sample_id => @sample.id, :payoff => yf[player.strategy])}
+        players.each{|player| player.payoffs.create(:sample_id => sample.id, :payoff => yf[player.strategy])}
       end
     end
+  end
+
+  def gather_features(simulation)
     Dir.foreach("#{ROOT_DIR}/../db/#{simulation.serial_id}/features") do |x|
       File.open("#{ROOT_DIR}/../db/#{simulation.serial_id}/features/"+x) do |out|
         @feature = simulation.game.features.where(:name => x).first ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first

@@ -32,7 +32,6 @@ group :development, :test do
   gem 'cucumber'
   gem 'compass'
   gem 'cucumber-rails'
-  gem 'simplecov', :require => false
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "autotest"

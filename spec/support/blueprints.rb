@@ -36,7 +36,7 @@ Simulator.blueprint do
 end
 
 SimCount.blueprint do
-  counter { 30 }
+  counter { 0 }
 end
 
 Game.blueprint do
@@ -60,7 +60,7 @@ end
 Simulation.blueprint do
   state { "queued" }
   flux { "true" }
-  size { 1 }
+  size { 30 }
 end
 
 Sample.blueprint do

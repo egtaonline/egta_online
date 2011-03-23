@@ -9,7 +9,6 @@ class Simulator
   field :name
   field :description
   field :version
-  field :strategies, :type => Array, :default => Array.new
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   embeds_many :strategies
