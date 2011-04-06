@@ -13,7 +13,7 @@ EgtMongoid::Application.routes.draw do
     resources :profiles, :only => [:index, :show, :destroy]
     resources :game_schedulers
     resources :features
-    resources :control_variates, :only => [:index, :show, :destroy] do
+    resources :control_variates, :only => [:index, :show, :destroy, :new] do
       collection do
         post 'add_feature', 'remove_feature', 'update_choice'
       end
