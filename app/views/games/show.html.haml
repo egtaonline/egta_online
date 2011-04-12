@@ -44,11 +44,14 @@
   %tr
     %th Name
     %th Samples
+    -unless @game[:regret_updated_at] == nil
+      %th Regret
   -@profiles.each do |profile|
     %tr{:class => "= cycle('','altrow') "}
       %td= link_to profile.name, [@game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")
-
+      -unless @game[:regret_updated_at] == nil
+        %td= profile[:regret]
 %p= will_paginate(@profiles)
 
 %h3 Transformations
@@ -63,3 +66,4 @@
       %td= link_to game.name, game
       %td= link_to 'Destroy', trans, :confirm => 'Are you sure?', :method => :delete
 %p= link_to 'New Control Variates', new_game_control_variate_path(@game)
+%p= link_to 'Update Regret', regret_game_path(@game)

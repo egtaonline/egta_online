@@ -1,9 +1,10 @@
 require 'net/scp'
 require 'inject'
 require 'stalker'
+require ::Rails.root.to_s + '/lib/egat_interface'
 
 class GamesController < AnalysisController
-  before_filter :find_game, :only => [:show, :edit, :update, :add_strategy, :remove_strategy, :destroy]
+  before_filter :find_game, :only => [:show, :edit, :update, :add_strategy, :remove_strategy, :destroy, :regret]
   before_filter :new_game, :only => [:new, :create, :update_parameters]
 
   def index
@@ -54,6 +55,12 @@ class GamesController < AnalysisController
         render :action => "new"
       end
     end
+  end
+
+  def regret
+    puts generate_regret(@game)
+    redirect_to(@game)
+      
   end
 
   def update
