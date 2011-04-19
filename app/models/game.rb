@@ -12,13 +12,13 @@ class Game
   field :size, :type => Integer
   validates_numericality_of :size, :integer_only => true
 
-  referenced_in :simulator
+  belongs_to :simulator
   embeds_many :control_variates, :inverse_of => :game
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
-  references_many :game_schedulers, :dependent => :destroy, :autosave => true
+  has_many :game_schedulers, :dependent => :destroy, :autosave => true
   embeds_many :features
-  references_many :simulations, :dependent => :destroy
+  has_many :simulations, :dependent => :destroy
 
   def setup_parameters(simulator)
     self.parameters = Array.new

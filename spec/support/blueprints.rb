@@ -1,19 +1,15 @@
 require 'machinist/mongoid'
-require 'sham'
-require 'faker'
 
-Sham.define do
-  sim_name { |index| "Sim#{index}" }
-  game_name { |index| "Game#{index}" }
-  strategy_name { |index| "Strategy#{index}" }
-  feature_name { |index| "Feature#{index}" }
-  version { Faker::Lorem.words(1) }
+ServerProxy.blueprint do
+  host {"d-108-249.eecs.umich.edu"}
+  location {"/home/bcassell"}
+  batch_size { 1 }
 end
 
 Account.blueprint do
   username { "bcassell" }
+  password {"sh@na1"}
   flux { true }
-  host { "nyx-login.engin.umich.edu"  }
   max_concurrent_simulations { 10 }
 end
 
@@ -30,9 +26,10 @@ GameScheduler.blueprint do
 end
 
 Simulator.blueprint do
-  name { Sham.sim_name }
-  version
+  name { "epp_sim" }
+  version { "Sim#{sn}" }
   parameters { "---\nweb parameters:\n    number of agents: 120" }
+  path { "/Users/bcassell/Ruby/egt_working_directory/epp_sim.zip" }
 end
 
 SimCount.blueprint do
@@ -40,13 +37,14 @@ SimCount.blueprint do
 end
 
 Game.blueprint do
-  name { Sham.game_name }
+  name { "Game#{sn}" }
   size { 2 }
-  parameters {["a", "b"]}
+  parameters {["number_of_agents"]}
+  number_of_agents { 120 }
 end
 
 Strategy.blueprint do
-  name { Sham.strategy_name }
+  name { "Strategy#{sn}" }
 end
 
 Profile.blueprint do
@@ -54,12 +52,13 @@ Profile.blueprint do
 end
 
 Player.blueprint do
-  strategy { "Strategy0" }
+  strategy { "a" }
 end
 
 Simulation.blueprint do
-  state { "queued" }
+  state { "pending" }
   flux { "true" }
+  job_id { 1 }
   size { 30 }
 end
 
@@ -71,6 +70,7 @@ User.blueprint do
   email { "test@test.com" }
   password { "stuff1" }
   password_confirmation { "stuff1" }
+  secret_key { SECRET_KEY }
 end
 
 Payoff.blueprint do
@@ -79,7 +79,7 @@ Payoff.blueprint do
 end
 
 Feature.blueprint do
-  name { Sham.feature_name }
+  name { "feature#{sn}" }
   expected_value { 0.5 }
 end
 

@@ -1,5 +1,5 @@
 Given /^a simulator$/ do
-  @simulator = Simulator.make
+  @simulator = Simulator.make!
   Simulator.all.count.should == 1
   puts @simulator.parameters
 end

@@ -5,7 +5,7 @@
 %p= link_to 'New game', new_game_path
 %p
   = label :simulator, :id, "Simulator"
-  = collection_select :simulator, :id, Simulator.all, :id, :name
+  = collection_select :simulator, :id, Simulator.all, :id, :fullname
 #game=render :partial => 'games'
 
 

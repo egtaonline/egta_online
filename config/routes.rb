@@ -1,7 +1,7 @@
 EgtMongoid::Application.routes.draw do
 
   devise_for :users
-
+  resources :game_manipulations
   resources :accounts
   resources :simulators do
     member do

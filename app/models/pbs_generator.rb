@@ -1,6 +1,7 @@
 class PbsGenerator
   include Mongoid::Document
 
+  has_many :simulations
   field :process_memory, :type => Integer
   field :qos
   field :time_per_sample, :type => Integer
@@ -18,5 +19,4 @@ class PbsGenerator
   def name
     "#{self.time_per_sample}-#{self.process_memory}-#{self.qos}"
   end
-
 end

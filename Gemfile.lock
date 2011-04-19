@@ -1,36 +1,46 @@
+GIT
+  remote: https://github.com/nmerouze/machinist_mongo.git
+  revision: fa4819c4e1233a4e3ce527b68af8aeee85dfc6c3
+  branch: machinist2
+  specs:
+    machinist_mongo (2.0.0.beta.1)
+      machinist (~> 2.0.0.beta2)
+
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
   specs:
     ZenTest (4.4.2)
     abstract (1.0.0)
-    actionmailer (3.0.4)
-      actionpack (= 3.0.4)
+    actionmailer (3.0.7)
+      actionpack (= 3.0.7)
       mail (~> 2.2.15)
-    actionpack (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
+    actionpack (3.0.7)
+      activemodel (= 3.0.7)
+      activesupport (= 3.0.7)
       builder (~> 2.1.2)
       erubis (~> 2.6.6)
-      i18n (~> 0.4)
+      i18n (~> 0.5.0)
       rack (~> 1.2.1)
-      rack-mount (~> 0.6.13)
+      rack-mount (~> 0.6.14)
       rack-test (~> 0.5.7)
       tzinfo (~> 0.3.23)
-    activemodel (3.0.4)
-      activesupport (= 3.0.4)
+    activemodel (3.0.7)
+      activesupport (= 3.0.7)
       builder (~> 2.1.2)
-      i18n (~> 0.4)
-    activerecord (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
+      i18n (~> 0.5.0)
+    activerecord (3.0.7)
+      activemodel (= 3.0.7)
+      activesupport (= 3.0.7)
       arel (~> 2.0.2)
       tzinfo (~> 0.3.23)
-    activeresource (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
-    activesupport (3.0.4)
-    arel (2.0.8)
+    activeresource (3.0.7)
+      activemodel (= 3.0.7)
+      activesupport (= 3.0.7)
+    activesupport (3.0.7)
+    arel (2.0.9)
+    attr_encrypted (1.2.0)
+      encryptor (>= 1.1.1)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     autotest-fsevent (0.2.4)
@@ -39,8 +49,8 @@ GEM
     autotest-rails-pure (4.1.2)
     bcrypt-ruby (2.1.4)
     beanstalk-client (1.1.0)
-    bson (1.2.1)
-    bson_ext (1.2.1)
+    bson (1.3.0)
+    bson_ext (1.3.0)
     builder (2.1.2)
     capistrano (2.5.19)
       highline
@@ -74,17 +84,16 @@ GEM
     culerity (0.2.15)
     daemon_controller (0.2.5)
     daemons (1.1.0)
-    database_cleaner (0.6.3)
+    database_cleaner (0.6.6)
     devise (1.1.5)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 1.0.2)
     diff-lcs (1.1.2)
     dirty-memoize (0.0.4)
+    encryptor (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     extendmatrix (0.3.1)
-    faker (0.9.5)
-      i18n (~> 0.4)
     fastercsv (1.5.4)
     fastthread (1.0.7)
     ffi (1.0.5)
@@ -111,10 +120,8 @@ GEM
       thor (~> 0.14.4)
     json (1.4.6)
     json_pure (1.5.1)
-    machinist (1.0.6)
-    machinist_mongo (1.2.0)
-      machinist (~> 1.0.6)
-    mail (2.2.15)
+    machinist (2.0.0.beta2)
+    mail (2.2.17)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -122,9 +129,9 @@ GEM
     mime-types (1.16)
     minimization (0.2.1)
       text-table (~> 1.2)
-    mongo (1.2.1)
-      bson (>= 1.2.1)
-    mongoid (2.0.0.rc.7)
+    mongo (1.3.0)
+      bson (>= 1.3.0)
+    mongoid (2.0.0)
       activemodel (~> 3.0)
       mongo (~> 1.2)
       tzinfo (~> 0.3.22)
@@ -137,6 +144,9 @@ GEM
     net-ssh (2.1.0)
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
+    net-ssh-multi (1.0.1)
+      net-ssh (>= 1.99.2)
+      net-ssh-gateway (>= 0.99.0)
     nokogiri (1.4.4)
     passenger (3.0.2)
       daemon_controller (>= 0.2.5)
@@ -155,22 +165,22 @@ GEM
     prawn-svg (0.9.1.10)
       prawn (>= 0.8.4)
       prawn-core (>= 0.8.4)
-    rack (1.2.1)
-    rack-mount (0.6.13)
+    rack (1.2.2)
+    rack-mount (0.6.14)
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rails (3.0.4)
-      actionmailer (= 3.0.4)
-      actionpack (= 3.0.4)
-      activerecord (= 3.0.4)
-      activeresource (= 3.0.4)
-      activesupport (= 3.0.4)
+    rails (3.0.7)
+      actionmailer (= 3.0.7)
+      actionpack (= 3.0.7)
+      activerecord (= 3.0.7)
+      activeresource (= 3.0.7)
+      activesupport (= 3.0.7)
       bundler (~> 1.0)
-      railties (= 3.0.4)
-    railties (3.0.4)
-      actionpack (= 3.0.4)
-      activesupport (= 3.0.4)
+      railties (= 3.0.7)
+    railties (3.0.7)
+      actionpack (= 3.0.7)
+      activesupport (= 3.0.7)
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
@@ -246,7 +256,7 @@ GEM
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.24)
+    tzinfo (0.3.26)
     warden (1.0.3)
       rack (>= 1.0.0)
     will_paginate (3.0.pre2)
@@ -257,12 +267,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  attr_encrypted
   autotest
   autotest-fsevent
   autotest-growl
   autotest-rails-pure
   beanstalk-client
-  bson_ext
+  bson_ext (= 1.3)
   capistrano
   capybara
   carrierwave
@@ -272,19 +283,18 @@ DEPENDENCIES
   daemons
   database_cleaner
   devise
-  faker
   ffi-ncurses
   haml
   haml-rails
   hpricot
   jquery-rails
-  machinist
-  machinist_mongo
-  mongoid (= 2.0.0.rc.7)
+  machinist_mongo!
+  mongoid (= 2.0)
   net-scp
   net-ssh
+  net-ssh-multi
   passenger
-  rails (= 3.0.4)
+  rails (= 3.0.7)
   rspec-rails (~> 2.4)
   ruby_parser
   simple_form

@@ -3,9 +3,9 @@
 class Profile
   include Mongoid::Document
 
-  embedded_in :game, :inverse_of => :profiles
+  embedded_in :game
   embeds_many :players
-  embeds_many :simulations, :inverse_of => :profile
+  has_many :simulations
 
   def scheduled_count
     game.simulations.scheduled.where(:profile_id => self.id) == [] ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)

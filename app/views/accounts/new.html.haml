@@ -9,8 +9,11 @@
       %td= f.label :username
       %td= f.text_field :username
     %tr
-      %td= f.label :host
-      %td= f.text_field :host, :value => "nyx-login.engin.umich.edu"
+      %td= f.label :password
+      %td= f.password_field :password
+    %tr
+      %td= label :server_proxy_id, "Server proxy"
+      %td= collection_select :serv, :server_proxy_id, ServerProxy.all, :id, :host
     %tr
       %td= f.label :max_concurrent_simulations
       %td= f.text_field :max_concurrent_simulations, :value => 10

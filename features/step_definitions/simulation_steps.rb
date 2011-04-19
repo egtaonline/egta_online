@@ -1,12 +1,13 @@
 Given /^the game has a simulation$/ do
-  SimCount.make
-  @simulation = Simulation.make
+  SimCount.make!
+  @simulation = Simulation.make!
   @simulation.game = @game
 end
 
 Given /^the simulation has a sample$/ do
   @sample = Sample.make
   @simulation.samples << @sample
+  @sample.save!
 end
 
 Given /^the sample is referenced in the feature sample$/ do

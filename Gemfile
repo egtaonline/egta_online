@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.0.4'
+gem 'rails', '3.0.7'
 
 # Deploy with Capistrano
 gem 'capistrano'
@@ -13,6 +13,7 @@ gem 'state_machine-mongoid'
 gem 'devise'
 gem 'ruby_parser'
 gem 'net-ssh'
+gem 'net-ssh-multi'
 gem 'net-scp'
 gem 'carrierwave'
 gem 'ffi-ncurses'
@@ -22,11 +23,12 @@ gem 'stalker'
 gem 'daemons'
 gem 'jquery-rails'
 gem 'will_paginate'
-gem 'mongoid', "2.0.0.rc.7"
-gem 'bson_ext'
+gem 'mongoid', "2.0"
+gem 'bson_ext', "1.3"
 gem 'statsample-optimization'
 gem 'hpricot'
 gem 'simple_form'
+gem 'attr_encrypted'
 
 group :development, :test do
   gem 'cucumber'
@@ -39,7 +41,5 @@ group :development, :test do
   gem "capybara"
   gem "autotest-fsevent"
   gem "autotest-growl"
-  gem "machinist"
-  gem 'machinist_mongo', :require => 'machinist/mongoid'
-  gem 'faker'
+  gem 'machinist_mongo', :git => 'https://github.com/nmerouze/machinist_mongo.git', :require => 'machinist/mongoid', :branch => 'machinist2'
 end

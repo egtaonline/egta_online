@@ -1,17 +1,19 @@
 Given /^a game$/ do
-  @game = Game.make
-  @simulator = Simulator.make
+  @game = Game.make!
+  @simulator = Simulator.make!
   @simulator.games << @game
 end
 
 Given /^the game has a feature$/ do
   @feature = Feature.make
   @game.features << @feature
+  @feature.save!
 end
 
 Given /^the feature has a feature sample$/ do
   @feature_sample = FeatureSample.make
   @feature.feature_samples << @feature_sample
+  @feature_sample.save!
 end
 
 Then /^the feature sample is deleted$/ do

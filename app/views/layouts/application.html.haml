@@ -21,16 +21,15 @@
 
   #content-outer
     #content-wrapper.container_16
-      #main.grid_14.alpha
+      #main.grid_13.alpha
         %p.notice= notice
         %p.alert= alert
         =yield
-      #left-columns.grid_2.omega
+      #left-columns.grid_3.omega
         -@sidemenu = Array.new
-        -@sidemenu << ["Analysis Menu", [["Simulators", simulators_path], |
-          ["Simulations", simulations_path], |
-          ["PBS Generators", pbs_generators_path], ["Games", games_path]]]
-        -@sidemenu << ["Schedulers", [["Game Schedulers", game_schedulers_path], |
+        -@sidemenu << ["Analysis", [["Simulators", simulators_path], |
+          ["Simulations", simulations_path], ["Games", games_path]]]
+        -@sidemenu << ["Scheduling", [["PBS Generators", pbs_generators_path], ["Game Schedulers", game_schedulers_path], |
           ["Profile Schedulers", profile_schedulers_path], |
           ["Deviation Schedulers", deviation_schedulers_path]]]
         .sidemenu

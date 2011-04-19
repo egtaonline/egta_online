@@ -12,17 +12,23 @@ class Simulator
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   embeds_many :strategies
-  references_many :games, :dependent => :destroy
+  has_and_belongs_to_many :server_proxies
+  has_many :games, :dependent => :destroy
 
-  def setup_simulator(account_id)
-    account = Account.find(account_id)
-    Net::SCP::upload!(account.host, account.username, simulator.path, "#{DEPLOY_PATH}/#{name}-#{version}.zip")
-    output = ""
-    Net::SSH.start(account.host, account.username) do |ssh|
-      output = ssh.exec!("cd #{DEPLOY_PATH}; if test -e #{name}-#{version}; then echo exists; else unzip #{name}-#{version}.zip -d #{name}-#{version}; chgrp -R wellman #{name}-#{version}; chmod -R ug+wrx #{name}-#{version}; rm #{name}-#{version}.zip; fi")
-    end
-    self.parameters = Net::SCP::download!(account.host, account.username, "#{DEPLOY_PATH}/#{name}-#{version}/#{name}/simulation_spec.yaml")
-    self.save
+  def location
+    File.dirname(__FILE__)+"/../../simulators/"+fullname
+  end
+
+  def fullname
+    name+"-"+version
+  end
+
+  def setup_simulator
+    system("unzip -u #{simulator.path} -d #{location}")
+    self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
+    output = "Simulator setup on main.\n"
+    self.save!
+    server_proxies.each {|server_proxy| output += server_proxy.setup_simulator(self)}
     return output
   end
 

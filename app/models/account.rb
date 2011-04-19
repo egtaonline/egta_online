@@ -5,11 +5,13 @@ class Account
   include Mongoid::Document
 
   field :username
-  field :host
   field :flux, :type => Boolean
   field :max_concurrent_simulations, :type => Integer
-  validates_presence_of :username, :host, :max_concurrent_simulations
+  belongs_to :server_proxy
+  validates_presence_of :username, :max_concurrent_simulations
   validate :username_can_connect_to_host
+
+  attr_encrypted :password, :key => 'a secret key'
 
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it
@@ -19,12 +21,16 @@ class Account
   end
 
   def name
-    "#{self.username}@#{self.host}"
+    "#{self.username}@#{self.server_proxy.host}"
   end
 
   def username_can_connect_to_host
     begin
-      Net::SSH.start(host, username, :timeout => 2)
+      if(self.password == nil)
+        Net::SSH.start(server_proxy.host, username, :timeout => 2)
+      else
+        Net::SSH.start(server_proxy.host, username, :password => self.password, :timeout => 2)
+      end
     rescue
       errors.add(:username, "can't login to host")
     end

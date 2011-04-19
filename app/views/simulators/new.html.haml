@@ -15,11 +15,13 @@
       %td= f.label :description
       %td= f.text_area :description, :cols=>27, :rows=>10
     %tr
-      %td= f.label :simulator, "Zipped Simulator"
+      %td= f.label :simulator, "Zipped simulator"
       %td= f.file_field :simulator
     %tr
-      %td= label :account, :account_id, "Default Account"
-      %td= collection_select :account, :account_id, Account.all, :id, :name
+      %td= label :serv, :server_proxy_ids, "Server proxies"
+      %td#server_proxies
+        -ServerProxy.all.each do |server_proxy|
+          =check_box_tag "serv[server_proxy_ids][]", server_proxy.host, @simulator.server_proxies.include?(server_proxy), :id => server_proxy.host
   %p
   = f.submit
 

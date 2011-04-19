@@ -1,5 +1,5 @@
 Given /^a game scheduler$/ do
-  @game_scheduler = GameScheduler.make
+  @game_scheduler = GameScheduler.make!
 end
 
 Given /^the game scheduler references the game$/ do
@@ -16,5 +16,5 @@ Then /^the game scheduler is created$/ do
 end
 
 Given /^a pbs generator$/ do
-  @pbs_generator = PbsGenerator.make
+  @pbs_generator = PbsGenerator.make!
 end

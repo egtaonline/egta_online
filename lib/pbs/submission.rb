@@ -1,6 +1,6 @@
 module PBS
   module Submission
-    QSUB_CMD = "/usr/local/torque/bin/qsub"
+    QSUB_CMD = "qsub"
 
     attr_accessor :script
 

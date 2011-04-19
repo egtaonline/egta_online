@@ -18,6 +18,8 @@ class AccountsController < AnalysisController
 
   def create
     @account = Account.new(params[:account])
+    @server_proxy = ServerProxy.find(params[:serv][:server_proxy_id])
+    @server_proxy.accounts << @account
     if @account.save
       flash[:notice] = 'Account was successfully created.'
       redirect_to @account

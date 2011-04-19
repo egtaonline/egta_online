@@ -8,7 +8,7 @@
     %td= @account.username
   %tr
     %th Host:
-    %td= @account.host
+    %td= @account.server_proxy.host
   %tr
     %th Max Concurrent Simulations:
     %td= pluralize(@account.max_concurrent_simulations, "simulation")
