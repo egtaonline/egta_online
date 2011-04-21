@@ -38,6 +38,12 @@ class Simulation
     samples.each {|sample| sample.kill_payoffs}
   end
 
+  def kill_payoffs
+    if profile != nil
+      samples.all.each {|sample| sample.kill_payoffs}
+    end
+  end
+
   state_machine :state, :initial => :pending do
     state :pending
     state :queued

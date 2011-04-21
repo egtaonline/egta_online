@@ -73,6 +73,19 @@ User.blueprint do
   secret_key { SECRET_KEY }
 end
 
+Simulation.blueprint do
+end
+
+def make_simulation_with_sample
+  simulation = Simulation.make
+  simulation.samples << Sample.make
+  simulation
+end
+
+Sample.blueprint do
+  id {1}
+end
+
 Payoff.blueprint do
   payoff { rand }
   sample_id {1}

@@ -17,6 +17,17 @@ EgtMongoid::Application.routes.draw do
   resources :games do
     resources :profiles, :only => [:index, :show, :destroy]
     resources :features
+    resources :control_variates, :only => [:index, :show, :destroy, :new] do
+      collection do
+        post 'add_feature', 'remove_feature', 'update_choice'
+      end
+    end
+    collection do
+      post 'update_parameters'
+    end
+    member do
+      get 'regret', 'robust_regret', 'analysis', 'rd'
+    end
     member do
       post 'add_strategy', 'remove_strategy'
     end

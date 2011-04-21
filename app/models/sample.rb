@@ -24,4 +24,5 @@ class Sample
       end
     end
   end
+
 end

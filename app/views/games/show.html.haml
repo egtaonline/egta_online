@@ -48,7 +48,6 @@
     %tr{:class => "= cycle('','altrow') "}
       %td= link_to profile.name, [@game, profile]
       %td= pluralize(profile.players.first.payoffs.count, "sample")
-
 %p= will_paginate(@profiles)
 
 %h3 Transformations
@@ -62,4 +61,6 @@
       %td= trans.type
       %td= link_to game.name, game
       %td= link_to 'Destroy', trans, :confirm => 'Are you sure?', :method => :delete
-/%p= link_to 'New Control Variates', new_game_control_variate_path(@game)
+
+%p= link_to 'New Control Variates', new_game_control_variate_path(@game)
+%p= link_to 'EGAT Analysis', analysis_game_path(@game)

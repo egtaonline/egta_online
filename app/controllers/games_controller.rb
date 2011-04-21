@@ -1,9 +1,10 @@
 require 'net/scp'
 require 'inject'
 require 'stalker'
+require ::Rails.root.to_s + '/lib/egat_interface'
 
 class GamesController < AnalysisController
-  before_filter :find_game, :only => [:show, :edit, :update, :add_strategy, :remove_strategy, :destroy]
+  before_filter :find_game, :only => [:show, :edit, :update, :add_strategy, :remove_strategy, :destroy, :robust_regret, :regret, :analysis, :rd]
   before_filter :new_game, :only => [:new, :create, :update_parameters]
 
   def index
@@ -126,6 +127,29 @@ class GamesController < AnalysisController
     respond_to do |format|
       format.js
     end
+  end
+
+  def analysis
+    @profiles = @game.profiles.paginate :per_page => 15, :page => (params[:page] || 1)
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def robust_regret
+    Stalker.enqueue 'calc_regret', :game => @game
+    redirect_to analysis_game_path(@game)
+  end
+
+  def regret
+    Stalker.enqueue 'calc_robust_regret', :game => @game
+    redirect_to  analysis_game_path(@game)
+  end
+
+  def rd
+    Stalker.enqueue 'calc_replicator_dynamics', :game => @game
+    redirect_to analysis_game_path(@game)
   end
 
   protected
