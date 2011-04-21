@@ -1,5 +1,15 @@
 #!/bin/sh
 
+#############################
+# Dynamic library stuff.
+#############################
+if [ `uname` = Linux ]
+then
+   export LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH}
+fi
+# need to do something else for mac...
+export DYLD_LIBRARY_PATH=/usr/local/lib:${DYLD_LIBRARY_PATH}
+
 EGAT_HOME=`dirname $0`
 LIB=${EGAT_HOME}/lib
 CLASSPATH=.

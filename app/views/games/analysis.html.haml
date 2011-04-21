@@ -1,0 +1,57 @@
+.breadcrumb
+  .bc
+    #{ link_to 'Home', root_path } #{ link_to 'Games', games_path } #{ link_to @game.name, @game}
+
+
+-unless @game[:robust_regret_updated_at] == nil
+  %h3 Robust Regret
+  %table{:width => "90%"}
+    %tr
+      %th Updated At
+      %td= @game[:robust_regret_updated_at]
+    %tr
+      %th Name
+      %th Regret
+    -@game.strategies.each do |strategy|
+      %tr
+        %td= strategy[:name]
+        %td= strategy[:regret]
+%p= link_to 'Update Robust Regret', robust_regret_game_path(@game)
+
+-unless @game[:regret_updated_at] == nil
+  %h3 Pure Profile Regret
+  %table{:width => "90%"}
+    %tr
+      %th Updated At
+      %td= @game[:regret_updated_at]
+    %tr
+      %th Name
+      %th Samples
+      %th Regret
+    -@profiles.each do |profile|
+      %tr{:class => "= cycle('','altrow') "}
+        %td= link_to profile.name, [@game, profile]
+        %td= pluralize(profile.players.first.payoffs.count, "sample")
+        -unless @game[:regret_updated_at] == nil
+          %td= profile[:regret]
+  %p= will_paginate(@profiles)
+%p= link_to 'Update Regret', regret_game_path(@game)
+  
+
+-unless @game[:rd_updated_at] == nil
+  %h3 Replicator Dynamics
+  %table{:width => "90%"}
+    %tr
+      %th Updated At
+      %td= @game[:rd_updated_at]
+    %tr  
+      %th Regret
+      %td= @game[:rd_regret]
+      %tr
+        %th Strategy
+        %th Probability
+        -@game[:rd_results].keys.each do |strategy|
+          %tr
+            %td= strategy
+            %td= @game[:rd_results][strategy]
+%p= link_to 'Run Replicator Dynamics', rd_game_path(@game)

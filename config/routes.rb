@@ -22,7 +22,7 @@ EgtMongoid::Application.routes.draw do
       post 'update_parameters'
     end
     member do
-      get 'regret'
+      get 'regret', 'robust_regret', 'analysis', 'rd'
     end
     member do
       post 'add_strategy', 'remove_strategy'
