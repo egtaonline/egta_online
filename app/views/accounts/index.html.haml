@@ -1,6 +1,3 @@
-.breadcrumb
-  .bc
-    #{link_to 'Home', root_path} Accounts
 %h3 Accounts
 %p= link_to 'New account', new_account_path
 %table{:width => "90%"}
@@ -11,5 +8,5 @@
   -@accounts.each do |account|
     %tr{:class => "= cycle('','altrow')"}
       %td= link_to account.username, account
-      %td= link_to account.host, account
+      %td= link_to account.server_proxy.host, account
       %td= link_to 'Destroy', account, :confirm => 'Are you sure?', :method => :delete

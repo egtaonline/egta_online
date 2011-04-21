@@ -1,14 +1,8 @@
 class ServerProxy
-  include Mongoid::Document
-  field :host
-  field :location
-  field :batch_size
-  has_many :accounts
-  has_and_belongs_to_many :simulators
-  embeds_one :scheduling_proxy
+  HOST = "nyx-login.engin.umich.edu"
+  LOCATION = "/home/wellmangroup/many-agent-simulations"
 
-  attr_reader :sessions
-  attr_reader :staging_session
+  attr_reader :sessions, :staging_session
 
   def start
     @sessions = Net::SSH::Multi.start
@@ -76,7 +70,7 @@ class ServerProxy
       end
     end
   end
-  
+
   def create_wrapper(simulations)
     simulator = simulations[0].game.simulator
     root_path = "#{location}/#{simulator.fullname}/#{simulator.name}"
@@ -99,7 +93,7 @@ class ServerProxy
       file.syswrite("cp -r ${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}; chown #{@staging_session[:user]} #{root_path}/../simulations/${PBS_ARRAYID}")
     end
   end
-  
+
   def check_simulations
     if Simulation.active.length > 0
       simulations = Simulation.active
@@ -171,7 +165,7 @@ class ServerProxy
       end
     end
   end
-  
+
   def gather_features(simulation)
     dirs = Dir.entries("#{ROOT_PATH}/db/#{simulation.serial_id}/features") - [".", ".."]
     dirs.each do |x|
@@ -185,7 +179,7 @@ class ServerProxy
       end
     end
   end
-  
+
   def get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
@@ -204,11 +198,11 @@ class ServerProxy
     end
     job_return
   end
-  
+
   def is_a_number?(s)
     s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
-  
+
   def numeralize(simulation)
     p = Hash.new
     simulation.game.parameters.each do |x|

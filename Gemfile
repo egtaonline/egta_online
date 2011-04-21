@@ -27,8 +27,7 @@ gem 'mongoid', "2.0"
 gem 'bson_ext', "1.3"
 gem 'statsample-optimization'
 gem 'hpricot'
-gem 'simple_form'
-gem 'attr_encrypted'
+gem 'encrypted_strings'
 
 group :development, :test do
   gem 'cucumber'

@@ -10,9 +10,15 @@ class Account
   belongs_to :server_proxy
   validates_presence_of :username, :max_concurrent_simulations
   validate :username_can_connect_to_host
+  field :encrypted_password
 
-  attr_encrypted :password, :key => 'a secret key'
+  def password=(pass)
+    self.update_attributes(:encrypted_password => pass.encrypt(:symmetric, :password => SECRET_KEY))
+  end
 
+  def password
+    self.encrypted_password.decrypt(:symmetric, :password => SECRET_KEY)
+  end
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it
   def schedulable?

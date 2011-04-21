@@ -1,0 +1,4 @@
+#!/bin/bash
+export CLASSPATH=$CLASSPATH:/Users/bcassell/Ruby/egt_working_directory/epp_sim/lib/jmarketsim.jar:/Users/bcassell/Ruby/egt_working_directory/epp_sim/lib/commons-math-2.1.jar
+rvm use jruby
+ruby --server --fast -Ilib lib/main.rb "$@"

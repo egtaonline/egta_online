@@ -1,18 +1,15 @@
-.breadcrumb
-  .bc
-    #{link_to 'Home', root_path} #{link_to 'Accounts', accounts_path} #{link_to @account.username} Edit Account
 %h3 Edit account
 =form_for @account do |f|
   = f.error_messages
   %table
     %tr
-      %td= f.label :username
+      %th= f.label :username
       %td= f.text_field :username
     %tr
-      %td= f.label :max_concurrent_simulations
+      %th= f.label :max_concurrent_simulations
       %td= f.text_field :max_concurrent_simulations, :value => 10
     %tr
-      %td= f.label :flux
+      %th= f.label :flux
       %td= f.check_box :flux, :checked => true
   %p
     = f.submit

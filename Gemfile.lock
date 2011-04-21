@@ -39,8 +39,6 @@ GEM
       activesupport (= 3.0.7)
     activesupport (3.0.7)
     arel (2.0.9)
-    attr_encrypted (1.2.0)
-      encryptor (>= 1.1.1)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     autotest-fsevent (0.2.4)
@@ -90,7 +88,7 @@ GEM
       warden (~> 1.0.2)
     diff-lcs (1.1.2)
     dirty-memoize (0.0.4)
-    encryptor (1.1.2)
+    encrypted_strings (0.3.3)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     extendmatrix (0.3.1)
@@ -215,8 +213,6 @@ GEM
       json_pure
       rubyzip
     sexp_processor (3.0.5)
-    simple_form (1.3.0)
-      rails (~> 3.0.0)
     spreadsheet (0.6.5.1)
       ruby-ole (>= 1.0)
     spruz (0.2.5)
@@ -267,7 +263,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  attr_encrypted
   autotest
   autotest-fsevent
   autotest-growl
@@ -283,6 +278,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   devise
+  encrypted_strings
   ffi-ncurses
   haml
   haml-rails
@@ -297,7 +293,6 @@ DEPENDENCIES
   rails (= 3.0.7)
   rspec-rails (~> 2.4)
   ruby_parser
-  simple_form
   stalker
   state_machine
   state_machine-mongoid
