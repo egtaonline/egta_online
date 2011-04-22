@@ -1,6 +1,6 @@
 class ServerProxy
-  HOST = "nyx-login.engin.umich.edu"
-  LOCATION = "/home/bcassell/"
+  HOST = "d-108-249.eecs.umich.edu"
+  LOCATION = "/home/bcassell/Test"
 
   attr_reader :sessions, :staging_session
 
