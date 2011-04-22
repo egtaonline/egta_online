@@ -1,11 +1,5 @@
 require 'machinist/mongoid'
 
-ServerProxy.blueprint do
-  host {"d-108-249.eecs.umich.edu"}
-  location {"/home/bcassell"}
-  batch_size { 1 }
-end
-
 Account.blueprint do
   username { "bcassell" }
   password {"sh@na1"}
@@ -71,9 +65,6 @@ User.blueprint do
   password { "stuff1" }
   password_confirmation { "stuff1" }
   secret_key { SECRET_KEY }
-end
-
-Simulation.blueprint do
 end
 
 def make_simulation_with_sample

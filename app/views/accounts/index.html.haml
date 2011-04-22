@@ -8,5 +8,4 @@
   -@accounts.each do |account|
     %tr{:class => "= cycle('','altrow')"}
       %td= link_to account.username, account
-      %td= link_to account.server_proxy.host, account
       %td= link_to 'Destroy', account, :confirm => 'Are you sure?', :method => :delete

@@ -2,6 +2,7 @@ Given /^a game$/ do
   @game = Game.make!
   @simulator = Simulator.make!
   @simulator.games << @game
+  @game.save!
 end
 
 Given /^the game has a feature$/ do

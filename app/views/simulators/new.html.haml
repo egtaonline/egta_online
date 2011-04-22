@@ -14,12 +14,6 @@
     %tr
       %td= f.label :simulator, "Zipped simulator"
       %td= f.file_field :simulator
-    %tr
-      %td= label :serv, :server_proxy_ids, "Server proxies"
-      %td#server_proxies
-        -ServerProxy.all.each do |server_proxy|
-          =check_box_tag "serv[server_proxy_ids][]", server_proxy.host, @simulator.server_proxies.include?(server_proxy), :id => server_proxy.host
-          =server_proxy.host
   %p
     = f.submit
 

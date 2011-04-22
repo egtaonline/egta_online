@@ -1,96 +1,43 @@
 class ServerProxy
-  HOST = "nyx-login.engin.umich.edu"
-  LOCATION = "/home/wellmangroup/many-agent-simulations"
+  HOST = "d-108-249.eecs.umich.edu"
+  LOCATION = "/home/bcassell/Test"
 
   attr_reader :sessions, :staging_session
 
   def start
     @sessions = Net::SSH::Multi.start
-    @staging_session = Net::SSH.start(self.host, accounts.first.username, :password => accounts.first.password)
+    @staging_session = Net::SSH.start(HOST, Account.first.username, :password => Account.first.password)
     @sessions.group :scheduling do
-      accounts.each {|account| @sessions.use(self.host, :user => account.username, :password => account.password)}
+      Account.all.each {|account| @sessions.use(HOST, :user => account.username, :password => account.password)}
     end
   end
 
   def setup_simulator(simulator)
-    @staging_session.exec!("rm -rf #{location}/#{simulator.name}*")
-    @staging_session.scp.upload!(simulator.path, location)
-    @staging_session.exec!("cd #{location}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
+    @staging_session.exec!("rm -rf #{LOCATION}/#{simulator.name}*")
+    puts "removed"
+    @staging_session.scp.upload!(simulator.simulator.path, LOCATION)
+    puts "uploaded"
+    @staging_session.exec!("cd #{LOCATION}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
+    puts "unzipped"
   end
 
   def queue_pending_simulations
-    queue_account = accounts.select{|account| account.max_concurrent_simulations-Simulation.active.where(:account_id => account.id).count >= batch_size}.sample
-    if queue_account != nil
-      simulations = Array.new
-      Simulation.pending.where(:game_id => Simulation.pending.first.game_id).limit(batch_size).each do |simulation|
-        simulation.update_attributes(:account_id => queue_account.id)
-        simulations << simulation
-      end
-      simulations.each do |simulation|
-        setup_hierarchy(simulation)
-        create_yaml(simulation)
-      end
-      nyx_processing(simulations)
-    end
-  end
-
-  private
-
-  def create_yaml(simulation)
-    File.open( "#{ROOT_PATH}/tmp/temp.yaml", 'w' ) do |out|
-      YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out)
-      YAML.dump(numeralize(simulation), out)
-    end
-  end
-
-  def setup_hierarchy(simulation)
-    @staging_session.exec!("mkdir -p #{location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/features")
-    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/simulation_spec.yaml")
-  end
-
-  def nyx_processing(simulations)
-    simulator = simulations[0].game.simulator
-    root_path = "#{location}/#{simulator.fullname}/#{simulator.name}"
-    account = simulations[0].account
-    submission = PBS::MASSubmission.new(PbsGenerator.find(simulations[0].pbs_generator_id), simulations[0].size, simulations[0].serial_id, "#{root_path}/script/wrapper")
-    submission.qos = "wellman_flux" if simulations[0].flux?
-    create_wrapper(simulations)
-    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/wrapper", "#{root_path}/script/")
-    @staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
-    @job = get_job(account, simulator, submission)
-    if submission
-      if submission && @job != "" && @job != nil
-        simulations.each do |simulation|
-          simulation.send('queue!')
-          simulation.job_id = @job+"[]"
-          simulation.save
+    queue_account = Account.first
+    while Simulation.pending.count != 0 && queue_account != nil
+      first_sim = Simulation.pending.first
+      queue_account = Account.all.select{|account| account.max_concurrent_simulations-Simulation.active.where(:account_id => account.id).count >= first_sim.pbs_generator.jobs_per_request}.sample
+      if queue_account != nil
+        simulations = Array.new
+        Simulation.pending.where(:game_id => first_sim.game_id).limit(first_sim.pbs_generator.jobs_per_request).each do |simulation|
+          simulation.update_attributes(:account_id => queue_account.id)
+          simulations << simulation
         end
-      else
-        simulations.each{|simulation| simulation.send('fail!')}
+        simulations.each do |simulation|
+          setup_hierarchy(simulation)
+          create_yaml(simulation)
+        end
+        nyx_processing(simulations)
       end
-    end
-  end
-
-  def create_wrapper(simulations)
-    simulator = simulations[0].game.simulator
-    root_path = "#{location}/#{simulator.fullname}/#{simulator.name}"
-    FileUtils.cp(ROOT_PATH + "/tmp/wrapper-template", ROOT_PATH + "/tmp/wrapper")
-    File.open(ROOT_PATH + "/tmp/wrapper", "a") do |file|
-      if simulations[0].flux?
-        file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
-      else
-        file.syswrite("\n\#PBS -q route")
-      end
-      file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
-      str = "\#PBS -t #{simulations[0].serial_id}"
-      simulations.size.times {|i| str += ",#{simulations[i].serial_id}"}
-      str += "\n"
-      file.syswrite(str)
-      file.syswrite("\#PBS -o #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
-      file.syswrite("\#PBS -e #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
-      file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{root_path}/../simulations/${PBS_ARRAYID} .\n")
-      file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{simulations[0].size}\n")
-      file.syswrite("cp -r ${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}; chown #{@staging_session[:user]} #{root_path}/../simulations/${PBS_ARRAYID}")
     end
   end
 
@@ -113,6 +60,66 @@ class ServerProxy
     end
   end
 
+  private
+
+  def create_yaml(simulation)
+    File.open( "#{ROOT_PATH}/tmp/temp.yaml", 'w' ) do |out|
+      YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out)
+      YAML.dump(numeralize(simulation), out)
+    end
+  end
+
+  def setup_hierarchy(simulation)
+    @staging_session.exec!("mkdir -p #{LOCATION}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/features")
+    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{LOCATION}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/simulation_spec.yaml")
+  end
+
+  def nyx_processing(simulations)
+    simulator = simulations[0].game.simulator
+    root_path = "#{LOCATION}/#{simulator.fullname}/#{simulator.name}"
+    account = simulations[0].account
+    submission = PBS::MASSubmission.new(PbsGenerator.find(simulations[0].pbs_generator_id), simulations[0].size, simulations[0].serial_id, "#{root_path}/script/wrapper")
+    submission.qos = "wellman_flux" if simulations[0].flux?
+    create_wrapper(simulations)
+    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/wrapper", "#{root_path}/script/")
+    @staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
+    @job = get_job(account, simulator, submission)
+    if submission
+      if submission && @job != "" && @job != nil
+        simulations.each do |simulation|
+          simulation.send('queue!')
+          simulation.job_id = @job+"[]"
+          simulation.save
+        end
+      else
+        simulations.each{|simulation| simulation.send('fail!')}
+      end
+    end
+  end
+
+  def create_wrapper(simulations)
+    simulator = simulations[0].game.simulator
+    root_path = "#{LOCATION}/#{simulator.fullname}/#{simulator.name}"
+    FileUtils.cp(ROOT_PATH + "/tmp/wrapper-template", ROOT_PATH + "/tmp/wrapper")
+    File.open(ROOT_PATH + "/tmp/wrapper", "a") do |file|
+      if simulations[0].flux?
+        file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
+      else
+        file.syswrite("\n\#PBS -q route")
+      end
+      file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
+      str = "\#PBS -t #{simulations[0].serial_id}"
+      simulations.size.times {|i| str += ",#{simulations[i].serial_id}"}
+      str += "\n"
+      file.syswrite(str)
+      file.syswrite("\#PBS -o #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
+      file.syswrite("\#PBS -e #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
+      file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{root_path}/../simulations/${PBS_ARRAYID} .\n")
+      file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{simulations[0].size}\n")
+      file.syswrite("cp -r ${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}; chown #{@staging_session[:user]} #{root_path}/../simulations/${PBS_ARRAYID}")
+    end
+  end
+
   def check_existance(root_path, simulation)
     output = @staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.serial_id}/out-#{simulation.serial_id}; then printf \"exists\"; fi")
     output == "exists"
@@ -131,7 +138,7 @@ class ServerProxy
 
   def check_status(simulation, job_id, state_info)
     simulator = simulation.game.simulator
-    root_path = "#{location}/#{simulator.fullname}/#{simulator.name}"
+    root_path = "#{LOCATION}/#{simulator.fullname}/#{simulator.name}"
     if job_id.include?(simulation.job_id)
       state = state_info[job_id.index(simulation.job_id)][9]
       if state == "C"
@@ -184,7 +191,7 @@ class ServerProxy
     job_return = ""
     if submission != nil
       server = @sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
-      channel = server.session(true).exec("cd #{location}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
+      channel = server.session(true).exec("cd #{LOCATION}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
         job_return.strip! if job_return != nil

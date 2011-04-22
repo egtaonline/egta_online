@@ -7,7 +7,6 @@ class Account
   field :username
   field :flux, :type => Boolean
   field :max_concurrent_simulations, :type => Integer
-  belongs_to :server_proxy
   validates_presence_of :username, :max_concurrent_simulations
   validate :username_can_connect_to_host
   field :encrypted_password
@@ -33,9 +32,9 @@ class Account
   def username_can_connect_to_host
     begin
       if(self.password == nil)
-        Net::SSH.start(server_proxy.host, username, :timeout => 2)
+        Net::SSH.start(ServerProxy::HOST, username, :timeout => 2)
       else
-        Net::SSH.start(server_proxy.host, username, :password => self.password, :timeout => 2)
+        Net::SSH.start(ServerProxy::HOST, username, :password => self.password, :timeout => 2)
       end
     rescue
       errors.add(:username, "can't login to host")

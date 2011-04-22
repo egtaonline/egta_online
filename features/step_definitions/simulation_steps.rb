@@ -1,5 +1,4 @@
 Given /^the game has a simulation$/ do
-  SimCount.make!
   @simulation = Simulation.make!
   @simulation.game = @game
 end

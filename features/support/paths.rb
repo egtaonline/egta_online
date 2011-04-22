@@ -18,7 +18,6 @@ module NavigationHelpers
       game_path(@game)
     when /the show page for the game scheduler/
       game_scheduler_path(@game_scheduler)
-
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

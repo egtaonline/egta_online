@@ -5,6 +5,6 @@ Feature: Server proxy maintains ssh connections
 
 Scenario: one account with a password, server proxy is created
   Given an account
-  And an existing server proxy
+  And a server proxy
   When the server proxy is activated
   Then a ssh session is created for the account

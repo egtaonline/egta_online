@@ -6,7 +6,7 @@ EgtMongoid::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   #config.cache_classes = true
-  config.cache_classes = false
+  config.cache_classes = true
 
 
   # Log error messages when you accidentally call methods on nil.
@@ -35,5 +35,5 @@ EgtMongoid::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  
+
 end

@@ -1,9 +1,5 @@
-Given /^an existing server proxy$/ do
-  @server_proxy = @account.server_proxy
-end
-
 Given /^a server proxy$/ do
-  @server_proxy = ServerProxy.make!
+  @server_proxy = ServerProxy.new
 end
 
 Given /^the simulation is running and has serial_id 41352$/ do
@@ -18,7 +14,8 @@ end
 
 Given /^the data exists on the remote server$/ do
   @server_proxy.start
-  @server_proxy.staging_session.scp.upload!(ROOT_PATH+"/features/support/41352", "epp_sim-Sim0001/simulations", :recursive => true)
+  @server_proxy.staging_session.exec!("mkdir -p #{ServerProxy::LOCATION}/epp_sim-Sim0001/simulations")
+  @server_proxy.staging_session.scp.upload!(ROOT_PATH+"/features/support/41352", ServerProxy::LOCATION+"/epp_sim-Sim0001/simulations", :recursive => true)
 end
 
 When /^simulations are checked$/ do

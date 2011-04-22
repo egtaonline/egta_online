@@ -9,14 +9,20 @@ class Simulator
   field :name
   field :description
   field :version
+  field :setup, :type => Boolean, :default => false
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   embeds_many :strategies
-  has_and_belongs_to_many :server_proxies
   has_many :games, :dependent => :destroy
+  validate :setup_simulator
+  after_create :set_setup_to_true
+
+  def set_setup_to_true
+    self.update_attributes(:setup => true)
+  end
 
   def location
-    File.dirname(__FILE__)+"/../../simulators/"+fullname
+    ROOT_PATH+"/simulators/"+fullname
   end
 
   def fullname
@@ -24,12 +30,22 @@ class Simulator
   end
 
   def setup_simulator
-    system("unzip -u #{simulator.path} -d #{location}")
-    self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
-    output = "Simulator setup on main.\n"
-    self.save!
-    server_proxies.each {|server_proxy| output += server_proxy.setup_simulator(self)}
-    return output
+    begin
+      if setup
+        system("unzip -u #{simulator.path} -d #{location}")
+        puts "unzip"
+        self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
+        sp = ServerProxy.new
+        sp.start
+        puts "start"
+        sp.setup_simulator(self)
+        puts "simulator setup"
+      else
+        return
+      end
+    rescue
+      errors.add(:simulator, "couldn't be uploaded to nyx")
+    end
   end
 
   def strategy_exists?(strategy_name)

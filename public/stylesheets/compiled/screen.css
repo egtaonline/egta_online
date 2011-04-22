@@ -148,17 +148,14 @@ html {
 /* line 47, ../../../app/stylesheets/application.scss */
 body {
   width: 950px;
-  margin: 0 auto;
-  overflow: hidden;
-  *zoom: 1;
+  margin: 0 auto 0;
   background-color: white;
 }
 
-/* line 51, ../../../app/stylesheets/application.scss */
+/* line 52, ../../../app/stylesheets/application.scss */
 #root {
   min-height: 100%;
   height: auto !important;
-  height: 100%;
   margin: 0 auto -140px;
   /* the bottom margin is the negative value of the footer's height */
 }
@@ -279,6 +276,8 @@ body {
 
 /* line 130, ../../../app/stylesheets/application.scss */
 #main_section {
+  background-color: white;
+  margin-bottom: 8px;
   padding: 10px;
   padding-left: 40px;
   display: inline;
@@ -292,7 +291,7 @@ body {
   overflow-x: hidden;
 }
 
-/* line 137, ../../../app/stylesheets/application.scss */
+/* line 139, ../../../app/stylesheets/application.scss */
 #side_nav {
   display: inline;
   float: left;
@@ -305,7 +304,7 @@ body {
   overflow-x: hidden;
 }
 
-/* line 141, ../../../app/stylesheets/application.scss */
+/* line 143, ../../../app/stylesheets/application.scss */
 #top_header {
   width: 950px;
   margin: 0 auto;
@@ -314,7 +313,7 @@ body {
   background-color: #730202;
   color: white;
 }
-/* line 145, ../../../app/stylesheets/application.scss */
+/* line 147, ../../../app/stylesheets/application.scss */
 #top_header h1 {
   margin-top: 7px;
   margin-bottom: 7px;
@@ -328,11 +327,11 @@ body {
 * html #top_header h1 {
   overflow-x: hidden;
 }
-/* line 151, ../../../app/stylesheets/application.scss */
+/* line 153, ../../../app/stylesheets/application.scss */
 #top_header a {
   color: white;
 }
-/* line 154, ../../../app/stylesheets/application.scss */
+/* line 156, ../../../app/stylesheets/application.scss */
 #top_header #user_nav {
   display: inline;
   float: left;
@@ -347,28 +346,28 @@ body {
   overflow-x: hidden;
 }
 
-/* line 162, ../../../app/stylesheets/application.scss */
+/* line 164, ../../../app/stylesheets/application.scss */
 h2, h3, h4 {
   font: bold 1em/1.5em Georgia, "Times New Roman", Times, serif;
   color: #444;
   padding: 10px 15px 7px 15px;
 }
 
-/* line 168, ../../../app/stylesheets/application.scss */
+/* line 170, ../../../app/stylesheets/application.scss */
 h1 {
   font-size: 3.2em;
   font-weight: normal;
   letter-spacing: -2px;
 }
 
-/* line 169, ../../../app/stylesheets/application.scss */
+/* line 171, ../../../app/stylesheets/application.scss */
 h2 {
   font-size: 2.4em;
   font-weight: normal;
   color: #663333;
 }
 
-/* line 170, ../../../app/stylesheets/application.scss */
+/* line 172, ../../../app/stylesheets/application.scss */
 h3 {
   font-size: 1.8em;
   font-weight: normal;
@@ -376,12 +375,12 @@ h3 {
   padding-top: 10px;
 }
 
-/* line 171, ../../../app/stylesheets/application.scss */
+/* line 173, ../../../app/stylesheets/application.scss */
 h4 {
   font-size: 1.3em;
 }
 
-/* line 173, ../../../app/stylesheets/application.scss */
+/* line 175, ../../../app/stylesheets/application.scss */
 .button {
   border-top: 1px solid #4a0c0c;
   background: #a62626;
@@ -406,30 +405,30 @@ h4 {
   float: left;
 }
 
-/* line 196, ../../../app/stylesheets/application.scss */
+/* line 198, ../../../app/stylesheets/application.scss */
 .button a {
   color: white;
 }
 
-/* line 199, ../../../app/stylesheets/application.scss */
+/* line 201, ../../../app/stylesheets/application.scss */
 .button:hover {
   border-top-color: #730206;
   background: #730206;
   color: #ebe2eb;
 }
 
-/* line 204, ../../../app/stylesheets/application.scss */
+/* line 206, ../../../app/stylesheets/application.scss */
 .button:active {
   border-top-color: #661616;
   background: #661616;
 }
 
-/* line 209, ../../../app/stylesheets/application.scss */
+/* line 211, ../../../app/stylesheets/application.scss */
 label {
   color: #868c56;
 }
 
-/* line 213, ../../../app/stylesheets/application.scss */
+/* line 215, ../../../app/stylesheets/application.scss */
 input:focus, select:focus, textarea:focus {
   color: #000;
   background: #EFFAE6;

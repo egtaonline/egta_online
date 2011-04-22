@@ -15,16 +15,8 @@ class SimulatorsController < AnalysisController
   end
 
   def create
-    puts params[:simulator]
-    puts params[:serv]
-    @simulator = Simulator.create(params[:simulator])
-    params[:serv][:server_proxy_ids].each {|host| @simulator.server_proxies << ServerProxy.where(:host => host).first}
-    if @simulator.save!
-      flash[:notice] = @simulator.setup_simulator
-      redirect_to @simulator
-    else
-      render :action => "new"
-    end
+    @simulator = Simulator.create!(params[:simulator])
+    redirect_to @simulator
   end
 
   def update

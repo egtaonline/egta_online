@@ -45,13 +45,13 @@ html{
     background-color: $background-color;
 }
 body {
-    @include container;
+    width: $blueprint_container_size;
+    margin: 0 auto 0;
     background-color: white;
 }
 #root{
     min-height: 100%;
     height: auto !important;
-    height: 100%;
     margin: 0 auto -140px; /* the bottom margin is the negative value of the footer's height */
 }
 
@@ -128,6 +128,8 @@ body {
     background-color: $header-color;
 }
 #main_section{
+    background-color: white;
+    margin-bottom: 8px;
     padding: 10px;
     @include prepend(1);
     @include column(22, true);

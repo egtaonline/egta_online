@@ -38,12 +38,6 @@ class Simulation
     samples.each {|sample| sample.kill_payoffs}
   end
 
-  def kill_payoffs
-    if profile != nil
-      samples.all.each {|sample| sample.kill_payoffs}
-    end
-  end
-
   state_machine :state, :initial => :pending do
     state :pending
     state :queued
@@ -72,6 +66,9 @@ class Simulation
   before_create :setup_id
 
   def setup_id
+    if SimCount.first == nil
+      SimCount.create!
+    end
     self.serial_id = SimCount.first.counter
     SimCount.first.update_attributes(:counter => SimCount.first.counter+1)
   end
