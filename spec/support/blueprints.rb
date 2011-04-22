@@ -1,7 +1,7 @@
 require 'machinist/mongoid'
-require ROOT_PATH+"/spec/support/account"
+require ROOT_PATH+"/spec/support/testaccount"
 
-# create this file as account.rb for testing
+# create this file as testaccount.rb for testing
 # require 'machinist/mongoid'
 #
 # Account.blueprint do

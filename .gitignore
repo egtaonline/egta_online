@@ -14,4 +14,4 @@ db/6*
 db/7*
 db/8*
 db/9*
-spec/support/account.rb
+spec/support/testaccount.rb
