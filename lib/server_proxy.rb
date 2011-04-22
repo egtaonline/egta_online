@@ -1,6 +1,6 @@
 class ServerProxy
-  HOST = "d-108-249.eecs.umich.edu"
-  LOCATION = "/home/bcassell/Test"
+  HOST = "nyx-login.engin.umich.edu"
+  LOCATION = "/home/bcassell/"
 
   attr_reader :sessions, :staging_session
 
@@ -56,6 +56,34 @@ class ServerProxy
           end
         end
         simulations.each {|simulation| check_status(simulation, job_id, state_info) }
+      end
+    end
+  end
+
+  def gather_samples(simulation)
+    count = 0
+    File.open( "#{ROOT_PATH}/db/#{simulation.serial_id}/payoff_data", 'r') do |out|
+      YAML.load_documents(out) do |yf|
+        sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{ROOT_PATH}/db/#{simulation.serial_id}/payoff_data", :file_index => count)
+        count += 1
+        players = simulation.game.profiles.find(simulation.profile_id).players
+        players.each do |player|
+          player.payoffs.create!(:sample_id => sample.id, :payoff => yf[player.strategy])
+        end
+      end
+    end
+  end
+
+  def gather_features(simulation)
+    dirs = Dir.entries("#{ROOT_PATH}/db/#{simulation.serial_id}/features") - [".", ".."]
+    dirs.each do |x|
+      File.open("#{ROOT_PATH}/db/#{simulation.serial_id}/features/"+x) do |out|
+        @feature = simulation.game.features.where(:name => x).count == 0 ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
+        count = 0
+        YAML.load_documents(out) do |yf|
+          @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
+          count += 1
+        end
       end
     end
   end
@@ -155,34 +183,6 @@ class ServerProxy
         check_for_errors(simulation)
       else
         simulation.fail!
-      end
-    end
-  end
-
-  def gather_samples(simulation)
-    count = 0
-    File.open( "#{ROOT_PATH}/db/#{simulation.serial_id}/payoff_data", 'r') do |out|
-      YAML.load_documents(out) do |yf|
-        sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{ROOT_PATH}/db/#{simulation.serial_id}/payoff_data", :file_index => count)
-        count += 1
-        players = simulation.game.profiles.find(simulation.profile_id).players
-        players.each do |player|
-          player.payoffs.create!(:sample_id => sample.id, :payoff => yf[player.strategy])
-        end
-      end
-    end
-  end
-
-  def gather_features(simulation)
-    dirs = Dir.entries("#{ROOT_PATH}/db/#{simulation.serial_id}/features") - [".", ".."]
-    dirs.each do |x|
-      File.open("#{ROOT_PATH}/db/#{simulation.serial_id}/features/"+x) do |out|
-        @feature = simulation.game.features.where(:name => x).count == 0 ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
-        count = 0
-        YAML.load_documents(out) do |yf|
-          @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
-          count += 1
-        end
       end
     end
   end

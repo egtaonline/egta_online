@@ -1,11 +1,14 @@
 require 'stalker'
 include Stalker
 require File.expand_path("../environment", __FILE__)
-require ::Rails.root.to_s + "/lib/egat_interface"
+
+job 'remove_strategy' do |args|
+  game = Game.find(BSON::ObjectId.from_string(args["game"]))
+  game.remove_strategy(args["strategy_name"])
+end
 
 job 'update_profiles' do |args|
-  simulator = Simulator.find(BSON::ObjectId.from_string(args["simulator"]))
-  game = simulator.games.find(BSON::ObjectId.from_string(args["game"]))
+  game = Game.find(BSON::ObjectId.from_string(args["game"]))
   game.ensure_profiles
 end
 
@@ -17,7 +20,7 @@ end
 job 'calc_robust_regret' do |args|
   game = Game.find(BSON::ObjectId.from_string(args["game"]))
   generate_robust_regret(game)
-end  
+end
 
 job 'calc_replicator_dynamics' do |args|
   game = Game.find(BSON::ObjectId.from_string(args["game"]))

@@ -31,13 +31,6 @@ Scenario: Deleting a simulator deletes related games
   When I delete the simulator
   Then the game is deleted
 
-Scenario: Deleting a game deletes related game schedulers
-  Given a game
-  And a game scheduler
-  And the game scheduler references the game
-  When I delete the game
-  Then the game scheduler is deleted
-
 Scenario: Deleting a game deletes related simulations
   Given a game
   And the game has a simulation

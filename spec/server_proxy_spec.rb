@@ -1,11 +1,14 @@
 require 'spec_helper'
 
 describe ServerProxy do
-  before(:all) do
+  before(:each) do
     SimCount.make!
     @account = Account.make!
     @server_proxy = ServerProxy.new
     @simulator = Simulator.make!
+    @simulator.simulator = double('simulator')
+    @simulator.simulator.stub(:path).and_return("/Users/bcassell/Ruby/egt_working_directory/epp_sim.zip")
+    @simulator.save!
     @game = Game.make!
     @game.simulator = @simulator
     @game.save!

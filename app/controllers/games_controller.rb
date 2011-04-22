@@ -54,13 +54,11 @@ class GamesController < AnalysisController
     @game.setup_parameters(@simulator)
     @simulator.games << @game
 
-    respond_to do |format|
-      if @game.save!
-        flash[:notice] = 'Game was successfully created.'
-        redirect_to @game
-      else
-        render :action => "new"
-      end
+    if @game.save!
+      flash[:notice] = 'Game was successfully created.'
+      redirect_to @game
+    else
+      render :action => "new"
     end
   end
 
@@ -87,10 +85,9 @@ class GamesController < AnalysisController
   end
 
   def add_strategy
-    @strategy = Strategy.new(:name => @game.simulator.strategies.find(params[:strategy_id]).name)
-    @game.add_strategy @strategy
+    @game.add_strategy_from_name params[:strategy_name]
     @strategy_options = @game.simulator.strategies.collect do |x|
-      @game.strategies.where(:name => x.name).count == 0 ? [x.name, x.id] : []
+      @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
     if @game.save!
@@ -101,10 +98,11 @@ class GamesController < AnalysisController
   end
 
   def remove_strategy
-    @strategy = @game.strategies.find params[:strategy_id]
-    @game.remove_strategy @strategy
+    @strategy = @game.strategies.find(params[:strategy_id])
+    Stalker.enqueue 'remove_strategy', :game => @game.id, :strategy_name => @strategy.name
+    @strategy.destroy
     @strategy_options = @game.simulator.strategies.collect do |x|
-      @game.strategies.where(:name => x.name).count == 0 ? [x.name, x.id] : []
+      @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
     if @game.save!
@@ -157,7 +155,7 @@ class GamesController < AnalysisController
   def find_game
     @game = Game.find(params[:id])
     @strategy_options = @game.simulator.strategies.collect do |x|
-      @game.strategies.where(:name => x.name).count == 0 ? [x.name, x.id] : []
+      @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
   end

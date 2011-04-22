@@ -10,9 +10,9 @@ class Simulator
   field :description
   field :version
   field :setup, :type => Boolean, :default => false
+  field :strategies, :type => Array, :default => []
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
-  embeds_many :strategies
   has_many :games, :dependent => :destroy
   validate :setup_simulator
   after_create :set_setup_to_true

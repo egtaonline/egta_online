@@ -11,8 +11,6 @@ class Profile
     game.simulations.scheduled.where(:profile_id => self.id) == [] ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)
   end
 
-  scope :contains_strategy, lambda{|strategy_name| where(strategy_name.to_sym.gt => 0)}
-
   def size
     players.size
   end
@@ -22,21 +20,7 @@ class Profile
   end
 
   def strategy_array
-    strat = Array.new
-    players.each {|x| strat.concat([x.strategy])}
-    strat.sort
-  end
-
-  def strategy_array=(array)
-    array.each do |x|
-      self.players.create(:strategy => x)
-      y = x.tr(".", "|")
-      if self[y] == nil || self[y] == 0
-        self[y] = 1
-      else
-        self[y] = self[y]+1
-      end
-    end
+    players.collect{|player| player.strategy}
   end
 
   def name

@@ -7,6 +7,7 @@ require 'fileutils'
 require 'pbs'
 require 'helper_demon'
 require 'transformation'
+require 'egat_interface'
 
 SECRET_KEY = "srgegta"
 FLUX_CORES = 10

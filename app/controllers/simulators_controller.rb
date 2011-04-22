@@ -34,16 +34,14 @@ class SimulatorsController < AnalysisController
   end
 
   def add_strategy
-    @simulator.strategies.create(:name => params[:strategy])
-
+    @simulator.update_attributes(:strategies => (@simulator.strategies << params[:strategy]))
     respond_to do |format|
       format.js
     end
   end
 
   def remove_strategy
-    @simulator.strategies.find(params[:strategy_id]).destroy
-
+    @simulator.strategies.delete(params[:strategy_name])
     respond_to do |format|
       format.js
     end

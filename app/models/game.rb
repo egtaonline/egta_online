@@ -14,7 +14,7 @@ class Game
 
   belongs_to :simulator
   embeds_many :control_variates, :inverse_of => :game
-  embeds_many :strategies
+  embeds_many :strategies, as: :actionable
   embeds_many :profiles, :inverse_of => :game
   has_many :game_schedulers, :dependent => :destroy, :autosave => true
   embeds_many :features
@@ -36,8 +36,7 @@ class Game
   end
 
   def add_strategy_from_name(name)
-    self.strategies.create(:name => name)
-    simulator.strategies << name
+    self.strategies.create!(:name => name)
     Stalker.enqueue 'update_profiles', :game => self.id
   end
 
@@ -51,10 +50,8 @@ class Game
   end
 
   # Remove Strategy from a Game
-  def remove_strategy(strategy)
-    if strategies.any? {|s| s == strategy}
-      strategy.destroy
-    end
+  def remove_strategy(strategy_name)
+    profiles.each {|profile| if profile.contains_strategy?(strategy_name); profile.destroy; end}
   end
 
 #   # This should find (or generate) all profiles that are used by Game, given the current set of strategies available.
@@ -66,7 +63,8 @@ class Game
       p_strategies.sort!
       profile = profiles.detect {|x| x.strategy_array == p_strategies}
       unless profile
-        profiles.create(:strategy_array => p_strategies)
+        prof = profiles.create!
+        p_strategies.each {|strategy| prof.players.create!(:strategy => strategy)}
       end
 
       p = next_profile(p, strategies.length, self.size)

@@ -9,7 +9,9 @@ end
 Given /^the profile references the simulation$/ do
   @profile.simulations << @simulation
   @simulation.save!
-  @profile.strategy_array = ["AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:noRA:0.0", "AmbiguityAversePricing:noRA:0.0", "AmbiguityAversePricing:noRA:0.0", "BayesianPricing:RA:0.0", "BayesianPricing:RA:0.0"]
+  ["AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:RA:0.0", "AmbiguityAversePricing:noRA:0.0", "AmbiguityAversePricing:noRA:0.0", "AmbiguityAversePricing:noRA:0.0", "BayesianPricing:RA:0.0", "BayesianPricing:RA:0.0"].each do |strategy_name|
+    @profile.players.create!(:strategy => strategy_name)
+  end
 end
 
 Given /^the data exists on the remote server$/ do
