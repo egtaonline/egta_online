@@ -14,7 +14,7 @@ class ControlVariate
   end
 
   def apply_cv(source_id, features)
-    @adjustment_coefficient_record = self.adjustment_coefficient_records.create(:game_id => source_id)
+    @adjustment_coefficient_record = self.adjustment_coefficient_record.create(:game_id => source_id)
     @adjustment_coefficient_record.calculate_coefficients(features.collect {|x| Game.find(source_id).features.where(:name => x).first})
     g = transform_game(game, ":cv")
     self.update_attributes(:destination_id => g.id)

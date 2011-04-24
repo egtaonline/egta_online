@@ -12,7 +12,7 @@ class ControlVariatesController < GameDescendentsController
   end
 
   def create
-    @control_variates = @game.control_variates.create(params[:control_variate])
+    @control_variates = @game.control_variates.create!(params[:control_variate])
     @control_variates.apply_cv(params[:acr][:source_id], params[:feature_names])
     if @control_variates.save!
       redirect_to(game_path(Game.find(@control_variates.destination_id)), :notice => 'Adjustments have been applied')
