@@ -1,6 +1,6 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
-set :rvm_ruby_string, '1.9.2-head'
+set :rvm_ruby_string, '1.9.2'
 
 set :application, "EGTMAS Web Interface"
 set :repository,  "git@github.com:bcassell/EGTMAS-Web-Interface.git"
