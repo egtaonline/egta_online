@@ -7,7 +7,7 @@ class Simulation
   belongs_to :account, :inverse_of => :simulations
   belongs_to :profile, :inverse_of => :simulations
   belongs_to :game
-  belongs_to :pbs_generator
+  belongs_to :scheduler
 
   field :size, :type => Integer
   field :state

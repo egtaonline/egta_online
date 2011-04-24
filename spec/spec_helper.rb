@@ -2,7 +2,6 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'support/blueprints'
-require 'support/helpers'
 
 RSpec.configure do |config|
   require "database_cleaner"

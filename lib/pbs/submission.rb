@@ -35,7 +35,7 @@ module PBS
 
     def initialize(pbs_proxy, samples, simulation_id, script)
       @process_memory = pbs_proxy.process_memory
-      @qos = pbs_proxy.qos
+      @qos = "cac"
       @samples = samples
       @time_per_sample = pbs_proxy.time_per_sample
       @script = script

@@ -12,14 +12,20 @@
       %td= f.label :active
       %td= f.check_box :active, {:checked => true}, true, false
     %tr
-      %td= f.label :max_samples, "Max Samples Per Profile"
+      %td= f.label :max_samples, "Max samples per profile"
       %td= f.text_field :max_samples, :value => 30
     %tr
       %td= f.label :samples_per_simulation, "Samples per scheduled"
       %td= f.text_field :samples_per_simulation, :value => 30
     %tr
-      %td= f.label :pbs_generator_id, 'PBS Generator'
-      %td= f.collection_select :pbs_generator_id, PbsGenerator.all, :id, :name
+      %td= f.label :process_memory, "Required memory (in MB)"
+      %td= f.text_field :process_memory
+    %tr
+      %td= f.label :time_per_sample
+      %td= f.text_field :time_per_sample
+    %tr
+      %td= f.label :jobs_per_request, "Concurrent Jobs per Request"
+      %td= f.text_field :jobs_per_request
   %p
     = f.submit 'Create Game Scheduler'
 

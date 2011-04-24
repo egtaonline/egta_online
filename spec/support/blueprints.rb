@@ -13,29 +13,28 @@ require ROOT_PATH+"/spec/support/testaccount"
 
 Simulator.blueprint do
   name { "epp_sim" }
-  version { "Sim-#{sn}" }
+  version { "Sim#{sn}" }
   parameters { "---\nweb parameters:\n    number of agents: 120" }
   path { "/Users/bcassell/Ruby/egt_working_directory/epp_sim.zip" }
 end
 
 Game.blueprint do
-  name { "Game-#{sn}" }
-  size { 2 }
+  name { "Game#{sn}" }
+  size { 8 }
   parameters {["number of agents"]}
   number_of_agents { 120 }
 end
 
 Strategy.blueprint do
-  name { "Strategy-#{sn}" }
+  name { "Strategy#{sn}" }
 end
 
 Profile.blueprint do
-  size { 2 }
-  strategy_array { ["a", "b"] }
+  size { 8 }
 end
 
 Player.blueprint do
-  strategy { "Strategy-0" }
+  strategy { "Strategy0" }
 end
 
 Simulation.blueprint do
@@ -61,7 +60,7 @@ Payoff.blueprint do
 end
 
 Feature.blueprint do
-  name { "Feature-#{sn}" }
+  name { "Feature#{sn}" }
   expected_value { 0.5 }
 end
 

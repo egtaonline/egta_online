@@ -1,6 +1,11 @@
 class HelperDemon
 
-  def self.process_schedulers
+  def initialize
+    @server_proxy = ServerProxy.new
+    @server_proxy.start
+  end
+
+  def process_schedulers
     puts "process_schedulers"
     Game.all.each do |game|
       game.game_schedulers.active.each do |game_scheduler|
@@ -15,16 +20,14 @@ class HelperDemon
     # end
   end
 
-  def self.queue_simulations
+  def queue_simulations
     puts "queue_simulations"
-    proxy = ServerProxy.new
-    proxy.queue_pending_simulations
+    @server_proxy.queue_pending_simulations
   end
 
-  def self.maintain_simulations
+  def maintain_simulations
     puts "maintain_simulations"
-    proxy = ServerProxy.new
-    proxy.check_active_simulations
+    @server_proxy.check_simulations
   end
 
 end

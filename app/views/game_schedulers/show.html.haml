@@ -1,19 +1,22 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{link_to 'Game Schedulers', game_schedulers_path} Show Game Scheduler
 %h3 Game Scheduler Information
-%table{:width => "90%"}
-  %tr{:class => "= cycle('','altrow')"}
+%table
+  %tr
     %th Game:
     %td= link_to @game_scheduler.game.name, @game_scheduler.game
-  %tr{:class => "= cycle('','altrow')"}
+  %tr
     %th Active:
-    %td=h @game_scheduler.active
-  %tr{:class => "= cycle('','altrow')"}
-    %th Max Samples Per Profile:
-    %td=h @game_scheduler.max_samples
-  %tr{:class => "= cycle('','altrow')"}
-    %th PBS Info:
-    %td= @pbs_name
+    %td= @game_scheduler.active
+  %tr
+    %th Max samples per profile:
+    %td= @game_scheduler.max_samples
+  %tr
+    %th Required memory (in MB):
+    %td= @game_scheduler.process_memory
+  %tr
+    %th Time per sample:
+    %td= @game_scheduler.time_per_sample
+  %tr
+    %th Concurrent jobs per request:
+    %td= @game_scheduler.jobs_per_request
 %p= link_to 'Edit game scheduler', edit_game_scheduler_path(@game_scheduler)
 

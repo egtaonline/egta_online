@@ -37,14 +37,12 @@ EgtMongoid::Application.routes.draw do
   end
   resources :simulations, :only => [:index, :show] do
     collection do
-      get 'purge'
-      post 'update_game'
+      post 'update_game', 'purge'
     end
   end
   resources :game_schedulers
   resources :profile_schedulers
   resources :deviation_schedulers
-  resources :pbs_generators
   root :to => 'home#index'
   match "/home/prep_work" => 'home#prep_work'
 

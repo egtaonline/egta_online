@@ -1,8 +1,8 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path }  Simulations
 %h3 Simulations
-%p
-  = label :game_id, :select, "Choose a game"
-  = grouped_collection_select :simulation, :game_id, Simulator.all, :games, :name, :id, :name
+= form_tag purge_simulations_path do
+  %p
+    = label :game_id, :select, "Choose a game"
+    = grouped_collection_select :simulation, :game_id, Simulator.all, :games, :name, :id, :name
+  %p
+    = submit_tag 'Purge Failed Simulations'
 #simulation=render :partial => 'simulations', :locals => {:simulations => @simulations}

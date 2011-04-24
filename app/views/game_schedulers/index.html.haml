@@ -14,7 +14,6 @@
     %tr{:class => "<%= cycle('','altrow') %>"}
       %td= link_to game_scheduler.game.name, [game_scheduler.game, game_scheduler]
       %td= link_to game_scheduler.active, [game_scheduler.game, game_scheduler]
-      %td= link_to @pbs_generator.name, @pbs_generator
       %td= link_to 'Destroy', [game_scheduler.game, game_scheduler], :confirm => 'Are you sure?', :method => :delete
 
 %p= will_paginate(@game_schedulers)

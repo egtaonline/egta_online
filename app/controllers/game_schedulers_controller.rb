@@ -6,7 +6,6 @@ class GameSchedulersController < AnalysisController
 
   def show
     @game_scheduler = GameScheduler.find(params[:id])
-    @pbs_name = PbsGenerator.find(@game_scheduler.pbs_generator_id).name
   end
 
   def new

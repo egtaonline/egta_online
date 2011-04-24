@@ -4,11 +4,11 @@
 class Account
   include Mongoid::Document
 
+  has_many :simulations, :inverse_of => :account
   field :username
   field :flux, :type => Boolean
   field :max_concurrent_simulations, :type => Integer
   validates_presence_of :username, :max_concurrent_simulations
-  validate :username_can_connect_to_host
   field :encrypted_password
 
   def password=(pass)
@@ -21,33 +21,16 @@ class Account
   # checks whether a given account is capable of having more simulation jobs
   # assigned to it
   def schedulable?
-    puts max_concurrent_simulations
+    puts self.max_concurrent_simulations
+    puts scheduled_count
     self.max_concurrent_simulations > scheduled_count
   end
 
   def name
-    "#{self.username}@#{self.server_proxy.host}"
-  end
-
-  def username_can_connect_to_host
-    begin
-      if(self.password == nil)
-        Net::SSH.start(ServerProxy::HOST, username, :timeout => 2)
-      else
-        Net::SSH.start(ServerProxy::HOST, username, :password => self.password, :timeout => 2)
-      end
-    rescue
-      errors.add(:username, "can't login to host")
-    end
+    self.username
   end
 
   def scheduled_count
-    sum = 0
-    Game.all.each do |x|
-      x.profiles.all.each do |y|
-        sum += y.simulations.where(:account_id => self.id).count
-      end
-    end
-    sum
+    simulations.scheduled.count
   end
 end

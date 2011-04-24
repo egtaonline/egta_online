@@ -5,8 +5,8 @@ class SimulationsController < AnalysisController
   end
 
   def show
-    @username = Account.find(@simulation.account_id).username
     @simulation = Simulation.find(params[:id])
+    @username = Account.find(@simulation.account_id).username
   end
 
   def purge

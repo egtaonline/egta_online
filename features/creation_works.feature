@@ -24,5 +24,3 @@ Scenario: Game creation works
   And I press "Create Game"
   Then the game is created
   And I am on the show page for the game
-
-

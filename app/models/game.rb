@@ -25,6 +25,14 @@ class Game
     YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| self[x] = y; self.parameters << x}
   end
 
+  def remove_payoffs(profile_id, sample_id)
+    profiles.find(profile_id).players.each{|player| player.payoffs.where(:sample_id => sample_id).destroy_all}
+  end
+
+  def remove_feature_samples(sample_id)
+    features.each{|feature| feature.feature_samples.where(:sample_id => sample_id).destroy_all}
+  end
+
   def calculate_cv_features(params, add=true)
     feature = features.find(params[:feature_id])
     if add

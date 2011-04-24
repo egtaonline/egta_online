@@ -8,7 +8,7 @@ class Profile
   has_many :simulations
 
   def scheduled_count
-    game.simulations.scheduled.where(:profile_id => self.id) == [] ? 0 : game.simulations.scheduled.where(:profile_id => self.id).sum(:size)
+    game.simulations.scheduled.where(:profile_id => self.id).reduce{|sum, sim| sum + sim.samples.count}.to_f + players.first.payoffs.count
   end
 
   def size
