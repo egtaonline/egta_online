@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     $("#simulation_game_id").change(function() {
         var game = $('select#simulation_game_id :selected').val();
-        jQuery.post('/simulations/update_game', {game_id: game})
+        jQuery.get('/simulations/update_game', {game_id: game})
     });
 
     $("#simulator_id").change(function() {

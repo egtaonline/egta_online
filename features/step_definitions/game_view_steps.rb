@@ -30,3 +30,11 @@ Then /^I should see the second simulator's games$/ do
   page.should have_content("Game0003")
 end
 
+
+When /^I select the first simulator from the select menu$/ do
+  select "epp_sim-Sim0003"
+end
+
+Then /^I should see the first simulator's games$/ do
+  page.should have_content("Game0005")
+end

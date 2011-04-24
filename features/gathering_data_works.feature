@@ -3,7 +3,6 @@ Feature: Gathering data works
   As a user
   I want the process to work
 
-@wip
 Scenario: Data already exists on remote server
   Given an account
   And a game

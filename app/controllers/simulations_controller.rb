@@ -51,12 +51,16 @@ class SimulationsController < AnalysisController
     if Game.count == 0
       @simulations = [].paginate :per_page => 15, :page => (params[:page] || 1)
     else
-      if params[:simulation] == nil or params[:simulation][:game_id] == nil
-        @game = Game.first
+      if params[:game_id] == nil
+        if params[:simulation] == nil or params[:simulation][:game_id] == nil
+          @game = Game.first
+        else
+          @game = Game.find(params[:simulation][:game_id])
+        end
       else
-        @game = Game.find(params[:simulation][:game_id])
+        @game = Game.find(params[:game_id])
       end
-      @simulations = @game.simulations.order_by(:created_at.desc).paginate :per_page => 15, :page => (params[:page] || 1)
+      @simulations = @game.simulations.order_by(:created_at.desc).without(:samples).paginate :per_page => 15, :page => (params[:page] || 1)
     end
   end
 

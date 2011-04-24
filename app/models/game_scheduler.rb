@@ -47,7 +47,7 @@ class GameScheduler < Scheduler
 
   def find_profile(n=1)
     scheduled_profiles = Array.new
-    game.profiles.all.shuffle.each do |profile|
+    game.profiles.all.each do |profile|
       if profile.scheduled_count < self.max_samples
         scheduled_profiles << profile
         if scheduled_profiles.size >= n

@@ -1,8 +1,12 @@
 --- 
+- AmbiguityAversePricing:RA:0.0
 - AmbiguityAversePricing:noRA:0.0
-- BayesianPricing:noRA:0.0
-- BayesianPricing:noRA:0.0
-- BayesianPricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- BayesianPricing:RA:0.0
 --- 
 number of agents: 120.0
 left variance: 0.0

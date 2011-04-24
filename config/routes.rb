@@ -37,7 +37,8 @@ EgtMongoid::Application.routes.draw do
   end
   resources :simulations, :only => [:index, :show] do
     collection do
-      post 'update_game', 'purge'
+      get 'update_game'
+      post 'purge'
     end
   end
   resources :game_schedulers
