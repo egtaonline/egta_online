@@ -35,10 +35,6 @@ group :development, :test do
   gem 'cucumber-rails'
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
-  gem "autotest"
-  gem "autotest-rails-pure"
   gem "capybara"
-  gem "autotest-fsevent"
-  gem "autotest-growl"
   gem 'machinist_mongo', :git => 'https://github.com/nmerouze/machinist_mongo.git', :require => 'machinist/mongoid', :branch => 'machinist2'
 end
