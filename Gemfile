@@ -28,10 +28,10 @@ gem 'bson_ext', "1.3"
 gem 'statsample-optimization'
 gem 'hpricot'
 gem 'encrypted_strings'
+gem 'compass'
 
 group :development, :test do
   gem 'cucumber'
-  gem 'compass'
   gem 'cucumber-rails'
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
