@@ -8,7 +8,7 @@ describe ServerProxy do
     @simulator.simulator = double('simulator')
     @simulator.simulator.stub(:path).and_return("/Users/bcassell/Ruby/egt_working_directory/epp_sim.zip")
     @simulator.save!
-    @game = Game.make!
+    @game = Game.make
     @game.simulator = @simulator
     @game.save!
     @server_proxy.start

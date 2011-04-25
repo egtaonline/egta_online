@@ -26,7 +26,12 @@ class Game
   end
 
   def remove_payoffs(profile_id, sample_id)
-    profiles.find(profile_id).players.each{|player| player.payoffs.where(:sample_id => sample_id).destroy_all}
+    profile = profiles.find(profile_id)
+    profile.players.each do |player|
+      player.payoffs.where(:sample_id => sample_id).each do |payoff|
+        payoff.delete
+      end
+    end
   end
 
   def remove_feature_samples(sample_id)

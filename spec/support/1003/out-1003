@@ -1,0 +1,1 @@
+/tmp/5181592[1003].nyx.engin.umich.edu/script/batch: line 3: 16228 Aborted                 /home/wellmangroup/opt/local/jruby/bin/jruby --server --fast -Ilib lib/main.rb "$@"

@@ -9,10 +9,18 @@ class DataLoader
     end
   end
 
+  def load_simulator(name, version, location)
+    @simulator = Simulator.where(:name => name, :version => version).first
+    @simulator.games.each {|game| game.simulations.each {|sim| load_folder(sim.serial_id, location)}}
+  end
+
   def load_folder(folder_number, location)
-    if Simulation.where(:serial_id => folder_number).count == 0
+    if Simulation.where(:serial_id => folder_number).count > 0
+      simulation = Simulation.where(:serial_id => folder_number).first
+      simulation.samples.destroy_all
       entries = Dir.entries("#{location}/#{folder_number}") - [".", ".."]
       if entries.include?("payoff_data")
+        game = simulation.game
         yaml_load = Array.new
         File.open("#{location}/#{folder_number}/simulation_spec.yaml") do |file|
           YAML.load_documents(file) do |y|
@@ -25,25 +33,14 @@ class DataLoader
             payoff << y
           end
         end
-        size = yaml_load[0].size
-        hash = yaml_load[1]
-        hash[:size] = size
-        hash[:parameters] = yaml_load[1].keys
-        hash[:name] = yaml_load[1].to_s+size.to_s
-        game = Game.find_or_create_by(hash)
-        game.save!
-        yaml_load[0].uniq.each{|strat| game.synchronous_add_strategy_from_name(strat)}
-        profile = game.profiles.detect {|prof| prof.strategy_array == yaml_load[0].sort}
-        simulation = Simulation.find_or_create_by(:serial_id => folder_number, :state => "complete", :profile_id => profile.id, :game_id => game.id, :size => payoff.size)
-        simulation.save!
-        simulation.update_attributes(:serial_id => folder_number)
         proxy = ServerProxy.new("localhost", location)
-        if simulation.samples.count == 0
-          proxy.gather_samples(simulation, location)
-        end
+        proxy.gather_samples(simulation, location)
+        simulation.update_attributes(:state => 'complete')
         if game.features == nil or game.features == [] or game.features.first.feature_samples.where(:sample_id => simulation.samples.first.id).count == 0
           proxy.gather_features(simulation, location)
         end
+      else
+        simulation.update_attributes(:state => 'failed')
       end
     end
   end
