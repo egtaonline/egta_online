@@ -15,7 +15,7 @@ class DataLoader
   end
 
   def load_folder(folder_number, location)
-    if Simulation.where(:serial_id => folder_number).count > 0
+    if Simulation.where(:serial_id => folder_number).count > 0 && File.exists?("#{location}/#{folder_number}")
       simulation = Simulation.where(:serial_id => folder_number).first
       simulation.samples.destroy_all
       entries = Dir.entries("#{location}/#{folder_number}") - [".", ".."]
