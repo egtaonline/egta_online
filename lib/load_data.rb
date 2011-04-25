@@ -39,10 +39,10 @@ class DataLoader
         simulation.update_attributes(:serial_id => folder_number)
         proxy = ServerProxy.new("localhost", location)
         if simulation.samples.count == 0
-          proxy.gather_samples(simulation)
+          proxy.gather_samples(simulation, location)
         end
         if game.features == nil or game.features == [] or game.features.first.feature_samples.where(:sample_id => simulation.samples.first.id).count == 0
-          proxy.gather_features(simulation)
+          proxy.gather_features(simulation, location)
         end
       end
     end
