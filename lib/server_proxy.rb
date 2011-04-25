@@ -62,9 +62,9 @@ class ServerProxy
     end
   end
 
-  def gather_samples(simulation, sample_location = "#{ROOT_PATH}/db/")
+  def gather_samples(simulation, sample_location = "#{ROOT_PATH}/db")
     count = 0
-    File.open(sample_location+"#{simulation.serial_id}/payoff_data", 'r') do |out|
+    File.open(sample_location+"/#{simulation.serial_id}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
         sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{sample_location}/#{simulation.serial_id}/payoff_data", :file_index => count)
         count += 1
@@ -77,10 +77,10 @@ class ServerProxy
     end
   end
 
-  def gather_features(simulation)
-    dirs = Dir.entries("#{ROOT_PATH}/db/#{simulation.serial_id}/features") - [".", ".."]
+  def gather_features(simulation, sample_location ="#{ROOT_PATH}/db")
+    dirs = Dir.entries("#{sample_location}/#{simulation.serial_id}/features") - [".", ".."]
     dirs.each do |x|
-      File.open("#{ROOT_PATH}/db/#{simulation.serial_id}/features/"+x) do |out|
+      File.open("#{sample_location}/#{simulation.serial_id}/features/"+x) do |out|
         @feature = simulation.game.features.where(:name => x).count == 0 ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
         count = 0
         YAML.load_documents(out) do |yf|
