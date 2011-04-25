@@ -20,7 +20,7 @@ class Profile
   end
 
   def strategy_array
-    players.collect{|player| player.strategy}
+    players.collect{|player| player.strategy}.sort
   end
 
   def name

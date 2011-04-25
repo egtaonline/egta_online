@@ -14,7 +14,7 @@ class Game
 
   belongs_to :simulator
   embeds_many :control_variates, :inverse_of => :game
-  embeds_many :strategies, as: :actionable
+  embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
   has_many :game_schedulers, :dependent => :destroy, :autosave => true
   embeds_many :features
@@ -43,9 +43,18 @@ class Game
     params[:feature_names].collect{|s| [s, features.where(:name => s).first.id]}
   end
 
+  def synchronous_add_strategy_from_name(name)
+    if strategies.where(:name => name).count == 0
+      self.strategies.create!(:name => name)
+      ensure_profiles
+    end
+  end
+
   def add_strategy_from_name(name)
-    self.strategies.create!(:name => name)
-    Stalker.enqueue 'update_profiles', :game => self.id
+    if strategies.where(:name => name).count == 0
+      self.strategies.create!(:name => name)
+      Stalker.enqueue 'update_profiles', :game => self.id
+    end
   end
 
   # Add Strategy to a Game

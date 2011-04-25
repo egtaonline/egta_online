@@ -1,4 +1,5 @@
 require 'server_proxy'
+require 'load_data'
 require 'net/ssh'
 require 'net/scp'
 require 'net/ssh/multi'
