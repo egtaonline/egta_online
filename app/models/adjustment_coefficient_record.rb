@@ -3,9 +3,8 @@ require 'statsample'
 class AdjustmentCoefficientRecord
   include Mongoid::Document
 
-  belongs_to :game
+  embedded_in :game
   field :feature_hash, :type => Hash
-  embedded_in :control_variate
 
   def calculate_coefficients(features)
     data = Hash.new
