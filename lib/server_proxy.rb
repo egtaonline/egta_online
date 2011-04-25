@@ -62,11 +62,11 @@ class ServerProxy
     end
   end
 
-  def gather_samples(simulation, sample_location = "#{ROOT_PATH}db/")
+  def gather_samples(simulation, sample_location = "#{ROOT_PATH}/db/")
     count = 0
     File.open(sample_location+"#{simulation.serial_id}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
-        sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{ROOT_PATH}/db/#{simulation.serial_id}/payoff_data", :file_index => count)
+        sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{sample_location}/#{simulation.serial_id}/payoff_data", :file_index => count)
         count += 1
         players = simulation.game.profiles.find(simulation.profile_id).players
         players.each do |player|

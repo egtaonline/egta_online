@@ -37,7 +37,7 @@ class DataLoader
         simulation = Simulation.find_or_create_by(:serial_id => folder_number, :state => "complete", :profile_id => profile.id, :game_id => game.id, :size => payoff.size)
         simulation.save!
         simulation.update_attributes(:serial_id => folder_number)
-        proxy = ServerProxy.new
+        proxy = ServerProxy.new("localhost", location)
         if simulation.samples.count == 0
           proxy.gather_samples(simulation)
         end
