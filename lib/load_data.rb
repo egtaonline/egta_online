@@ -4,14 +4,14 @@ class DataLoader
     entries.each do |entry|
       if entry.to_i.to_s == entry
         puts entry
-        load_folder(entry.to_i)
+        load_folder(entry.to_i, location)
       end
     end
   end
 
-  def load_folder(folder_number)
+  def load_folder(folder_number, location)
     if Simulation.where(:serial_id => folder_number).count == 0
-      entries = Dir.entries("#{ROOT_PATH}/db/#{folder_number}") - [".", ".."]
+      entries = Dir.entries("#{location}/#{folder_number}") - [".", ".."]
       if entries.include?("payoff_data")
         yaml_load = Array.new
         File.open("#{ROOT_PATH}/db/#{folder_number}/simulation_spec.yaml") do |file|
