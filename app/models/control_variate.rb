@@ -25,6 +25,7 @@ class ControlVariate
   end
 
   def apply_transformation(g)
+    g.features.each {|f| if f.expected_value == nil; f.expected_value = f.sample_avg; end}
     adjustment_coefficient_record = Game.find(self.acr_game_id).adjustment_coefficient_records.find(self.adjustment_coefficient_record_id)
     g.profiles.each do |x|
       x.players.each do |y|
