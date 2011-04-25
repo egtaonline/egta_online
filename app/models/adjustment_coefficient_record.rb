@@ -3,11 +3,11 @@ require 'statsample'
 class AdjustmentCoefficientRecord
   include Mongoid::Document
 
+  belongs_to :game
   field :feature_hash, :type => Hash
   embedded_in :control_variate
 
   def calculate_coefficients(features)
-    game = control_variate.game
     data = Hash.new
     data["payoffs"] = Array.new
     features.each {|x| data[x.name] = Array.new}

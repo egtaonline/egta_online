@@ -14,6 +14,7 @@ class Game
 
   belongs_to :simulator
   embeds_many :control_variates, :inverse_of => :game
+  has_many :adjustment_coefficient_records
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
   has_many :game_schedulers, :dependent => :destroy, :autosave => true
