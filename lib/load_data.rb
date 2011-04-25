@@ -14,13 +14,13 @@ class DataLoader
       entries = Dir.entries("#{location}/#{folder_number}") - [".", ".."]
       if entries.include?("payoff_data")
         yaml_load = Array.new
-        File.open("#{ROOT_PATH}/db/#{folder_number}/simulation_spec.yaml") do |file|
+        File.open("#{location}/#{folder_number}/simulation_spec.yaml") do |file|
           YAML.load_documents(file) do |y|
             yaml_load << y
           end
         end
         payoff = Array.new
-        File.open("#{ROOT_PATH}/db/#{folder_number}/payoff_data") do |file|
+        File.open("#{location}/#{folder_number}/payoff_data") do |file|
           YAML.load_documents(file) do |y|
             payoff << y
           end
