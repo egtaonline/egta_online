@@ -16,6 +16,8 @@ class ControlVariatesController < GameDescendentsController
     @control_variates.apply_cv(params[:acr][:source_id], params[:feature_names])
     if @control_variates.save!
       redirect_to(game_path(Game.find(@control_variates.destination_id)), :notice => 'Adjustments have been applied')
+    else
+      render :action => "new"
     end
   end
 
@@ -38,7 +40,7 @@ class ControlVariatesController < GameDescendentsController
 
   def destroy
     @game.control_variates.find(params[:id]).destroy
-    redirect_to(control_variates_url)
+    redirect_to(@game)
   end
 
   protected
