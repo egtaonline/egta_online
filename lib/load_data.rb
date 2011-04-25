@@ -1,6 +1,6 @@
 class DataLoader
-  def load_db
-    entries = Dir.entries("#{ROOT_PATH}/db") - [".", ".."]
+  def load_db(location = "#{ROOT_PATH}/db")
+    entries = Dir.entries(location) - [".", ".."]
     entries.each do |entry|
       if entry.to_i.to_s == entry
         puts entry
