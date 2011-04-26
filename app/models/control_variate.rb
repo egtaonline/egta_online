@@ -15,7 +15,7 @@ class ControlVariate
     adjustment_coefficient_record.save!
     self.adjustment_coefficient_record_id = adjustment_coefficient_record.id
     self.save!
-    Stalker.enqueue 'calculate_cv', :game => self.game.id.to_s, :source_game => source_id.to_s, :cv => self.id.to_s, :name => "#{game.name}:cv:#{source_id}"
+    Stalker.enqueue 'calculate_cv', :game => self.game.id.to_s, :cv => self.id.to_s, :name => "#{game.name}:cv:#{source_id}"
   end
 
   def transform_game(name)
