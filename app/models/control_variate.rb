@@ -25,7 +25,7 @@ class ControlVariate
   end
 
   def apply_transformation(g)
-    g.features.each {|f| if f.expected_value == nil; f.expected_value = f.sample_avg; end}
+    g.features.each {|f| if f.expected_value == nil; f.update_attributes(:expected_value => f.sample_avg); end}
     adjustment_coefficient_record = Game.find(self.acr_game_id).adjustment_coefficient_records.find(self.adjustment_coefficient_record_id)
     g.profiles.each do |x|
       x.players.each do |y|
@@ -33,7 +33,7 @@ class ControlVariate
           adjusted = z.payoff
           g.features.each do |f|
             if adjustment_coefficient_record.feature_hash[f.name] != nil
-              adjusted += adjustment_coefficient_record.feature_hash[f.name].to_f*(f.feature_samples.where(:sample_id => z.sample_id).first.value - (f.expected_value ? f.expected_value : f.sample_avg))
+              adjusted += adjustment_coefficient_record.feature_hash[f.name].to_f*(f.feature_samples.where(:sample_id => z.sample_id).first.value - f.expected_value)
             end
           end
           z.update_attributes(:payoff => adjusted)
