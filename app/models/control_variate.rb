@@ -29,7 +29,7 @@ class ControlVariate
     self.game.profiles.each do |profile|
       trans_profile = trans_game.profiles.create!
       profile.players.each do |player|
-        trans_player = trans_profile.players.create!
+        trans_player = trans_profile.players.create!(:strategy => player.strategy)
         player.payoffs.each do |payoff|
           adjusted = payoff.payoff
           self.features.each do |f|
