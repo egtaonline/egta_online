@@ -1,6 +1,5 @@
 class ControlVariate
   include Mongoid::Document
-  include Transformation
   field :destination_id
   field :adjustment_coefficient_record_id
   field :acr_game_id
