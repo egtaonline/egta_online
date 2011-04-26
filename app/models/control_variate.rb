@@ -5,10 +5,6 @@ class ControlVariate
   field :acr_game_id
   embedded_in :game
 
-  def features
-    feature_ids.collect {|x| game.features.find(x)}
-  end
-
   def type
     "Control Variates"
   end
@@ -18,7 +14,7 @@ class ControlVariate
     adjustment_coefficient_record = Game.find(source_id).adjustment_coefficient_records.create!
     adjustment_coefficient_record.save!
     self.adjustment_coefficient_record_id = adjustment_coefficient_record.id
-    adjustment_coefficient_record.calculate_coefficients(self.features.collect {|x| Game.find(source_id).features.where(:name => x).first})
+    adjustment_coefficient_record.calculate_coefficients(features.collect {|x| Game.find(source_id).features.where(:name => x).first})
     g = transform_game("#{game.name}:cv:#{source_id}")
     self.update_attributes(:destination_id => g.id)
   end
