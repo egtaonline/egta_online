@@ -21,7 +21,7 @@ class ControlVariate
 
   def transform_game(name)
     trans_game = Game.new(:name => name)
-    self.game.simulator.games < trans_game
+    self.game.simulator.games << trans_game
     trans_game.save!
     self.game.strategies.each {|strat| trans_game.strategies.create!(:name => strat.name)}
     self.game.features.each {|f| if f.expected_value == nil; f.update_attributes(:expected_value => f.sample_avg); end}
