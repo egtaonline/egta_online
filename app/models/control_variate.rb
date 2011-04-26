@@ -10,11 +10,8 @@ class ControlVariate
   end
 
   def apply_cv(source_id, features)
-    self.acr_game_id = source_id
     adjustment_coefficient_record = Game.find(source_id).adjustment_coefficient_records.create!
-    adjustment_coefficient_record.save!
-    self.adjustment_coefficient_record_id = adjustment_coefficient_record.id
-    self.save!
+    self.update_attributes(:acr_game_id => source_id, :adjustment_coefficient_record_id => adjustment_coefficient_record.id)
     Stalker.enqueue 'calculate_cv', :game => self.game.id.to_s, :cv => self.id.to_s, :name => "#{game.name}:cv:#{source_id}"
   end
 
