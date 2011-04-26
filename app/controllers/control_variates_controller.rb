@@ -14,11 +14,7 @@ class ControlVariatesController < GameDescendentsController
   def create
     @control_variate = @game.control_variates.create!(params[:control_variate])
     @control_variate.apply_cv(params[:acr][:source_id], params[:feature_names])
-    if @control_variate.save!
-      redirect_to(Game.find(@control_variate.destination_id), :notice => 'Adjustments have been applied')
-    else
-      render :action => "new"
-    end
+    redirect_to(@game, :notice => 'Adjustments have been applied')
   end
 
   def add_feature
