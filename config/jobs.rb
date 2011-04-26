@@ -12,7 +12,7 @@ job 'calculate_cv' do |args|
   cv = game.control_variates.find(args["cv"])
   source_game = Game.find(cv.acr_game_id)
   adjustment_coefficient_record = source_game.adjustment_coefficient_records.find(cv.adjustment_coefficient_record_id)
-  adjustment_coefficient_record.calculate_coefficients(features.collect {|x| Game.find(cv.acr_game_id).features.where(:name => x).first})
+  adjustment_coefficient_record.calculate_coefficients(args["features"].collect {|x| Game.find(cv.acr_game_id).features.where(:name => x).first})
   adjustment_coefficient_record.save!
   cv.update_attributes(:destination_id => cv.transform_game(args["name"]))
 end
