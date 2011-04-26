@@ -6,7 +6,6 @@ class ProfilesController < GameDescendentsController
 
   def show
     @profile = @game.profiles.find(params[:id])
-    @account_options = Account.all.collect {|s| [s.name, s.id]}
   end
 
   def destroy

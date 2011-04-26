@@ -1,9 +1,6 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{ link_to 'Profiles', [@profile.game, @profile] } Show Profile
 %h3 Profile Information
-%table{:width => "90%"}
-  %tr{:class => "= cycle('','altrow') "}
+%table
+  %tr
     %th Simulator:
     %td=link_to @profile.game.simulator.name, @profile.game.simulator
   -@profile.players.each do |player|
@@ -17,17 +14,17 @@
     %th Count
     %th Payoff
   -@profile.game.strategies.each do |strategy|
-    -if @profile[strategy.name.tr(".", "|")]
+    -if @profile.players.where(:name => strategy.name)
       %tr{:class => "= cycle('','altrow') "}
         %td= strategy.name
-        %td= @profile[strategy.name.tr(".", "|")]
+        %td= @profile.players.where(:name => strategy.name).count
         %td= @profile.payoff_to_strategy(strategy.name)
 
 %h3 Sample Information
 %table{:width => "90%"}
   %tr{:class => "= cycle('','altrow') "}
     %th Total
-    %td= pluralize(@total_samples, "sample")
+    %td= pluralize(@profile.players.first.payoffs.count, "sample")
 
 %h3 Simulation Information
 %table{:width => "90%"}
