@@ -42,7 +42,7 @@ class ControlVariate
               adjusted += adjustment_coefficient_record.feature_hash[f.name].to_f*(f.feature_samples.where(:sample_id => payoff.sample_id).first.value - f.expected_value)
             end
           end
-          trans_player.payoffs.create!(:payoff = adjusted, :sample_id = payoff.sample_id)
+          trans_player.payoffs.create!(:payoff => adjusted, :sample_id => payoff.sample_id)
         end
       end
     end
