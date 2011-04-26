@@ -20,7 +20,7 @@ class ControlVariate
   end
 
   def transform_game(name)
-    trans_game = Game.new(:name => name)
+    trans_game = Game.new(:name => name, :parameters => self.game.parameters, :size => self.game.size)
     self.game.simulator.games << trans_game
     trans_game.save!
     self.game.strategies.each {|strat| trans_game.strategies.create!(:name => strat.name)}
