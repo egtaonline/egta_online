@@ -14,9 +14,7 @@ class ControlVariate
     adjustment_coefficient_record = Game.find(source_id).adjustment_coefficient_records.create!
     adjustment_coefficient_record.save!
     self.adjustment_coefficient_record_id = adjustment_coefficient_record.id
-    adjustment_coefficient_record.calculate_coefficients(features.collect {|x| Game.find(source_id).features.where(:name => x).first})
-    g = transform_game("#{game.name}:cv:#{source_id}")
-    self.update_attributes(:destination_id => g.id)
+    Stalker.enqueue 'calculate_cv', :game => self.game.id, :source_game => source_id, :cv => self.id, :name => "#{game.name}:cv:#{source_id}"
   end
 
   def transform_game(name)
