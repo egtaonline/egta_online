@@ -23,7 +23,7 @@
 %table
   %tr{:class => "= cycle('','altrow') "}
     %th EGAT XML Format:
-    %td= link_to "Download", @game
+    %td= link_to "Download", game_path(@game, :xml)
 %h3 Schedulers
 %table
   %tr
