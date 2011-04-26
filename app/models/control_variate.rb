@@ -15,11 +15,11 @@ class ControlVariate
     adjustment_coefficient_record.save!
     self.adjustment_coefficient_record_id = adjustment_coefficient_record.id
     adjustment_coefficient_record.calculate_coefficients(features.collect {|x| Game.find(source_id).features.where(:name => x).first})
-    g = transform_game(features, "#{game.name}:cv:#{source_id}")
+    g = transform_game("#{game.name}:cv:#{source_id}")
     self.update_attributes(:destination_id => g.id)
   end
 
-  def transform_game(features, name)
+  def transform_game(name)
     trans_game = Game.new(:name => name, :parameters => self.game.parameters, :size => self.game.size)
     self.game.simulator.games << trans_game
     trans_game.save!
@@ -32,7 +32,7 @@ class ControlVariate
         trans_player = trans_profile.players.create!(:strategy => player.strategy)
         player.payoffs.each do |payoff|
           adjusted = payoff.payoff
-          features.each do |f|
+          self.game.features.each do |f|
             if adjustment_coefficient_record.feature_hash[f.name] != nil
               adjusted += adjustment_coefficient_record.feature_hash[f.name].to_f*(f.feature_samples.where(:sample_id => payoff.sample_id).first.value - f.expected_value)
             end
