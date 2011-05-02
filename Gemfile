@@ -17,11 +17,13 @@ gem 'net-ssh-multi'
 gem 'net-scp'
 gem 'carrierwave'
 gem 'ffi-ncurses'
-gem 'passenger'
+# gem 'passenger'
+gem 'thin'
 gem 'beanstalk-client'
 gem 'stalker'
 gem 'daemons'
 gem 'jquery-rails'
+#todo replace with kaminari
 gem 'will_paginate'
 gem 'mongoid', "2.0"
 gem 'bson_ext', "1.3"
@@ -36,5 +38,6 @@ group :development, :test do
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "capybara"
+  gem "launchy"
   gem 'machinist_mongo', :git => 'https://github.com/nmerouze/machinist_mongo.git', :require => 'machinist/mongoid', :branch => 'machinist2'
 end

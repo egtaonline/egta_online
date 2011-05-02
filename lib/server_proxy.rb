@@ -66,7 +66,7 @@ class ServerProxy
     count = 0
     File.open(sample_location+"/#{simulation.serial_id}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
-        sample = simulation.samples.create!(:profile_id => simulation.profile_id, :filename => "#{sample_location}/#{simulation.serial_id}/payoff_data", :file_index => count)
+        sample = simulation.samples.create!(:filename => "#{sample_location}/#{simulation.serial_id}/payoff_data", :file_index => count)
         count += 1
         players = simulation.game.profiles.find(simulation.profile_id).players
         players.each do |player|

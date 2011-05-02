@@ -1,0 +1,17 @@
+%h1 Listing instructions
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @instructions.each do |instruction|
+    %tr
+      %td= link_to 'Show', instruction
+      %td= link_to 'Edit', edit_instruction_path(instruction)
+      %td= link_to 'Destroy', instruction, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Instruction', new_instruction_path

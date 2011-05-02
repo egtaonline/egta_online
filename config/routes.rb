@@ -1,6 +1,9 @@
 EgtMongoid::Application.routes.draw do
 
+  resources :instructions
+
   devise_for :users
+
   resources :schedulers
   resources :game_manipulations
   resources :accounts
@@ -9,11 +12,7 @@ EgtMongoid::Application.routes.draw do
       post 'add_strategy', 'remove_strategy'
     end
   end
-      #   resources :control_variates, :only => [:index, :show, :destroy] do
-      #   collection do
-      #     post 'add_feature', 'remove_feature', 'update_choice'
-      #   end
-      # end
+
   resources :games do
     resources :profiles, :only => [:index, :show, :destroy]
     resources :features

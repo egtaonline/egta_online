@@ -67,3 +67,6 @@ end
 FeatureSample.blueprint do
   value { rand }
 end
+Instruction.blueprint do
+  # Attributes here
+end

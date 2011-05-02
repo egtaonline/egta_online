@@ -1,15 +1,16 @@
 %a{:name => "TemplateInfo"}
 %h2 Home
-%p Welcome to EGTA Online.  Here you can schedule simulations and perform empirical game-theoretic analysis.  This site looks best in #{link_to "Chrome", "http://www.google.com/chrome"}
-
-%a{:href=>url_for(:controller => :accounts, :action => :new)}
-  .button= "Register an Account"
-%a{:href=>url_for(:controller => :simulators, :action => :new)}
-  .button= "Upload a Simulator"
-%a{:href=>url_for(:controller => :games, :action => :new)}
-  .button= "Create a Game"
-%a{:href=>url_for(:controller => :game_manipulations, :action => :new)}
-  .button= "Perform Analysis"
+%p Welcome to EGTA Online.  Here you can schedule simulations onto CAC administered clusters and perform empirical game-theoretic and statistical analysis on the results.
+%p This site looks best in #{link_to "Chrome", "http://www.google.com/chrome"}.
+%p
+  %a{:href=>url_for(:controller => :accounts, :action => :new)}
+    .button= "Register an Account"
+  %a{:href=>url_for(:controller => :simulators, :action => :new)}
+    .button= "Upload a Simulator"
+  %a{:href=>url_for(:controller => :games, :action => :new)}
+    .button= "Create a Game"
+  %a{:href=>url_for(:controller => :game_manipulations, :action => :new)}
+    .button= "Perform Analysis"
 / %ol
 /   %li
 /     %h4 Register a cluster account
