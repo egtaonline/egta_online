@@ -1,5 +1,5 @@
-#Controls the CRUD of Features
-class FeaturesController < GameDescendentsController
+class FeaturesController < AnalysisController
+  before_filter :find_game
   before_filter :find_feature, :only => [:show, :edit, :update, :destroy]
 
   def index
@@ -39,6 +39,9 @@ class FeaturesController < GameDescendentsController
   end
 
   protected
+  def find_game
+    @game = Game.find(params[:game_id])
+  end
 
   def find_feature
     @feature = @game.features.find(params[:id])
