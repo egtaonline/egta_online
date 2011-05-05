@@ -1,8 +1,5 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{link_to 'Simulators', analysis_features_path} #{link_to @feature.name, [:analysis, @feature]} Edit Feature
 %h3 Edit feature
--form_for([:analysis,@feature]) do |f|
+=form_for([@game,@feature]) do |f|
   = f.error_messages
   %table
     %tr
@@ -10,9 +7,6 @@
       %td= f.text_field :name
     %tr
       %td= f.label :expected_value
-      -if f.expected_value == nil
-        %td= f.text_field :expected_value, :value => f.sample_avg
-      -else
-        %td= f.text_field :expected_value
+      %td= f.text_field :expected_value
   %p
     = f.submit 'Update'

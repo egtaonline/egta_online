@@ -1,22 +1,16 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{link_to 'Features', analysis_features_path} Show Feature: #{h @feature.name}
 %h3 Feature Information
-%p= link_to 'Edit feature', edit_analysis_feature_path(@feature)
-%table{:width => "90%"}
-  %tr{:class => "<%= cycle('','altrow') %>"}
+%p= link_to 'Edit feature', edit_game_feature_path(@game, @feature)
+%table
+  %tr
     %th Name:
     %td=h @feature.name
-  %tr{:class => "<%= cycle('','altrow') %>"}
+  %tr
     %th Expected Value:
-    %td=h @feature.sample_avg
-  %tr{:class => "<%= cycle('','altrow') %>"}
+    %td= @feature.expected_value
+  %tr
     %th Average Value:
-    %td=h @feature.sample_avg
-  %tr{:class => "<%= cycle('','altrow') %>"}
+    %td= @feature.sample_avg
+  %tr
     %th Number of Samples:
-    %td=h @feature.sample_count
-  %tr{:class => "<%= cycle('','altrow') %>"}
-    %th Game:
-    %td=h @feature.game.name
+    %td= @feature.sample_count
 

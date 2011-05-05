@@ -1,8 +1,5 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{link_to 'Simulators', analysis_features_path} #{link_to @feature.name, [:analysis, @feature]} Create Feature
 %h3 Create feature
--form_for([:analysis,@feature]) do |f|
+=form_for([@game,@feature]) do |f|
   = f.error_messages
   %table
     %tr
@@ -11,9 +8,6 @@
     %tr
       %td= f.label :expected_value
       %td= f.text_field :expected_value
-    %tr
-      %td= f.label :game_id, "Game" 
-      %td= f.select :game_id, @game_options
   %p
     = f.submit 'Create'
 
