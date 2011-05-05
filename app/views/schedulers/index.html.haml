@@ -1,0 +1,17 @@
+%h1 Listing schedulers
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @schedulers.each do |scheduler|
+    %tr
+      %td= link_to 'Show', scheduler
+      %td= link_to 'Edit', edit_scheduler_path(scheduler)
+      %td= link_to 'Destroy', scheduler, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Scheduler', new_scheduler_path

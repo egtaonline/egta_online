@@ -1,11 +1,11 @@
 EgtMongoid::Application.routes.draw do
 
-  resources :instructions
-
+  #indexers
   devise_for :users
 
-  resources :schedulers
-  resources :game_manipulations
+  resources :schedulers, :only => [:index]
+  resources :game_manipulations, :only => [:index]
+  resources :game_schedulers, :exclude => [:index]
   resources :accounts
   resources :simulators do
     member do
@@ -14,20 +14,16 @@ EgtMongoid::Application.routes.draw do
   end
 
   resources :games do
-    resources :profiles, :only => [:index, :show, :destroy]
+    resources :profiles, :only => [:index, :show]
     resources :features
+    resources :game_schedulers, :exclude => [:index]
     resources :control_variates, :exclude => [:index] do
       collection do
         post 'add_feature', 'remove_feature', 'update_choice'
       end
     end
-    collection do
-      post 'update_parameters'
-    end
     member do
       get 'regret', 'robust_regret', 'analysis', 'rd'
-    end
-    member do
       post 'add_strategy', 'remove_strategy'
     end
     collection do
@@ -40,11 +36,6 @@ EgtMongoid::Application.routes.draw do
       post 'purge'
     end
   end
-  resources :game_schedulers
-  resources :profile_schedulers
-  resources :deviation_schedulers
   root :to => 'home#index'
-  match "/home/prep_work" => 'home#prep_work'
-
 end
 

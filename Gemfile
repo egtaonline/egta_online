@@ -31,6 +31,7 @@ gem 'statsample-optimization'
 gem 'hpricot'
 gem 'encrypted_strings'
 gem 'compass'
+gem 'simple_form'
 
 group :development, :test do
   gem 'cucumber'

@@ -204,6 +204,7 @@ GEM
       json_pure
       rubyzip
     sexp_processor (3.0.5)
+    simple_form (1.3.1)
     spreadsheet (0.6.5.1)
       ruby-ole (>= 1.0)
     stalker (0.7.0)
@@ -282,6 +283,7 @@ DEPENDENCIES
   rails (= 3.0.7)
   rspec-rails (~> 2.4)
   ruby_parser
+  simple_form
   stalker
   state_machine
   state_machine-mongoid

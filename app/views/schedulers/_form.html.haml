@@ -1,0 +1,15 @@
+= simple_form_for(@scheduler) do |f|
+  - if @scheduler.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@scheduler.errors.count, "error")
+        prohibited this scheduler from being saved:
+
+      %ul
+      - @scheduler.errors.full_messages.each do |msg|
+        %li= msg
+
+  .inputs
+
+  .actions
+    = f.button :submit

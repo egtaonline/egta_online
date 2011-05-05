@@ -70,3 +70,7 @@ end
 Instruction.blueprint do
   # Attributes here
 end
+
+Scheduler.blueprint do
+  # Attributes here
+end
