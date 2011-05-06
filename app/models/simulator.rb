@@ -18,7 +18,7 @@ class Simulator
   after_create :set_setup_to_true
 
   def set_setup_to_true
-    self.update_attributes(:setup => true)
+    self.update_attributes(:setup => false)
   end
 
   def location
