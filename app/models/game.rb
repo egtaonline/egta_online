@@ -23,7 +23,7 @@ class Game
 
   def setup_parameters(params)
     self.parameters = Array.new
-    params.each_pair {|x, y| self[x] = y; self.parameters << x}
+    params.each_pair {|x, y| self[x] = y; self.parameters << x if self.parameters.include?(x) == false}
   end
 
   def remove_payoffs(profile_id, sample_id)

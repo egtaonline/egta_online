@@ -52,6 +52,7 @@ describe "Games" do
     end
     it "respects parameter changes", :js => true do
       visit new_game_path
+      select @simulator2.fullname
       fill_in "Name", :with => "test2"
       fill_in "Number of agents", :with => "100"
       click_button "Create Game"
