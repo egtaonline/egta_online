@@ -15,7 +15,7 @@ class ServerProxy
   end
 
   def setup_simulator(simulator)
-    @staging_session.exec!("rm -rf #{@location}/#{simulator.name}*")
+    @staging_session.exec!("rm -rf #{@location}/#{simulator.fullname}*")
     puts "removed"
     @staging_session.scp.upload!(simulator.simulator.path, @location)
     puts "uploaded"
