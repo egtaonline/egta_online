@@ -34,7 +34,8 @@ class SimulatorsController < AnalysisController
   end
 
   def add_strategy
-    @simulator.update_attributes(:strategies => (@simulator.strategies << params[:strategy]))
+    @simulator.strategies << params[:strategy]
+    @simulator.save!
     respond_to do |format|
       format.js
     end
