@@ -1,6 +1,3 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } #{ link_to 'Games', games_path } Create Game
 %h3 New Game
 =form_for @game do |f|
   = f.error_messages
@@ -13,7 +10,7 @@
       %td= f.text_field :name
     %tr
       %td= label :simulator_id, "Simulator"
-      %td= collection_select :sim, :simulator_id, Simulator.all, :id, :name
+      %td= collection_select :sim, :simulator_id, Simulator.all, :id, :fullname
     %tr
       %td= f.label :description
       %td= f.text_area :description, :cols=>27, :rows=>10

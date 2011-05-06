@@ -38,7 +38,7 @@ group :development, :test do
   gem 'cucumber-rails'
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
-  gem "capybara"
+  gem "capybara", "1.0.0.beta1"
   gem "launchy"
   gem 'machinist_mongo', :git => 'https://github.com/nmerouze/machinist_mongo.git', :require => 'machinist/mongoid', :branch => 'machinist2'
 end

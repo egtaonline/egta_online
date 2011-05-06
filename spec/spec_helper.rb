@@ -20,4 +20,5 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
   config.mock_with :rspec
+
 end
