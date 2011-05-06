@@ -21,6 +21,7 @@ class ServerProxy
     puts "uploaded"
     @staging_session.exec!("cd #{@location}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
     puts "unzipped"
+    @staging_session.exec!("cd #{@location}; chmod -R ug+rwx #{simulator.fullname}")
   end
 
   def queue_pending_simulations

@@ -44,6 +44,11 @@ describe "Games" do
       find_field("Number of agents").value.should == "120"
       select @simulator2.fullname
       find_field("Number of agents").value.should == "101"
+      fill_in "Name", :with => "test"
+      click_button "Create Game"
+      save_and_open_page
+      page.should have_content("Game was successfully created.")
+      page.should have_content("101")
     end
   end
   # describe "GET games/1/features/new" do
