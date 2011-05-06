@@ -18,7 +18,7 @@ class Simulator
   after_create :set_setup_to_true
 
   def set_setup_to_true
-    self.update_attributes(:setup => false)
+    self.update_attributes(:setup => true)
   end
 
   def location
@@ -31,7 +31,7 @@ class Simulator
 
   def setup_simulator
     begin
-      if setup
+      if setup == false
         system("unzip -u #{simulator.path} -d #{location}")
         puts "unzip"
         self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
