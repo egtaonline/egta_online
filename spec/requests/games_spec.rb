@@ -50,6 +50,15 @@ describe "Games" do
       page.should have_content("Game was successfully created.")
       page.should have_content("101")
     end
+    it "respects parameter changes", :js => true do
+      visit new_game_path
+      fill_in "Name", :with => "test2"
+      fill_in "Number of agents", :with => "100"
+      click_button "Create Game"
+      save_and_open_page
+      page.should have_content("Game was successfully created.")
+      page.should have_content("100")
+    end
   end
   # describe "GET games/1/features/new" do
   #   it "should load without error" do

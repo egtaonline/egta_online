@@ -50,7 +50,7 @@ class GamesController < AnalysisController
   def create
     @simulator = Simulator.find(params[:sim][:simulator_id])
     @game = Game.new(params[:game])
-    @game.setup_parameters(@simulator)
+    @game.setup_parameters(params[:game])
     @simulator.games << @game
 
     if @game.save!

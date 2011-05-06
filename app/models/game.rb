@@ -21,9 +21,9 @@ class Game
   embeds_many :features
   has_many :simulations, :dependent => :destroy
 
-  def setup_parameters(simulator)
+  def setup_parameters(params)
     self.parameters = Array.new
-    YAML.load(simulator.parameters)["web parameters"].each_pair {|x, y| self[x] = y; self.parameters << x}
+    params.each_pair {|x, y| self[x] = y; self.parameters << x}
   end
 
   def remove_payoffs(profile_id, sample_id)
