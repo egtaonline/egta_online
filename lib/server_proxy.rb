@@ -161,6 +161,10 @@ class ServerProxy
 
   def check_existance(root_path, simulation)
     output = @staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.serial_id}/out-#{simulation.serial_id}; then printf \"exists\"; fi")
+    if output == "exists"
+      server = @sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+      server.session(true).exec!("chgrp -R wellman #{root_path}/../simulations/#{simulation.serial_id}; chmod -R ug+rwx #{root_path}/../simulations/#{simulation.serial_id}")
+    end
     output == "exists"
   end
 
