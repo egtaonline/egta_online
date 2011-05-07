@@ -298,6 +298,24 @@ h4 {
 }
 
 /* line 175, ../../../app/stylesheets/application.scss */
+code {
+  margin: 3px 0;
+  padding: 15px;
+  text-align: left;
+  display: block;
+  overflow: auto;
+  font: 500 0.9em 'Lucida Console', 'Courier New', Monospace;
+  /* white-space: pre; */
+  border: 1px solid #F0F0F0;
+  background: #f8f8f8;
+}
+
+/* line 186, ../../../app/stylesheets/application.scss */
+#ind {
+  text-indent: 12px;
+}
+
+/* line 190, ../../../app/stylesheets/application.scss */
 .button {
   border-top: 1px solid #4a0c0c;
   background: #a62626;
@@ -322,30 +340,30 @@ h4 {
   float: left;
 }
 
-/* line 198, ../../../app/stylesheets/application.scss */
+/* line 213, ../../../app/stylesheets/application.scss */
 .button a {
   color: white;
 }
 
-/* line 201, ../../../app/stylesheets/application.scss */
+/* line 216, ../../../app/stylesheets/application.scss */
 .button:hover {
   border-top-color: #730206;
   background: #730206;
   color: #ebe2eb;
 }
 
-/* line 206, ../../../app/stylesheets/application.scss */
+/* line 221, ../../../app/stylesheets/application.scss */
 .button:active {
   border-top-color: #661616;
   background: #661616;
 }
 
-/* line 211, ../../../app/stylesheets/application.scss */
+/* line 226, ../../../app/stylesheets/application.scss */
 label {
   color: #868c56;
 }
 
-/* line 215, ../../../app/stylesheets/application.scss */
+/* line 230, ../../../app/stylesheets/application.scss */
 input:focus, select:focus, textarea:focus {
   color: #000;
   background: #EFFAE6;

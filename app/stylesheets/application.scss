@@ -172,6 +172,21 @@ h2 { font-size: 2.4em; font-weight: normal; color: #663333; }
 h3 { font-size: 1.8em; font-weight: normal; letter-spacing: -0.5px; padding-top: 10px}
 h4 { font-size: 1.3em; }
 
+code {
+    margin: 3px 0;
+    padding: 15px;
+    text-align: left;
+    display: block;
+    overflow: auto;
+    font: 500 0.9em 'Lucida Console', 'Courier New', Monospace ;
+    /* white-space: pre; */
+    border: 1px solid #F0F0F0;
+    background: #f8f8f8;
+}
+#ind {
+    text-indent: 12px;
+}
+
 .button {
    border-top: 1px solid #4a0c0c;
    background: #a62626;

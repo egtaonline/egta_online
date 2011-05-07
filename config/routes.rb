@@ -37,5 +37,6 @@ EgtMongoid::Application.routes.draw do
     end
   end
   root :to => 'home#index'
+  match "home/prep_work" => "home#prep_work"
 end
 
