@@ -103,7 +103,8 @@ class ServerProxy
 
   def setup_hierarchy(simulation)
     @staging_session.exec!("mkdir -p #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/features")
-    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/simulation_spec.yaml; chmod -R ug+rwx #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}")
+    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}/simulation_spec.yaml")
+    @staging_session.exec!("chmod -R ug+rwx #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.serial_id}")
   end
 
   def nyx_processing(simulations)
