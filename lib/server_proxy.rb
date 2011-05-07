@@ -151,11 +151,11 @@ class ServerProxy
       end
       str += "\n"
       file.syswrite(str)
-      file.syswrite("\#PBS -o #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
-      file.syswrite("\#PBS -e #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
+      file.syswrite("\#PBS -o /tmp/${PBS_JOBID}/${PBS_ARRAYID}/out\n")
+      file.syswrite("\#PBS -e /tmp/${PBS_JOBID}/${PBS_ARRAYID}/out\n")
       file.syswrite("mkdir /tmp/${PBS_JOBID}; cp -r #{root_path} /tmp/${PBS_JOBID}; cp -r #{root_path}/../simulations/${PBS_ARRAYID} /tmp/${PBS_JOBID}/${PBS_ARRAYID}\n")
       file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{simulations[0].size}\n")
-      file.syswrite("cp -r /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}; chown -R #{@staging_session.options[:user]} #{root_path}")
+      file.syswrite("cp -r /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}")
     end
   end
 
