@@ -63,9 +63,9 @@ class ServerProxy
 
   def gather_samples(simulation, sample_location = "#{ROOT_PATH}/db")
     count = 0
-    File.open(sample_location+"/#{simulation.id}/payoff_data", 'r') do |out|
+    File.open(sample_location+"/#{simulation.number}/payoff_data", 'r') do |out|
       YAML.load_documents(out) do |yf|
-        sample = simulation.samples.create!(:filename => "#{sample_location}/#{simulation.id}/payoff_data", :file_index => count)
+        sample = simulation.samples.create!(:filename => "#{sample_location}/#{simulation.number}/payoff_data", :file_index => count)
         count += 1
         players = simulation.game.profiles.find(simulation.profile_id).players
         players.each do |player|
@@ -77,9 +77,9 @@ class ServerProxy
   end
 
   def gather_features(simulation, sample_location ="#{ROOT_PATH}/db")
-    dirs = Dir.entries("#{sample_location}/#{simulation.id}/features") - [".", ".."]
+    dirs = Dir.entries("#{sample_location}/#{simulation.number}/features") - [".", ".."]
     dirs.each do |x|
-      File.open("#{sample_location}/#{simulation.id}/features/"+x) do |out|
+      File.open("#{sample_location}/#{simulation.number}/features/"+x) do |out|
         @feature = simulation.game.features.where(:name => x).count == 0 ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
         count = 0
         YAML.load_documents(out) do |yf|
@@ -100,16 +100,16 @@ class ServerProxy
   end
 
   def setup_hierarchy(simulation)
-    @staging_session.exec!("mkdir -p #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.id}/features")
-    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.id}/simulation_spec.yaml")
-    @staging_session.exec!("chmod -R ug+rwx #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.id}")
+    @staging_session.exec!("mkdir -p #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/features")
+    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/simulation_spec.yaml")
+    @staging_session.exec!("chmod -R ug+rwx #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}")
   end
 
   def nyx_processing(simulations)
     simulator = simulations[0].game.simulator
     root_path = "#{@location}/#{simulator.fullname}/#{simulator.name}"
     account = simulations[0].account
-    submission = PBS::MASSubmission.new(simulations[0].scheduler, simulations[0].size, simulations[0].id, "#{root_path}/script/wrapper")
+    submission = PBS::MASSubmission.new(simulations[0].scheduler, simulations[0].size, simulations[0].number, "#{root_path}/script/wrapper")
     submission.qos = "wellman_flux" if simulations[0].flux?
     create_wrapper(simulations)
     @staging_session.scp.upload!("#{ROOT_PATH}/tmp/wrapper", "#{root_path}/script/")
@@ -142,9 +142,9 @@ class ServerProxy
       str = "\#PBS -t "
       simulations.each_index do |i|
         if i == 0
-          str += "#{simulations[0].id}"
+          str += "#{simulations[0].number}"
         else
-          str += ",#{simulations[i].id}"
+          str += ",#{simulations[i].number}"
         end
       end
       str += "\n"
@@ -158,21 +158,21 @@ class ServerProxy
   end
 
   def check_existance(root_path, simulation)
-    output = @staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.id}/out-#{simulation.id}; then printf \"exists\"; fi")
+    output = @staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
     if output == "exists"
       server = @sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
-      server.session(true).exec!("chgrp -R wellman #{root_path}/../simulations/#{simulation.id}; chmod -R ug+rwx #{root_path}/../simulations/#{simulation.id}")
+      server.session(true).exec!("chgrp -R wellman #{root_path}/../simulations/#{simulation.number}; chmod -R ug+rwx #{root_path}/../simulations/#{simulation.number}")
     end
     output == "exists"
   end
 
   def check_for_errors(simulation)
-    if File.open("#{ROOT_PATH}/db/#{simulation.id}/out-#{simulation.id}").read == ""
+    if File.open("#{ROOT_PATH}/db/#{simulation.number}/out-#{simulation.number}").read == ""
       gather_samples simulation
       gather_features simulation
       simulation.finish!
     else
-      simulation.error_message = File.open("#{ROOT_PATH}/db/#{simulation.id}/out-#{simulation.id}").readline
+      simulation.error_message = File.open("#{ROOT_PATH}/db/#{simulation.number}/out-#{simulation.number}").readline
       simulation.fail!
     end
   end
@@ -185,7 +185,7 @@ class ServerProxy
       puts state_info
       if state == "C"
         if check_existance(root_path, simulation)
-          @staging_session.scp.download!("#{root_path}/../simulations/#{simulation.id}", "#{ROOT_PATH}/db/", :recursive => true)
+          @staging_session.scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{ROOT_PATH}/db/", :recursive => true)
           check_for_errors(simulation)
         end
       elsif state == "R" && simulation.state != "running"
@@ -193,7 +193,7 @@ class ServerProxy
       end
     elsif state != "Q"
       if check_existance(root_path, simulation)
-        @staging_session.scp.download!("#{root_path}/../simulations/#{simulation.id}", "#{ROOT_PATH}/db/", :recursive => true)
+        @staging_session.scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{ROOT_PATH}/db/", :recursive => true)
         check_for_errors(simulation)
       else
         simulation.fail!

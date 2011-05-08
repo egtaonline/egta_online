@@ -4,6 +4,8 @@
 class Simulation
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Sequence
+
   belongs_to :account, :inverse_of => :simulations
   belongs_to :profile, :inverse_of => :simulations
   belongs_to :game
@@ -15,6 +17,10 @@ class Simulation
   field :error_message
   field :flux, :type => Boolean
   field :created_at
+
+  field :number, :type=>Integer
+  sequence :number
+
   embeds_many :samples
 
   scope :pending, where(:state=>'pending')

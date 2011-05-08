@@ -18,9 +18,7 @@ class GameScheduler < Scheduler
     scheduled_profiles.each do |profile|
       account = find_account
       if account != nil
-        sid = Simulation.count > 0 ? Simulation.last.id + 1 : 0
         @simulation = Simulation.new(
-          :id => sid
           :game_id => game.id,
           :account => account,
           :size => samples_per_simulation,
