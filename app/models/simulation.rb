@@ -29,6 +29,10 @@ class Simulation
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
   before_destroy :kill_feature_samples, :kill_payoffs
 
+  def id
+    self._id.to_s.to_i(16)
+  end
+
   def kill_feature_samples
     samples.each {|sample| sample.kill_feature_samples}
   end
