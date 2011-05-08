@@ -12,7 +12,7 @@ describe DataLoader do
       @game.profiles.first.players.create!(:strategy => entry)
     end
     @simulation_pass.save!
-    @simulation_pass.update_attributes(:serial_id => 41352)
+    @simulation_pass.update_attributes(:id => 41352)
     @game.profiles.first.simulations << @simulation_pass
     @game.simulations << @simulation_pass
     @simulation_pass.save!
@@ -26,15 +26,15 @@ describe DataLoader do
       @game.profiles.last.players.create!(:strategy => entry)
     end
     @simulation_fail.save!
-    @simulation_fail.update_attributes(:serial_id => 1003)
+    @simulation_fail.update_attributes(:id => 1003)
     @game.profiles.last.simulations << @simulation_fail
     @game.simulations << @simulation_fail
     @simulation_fail.save!
     @data_l = DataLoader.new("#{ROOT_PATH}/spec/support")
     @data_l.load_folder(1003, "#{ROOT_PATH}/spec/support")
     @data_l.load_folder(41352, "#{ROOT_PATH}/spec/support")
-    @simulation_fail = Simulation.where(:serial_id => 1003).first
-    @simulation_pass = Simulation.where(:serial_id => 41352).first
+    @simulation_fail = Simulation.where(:id => 1003).first
+    @simulation_pass = Simulation.where(:id => 41352).first
     @game = Game.first
   end
   describe "#load_folder" do
@@ -60,8 +60,8 @@ describe DataLoader do
   describe "#load_simulator" do
     it "should load for all simulations in games of the simulator" do
       @data_l.load_simulator(Simulator.first.name, Simulator.first.version, "#{ROOT_PATH}/spec/support")
-      @simulation_fail = Simulation.where(:serial_id => 1003).first
-      @simulation_pass = Simulation.where(:serial_id => 41352).first
+      @simulation_fail = Simulation.where(:id => 1003).first
+      @simulation_pass = Simulation.where(:id => 41352).first
       @game = Game.first
       @simulation_fail.state.should == 'failed'
       @simulation_pass.state.should == 'complete'

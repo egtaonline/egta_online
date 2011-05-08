@@ -34,8 +34,6 @@ gem 'compass'
 gem 'simple_form'
 
 group :development, :test do
-  gem 'cucumber'
-  gem 'cucumber-rails'
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "capybara", "1.0.0.beta1"

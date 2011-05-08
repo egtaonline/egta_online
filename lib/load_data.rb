@@ -11,12 +11,12 @@ class DataLoader
 
   def load_simulator(name, version, location)
     @simulator = Simulator.where(:name => name, :version => version).first
-    @simulator.games.each {|game| game.simulations.each {|sim| load_folder(sim.serial_id, location)}}
+    @simulator.games.each {|game| game.simulations.each {|sim| load_folder(sim.id, location)}}
   end
 
   def load_folder(folder_number, location)
-    if Simulation.where(:serial_id => folder_number).count > 0 && File.exists?("#{location}/#{folder_number}")
-      simulation = Simulation.where(:serial_id => folder_number).first
+    if Simulation.where(:id => folder_number).count > 0 && File.exists?("#{location}/#{folder_number}")
+      simulation = Simulation.where(:id => folder_number).first
       simulation.samples.destroy_all
       entries = Dir.entries("#{location}/#{folder_number}") - [".", ".."]
       if entries.include?("payoff_data")

@@ -15,7 +15,6 @@ class Simulation
   field :error_message
   field :flux, :type => Boolean
   field :created_at
-  field :serial_id, :type => Integer
   embeds_many :samples
 
   scope :pending, where(:state=>'pending')
@@ -61,15 +60,5 @@ class Simulation
       transition [:pending, :queued, :running, :failed] => :complete
     end
 
-  end
-
-  before_create :setup_id
-
-  def setup_id
-    if SimCount.first == nil
-      SimCount.create!
-    end
-    self.serial_id = SimCount.first.counter
-    SimCount.first.update_attributes(:counter => SimCount.first.counter+1)
   end
 end
