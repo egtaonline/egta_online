@@ -24,6 +24,7 @@ class GameScheduler < Scheduler
           :profile_id => profile.id,
           :flux => (Simulation.where(:game_id => game.id, :flux => true, :state => 'queued').count < FLUX_CORES))
         simulations << @simulation
+        @simulation.scheduler = self
         @simulation.save!
       else
         break
