@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/nmerouze/machinist_mongo.git
-  revision: fa4819c4e1233a4e3ce527b68af8aeee85dfc6c3
-  branch: machinist2
-  specs:
-    machinist_mongo (2.0.0.beta.1)
-      machinist (~> 2.0.0.beta2)
-
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
@@ -76,6 +68,7 @@ GEM
       abstract (>= 1.0.0)
     eventmachine (0.12.10)
     extendmatrix (0.3.1)
+    fabrication (0.9.5)
     fastercsv (1.5.4)
     ffi (1.0.7)
       rake (>= 0.8.7)
@@ -99,7 +92,6 @@ GEM
     launchy (0.4.0)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
-    machinist (2.0.0.beta2)
     mail (2.2.17)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -251,13 +243,13 @@ DEPENDENCIES
   database_cleaner
   devise
   encrypted_strings
+  fabrication
   ffi-ncurses
   haml
   haml-rails
   hpricot
   jquery-rails
   launchy
-  machinist_mongo!
   mongoid (= 2.0)
   net-scp
   net-ssh

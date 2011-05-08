@@ -17,7 +17,7 @@ class Game
   embeds_many :adjustment_coefficient_records
   embeds_many :strategies
   embeds_many :profiles, :inverse_of => :game
-  has_many :game_schedulers, :dependent => :destroy, :autosave => true
+  has_many :schedulers, :dependent => :destroy
   embeds_many :features
   has_many :simulations, :dependent => :destroy
 

@@ -1,7 +1,7 @@
 class HelperDemon
 
   def initialize
-    @server_proxy = ServerProxy.new
+    @server_proxy = ServerProxy.new("nyx-login.engin.umich.edu", "/home/wellmangroup/many-agent-simulations")
     @server_proxy.start
   end
 

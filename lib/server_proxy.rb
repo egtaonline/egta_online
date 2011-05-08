@@ -1,10 +1,11 @@
 class ServerProxy
-  def initialize(host = "nyx-login.engin.umich.edu", location = "/home/wellmangroup/many-agent-simulations")
+  def initialize(host = "d-108-249.eecs.umich.edu", location = "/home/bcassell/Test")
     @host = host
     @location = location
   end
 
-  attr_reader :sessions, :staging_session, :host, :location
+  attr_reader :sessions, :staging_session
+  attr_accessor :host, :location
 
   def start
     @sessions = Net::SSH::Multi.start
@@ -16,11 +17,8 @@ class ServerProxy
 
   def setup_simulator(simulator)
     @staging_session.exec!("rm -rf #{@location}/#{simulator.fullname}*")
-    puts "removed"
-    @staging_session.scp.upload!(simulator.simulator.path, @location)
-    puts "uploaded"
+    @staging_session.scp.upload!(simulator.simulator_source.path, @location)
     @staging_session.exec!("cd #{@location}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
-    puts "unzipped"
     @staging_session.exec!("cd #{@location}; chmod -R ug+rwx #{simulator.fullname}")
   end
 
@@ -36,8 +34,8 @@ class ServerProxy
           simulations << simulation
         end
         simulations.each do |simulation|
-          setup_hierarchy(simulation)
           create_yaml(simulation)
+          setup_hierarchy(simulation)
         end
         nyx_processing(simulations)
       end

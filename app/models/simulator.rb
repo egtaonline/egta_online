@@ -4,7 +4,7 @@ require 'carrierwave/orm/mongoid'
 class Simulator
   include Mongoid::Document
 
-  mount_uploader :simulator, SimulatorUploader
+  mount_uploader :simulator_source, SimulatorUploader
   field :parameters
   field :name
   field :description
@@ -32,19 +32,16 @@ class Simulator
   def setup_simulator
     begin
       if setup == false
-        system("unzip -u #{simulator.path} -d #{location}")
-        puts "unzip"
+        system("unzip -uqq #{simulator_source.path} -d #{location}")
         self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
         sp = ServerProxy.new
         sp.start
-        puts "start"
         sp.setup_simulator(self)
-        puts "simulator setup"
       else
         return
       end
     rescue
-      errors.add(:simulator, "couldn't be uploaded to nyx")
+      errors.add(:simulator_source, "couldn't be uploaded to destination")
     end
   end
 
