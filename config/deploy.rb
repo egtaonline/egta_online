@@ -16,11 +16,12 @@ role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails mi
 namespace :deploy do
   task :start, :roles => :app do
     after "deploy:symlink", "daemons:start"
-    run "touch #{current_release}/tmp/restart.txt"
+    run "service thin start"
   end
 
   task :stop, :roles => :app do
     before "deploy:symlink", "daemons:stop"
+    run "service thin stop"
   end
 
   desc "Restart Application"
@@ -28,6 +29,7 @@ namespace :deploy do
     before "deploy:symlink", "daemons:stop"
     after "deploy:symlink", "daemons:start"
     run "touch #{current_release}/tmp/restart.txt"
+    run "service thin restart"
   end
 end
 

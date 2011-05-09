@@ -7,4 +7,3 @@
     %tr{:class => "= cycle('','altrow') "}
       %td= link_to simulation.state, simulation
       %td= link_to profile.name, [simulation.game, profile]
-%p= will_paginate simulations, :game_id => simulations[0].game.id
