@@ -2,6 +2,7 @@ class Scheduler
   include Mongoid::Document
 
   has_many :simulations, :inverse_of => :scheduler
+  scope :active, where(:active=>true)
   field :process_memory, :type => Integer
   field :time_per_sample, :type => Integer
   field :jobs_per_request, :type => Integer

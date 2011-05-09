@@ -6,7 +6,6 @@ class GameScheduler < Scheduler
 
   belongs_to :game
   field :active, :type => Boolean
-  scope :active, where(:active=>true)
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer
   validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
