@@ -14,36 +14,19 @@ role :app, "d-108-249.eecs.umich.edu"                          # This may be the
 role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
 
 namespace :deploy do
-  task :start, :roles => :app do
-    after "deploy:symlink", "daemons:start"
+  task :stop_god do
+    run "god terminate"
   end
 
-  task :stop, :roles => :app do
-    before "deploy:symlink", "daemons:stop"
+  task :start_god do
+    run "god -c #{current_release}/config/egta.god"
   end
 
   desc "Restart Application"
   task :restart, :roles => :app do
-    before "deploy:symlink", "daemons:stop"
-    after "deploy:symlink", "daemons:start"
+    before "deploy:symlink", "deploy:stop_god"
   end
 end
 
-namespace :daemons do
-
-  desc "Start Daemons"
-  task :start, :roles => :app do
-    run "god -c #{current_release}/config/egta.god"
-  end
-
-  desc "Stop Daemons"
-  task :stop, :roles => :app do
-    run "god terminate"
-  end
-
-  desc "Restart Daemons"
-  task :restart, :roles => :app do
-    run "god terminate"
-    run "god -c #{current_release}/config/egta.god"
-  end
-end
+before 'deploy:update_code', 'deploy:stop_god'
+after "deploy:symlink", "deploy:start_god"
