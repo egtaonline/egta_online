@@ -74,6 +74,7 @@ GEM
       rake (>= 0.8.7)
     ffi-ncurses (0.3.3)
       ffi (>= 0.6.3)
+    god (0.11.0)
     gsl (1.14.5)
       narray (>= 0.5.9)
     haml (3.0.25)
@@ -245,6 +246,7 @@ DEPENDENCIES
   encrypted_strings
   fabrication
   ffi-ncurses
+  god
   haml
   haml-rails
   hpricot

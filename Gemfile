@@ -6,6 +6,7 @@ gem 'rails', '3.0.7'
 # Deploy with Capistrano
 gem 'capistrano'
 
+gem 'god'
 gem 'haml'
 gem 'haml-rails'
 gem 'state_machine'
