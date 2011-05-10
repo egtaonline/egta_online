@@ -1,3 +1,4 @@
+config/initializers/setup_mail.rb
 *.DS_Store
 .bundle
 db/*.sqlite3
