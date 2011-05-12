@@ -96,16 +96,14 @@ class GamesController < AnalysisController
 
   def remove_strategy
     @strategy = @game.strategies.find(params[:strategy_id])
-    Stalker.enqueue 'remove_strategy', :game => @game.id, :strategy_name => @strategy.name
+    @game.remove_strategy(@strategy.name)
     @strategy.destroy
     @strategy_options = @game.simulator.strategies.collect do |x|
       @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
     if @game.save!
-      respond_to do |format|
-        format.js
-      end
+      redirect_to(@game)
     end
   end
 
