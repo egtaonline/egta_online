@@ -97,12 +97,13 @@ class GamesController < AnalysisController
   def remove_strategy
     @strategy = @game.strategies.find(params[:strategy_id])
     @game.remove_strategy(@strategy.name)
+    save_result = @game.save!
     @strategy.destroy
     @strategy_options = @game.simulator.strategies.collect do |x|
       @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
-    if @game.save!
+    if save_result
       redirect_to(@game)
     end
   end
