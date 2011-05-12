@@ -1,0 +1,11 @@
+development:
+    host: "d-108-249.eecs.umich.edu"
+    deploy_path: "/home/bcassell/Test"
+
+test:
+    host: "d-108-249.eecs.umich.edu"
+    deploy_path: "/home/bcassell/Test"
+
+production:
+    host: "nyx-login.engin.umich.edu"
+    deploy_path: "/home/wellmangroup/many-agent-simulations"

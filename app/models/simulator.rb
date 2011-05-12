@@ -34,7 +34,7 @@ class Simulator
       if setup == false
         system("unzip -uqq #{simulator_source.path} -d #{location}")
         self.parameters = File.open(location+"/"+name+"/simulation_spec.yaml"){|io| io.read}
-        sp = ServerProxy.new("nyx-login.engin.umich.edu", "/home/wellmangroup/many-agent-simulations")
+        sp = ServerProxy.new
         sp.start
         sp.setup_simulator(self)
       else

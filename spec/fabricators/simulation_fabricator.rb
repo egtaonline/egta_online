@@ -1,4 +1,4 @@
 Fabricator(:simulation) do
   state "pending"
-  size 1
+  size 6
 end

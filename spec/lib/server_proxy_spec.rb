@@ -3,11 +3,11 @@ require 'spec_helper'
 describe ServerProxy do
   let!(:server_proxy) { Fabricate.build(:server_proxy) }
   let!(:simulator) { Fabricate(:simulator) }
-  let!(:ssh) { Net::SSH.start(server_proxy.host, Account.first.username, :password => Account.first.password) }
+  let!(:ssh) { Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password) }
   describe "#setup_simulator" do
-    specify { should_exist("#{server_proxy.location}/#{simulator.name}.zip") }
-    specify { should_exist("#{server_proxy.location}/#{simulator.fullname}/#{simulator.name}") }
-    specify { should_exist("#{server_proxy.location}/#{simulator.fullname}/simulations") }
+    specify { should_exist("#{Yetting.deploy_path}/#{simulator.name}.zip") }
+    specify { should_exist("#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}") }
+    specify { should_exist("#{Yetting.deploy_path}/#{simulator.fullname}/simulations") }
   end
   describe "#queue_pending_simulations" do
     context "single simulator, single simulation" do
@@ -23,9 +23,9 @@ describe ServerProxy do
         sim_parms.first.should == ["AmbiguityAversePricing:noRA:0.0", "BayesianPricing:noRA:0.0"]
         sim_parms.last["number of agents"].should == 120.0
       end
-      specify { should_exist("#{server_proxy.location}/#{simulator.fullname}/simulations/#{Simulation.first.id}") }
-      specify { should_exist("#{server_proxy.location}/#{simulator.fullname}/simulations/#{Simulation.first.id}/simulation_spec.yaml") }
-      specify { should_exist("#{server_proxy.location}/#{simulator.fullname}/simulations/#{Simulation.first.id}/features") }
+      specify { should_exist("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{Simulation.first.number}") }
+      specify { should_exist("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{Simulation.first.number}/simulation_spec.yaml") }
+      specify { should_exist("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{Simulation.first.number}/features") }
     end
     context "two simulators, single simulation" do
       let!(:simulator2) { Fabricate(:simulator) }
@@ -42,14 +42,16 @@ describe ServerProxy do
       end
     end
   end
-
-  # describe "#gather_samples" do
-  #   it "should add samples to the simulation" do
-  #     @simulation.samples.count.should == 30
-  #     @game.profiles.first.players.each {|player| puts player.payoffs.to_s}
-  #     @game.profiles.first.players.first.payoffs.count.should == 30
-  #   end
-  # end
+  describe "#gather_samples" do
+    before do
+      Simulation.first.update_attributes(:number => 41352)
+      server_proxy.gather_samples(Simulation.first, "#{ROOT_PATH}/spec/support/")
+    end
+    it "should add samples to the simulation" do
+      Simulation.first.samples.count.should == 6
+      Simulator.first.games.first.profiles.first.players.first.payoffs.count.should == 6
+    end
+  end
   def should_exist(location)
     output = ssh.exec!("if test -e "+location+"; then printf \"exists\"; else printf \"#{location}\"; fi")
     output.should == "exists"

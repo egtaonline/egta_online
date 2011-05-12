@@ -1,3 +1,4 @@
+require 'yaml'
 RAILS_ROOT = File.expand_path("../..", __FILE__)
 
 God.watch do |w|
@@ -119,44 +120,67 @@ God.watch do |w|
   end
 end
 
-God.watch do |w|
-  w.dir = '/home/bcassell/Deployment/current'
-  w.group = "server"
-  w.name = "thin"
-  w.interval = 30.seconds
-  w.env = {"RAILS_ENV" => "production"}
-  w.start = "rvmsudo /etc/init.d/thin start"
-  w.restart = "rvmsudo /etc/init.d/thin restart"
-  w.stop = "rvmsudo /etc/init.d/thin stop"
-  w.log = "#{RAILS_ROOT}/log/thin.log"
+config_path = "/etc/thin"
 
-  w.start_if do |start|
-    start.condition(:process_running) do |c|
-      c.running = false
-    end
-  end
+Dir[config_path + "/*.yml"].each do |file|
+  config = YAML.load_file(file)
+  num_servers = config["servers"] ||= 1
 
-  w.restart_if do |restart|
-    restart.condition(:memory_usage) do |c|
-      c.above = 1000.megabytes
-      c.times = [3, 5] # 3 out of 5 intervals
-    end
+  for i in 0...num_servers
+    God.watch do |w|
+      w.group = "thin-" + File.basename(file, ".yml")
+      w.name = w.group + "-#{i}"
 
-    restart.condition(:cpu_usage) do |c|
-      c.above = 80.percent
-      c.times = 5
-    end
-  end
+      w.interval = 30.seconds
 
-  w.lifecycle do |on|
-    on.condition(:flapping) do |c|
-      c.to_state = [:start, :restart]
-      c.times = 5
-      c.within = 5.minute
-      c.transition = :unmonitored
-      c.retry_in = 10.minutes
-      c.retry_times = 5
-      c.retry_within = 1.hours
+      w.uid = config["user"]
+      w.gid = config["group"]
+
+      w.start = "thin start -C #{file} -o #{i}"
+      w.start_grace = 10.seconds
+
+      w.stop = "thin stop -C #{file} -o #{i}"
+      w.stop_grace = 10.seconds
+
+      w.restart = "thin restart -C #{file} -o #{i}"
+
+      pid_path = config["chdir"] + "/" + config["pid"]
+      ext = File.extname(pid_path)
+
+      w.pid_file = pid_path.gsub(/#{ext}$/, ".#{i}#{ext}")
+
+      w.behavior(:clean_pid_file)
+
+      w.start_if do |start|
+        start.condition(:process_running) do |c|
+          c.interval = 5.seconds
+          c.running = false
+        end
+      end
+
+      w.restart_if do |restart|
+        restart.condition(:memory_usage) do |c|
+          c.above = 150.megabytes
+          c.times = [3,5] # 3 out of 5 intervals
+        end
+
+        restart.condition(:cpu_usage) do |c|
+          c.above = 50.percent
+          c.times = 5
+        end
+      end
+
+      w.lifecycle do |on|
+        on.condition(:flapping) do |c|
+          c.to_state = [:start, :restart]
+          c.times = 5
+          c.within = 5.minutes
+          c.transition = :unmonitored
+          c.retry_in = 10.minutes
+          c.retry_times = 5
+          c.retry_within = 2.hours
+        end
+      end
     end
   end
 end

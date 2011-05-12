@@ -15,7 +15,8 @@ class SimulatorsController < AnalysisController
   end
 
   def create
-    @simulator = Simulator.create!(params[:simulator])
+    @simulator = Simulator.create(params[:simulator])
+    @simulator.setup_simulator
     redirect_to @simulator
   end
 

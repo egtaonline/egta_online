@@ -12,5 +12,4 @@ require 'egat_interface'
 
 SECRET_KEY = "srgegta"
 FLUX_CORES = 10
-DEPLOY_PATH = "/home/wellmangroup/many-agent-simulations"
 ROOT_PATH = File.dirname(__FILE__) + "/../../"

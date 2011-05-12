@@ -1,25 +1,20 @@
 class ServerProxy
-  def initialize(host = "d-108-249.eecs.umich.edu", location = "/home/bcassell/Test")
-    @host = host
-    @location = location
-  end
 
   attr_reader :sessions, :staging_session
-  attr_accessor :host, :location
 
   def start
     @sessions = Net::SSH::Multi.start
-    @staging_session = Net::SSH.start(@host, Account.first.username, :password => Account.first.password)
+    @staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
     @sessions.group :scheduling do
-      Account.all.each {|account| @sessions.use(@host, :user => account.username, :password => account.password)}
+      Account.all.each {|account| @sessions.use(Yetting.host, :user => account.username, :password => account.password)}
     end
   end
 
   def setup_simulator(simulator)
-    @staging_session.exec!("rm -rf #{@location}/#{simulator.fullname}*")
-    @staging_session.scp.upload!(simulator.simulator_source.path, @location)
-    @staging_session.exec!("cd #{@location}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
-    @staging_session.exec!("cd #{@location}; chmod -R ug+rwx #{simulator.fullname}")
+    @staging_session.exec!("rm -rf #{Yetting.deploy_path}/#{simulator.fullname}*")
+    @staging_session.scp.upload!(simulator.simulator_source.path, Yetting.deploy_path)
+    @staging_session.exec!("cd #{Yetting.deploy_path}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
+    @staging_session.exec!("cd #{Yetting.deploy_path}; chmod -R ug+rwx #{simulator.fullname}")
   end
 
   def queue_pending_simulations
@@ -70,10 +65,10 @@ class ServerProxy
         players = simulation.game.profiles.find(simulation.profile_id).players
         players.each do |player|
           player.payoffs.create!(:sample_id => sample.id, :payoff => yf[player.strategy].to_f)
-          sample.save!
         end
       end
     end
+    simulation.game.save!
   end
 
   def gather_features(simulation, sample_location ="#{ROOT_PATH}/db")
@@ -100,14 +95,14 @@ class ServerProxy
   end
 
   def setup_hierarchy(simulation)
-    @staging_session.exec!("mkdir -p #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/features")
-    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/simulation_spec.yaml")
-    @staging_session.exec!("chmod -R ug+rwx #{@location}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}")
+    @staging_session.exec!("mkdir -p #{Yetting.deploy_path}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/features")
+    @staging_session.scp.upload!("#{ROOT_PATH}/tmp/temp.yaml", "#{Yetting.deploy_path}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}/simulation_spec.yaml")
+    @staging_session.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulation.game.simulator.fullname}/simulations/#{simulation.number}")
   end
 
   def nyx_processing(simulations)
     simulator = simulations[0].game.simulator
-    root_path = "#{@location}/#{simulator.fullname}/#{simulator.name}"
+    root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     account = simulations[0].account
     submission = PBS::MASSubmission.new(simulations[0].scheduler, simulations[0].size, simulations[0].number, "#{root_path}/script/wrapper")
     submission.qos = "wellman_flux" if simulations[0].flux?
@@ -130,7 +125,7 @@ class ServerProxy
 
   def create_wrapper(simulations)
     simulator = simulations[0].game.simulator
-    root_path = "#{@location}/#{simulator.fullname}/#{simulator.name}"
+    root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     FileUtils.cp(ROOT_PATH + "/tmp/wrapper-template", ROOT_PATH + "/tmp/wrapper")
     File.open(ROOT_PATH + "/tmp/wrapper", "a") do |file|
       if simulations[0].flux?
@@ -179,7 +174,7 @@ class ServerProxy
 
   def check_status(simulation, job_id, state_info)
     simulator = simulation.game.simulator
-    root_path = "#{@location}/#{simulator.fullname}/#{simulator.name}"
+    root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     if job_id.include?(simulation.job_id)
       state = state_info[job_id.index(simulation.job_id)][9]
       puts state_info
@@ -205,7 +200,7 @@ class ServerProxy
     job_return = ""
     if submission != nil
       server = @sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
-      channel = server.session(true).exec("cd #{@location}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
+      channel = server.session(true).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
         job_return.strip! if job_return != nil

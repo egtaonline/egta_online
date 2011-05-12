@@ -3,9 +3,9 @@
 
 #PBS -q route
 #PBS -N mas-epp_sim
-#PBS -t 4dc70a0ad7624745c400005f
+#PBS -t 2
 #PBS -o /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID}/out
 #PBS -e /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID}/out
 mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r /home/bcassell/Test/epp_sim-testing11/epp_sim/* .; cp -r /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID} .
-/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} 1
+/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} 6
 cp -r ${PBS_ARRAYID} /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}
