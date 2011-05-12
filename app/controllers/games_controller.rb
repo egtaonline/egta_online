@@ -102,7 +102,9 @@ class GamesController < AnalysisController
       @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
-    redirect_to(@game)
+    if @game.save!
+      redirect_to(@game)
+    end
   end
 
   def destroy
