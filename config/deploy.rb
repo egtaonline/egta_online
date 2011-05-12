@@ -28,11 +28,4 @@ namespace :god do
   task :status, :roles => :app do
     "god status"
   end
-  task :log, :roles => :app do
-    "tail -f /var/log/messages"
-  end
-  task :redeploy, :roles => :app do
-    god.deploy_config
-    god.load_config
-  end
 end
