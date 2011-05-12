@@ -16,26 +16,20 @@ role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails mi
 namespace :god do
   task :start, :roles => :app do
     god_config_file = "#{latest_release}/config/egta.god"
-    sudo "god --log-level debug -c #{god_config_file}"
+    "god --log-level debug -c #{god_config_file}"
   end
   task :stop, :roles => :app do
-    sudo "god terminate" rescue nil
+    "god terminate" rescue nil
   end
   task :restart, :roles => :app do
     god.stop
     god.start
   end
   task :status, :roles => :app do
-    sudo "god status"
+    "god status"
   end
   task :log, :roles => :app do
-    sudo "tail -f /var/log/messages"
-  end
-  task :deploy_config, :roles => :app do
-    god_config_file = "#{latest_release}/config/omt.god"
-    god_script_template = File.dirname(__FILE__) + "/deploy/templates/omt.god.erb.rb"
-    data = ERB.new(IO.read(god_script_template)).result(binding)
-    sudo "god load #{god_config_file}"
+    "tail -f /var/log/messages"
   end
   task :redeploy, :roles => :app do
     god.deploy_config
