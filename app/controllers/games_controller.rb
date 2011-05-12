@@ -84,15 +84,13 @@ class GamesController < AnalysisController
   end
 
   def add_strategy
-    @game.add_strategy_from_name params[:strategy_name]
+    @game.synchronous_add_strategy_from_name params[:strategy_name]
     @strategy_options = @game.simulator.strategies.collect do |x|
       @game.strategies.where(:name => x).count == 0 ? [x, x] : []
     end
     @strategy_options.delete([])
     if @game.save!
-      respond_to do |format|
-        format.js
-      end
+      format.html { render :action => "show" }
     end
   end
 
