@@ -13,19 +13,20 @@ role :web, "d-108-249.eecs.umich.edu"                          # Your HTTP serve
 role :app, "d-108-249.eecs.umich.edu"                          # This may be the same as your `Web` server
 role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
 
-namespace :god do
-  task :start, :roles => :app do
-    god_config_file = "#{latest_release}/config/egta.god"
-    "god --log-level debug -c #{god_config_file}"
+namespace :deploy do
+  task :stop_god do
+    run "god terminate" rescue nil
   end
-  task :stop, :roles => :app do
-    "god terminate" rescue nil
+
+  task :start_god do
+    run "god -c #{current_release}/config/egta.god"
   end
+
+  desc "Restart Application"
   task :restart, :roles => :app do
-    god.stop
-    god.start
-  end
-  task :status, :roles => :app do
-    "god status"
+    before "deploy:symlink", "deploy:stop_god"
   end
 end
+
+before 'deploy:update_code', 'deploy:stop_god'
+after "deploy:symlink", "deploy:start_god"
