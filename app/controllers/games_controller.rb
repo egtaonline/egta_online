@@ -90,7 +90,7 @@ class GamesController < AnalysisController
     end
     @strategy_options.delete([])
     if @game.save!
-      format.html { redirect_to(@game) }
+      redirect_to(@game)
     end
   end
 
