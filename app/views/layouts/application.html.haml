@@ -22,12 +22,12 @@
           #{link_to "sign in", new_user_session_path}
       %nav#object_nav
         %a#box{:href=>"/"}= "Home"
-        %a#box{:href=>accounts_path}= "Accounts"
-        %a#box{:href=>simulators_path}= "Simulators"
-        %a#box{:href=>games_path}= "Games"
-        %a#box{:href=>schedulers_path}= "Schedulers"
-        %a#box{:href=>simulations_path}= "Simulations"
-        %a#box{:href=>game_manipulations_path}= "Analysis"
+        %a#box{:href=>"/accounts"}= "Accounts"
+        %a#box{:href=>"/simulators"}= "Simulators"
+        %a#box{:href=>"/games"}= "Games"
+        %a#box{:href=>"/schedulers"}= "Schedulers"
+        %a#box{:href=>"/simulations"}= "Simulations"
+        %a#box{:href=>"/game_manipulations"}= "Analysis"
     %section#main_section
       .notice= notice
       .alert= alert
@@ -37,12 +37,12 @@
     #bar
       #first_box
         %h3 Schedulers
-        %p EGTA Online has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
+        EGTA Online has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
       #middle_box
         %h3 Simulations
-        %p EGTA Online has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
+        EGTA Online has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
       #last_box
         %h3 Samples
-        %p EGTA Online has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.
+        EGTA Online has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.
     #copyright
       &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;

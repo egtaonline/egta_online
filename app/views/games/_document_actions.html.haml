@@ -1,0 +1,31 @@
+%h3 Game Data
+%table
+  %tr
+    %th EGAT XML Format:
+    %td= link_to "Download", url_for(:action => "show", :format => "xml", :id => entry.id)
+%h3 Schedulers
+%table
+  %tr
+    %th Active?
+  %tr
+    -Scheduler.where(:game_id => entry.id).each do |scheduler|
+      %tr
+        %td= link_to "Show", scheduler
+        %td= scheduler.active
+= link_to 'Create a scheduler', new_game_scheduler_path
+%h3 Strategies
+%table
+  %tr
+    %th Name
+  =render :partial => "#{plural_name}/strategy", :collection => entry.strategy_array
+  =form_tag url_for(:action=>:add_strategy, :id => entry.id), :method=>:post do
+    %tr
+      %td= select_tag :strategy, options_for_select(entry.simulator.strategy_array-entry.strategy_array)
+      %td= submit_tag "Add"
+%h3 Profiles
+%table
+  %tr
+    %th Name
+    %th Samples
+  =render :partial => "#{plural_name}/profile", :collection => profiles
+= paginate(profiles)

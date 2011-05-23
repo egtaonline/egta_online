@@ -19,6 +19,7 @@ end
 
 module Simulator
   class ProfileSimulator
+    attr_reader :instrument
     def initialize(profile, simulation_schema)
       @instrument = EquityPremiumInstrumentation.new(simulation_schema["interest rate"], simulation_schema["quarters"], YAML_LOGGER)
       @profile = profile

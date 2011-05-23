@@ -1,0 +1,10 @@
+= simple_form_for entry do |f|
+  = f.label :game_id
+  .input= f.grouped_collection_select :game_id, Simulator.all, :games, :name, :id, :name
+  = f.input :max_samples
+  = f.input :samples_per_simulation
+  = f.input :process_memory, :label => "Process memory (in MB)"
+  = f.input :time_per_sample
+  = f.input :jobs_per_request
+  = f.input :active, :as => :boolean
+  = f.button :submit

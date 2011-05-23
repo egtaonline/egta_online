@@ -12,11 +12,11 @@
     %tr
       %th Name
       %th Regret
-    -@game.strategies.each do |strategy|
+    -@game.strategy_array.each do |strategy|
       %tr
         %td= strategy[:name]
         %td= strategy[:regret]
-%p= link_to 'Update Robust Regret', robust_regret_game_path(@game)
+= link_to 'Update Robust Regret', robust_regret_game_path(@game)
 
 -unless @game[:regret_updated_at] == nil
   %h3 Pure Profile Regret
@@ -34,8 +34,8 @@
         %td= pluralize(profile.players.first.payoffs.count, "sample")
         -unless @game[:regret_updated_at] == nil
           %td= profile[:regret]
-  %p= will_paginate(@profiles)
-%p= link_to 'Update Regret', regret_game_path(@game)
+  = will_paginate(@profiles)
+= link_to 'Update Regret', regret_game_path(@game)
   
 
 -unless @game[:rd_updated_at] == nil
@@ -54,4 +54,4 @@
           %tr
             %td= strategy
             %td= @game[:rd_results][strategy]
-%p= link_to 'Run Replicator Dynamics', rd_game_path(@game)
+= link_to 'Run Replicator Dynamics', rd_game_path(@game)

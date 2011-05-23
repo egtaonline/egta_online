@@ -1,23 +1,15 @@
 class HelperDemon
 
   def initialize
-    @server_proxy = ServerProxy.new("nyx-login.engin.umich.edu", "/home/wellmangroup/many-agent-simulations")
+    @server_proxy = ServerProxy.new
     @server_proxy.start
   end
 
   def process_schedulers
     puts "process_schedulers"
-    Game.all.each do |game|
-      game.schedulers.active.each do |scheduler|
-        scheduler.schedule(30)
-      end
+    Scheduler.active.each do |scheduler|
+      scheduler.schedule(30)
     end
-    # ProfileScheduler.active.each do |profile_scheduler|
-    #   profile_scheduler.schedule
-    # end
-    # DeviationScheduler.active.each do |deviation_scheduler|
-    #   deviation_scheduler.schedule
-    # end
   end
 
   def queue_simulations

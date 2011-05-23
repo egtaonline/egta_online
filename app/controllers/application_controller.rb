@@ -1,7 +1,9 @@
 #Updates application statistics in the view
 class ApplicationController < ActionController::Base
+  clear_helpers
   protect_from_forgery
   before_filter :checkup
+  before_filter :authenticate_user!
 
   def checkup
     # @sample_count = 0

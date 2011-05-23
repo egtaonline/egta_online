@@ -21,8 +21,6 @@ count = 0
   ps.run()
 end
 
-puts count
-puts Time.now().to_f-time
 #end
 
 #JRubyProf.print_flat_text(result, "flat.txt")

@@ -3,37 +3,11 @@
 %p Welcome to EGTA Online.  Here you can schedule simulations onto CAC administered clusters and perform empirical game-theoretic and statistical analysis on the results.
 %p This site looks best in #{link_to "Chrome", "http://www.google.com/chrome"}.
 %p
-  %a{:href=>url_for(:controller => :accounts, :action => :new)}
-    .button= "Register an Account"
-  %a{:href=>url_for(:controller => :simulators, :action => :new)}
-    .button= "Upload a Simulator"
-  %a{:href=>url_for(:controller => :games, :action => :new)}
-    .button= "Create a Game"
-  %a{:href=>url_for(:controller => :game_manipulations, :action => :index)}
-    .button= "Perform Analysis"
-/ %ol
-/   %li
-/     %h4 Register a cluster account
-/     %p Create an account with the #{link_to "Center for Advanced Computing", "http://cac.engin.umich.edu/"}.  Then request an account from the admin of this page (currently Ben).
-/   %li
-/     %h4 Prepare your simulator for use with the web interface
-/     %p #{link_to "Click here", home_prep_work_path} for instructions on how to prepare your simulator for use with this web interface.
-/   %li
-/     %h4 Register your simulator
-/     %p Zip your simulator so that your top level directory is in your zip file, i.e., if I unzip simulator.zip, I get a folder named simulator that has your simulator in it.  Upload your simulator using the Simulator link to the right.  Make sure that the name you enter for your simulator matches the name of the aforementioned top level folder.
-/   %li
-/     %h4 Create a PBS Generator
-/     %p PBS scripts are used by nyx to schedule your jobs.  You should have a reasonable estimate of how long it takes to gather one sample of your simulation before using this interface, as this information is needed to create the PBS script.  If you underestimate, your jobs will be killed before they complete, and if you overestimate you'll wait in the nyx queue longer than necessary.
-/   %li
-/     %h4 Register your strategies
-/     %p Your strategies don't have to follow any particular naming convention, but make sure that the names you enter here can be interpreted by your simulator to create agents of the appropriate type, and that your logging uses the same name for agents of that type.
-/   %li
-/     %h4 Create a game
-/     %p When you create a game, if you select a simulator with an included simulation_spec.yaml in its home directory, you will be presented with an interface for editing the run time parameters that will be passed to your simulator.  All sampling from this game will have the same run time parameters to ensure consistency of your simulation results across profiles.
-/   %li
-/     %h4 Add strategies to the game
-/     %p After creating a game you may add previously registered strategies to the game for the purpose of profile construction.  By default, games have no strategies, and thus 0 profiles, so this step must be done in order for any simulations to be scheduled.  Strategies can be added to games either immediately after the game is created, or at a later point by visiting the game's page.
-/   %li
-/     %h4 Create a game scheduler
-/     %p
-.clear &nbsp;
+  %a{:href=>"/accounts/new"}
+    .butt= "Register an Account"
+  %a{:href=>"/simulators/new"}
+    .butt= "Upload a Simulator"
+  %a{:href=>"/games/new"}
+    .butt= "Create a Game"
+  %a{:href=>"/game_manipulations/new"}
+    .butt= "Perform Analysis"

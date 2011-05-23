@@ -17,13 +17,11 @@ class GameScheduler < Scheduler
     scheduled_profiles.each do |profile|
       account = find_account
       if account != nil
-        @simulation = Simulation.new(
-          :game_id => game.id,
+        @simulation = profile.simulations.create!(
           :account => account,
           :size => samples_per_simulation,
           :state => 'pending',
-          :profile_id => profile.id,
-          :flux => (Simulation.where(:game_id => game.id, :flux => true, :state => 'queued').count < FLUX_CORES))
+          :flux => (simulations.where(:flux => true, :state => 'queued').count < FLUX_CORES))
         simulations << @simulation
         @simulation.save!
       else

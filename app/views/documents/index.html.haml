@@ -1,0 +1,8 @@
+%h3= page_title(:index, single_name)
+= new_link(klass_name, plural_name)
+%table
+  %tr
+    =render :partial => 'documents/header', :collection => headers
+  =render :partial => 'documents/entry', :collection => entries
+=paginate entries
+.action=index_actions

@@ -1,0 +1,6 @@
+%h3= page_title(:show, single_name)
+%table
+  =render :partial => 'documents/show_field', :collection => show_fields(entry)
+.action
+  = edit_link(single_name, plural_name)
+= document_actions

@@ -8,8 +8,9 @@ class Simulation
 
   belongs_to :account, :inverse_of => :simulations
   belongs_to :profile, :inverse_of => :simulations
-  belongs_to :game
   belongs_to :scheduler
+  delegate :game, :to => :profile
+  delegate :game_id, :to => :profile
 
   field :size, :type => Integer
   field :state
@@ -21,8 +22,6 @@ class Simulation
   field :number, :type=>Integer
   sequence :number
 
-  embeds_many :samples
-
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')
   scope :running, where(:state=>'running')
@@ -33,15 +32,6 @@ class Simulation
 
   validates_presence_of :state, :on => :create, :message => "can't be blank"
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
-  before_destroy :kill_feature_samples, :kill_payoffs
-
-  def kill_feature_samples
-    samples.each {|sample| sample.kill_feature_samples}
-  end
-
-  def kill_payoffs
-    samples.each {|sample| sample.kill_payoffs}
-  end
 
   state_machine :state, :initial => :pending do
     state :pending

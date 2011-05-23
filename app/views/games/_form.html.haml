@@ -1,0 +1,9 @@
+= simple_form_for entry, :url => {:controller => "games"} do |f| 
+  = f.input :name
+  = f.input :size, :collection => 2..16, :include_blank => false
+  = f.input :description, :as => :text
+  = f.label :simulator, "Simulator"
+  .input= f.collection_select :simulator, Simulator.all, :id, :fullname
+  #params
+    =render :partial => "#{plural_name}/parameters", :object => Simulator.first.parameters, :locals => {:f => f}
+  = f.button :submit

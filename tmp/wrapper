@@ -1,11 +1,12 @@
 #!/bin/bash
 #PBS -S /bin/sh
 
-#PBS -q route
+#PBS -A wellman_flux
+#PBS -q flux
 #PBS -N mas-epp_sim
-#PBS -t 2
-#PBS -o /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID}/out
-#PBS -e /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID}/out
-mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r /home/bcassell/Test/epp_sim-testing11/epp_sim/* .; cp -r /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations/${PBS_ARRAYID} .
-/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} 6
-cp -r ${PBS_ARRAYID} /home/bcassell/Test/epp_sim-testing11/epp_sim/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}
+#PBS -t 15,16
+#PBS -o /home/wellmangroup/many-agent-simulations/epp_sim-TEST/epp_sim/../simulations/${PBS_ARRAYID}/out
+#PBS -e /home/wellmangroup/many-agent-simulations/epp_sim-TEST/epp_sim/../simulations/${PBS_ARRAYID}/out
+mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r /home/wellmangroup/many-agent-simulations/epp_sim-TEST/epp_sim/* .; cp -r /home/wellmangroup/many-agent-simulations/epp_sim-TEST/epp_sim/../simulations/${PBS_ARRAYID} .
+/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} 5
+cp -r ${PBS_ARRAYID} /home/wellmangroup/many-agent-simulations/epp_sim-TEST/epp_sim/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}

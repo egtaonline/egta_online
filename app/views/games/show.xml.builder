@@ -7,7 +7,7 @@ xml.nfg(:name=>@game.name, :description=>@game.description) do |nfg|
     end
   end
   nfg.actions do |actions|
-    @game.strategies.each do |strategy|
+    @game.strategy_array.each do |strategy|
       actions.action(:id=>strategy.name)
     end
   end

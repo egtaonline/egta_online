@@ -1,5 +1,3 @@
-%table
-  -game.parameters.each do |x|
-    %tr
-      %td= label :game, x
-      %td= text_field :game, x
+- parameters.each_pair do |x, y|
+  =label :symmetric_game, "parameters[#{x}]", x.capitalize
+  .input=text_field :symmetric_game, "parameters[#{x}]", :value => y

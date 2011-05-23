@@ -4,106 +4,50 @@
 class Game
   include Mongoid::Document
   field :description
-  field :parameters, :type => Array
-  validates_presence_of :parameters
+  field :parameter_fields, :type => Array
   field :name
+  field :strategy_array, :type => Array, :default => []
   validates_presence_of :name
   validates_uniqueness_of :name
   field :size, :type => Integer
   validates_numericality_of :size, :integer_only => true
 
+
   belongs_to :simulator
-  embeds_many :control_variates, :inverse_of => :game
-  embeds_many :adjustment_coefficient_records
-  embeds_many :strategies
-  embeds_many :profiles, :inverse_of => :game
+  has_many :profiles, :dependent => :destroy
   has_many :schedulers, :dependent => :destroy
-  embeds_many :features
-  has_many :simulations, :dependent => :destroy
+  has_many :features
 
-  def setup_parameters(params)
-    self.parameters = Array.new
-    params.each_pair {|x, y| self[x] = y; self.parameters << x if self.parameters.include?(x) == false}
+  def self.edit_inputs
+    nil
   end
 
-  def remove_payoffs(profile_id, sample_id)
-    profile = profiles.find(profile_id)
-    profile.players.each do |player|
-      player.payoffs.where(:sample_id => sample_id).each do |payoff|
-        payoff.delete
-      end
-    end
+  def parameters
+    param_hash = Hash.new
+    self.parameter_fields.each { |param| param_hash[param] = self[param] }
+    param_hash
   end
 
-  def remove_feature_samples(sample_id)
-    features.each{|feature| feature.feature_samples.where(:sample_id => sample_id).destroy_all}
+  def parameters=(param_hash)
+    self.parameter_fields = param_hash.keys
+    self.parameter_fields.each { |param| self[param] = param_hash[param] }
   end
 
-  def calculate_cv_features(params, add=true)
-    feature = features.find(params[:feature_id])
-    if add
-      params[:feature_names] << feature.name
-    else
-      params[:feature_names].delete("#{feature.name}")
-    end
-    params[:feature_names].collect{|s| [s, features.where(:name => s).first.id]}
-  end
-
-  def synchronous_add_strategy_from_name(name)
-    if strategies.where(:name => name).count == 0
-      self.strategies.create!(:name => name)
-      ensure_profiles
-    end
-  end
-
-  def add_strategy_from_name(name)
-    if strategies.where(:name => name).count == 0
-      self.strategies.create!(:name => name)
-      Stalker.enqueue 'update_profiles', :game => self.id
-    end
+  def self.inputs
+    @inputs ||= [Hash[:name => "name", :type => "text_field"], Hash[:name => "description", :type => "text_area"]]
   end
 
   # Add Strategy to a Game
-  def add_strategy(strategy)
-    unless strategies.any? {|s| s == strategy}
-      self.strategies << strategy
-      self.save!
-      ensure_profiles
-    end
+  def add_strategy_by_name(strategy_name)
+    strategy_array << strategy_name
+    strategy_array.uniq!
+    ensure_profiles
   end
 
   # Remove Strategy from a Game
-  def remove_strategy(strategy_name)
+  def delete_strategy_by_name(strategy_name)
     profiles.each {|profile| if profile.contains_strategy?(strategy_name); profile.destroy; end}
-  end
-
-#   # This should find (or generate) all profiles that are used by Game, given the current set of strategies available.
-  def ensure_profiles
-
-    p = Array.new(self.size, 0)
-    while p != nil
-      p_strategies = p.collect {|i| strategies[i].name}
-      p_strategies.sort!
-      profile = profiles.detect {|x| x.strategy_array == p_strategies}
-      unless profile
-        prof = profiles.create!
-        p_strategies.each {|strategy| prof.players.create!(:strategy => strategy)}
-      end
-
-      p = next_profile(p, strategies.length, self.size)
-    end
-  end
-
-  def next_profile(array, n_strategies, profile_size)
-    if array.nil? || array.empty?
-      nil
-    elsif array.last == (n_strategies - 1)
-      next_profile(array[0..-2], n_strategies, profile_size)
-    else
-      a = array.clone
-      a[-1] += 1
-      a.concat(Array.new(profile_size - a.length, a[-1]))
-      a
-    end
+    strategy_array.delete(strategy_name)
+    self.save!
   end
 end

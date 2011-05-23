@@ -66,9 +66,9 @@ module PricingStrategies
       str = self.class.to_s
       str.slice!("PricingStrategies::")
       if @price_with_ra == true
-        return "#{str}:RA:#{shade}"
+        return "#{str}:RA:#{shade.to_i}"
       else
-        return "#{str}:noRA:#{shade}"
+        return "#{str}:noRA:#{shade.to_i}"
       end
     end
 

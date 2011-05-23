@@ -1,6 +1,6 @@
 class ServerProxy
 
-  attr_reader :sessions, :staging_session
+  attr_accessor :sessions, :staging_session
 
   def start
     @sessions = Net::SSH::Multi.start
@@ -10,10 +10,15 @@ class ServerProxy
     end
   end
 
+  def stop
+    @sessions.close
+    @staging_session.close
+  end
+
   def setup_simulator(simulator)
-    @staging_session.exec!("rm -rf #{Yetting.deploy_path}/#{simulator.fullname}*")
+    @staging_session.exec!("rm -rf #{Yetting.deploy_path}/#{simulator.fullname}*; rm -rf #{Yetting.deploy_path}/#{simulator.name}.zip")
     @staging_session.scp.upload!(simulator.simulator_source.path, Yetting.deploy_path)
-    @staging_session.exec!("cd #{Yetting.deploy_path}; unzip -u #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
+    @staging_session.exec!("cd #{Yetting.deploy_path}; unzip -uqq #{simulator.name}.zip -d #{simulator.fullname}; mkdir #{simulator.fullname}/simulations")
     @staging_session.exec!("cd #{Yetting.deploy_path}; chmod -R ug+rwx #{simulator.fullname}")
   end
 
@@ -24,7 +29,7 @@ class ServerProxy
       queue_account = Account.all.select{|account| account.max_concurrent_simulations-Simulation.active.where(:account_id => account.id).count >= first_sim.scheduler.jobs_per_request}.sample
       if queue_account != nil
         simulations = Array.new
-        Simulation.pending.where(:game_id => first_sim.game_id).limit(first_sim.scheduler.jobs_per_request).each do |simulation|
+        Simulation.pending.where(:profile_id.in => first_sim.game.profiles.collect{|profile| profile.id}).limit(first_sim.scheduler.jobs_per_request).each do |simulation|
           simulation.update_attributes(:account_id => queue_account.id)
           simulations << simulation
         end
@@ -56,41 +61,10 @@ class ServerProxy
     end
   end
 
-  def gather_samples(simulation, sample_location = "#{ROOT_PATH}/db")
-    count = 0
-    File.open(sample_location+"/#{simulation.number}/payoff_data", 'r') do |out|
-      YAML.load_documents(out) do |yf|
-        sample = simulation.samples.create!(:filename => "#{sample_location}/#{simulation.number}/payoff_data", :file_index => count)
-        count += 1
-        players = simulation.game.profiles.find(simulation.profile_id).players
-        players.each do |player|
-          player.payoffs.create!(:sample_id => sample.id, :payoff => yf[player.strategy].to_f)
-        end
-      end
-    end
-    simulation.game.save!
-  end
-
-  def gather_features(simulation, sample_location ="#{ROOT_PATH}/db")
-    dirs = Dir.entries("#{sample_location}/#{simulation.number}/features") - [".", ".."]
-    dirs.each do |x|
-      File.open("#{sample_location}/#{simulation.number}/features/"+x) do |out|
-        @feature = simulation.game.features.where(:name => x).count == 0 ? simulation.game.features.create(:name => x) : simulation.game.features.where(:name => x).first
-        count = 0
-        YAML.load_documents(out) do |yf|
-          @feature.feature_samples.create(:feature_name => @feature.name, :value => yf, :sample_id => simulation.samples.where(:file_index => count).first.id)
-          count += 1
-        end
-      end
-    end
-  end
-
-  private
-
   def create_yaml(simulation)
     File.open( "#{ROOT_PATH}/tmp/temp.yaml", 'w' ) do |out|
-      YAML.dump(simulation.game.profiles.find(simulation.profile_id).strategy_array, out)
-      YAML.dump(numeralize(simulation), out)
+      YAML.dump(Profile.find(simulation.profile_id).yaml_rep, out)
+      YAML.dump(numeralize(simulation.game), out)
     end
   end
 
@@ -163,8 +137,7 @@ class ServerProxy
 
   def check_for_errors(simulation)
     if File.open("#{ROOT_PATH}/db/#{simulation.number}/out-#{simulation.number}").read == ""
-      gather_samples simulation
-      gather_features simulation
+      DataParser.parse(simulation.number)
       simulation.finish!
     else
       simulation.error_message = File.open("#{ROOT_PATH}/db/#{simulation.number}/out-#{simulation.number}").readline
@@ -219,13 +192,13 @@ class ServerProxy
     s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
-  def numeralize(simulation)
+  def numeralize(game)
     p = Hash.new
-    simulation.game.parameters.each do |x|
-      if is_a_number?(simulation.game[x])
-        p[x] = simulation.game[x].to_f
+    game.parameters.each_pair do |x, y|
+      if is_a_number?(y)
+        p[x] = y.to_f
       else
-        p[x] = simulation.game[x]
+        p[x] = y
       end
     end
     p

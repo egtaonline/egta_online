@@ -1,5 +1,7 @@
 config/initializers/setup_mail.rb
 *.DS_Store
+.autotest
+.rspec
 .bundle
 db/*.sqlite3
 log/*.log

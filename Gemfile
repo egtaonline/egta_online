@@ -11,20 +11,19 @@ gem 'haml-rails'
 gem 'state_machine'
 gem 'state_machine-mongoid'
 gem 'devise'
+gem 'decent_exposure'
 gem 'ruby_parser'
 gem 'net-ssh'
 gem 'net-ssh-multi'
 gem 'net-scp'
 gem 'carrierwave'
 gem 'ffi-ncurses'
-# gem 'passenger'
 gem 'thin'
 gem 'beanstalk-client'
 gem 'stalker'
 gem 'daemons'
 gem 'jquery-rails'
-#todo replace with kaminari
-gem 'will_paginate'
+gem 'kaminari'
 gem 'mongoid', "2.0"
 gem 'bson_ext', "1.3"
 gem 'statsample-optimization'
@@ -34,10 +33,15 @@ gem 'compass'
 gem 'simple_form'
 
 group :development, :test do
+  gem 'rb-fsevent'
+  gem 'growl'
+  gem 'spork'
+  gem "guard-rspec"
+  gem 'guard-compass'
+  gem 'guard-spork'
   gem "database_cleaner"
   gem "rspec-rails", "~> 2.4"
   gem "capybara", "1.0.0.beta1"
   gem "launchy"
   gem "fabrication"
-#  gem 'machinist_mongo', :git => 'https://github.com/nmerouze/machinist_mongo.git', :require => 'machinist/mongoid', :branch => 'machinist2'
 end

@@ -3,39 +3,13 @@
 class Profile
   include Mongoid::Document
 
-  embedded_in :game
-  embeds_many :players
-  has_many :simulations
+  belongs_to :game
+  has_many :simulations, :dependent => :destroy
+  has_many :features
+  embeds_many :profile_entries
 
   def scheduled_count
-    game.simulations.scheduled.where(:profile_id => self.id).reduce(0){|sum, sim| sum + sim.size}.to_f + players.first.payoffs.count
+    simulations.reduce(0){|sum, sim| sum + sim.size}.to_f + profile_entries.first.samples.count
   end
 
-  def size
-    players.size
-  end
-
-  def contains_strategy?(name)
-    players.where(:strategy => name).count != 0
-  end
-
-  def strategy_array
-    players.collect{|player| player.strategy}.sort
-  end
-
-  def name
-    strategy_array.join(", ")
-  end
-
-  def payoff_to_strategy(strategy)
-    pay = 0.0
-    players.where(:strategy => strategy).each {|x| pay += x.payoffs.count == 0 ? 0 : x.payoffs.avg(:payoff)}
-    pay /= players.where(:strategy => strategy).count
-  end
-
-  before_destroy :kill_simulations
-
-  def kill_simulations
-    game.simulations.where(:profile_id => self.id).destroy_all
-  end
 end

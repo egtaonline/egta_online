@@ -1,6 +1,9 @@
 require 'yaml_logger'
 
 class EquityPremiumInstrumentation
+
+  attr_reader :premia
+
   def initialize(interest_rate, quarter_count, yaml_logger)
     @interest_rate = interest_rate
     @total_price_1 = 0
@@ -10,6 +13,7 @@ class EquityPremiumInstrumentation
     @transaction_count = 0
     @total_dividend = 0
     @quarter_count = quarter_count
+    @premia = 0.0
   end
 
   def record_price(price)
@@ -34,6 +38,7 @@ class EquityPremiumInstrumentation
     average_payoff = 0
     traders.each{|x| average_payoff += x.cash_value}
     YAML_LOGGER.record_feature("average_payoff", average_payoff/traders.size)
+    @premia += @total_premium/@period_count
     YAML_LOGGER.record_feature("average_equity_premium", @period_count != 0 ? @total_premium/@period_count : @total_premium != 0 ? "Problem" : "NIL")
     YAML_LOGGER.record_feature("average_dividend", @total_dividend/@quarter_count)
     @total_price_1 = 0

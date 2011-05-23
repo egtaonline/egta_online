@@ -13,7 +13,7 @@
     %th Strategy
     %th Count
     %th Payoff
-  -@profile.game.strategies.each do |strategy|
+  -@profile.game.strategy_array.each do |strategy|
     -if @profile.players.where(:strategy => strategy.name).count > 0
       %tr{:class => "= cycle('','altrow') "}
         %td= strategy.name

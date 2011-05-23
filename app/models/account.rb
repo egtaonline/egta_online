@@ -6,23 +6,32 @@ class Account
 
   has_many :simulations, :inverse_of => :account
   field :username
-  field :flux, :type => Boolean
   field :max_concurrent_simulations, :type => Integer
   validates_presence_of :username, :max_concurrent_simulations
+  validate :login
   field :encrypted_password
+
+  def login
+    begin
+      Net::SSH.start(Yetting.host, username, :password => self.password, :timeout => 2)
+    rescue
+      errors.add(:username, "can't login to host")
+    end
+  end
 
   def password=(pass)
     self.update_attributes(:encrypted_password => pass.encrypt(:symmetric, :password => SECRET_KEY))
   end
 
   def password
-    self.encrypted_password.decrypt(:symmetric, :password => SECRET_KEY)
+    if self.encrypted_password == nil
+      ''
+    else
+      self.encrypted_password.decrypt(:symmetric, :password => SECRET_KEY)
+    end
   end
-  # checks whether a given account is capable of having more simulation jobs
-  # assigned to it
+
   def schedulable?
-    puts self.max_concurrent_simulations
-    puts scheduled_count
     self.max_concurrent_simulations > scheduled_count
   end
 

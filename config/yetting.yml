@@ -1,6 +1,6 @@
 development:
-    host: "d-108-249.eecs.umich.edu"
-    deploy_path: "/home/bcassell/Test"
+    host: "nyx-login.engin.umich.edu"
+    deploy_path: "/home/wellmangroup/many-agent-simulations"
 
 test:
     host: "d-108-249.eecs.umich.edu"
