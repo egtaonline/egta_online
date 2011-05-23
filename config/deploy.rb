@@ -15,11 +15,11 @@ role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails mi
 
 namespace :deploy do
   task :stop_god do
-    run "god terminate" rescue nil
+    run "/home/bcassell/.rvm/bin/bootup_god terminate" rescue nil
   end
 
   task :start_god do
-    run "god -c #{current_release}/config/egta.god"
+    run "/home/bcassell/.rvm/bin/bootup_god -c #{current_release}/config/egta.god"
   end
 
   desc "Restart Application"
