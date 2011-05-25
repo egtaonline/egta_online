@@ -2,19 +2,35 @@ require 'stalker'
 include Stalker
 require File.expand_path("../environment", __FILE__)
 
+@server_proxy = ServerProxy.new
+#@server_proxy.start
+Stalker.enqueue('schedule_simulations', {}, :delay => 100)
+Stalker.enqueue('queue_simulations', {}, :delay => 200)
+Stalker.enqueue('maintain_simulations', {}, :delay => 300)
+
+job 'schedule_simulations' do
+  puts "process_schedulers"
+  Scheduler.active.each do |scheduler|
+    scheduler.schedule(30)
+  end
+  Stalker.enqueue('schedule_simulations', {}, :delay => 100)
+end
+
+job 'queue_simulations' do
+  puts "queue_simulations"
+  @server_proxy.queue_pending_simulations
+  Stalker.enqueue('queue_simulations', {}, :delay => 200)
+end
+
+job 'maintain_simulations' do
+  puts "maintain_simulations"
+  @server_proxy.check_simulations
+  Stalker.enqueue('maintain_simulations', {}, :delay => 300)
+end
+
 job 'remove_strategy' do |args|
   game = Game.find(BSON::ObjectId.from_string(args["game"]))
   game.remove_strategy(args["strategy_name"])
-end
-
-job 'calculate_cv' do |args|
-  game = Game.find(args["game"])
-  cv = game.control_variates.find(args["cv"])
-  source_game = Game.find(cv.acr_game_id)
-  adjustment_coefficient_record = source_game.adjustment_coefficient_records.find(cv.adjustment_coefficient_record_id)
-  adjustment_coefficient_record.calculate_coefficients(args["features"].collect {|x| Game.find(cv.acr_game_id).features.where(:name => x).first})
-  adjustment_coefficient_record.save!
-  cv.update_attributes(:destination_id => cv.transform_game(args["name"]))
 end
 
 job 'update_profiles' do |args|

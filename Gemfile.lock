@@ -56,7 +56,6 @@ GEM
     compass (0.10.6)
       haml (>= 3.0.4)
     configuration (1.2.0)
-    daemons (1.1.0)
     database_cleaner (0.6.6)
     decent_exposure (1.0.1)
     devise (1.1.5)
@@ -252,7 +251,6 @@ DEPENDENCIES
   capybara (= 1.0.0.beta1)
   carrierwave
   compass
-  daemons
   database_cleaner
   decent_exposure
   devise

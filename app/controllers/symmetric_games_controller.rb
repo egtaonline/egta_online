@@ -1,0 +1,2 @@
+class SymmetricGamesController < GamesController
+end

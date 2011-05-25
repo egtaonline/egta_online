@@ -1,5 +1,5 @@
 development:
-    host: "nyx-login.engin.umich.edu"
+    host: "nyx-login-amd.engin.umich.edu"
     deploy_path: "/home/wellmangroup/many-agent-simulations"
 
 test:
@@ -7,5 +7,5 @@ test:
     deploy_path: "/home/bcassell/Test"
 
 production:
-    host: "nyx-login.engin.umich.edu"
+    host: "nyx-login-amd.engin.umich.edu"
     deploy_path: "/home/wellmangroup/many-agent-simulations"

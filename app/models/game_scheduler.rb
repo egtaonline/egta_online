@@ -5,6 +5,7 @@ class GameScheduler < Scheduler
   include Mongoid::Document
 
   belongs_to :game
+  alias_attribute :target, :game
   field :active, :type => Boolean
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer

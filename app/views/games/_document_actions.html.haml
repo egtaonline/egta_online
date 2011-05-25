@@ -6,13 +6,14 @@
 %h3 Schedulers
 %table
   %tr
+    %th Type
     %th Active?
   %tr
     -Scheduler.where(:game_id => entry.id).each do |scheduler|
       %tr
-        %td= link_to "Show", scheduler
-        %td= scheduler.active
-= link_to 'Create a scheduler', new_game_scheduler_path
+        %td= link_to scheduler.class, url_for(:controller => scheduler.class.to_s.underscore.pluralize, :id => scheduler.id)
+        %td= link_to scheduler.active, url_for(:controller => scheduler.class.to_s.underscore.pluralize, :id => scheduler.id)
+.action= link_to 'Create a scheduler', new_game_scheduler_path
 %h3 Strategies
 %table
   %tr

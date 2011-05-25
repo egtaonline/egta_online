@@ -20,7 +20,6 @@ gem 'carrierwave'
 gem 'ffi-ncurses'
 gem 'beanstalk-client'
 gem 'stalker'
-gem 'daemons'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'mongoid', "2.0"
