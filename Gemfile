@@ -34,6 +34,8 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'growl'
   gem 'spork'
+  gem 'cucumber-rails'
+  gem 'guard-cucumber'
   gem "guard-rspec"
   gem 'guard-compass'
   gem 'guard-spork'

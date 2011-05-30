@@ -8,16 +8,14 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
-    when /the home\s?page/
-      "/"
-    when /the show page for the account/
-      account_path(@account)
-    when /the show page for the simulator/
-      simulator_path(@simulator)
-    when /the show page for the game/
-      game_path(@game)
-    when /the show page for the game scheduler/
-      game_scheduler_path(@game_scheduler)
+    when /^the home\s?page$/
+      '/'
+    when /^the sign in page$/
+      '/users/sign_in'
+    when /^the show game page$/
+      '/games/show'
+    when /^that game scheduler show page$/
+      "/game_schedulers/#{@game_scheduler.id}"
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
@@ -26,10 +24,10 @@ module NavigationHelpers
 
     else
       begin
-        page_name =~ /the (.*) page/
+        page_name =~ /^the (.*) page$/
         path_components = $1.split(/\s+/)
         self.send(path_components.push('path').join('_').to_sym)
-      rescue Object => e
+      rescue NoMethodError, ArgumentError
         raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
           "Now, go and add a mapping in #{__FILE__}"
       end

@@ -28,5 +28,5 @@
   %tr
     %th Name
     %th Samples
-  =render :partial => "#{plural_name}/profile", :collection => profiles
+  =render :partial => "shared/profile", :collection => profiles
 = paginate(profiles)

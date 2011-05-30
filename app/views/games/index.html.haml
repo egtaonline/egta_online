@@ -1,12 +1,7 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path }  Games
-%h3 Games
-%p= link_to 'New game', new_game_path
-%p
-  = label :simulator, :id, "Simulator"
-  = collection_select :simulator, :id, Simulator.all, :id, :fullname
-#game=render :partial => 'games'
+%h3 Find Games
 
-
-
+= form_tag '/games/show', :method => 'get' do
+  %p
+    =label :search, :run_time_configuration_id, "Run time configuration"
+    =grouped_collection_select :search, :run_time_configuration_id, Simulator.all, :run_time_configurations, :fullname, :id, :name
+    =submit_tag "View game", :name => nil

@@ -1,63 +1,14 @@
-%h3 Game Information
-%table
-  %tr
-    %th Name:
-    %td=@game.name
-  %tr
-    %th Simulator:
-    %td=@game.simulator.name
-  %tr
-    %th Description:
-    %td=@game.description
-%table
-  %tr
-    %th Parameter
-    %th Value
-    -@game.parameters.each do |x|
-      %tr
-        %td= x
-        %td= @game[x]
-%p= link_to 'Edit game', edit_game_path(@game)
+%h3 Show Game
 
-%h3 Game Data
-%table
-  %tr{:class => "= cycle('','altrow') "}
-    %th EGAT XML Format:
-    %td= link_to "Download", game_path(@game, :xml)
-%h3 Schedulers
 %table
   %tr
-    %th Active?
-  %tr
-    -GameScheduler.where(:game_id => @game.id).each do |game_scheduler|
-      %tr{:class => "= cycle('','altrow') "}
-        %td= link_to "Show", game_scheduler
-        %td= h game_scheduler.active
-%p= link_to 'Create a scheduler', new_game_scheduler_path
-%h3 Strategies
-#strategies=render :partial => 'strategies', :locals => {:game => @game}
+    %th= "Run time configuration"
+    %td= @parameters
+
 %h3 Profiles
-%table{:width => "90%"}
+%table
   %tr
     %th Name
     %th Samples
-  -@profiles.each do |profile|
-    %tr{:class => "= cycle('','altrow') "}
-      %td= link_to profile.name, [@game, profile]
-      %td= pluralize(profile.players.first.payoffs.count, "sample")
-%p= will_paginate(@profiles)
-
-%h3 Transformations
-%table{:width => "90%"}
-  %tr
-    %th Type
-    %th Result
-  -@transformations.each do |trans|
-    -game = Game.find(trans.destination_id)
-    %tr
-      %td= trans.type
-      %td= link_to game.name, game
-      %td= link_to 'Destroy', trans, :confirm => 'Are you sure?', :method => :delete
-
-%p= link_to 'New Control Variates', new_game_control_variate_path(@game)
-%p= link_to 'EGAT Analysis', analysis_game_path(@game)
+  =render :partial => "shared/profile", :collection => @profiles
+= paginate(@profiles)

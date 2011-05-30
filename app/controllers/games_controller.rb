@@ -1,9 +1,9 @@
-class GamesController < StrategyController
-  expose(:profiles) { entry.profiles.page(params[:page]).per(15) }
+class GamesController < AnalysisController
+  def index
+  end
 
-  def update_parameters
-    respond_to do |format|
-      format.js
-    end
+  def show
+    @parameters = RunTimeConfiguration.find(params[:search][:run_time_configuration_id]).name
+    @profiles = Profile.where(params[:search]).order("name DESC").page(params[:page]).per(20)
   end
 end

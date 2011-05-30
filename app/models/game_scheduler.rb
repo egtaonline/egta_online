@@ -3,13 +3,12 @@
 
 class GameScheduler < Scheduler
   include Mongoid::Document
+  include StrategyManipulation
 
-  belongs_to :game
-  alias_attribute :target, :game
-  field :active, :type => Boolean
-  field :samples_per_simulation, :type => Integer
-  field :max_samples, :type => Integer
-  validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
+  field :size, :type => Integer
+  field :strategy_array, :type => Array, :default => []
+
+  has_many :profiles, :as => :schedulable
 
   # Schedule a Simulation for a given Game
   def schedule(n=1)
@@ -31,19 +30,32 @@ class GameScheduler < Scheduler
     end
   end
 
-  private
+  def ensure_profiles
 
-  def find_account
-    account = nil
-    Account.all.each do |a|
-      if a.schedulable?
-        account = a
-        break
+    p = Array.new(self.size, 0)
+    while p != nil
+      p_strategy_array = p.collect {|i| strategy_array[i]}
+      p_strategy_array.sort!
+      profile = profiles.detect {|x| x.strategy_array == p_strategy_array}
+      unless profile
+        prof = SymmetricProfile.new
+        p_strategy_array.each do |strategy|
+          if prof[strategy] == nil
+            prof[strategy] = 1
+            prof.profile_entries.create!(:name => strategy)
+          else
+            prof[strategy] += 1
+          end
+        end
+        self.profiles << prof
+        prof.save!
       end
-    end
 
-    account
+      p = next_profile(p, strategy_array.length, self.size)
+    end
   end
+
+  private
 
   def find_profile(n=1)
     scheduled_profiles = Array.new
@@ -56,5 +68,18 @@ class GameScheduler < Scheduler
       end
     end
     scheduled_profiles
+  end
+
+  def next_profile(array, n_strategy_array, profile_size)
+    if array.nil? || array.empty?
+      nil
+    elsif array.last == (n_strategy_array - 1)
+      next_profile(array[0..-2], n_strategy_array, profile_size)
+    else
+      a = array.clone
+      a[-1] += 1
+      a.concat(Array.new(profile_size - a.length, a[-1]))
+      a
+    end
   end
 end

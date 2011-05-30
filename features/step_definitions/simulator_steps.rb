@@ -1,22 +1,12 @@
-Given /^a simulator$/ do
-  @simulator = Simulator.make!
-  Simulator.all.count.should == 1
-  puts @simulator.parameters
+When /^I query that simulator for run time configurations$/ do
+  @run_time_configurations = @simulator.run_time_configurations
 end
 
-Given /^the game references the simulator$/ do
-  @simulator.games << @game
+Then /^I receive "([^"]*)"$/ do |arg1|
+  @run_time_configurations.collect{|rtc| rtc.parameters}.should == eval(arg1)
 end
 
-When /^I delete the simulator$/ do
-  @simulator.destroy
-end
-
-Then /^the game is deleted$/ do
-  Game.all.count.should == 0
-end
-
-Then /^the simulator is created$/ do
-  @simulator = Simulator.first
-  @simulator.should_not == nil
+Given /^that simulator has the strategy array "([^"]*)"$/ do |arg1|
+  @simulator.strategy_array = eval(arg1)
+  @simulator.save!
 end

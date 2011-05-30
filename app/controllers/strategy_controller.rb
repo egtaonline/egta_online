@@ -1,7 +1,7 @@
 class StrategyController < DocumentsController
   def add_strategy
-    entry.add_strategy_by_name(params[:strategy])
-    puts entry.save!
+    entry.add_strategy_by_name params[:strategy]
+    entry.save!
     redirect_to url_for(:action => "show", :id => entry.id)
   end
 

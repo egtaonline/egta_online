@@ -3,6 +3,7 @@ require 'carrierwave/orm/mongoid'
 
 class Simulator
   include Mongoid::Document
+  include StrategyManipulation
 
   mount_uploader :simulator_source, SimulatorUploader
   field :parameter_fields, :type => Array
@@ -13,23 +14,14 @@ class Simulator
   field :strategy_array, :type => Array
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
-  has_many :games, :dependent => :destroy
+  has_many :profiles, :dependent => :destroy
+  has_many :schedulers, :dependent => :destroy
+  has_one :default_configuration, :class_name => "RunTimeConfiguration"
   validate :setup_simulator
   after_create :set_setup_to_true
 
-  def parameters
-    param_hash = Hash.new
-    self.parameter_fields.each { |param| param_hash[param] = self[param] }
-    param_hash
-  end
-
-  def parameters=(param_hash)
-    self.parameter_fields = param_hash.keys
-    self.parameter_fields.each { |param| self[param] = param_hash[param] }
-  end
-
-  def self.inputs
-    @inputs ||= [Hash[:name => "name", :type => "text_field"], Hash[:name => "version", :type => "text_field"], Hash[:name => "description", :type => "text_area"], Hash[:name => "simulator_source", :type => "file_field"]]
+  def run_time_configurations
+    profiles.reduce([]) {|ret, profile| ret << profile.run_time_configuration}.uniq
   end
 
   def set_setup_to_true
@@ -62,20 +54,5 @@ class Simulator
     rescue
       errors.add(:simulator_source, "couldn't be uploaded to destination")
     end
-  end
-
-  def strategy_exists?(strategy_name)
-    strategy_array.include?(strategy_name)
-  end
-
-  def add_strategy_by_name(strategy_name)
-    self.strategy_array = Array.new if self.strategy_array == nil
-    self.strategy_array << strategy_name unless self.strategy_array.include?(strategy_name)
-    puts strategy_name
-    puts self.strategy_array
-  end
-
-  def delete_strategy_by_name(strategy_name)
-    self.strategy_array.delete(strategy_name)
   end
 end

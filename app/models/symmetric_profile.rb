@@ -4,7 +4,7 @@ class SymmetricProfile < Profile
   def yaml_rep
     strategy_array
   end
-  
+
   def strategy_array
     ret_array = Array.new
     profile_entries.each{|pe| self[pe.name].times{ret_array << pe.name}}
@@ -12,8 +12,7 @@ class SymmetricProfile < Profile
   end
 
   def name
-    return_string = strategy_array.uniq.reduce("") {|string, strategy| string + strategy + ": #{self[strategy]}, "}
-    return_string[0..-3]
+    @name ||= strategy_array.uniq.reduce("") {|string, strategy| string + strategy + ": #{self[strategy]}, "}[0..-3]
   end
 
   def payoff_to_strategy(strategy)
