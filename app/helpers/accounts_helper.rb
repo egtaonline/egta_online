@@ -1,12 +1,12 @@
 module AccountsHelper
   include ApplicationHelper
-  
+
   def headers
     @headers ||= ["Username"]
   end
 
   def index_fields(entry)
-    [Hash[:value => entry.username, :id => entry.id]]
+    [Hash[:value => entry.username, :controller => "accounts", :id => entry.id]]
   end
 
   def show_fields(entry)

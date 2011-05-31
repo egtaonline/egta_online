@@ -1,6 +1,6 @@
 = simple_form_for entry do |f|
-  = f.label :game_id
-  .input= f.grouped_collection_select :game_id, Simulator.all, :games, :name, :id, :name
+  = f.label :simulator_id
+  .input= f.collection_select :simulator_id, Simulator.all, :id, :fullname
   = f.input :max_samples
   = f.input :samples_per_simulation
   = f.input :process_memory, :label => "Process memory (in MB)"
