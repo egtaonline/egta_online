@@ -6,23 +6,18 @@ class Simulator
   include StrategyManipulation
 
   mount_uploader :simulator_source, SimulatorUploader
-  field :parameter_fields, :type => Array
   field :name
   field :description
   field :version
   field :setup, :type => Boolean, :default => false
-  field :strategy_array, :type => Array
+  field :strategy_array, :type => Array, :default => []
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy
   has_many :schedulers, :dependent => :destroy
-  has_one :default_configuration, :class_name => "RunTimeConfiguration"
+  has_many :run_time_configurations
   validate :setup_simulator
   after_create :set_setup_to_true
-
-  def run_time_configurations
-    profiles.reduce([]) {|ret, profile| ret << profile.run_time_configuration}.uniq
-  end
 
   def set_setup_to_true
     if setup == false

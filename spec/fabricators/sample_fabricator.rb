@@ -1,0 +1,2 @@
+Fabricator(:sample) do
+end

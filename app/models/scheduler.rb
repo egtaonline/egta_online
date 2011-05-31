@@ -13,7 +13,9 @@ class Scheduler
   belongs_to :simulator
   belongs_to :run_time_configuration
 
-  validates_presence_of :process_memory
+  after_save :set_run_time_configuration
+
+  validates_presence_of :process_memory, :simulator
   validates_numericality_of :process_memory, :only_integer => true
 
   validates_presence_of :time_per_sample
@@ -25,6 +27,12 @@ class Scheduler
 
   def name
     "#{self.class}-#{self.time_per_sample}-#{self.process_memory}-#{self.qos}"
+  end
+
+  def set_run_time_configuration
+    if run_time_configuration == nil
+      self.update_attribute(:run_time_configuration_id, simulator.run_time_configurations.first.id)
+    end
   end
 
   def find_account

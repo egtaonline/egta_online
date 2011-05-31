@@ -1,4 +1,4 @@
-Fabricator(:game_scheduler) do
+Fabricator(:scheduler, :class_name => :game_scheduler) do
   size 2
   process_memory 1000
   jobs_per_request 1
