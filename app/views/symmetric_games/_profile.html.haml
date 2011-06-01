@@ -1,3 +1,0 @@
-%tr
-  %td= link_to profile.name, url_for(:action => "show", :id => profile.id)
-  %td= pluralize(profile.profile_entries.first.samples.count, "sample")

@@ -12,7 +12,6 @@ Background:
   And I check "Remember me"
   And I press "Sign in"
 
-
 Scenario: Profile generation works for single strategy
   Given 1 simulator
   And that simulator has the strategy array "['A']"

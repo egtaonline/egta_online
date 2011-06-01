@@ -1,1 +1,0 @@
-jQuery('#params').html('<%= escape_javascript(render(:partial => "#{plural_name}/parameters", :object => params[:object_class].camelize.constantize.find(params[:object_id]).parameters))%>');

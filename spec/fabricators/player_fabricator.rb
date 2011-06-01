@@ -1,2 +1,0 @@
-Fabricator(:player) do
-end
