@@ -16,6 +16,8 @@ module NavigationHelpers
       '/games/show'
     when /^the game scheduler show page$/
       "/game_schedulers/#{GameScheduler.first.id}"
+    when /^the account\s?page$/
+      '/accounts'
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

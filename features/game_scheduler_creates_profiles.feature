@@ -7,8 +7,8 @@ Background:
   Given 1 user
   And I am on the sign in page
   And I fill in the following:
-    | Email    | test@test.com |
-    | Password | stuff1        |
+    | Email    | test1@test.com |
+    | Password | password1        |
   And I check "Remember me"
   And I press "Sign in"
 
