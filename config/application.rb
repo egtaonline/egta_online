@@ -40,7 +40,12 @@ module EgtaOnline
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-
+    config.generators do |g|
+      g.test_framework :rspec, :fixture => true
+      g.fixture_replacement :fabrication, :dir => 'spec/fabricators'
+      g.form_builder :simple_form
+      g.template_engine :haml
+    end
     # Enable the asset pipeline
     config.assets.enabled = true
   end

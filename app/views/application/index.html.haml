@@ -1,0 +1,13 @@
+%h2 Home
+%p Welcome to EGTA Online.  Here you can schedule simulations onto CAC administered clusters and perform empirical game-theoretic and statistical analysis on the results.
+%p This site looks best in #{link_to "Chrome", "http://www.google.com/chrome"}.
+%p
+  %a{:href=>"/accounts/new"}
+    .butt= "Register an Account"
+  %a{:href=>"/simulators/new"}
+    .butt= "Upload a Simulator"
+  %a{:href=>"/symmetric_game_schedulers/new"}
+    .butt= "Create a Scheduler"
+  %a{:href=>"/games"}
+    .butt= "Perform Analysis"
+%p= link_to "Instructions for preparing your simulator", "/home/prep_work"

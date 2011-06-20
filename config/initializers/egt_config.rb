@@ -1,0 +1,2 @@
+SECRET_KEY = "srgegta"
+FLUX_CORES = 20

@@ -1,0 +1,11 @@
+development:
+    host: "nyx-login.engin.umich.edu"
+    deploy_path: "/home/wellmangroup/many-agent-simulations"
+
+test:
+    host: "nyx-login.engin.umich.edu"
+    deploy_path: "/home/wellmangroup/many-agent-simulations"
+
+production:
+    host: "nyx-login.engin.umich.edu"
+    deploy_path: "/home/wellmangroup/many-agent-simulations"

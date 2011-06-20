@@ -1,0 +1,44 @@
+!!!
+%head
+  %title Home - EGTA Online
+
+  = stylesheet_link_tag 'application'
+  =javascript_include_tag 'application'
+  =csrf_meta_tags
+
+%body
+  #root
+    %header#top_header
+      %h1#logo-text
+        =link_to 'EGTA Online', '/'
+      %nav#user_nav
+        -if user_signed_in?
+          = "Signed in as #{current_user.email} |"
+          = link_to "Sign out", destroy_user_session_path
+        -else
+          #{link_to "sign in", new_user_session_path}
+      %nav#object_nav
+        .box= link_to "Home", "/"
+        .box= link_to "Accounts", "/accounts"
+        .box= link_to "Simulators", "/simulators"
+        .box= link_to "Games", "/games"
+        .box= link_to "Schedulers", "/schedulers"
+        .box= link_to "Simulations", "/simulations"
+    %section#main_section
+      .notice= notice
+      .alert= alert
+      =yield
+    #root_footer
+  %footer#footer
+    #bar
+      #first_box
+        %h3 Schedulers
+        EGTA Online has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
+      #middle_box
+        %h3 Simulations
+        EGTA Online has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
+      #last_box
+        %h3 Samples
+        EGTA Online has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.
+    #copyright
+      &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;

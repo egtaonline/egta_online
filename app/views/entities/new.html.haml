@@ -1,0 +1,5 @@
+%h2= "New #{klass_name}"
+= simple_form_for @entry do |f|
+  = f.error_notification
+  = render :partial => "form", :locals => {:f => f}
+  = f.button :submit

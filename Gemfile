@@ -2,10 +2,6 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.0.rc4'
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
-
 # Asset template engines
 gem 'sass-rails', "~> 3.1.0.rc"
 gem 'coffee-script'
@@ -22,10 +18,25 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem "capybara", :group => [:development, :test]
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
 gem "hoptoad_notifier"
 gem "bson_ext"
 gem "mongoid", ">= 2.0.0.beta.19"
-gem "rspec-rails", ">= 2.0.1", :group => [:development, :test]
+gem "devise"
+gem "yettings"
+gem "net-ssh", :require => 'net/ssh'
+gem "kaminari"
+gem "decent_exposure"
+gem "simple_form"
+gem "encrypted_strings"
+gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
+
+group :development, :testing do
+  gem "capybara"
+  gem "cucumber-rails"
+  gem "launchy"
+  gem "database_cleaner"
+  gem "fabrication"
+  gem "rspec-rails"
+end

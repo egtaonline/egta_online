@@ -1,0 +1,7 @@
+%h3= "#{plural_name.titleize}"
+=render :partial => 'new_links'
+%table
+  %tr
+    =render :partial => 'headers'
+  =render :partial => 'entry', :collection => entries
+=paginate entries

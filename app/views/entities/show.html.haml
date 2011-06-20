@@ -1,0 +1,5 @@
+%h2= "Inspect #{klass_name}"
+%table
+  =render :partial => 'show_fields', :locals => {:entry => @entry}
+.action
+  = link_to "Edit #{klass_name}", "/#{plural_name}/edit/#{@entry.id}"
