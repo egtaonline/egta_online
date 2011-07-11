@@ -1,0 +1,14 @@
+%h3 Profile Entries
+%table
+  %tr
+    %th Name
+    %th Payoff
+  =render :partial => "profile_entry", :collection => entry.profile_entries
+
+%h3 Features
+%table
+  %tr
+    %th Name
+    %th Expected Value
+    %th Payoff
+  =render :partial => "feature", :collection => entry.features

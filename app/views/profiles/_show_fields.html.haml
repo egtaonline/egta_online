@@ -1,0 +1,13 @@
+%tr
+  %th= "Name"
+  %td= entry.name
+%tr
+  %th= "Simulator"
+  %td= entry.simulator.fullname
+- entry.parameter_hash.each_pair do |k, v|
+  %tr
+    %th= k.humanize
+    %td= v
+%tr
+  %th= "Samples"
+  %td= entry.profile_entries.first.samples.count

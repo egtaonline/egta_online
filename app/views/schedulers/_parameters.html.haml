@@ -1,0 +1,4 @@
+- parameters.each_pair do |x, y|
+  %p
+    = label :scheduler, "parameter_hash[#{x}]", x.humanize
+    = text_field :scheduler, "parameter_hash[#{x}]", :value => y

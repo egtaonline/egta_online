@@ -13,7 +13,7 @@ module NavigationHelpers
     when /^the sign in page$/
       '/users/sign_in'
     when /^the last (.*)'s page$/i
-      "/#{$1}s/#{$1.camelize.constantize.last.id}"
+      "/#{$1.parameterize('_').pluralize}/#{$1.parameterize('_').camelize.constantize.last.id}"
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

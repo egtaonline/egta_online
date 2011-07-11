@@ -24,6 +24,7 @@ class EntitiesController < ApplicationController
   end
 
   def edit
+    @entry = klass.find(params[:id])
   end
 
   def update

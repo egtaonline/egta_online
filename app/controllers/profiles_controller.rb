@@ -1,0 +1,2 @@
+class ProfilesController < EntitiesController
+end

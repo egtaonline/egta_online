@@ -22,18 +22,22 @@ gem "haml", ">= 3.0.0"
 gem "haml-rails"
 gem "hoptoad_notifier"
 gem "bson_ext"
-gem "mongoid", ">= 2.0.0.beta.19"
+gem "mongoid"
+gem "state_machine"
 gem "devise"
 gem "yettings"
 gem "net-ssh", :require => 'net/ssh'
 gem "kaminari"
 gem "decent_exposure"
+gem "carrierwave"
 gem "simple_form"
 gem "encrypted_strings"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
 group :development, :testing do
   gem "capybara"
+  gem "growl"
+  gem "spork"
   gem "cucumber-rails"
   gem "launchy"
   gem "database_cleaner"

@@ -1,0 +1,25 @@
+--- 
+- AmbiguityAversePricing:RA:0.0
+- AmbiguityAversePricing:RA:0.0
+- AmbiguityAversePricing:RA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- AmbiguityAversePricing:noRA:0.0
+- BayesianPricing:RA:0.0
+- BayesianPricing:RA:0.0
+--- 
+number of agents: 120.0
+left variance: 0.0
+right variance: 0.1
+mean risk aversion: 1.0
+risk aversion std dev: 0.2
+mean dividend: 0.5
+kappa: 0.05
+dividend shock std dev: 0.01
+signal shock std dev: 0.01
+quarters: 40.0
+news per quarter: 10.0
+interest rate: 0.01
+cash: 1000.0
+shares: 20.0
+max shares per transaction: 5.0

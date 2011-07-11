@@ -1,0 +1,4 @@
+%tr
+  %td= feature.name.humanize
+  %td= feature.expected_value == nil ? "undefined" : feature.expected_value
+  %td= feature.samples.avg(:payoff)

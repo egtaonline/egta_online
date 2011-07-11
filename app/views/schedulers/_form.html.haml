@@ -1,0 +1,11 @@
+= f.input :name
+= f.input :size, :label => "Game size"
+= f.input :max_samples
+= f.input :samples_per_simulation
+= f.input :process_memory, :label => "Process memory (in MB)"
+= f.input :time_per_sample
+= f.input :jobs_per_request
+= label :scheduler, :simulator_id
+= collection_select :scheduler, :simulator_id, Simulator.all, :id, :fullname
+= f.input :active, :as => :boolean
+#param= render :partial => "parameters", :object => Simulator.first.parameter_hash

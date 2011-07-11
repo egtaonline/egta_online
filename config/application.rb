@@ -42,8 +42,7 @@ module EgtaOnline
     config.filter_parameters += [:password]
     config.generators do |g|
       g.test_framework :rspec, :fixture => true
-      g.fixture_replacement :fabrication, :dir => 'spec/fabricators'
-      g.form_builder :simple_form
+      g.fixture_replacement :fabrication
       g.template_engine :haml
     end
     # Enable the asset pipeline

@@ -1,0 +1,17 @@
+%h3 Strategies
+%table
+  %tr
+    %th Name
+  =render :partial => "strategy", :collection => entry.strategy_array
+  =form_tag url_for(:action=>:add_strategy, :id => entry.id), :method=>:post do
+    %tr
+      %td= select_tag :strategy, options_for_select(entry.simulator.strategy_array-entry.strategy_array)
+      %td= submit_tag "Add"
+
+%h3 Profiles
+%table
+  %tr
+    %th Name
+    %th Samples
+  =render :partial => "profile", :collection => @profiles
+= paginate(@profiles)

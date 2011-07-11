@@ -35,6 +35,11 @@ Devise.setup do |config|
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
   config.case_insensitive_keys = [ :email ]
+  
+  # Configure which authentication keys should have whitespace stripped.
+  # These keys will have whitespace before and after removed upon creating or
+  # modifying a user and when used to authenticate or find a user. Default is :email.
+  config.strip_whitespace_keys = [ :email ]
 
   # Tell if authentication through request.params is enabled. True by default.
   # config.params_authenticatable = true
@@ -48,13 +53,18 @@ Devise.setup do |config|
   # The realm used in Http Basic Authentication. "Application" by default.
   # config.http_authentication_realm = "Application"
 
+  # It will change confirmation, password recovery and other workflows
+  # to behave the same regardless if the e-mail provided was right or wrong.
+  # Does not affect registerable.
+  # config.paranoid = true
+
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
   # using other encryptors, it sets how many times you want the password re-encrypted.
   config.stretches = 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = "f434ef75c5a37a9ed260bff23158f17378135fa5d81b0c37163105b7b83a8f8e61bcbe1e09d2f529ac5846eeff12dfaa3b5474ced7277942baf8f8a8ebd97b27"
+  # config.pepper = "8bab362a76d52518a58b7d77a63188d02548fc717f474bd8b63b8312550d85ad3574ee50830a75ed0252f25f6ef60eebadc02a94209e5a0c48d714744eb702be"
 
   # ==> Configuration for :confirmable
   # The time you want to give your user to confirm his account. During this time
