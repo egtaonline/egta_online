@@ -26,7 +26,9 @@ gem "mongoid"
 gem "state_machine"
 gem "devise"
 gem "yettings"
-gem "net-ssh", :require => 'net/ssh'
+gem "net-ssh", :require => ['net/ssh']
+gem "net-ssh-multi", :require => ['net/ssh/multi']
+gem "net-scp", :require => ['net/scp']
 gem "kaminari"
 gem "decent_exposure"
 gem "carrierwave"

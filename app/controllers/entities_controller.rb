@@ -28,7 +28,8 @@ class EntitiesController < ApplicationController
   end
 
   def update
-    if @entry.update_attributes!(params[single_name])
+    if @entry = klass.find(params[:id])
+      @entry.update_attributes!(params[single_name])
       flash[:notice] = "#{klass_name} was successfully updated."
       redirect_to url_for(:action => "show", :id => @entry.id)
     else

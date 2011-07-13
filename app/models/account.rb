@@ -9,6 +9,9 @@ class Account
   validates_presence_of :username
   validate :login
   field :encrypted_password
+  field :active, :type => Boolean, :default => false
+  scope :active, where(active: true)
+  key :username
 
   def login
     begin

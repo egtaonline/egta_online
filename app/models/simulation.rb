@@ -6,7 +6,7 @@ class Simulation
   include Mongoid::Timestamps
   include Mongoid::Sequence
 
-  belongs_to :account, :inverse_of => :simulations
+  belongs_to :account
   belongs_to :profile, :inverse_of => :simulations
   belongs_to :scheduler
 

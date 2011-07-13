@@ -2,7 +2,16 @@ EgtaOnline::Application.routes.draw do
 
   devise_for :users
   resources :accounts
+  resources :profiles, :only => :show
+  resources :simulations, :except => [:edit, :update] do
+    collection do
+      post :purge
+    end
+  end
   resources :schedulers do
+    member do
+      post :add_strategy, :remove_strategy
+    end
     collection do
       post :update_parameters
     end
