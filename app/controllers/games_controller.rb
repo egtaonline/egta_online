@@ -1,0 +1,2 @@
+class GamesController < SimulatorSelectorController
+end

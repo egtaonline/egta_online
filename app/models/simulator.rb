@@ -16,6 +16,7 @@ class Simulator
   validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy
   has_many :schedulers, :dependent => :destroy
+  has_many :games
   after_create :setup_simulator
   key :name, :version
 

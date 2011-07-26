@@ -1,0 +1,3 @@
+= label :selector, :simulator_id
+= collection_select :selector, :simulator_id, Simulator.all, :id, :fullname
+#param= render :partial => "parameters", :object => Simulator.first.parameter_hash

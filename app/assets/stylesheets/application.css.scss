@@ -19,7 +19,7 @@ $footer-color: #dbbd65;
 @import "compass/css3";
 
 p{
-    padding: 0px 10px 10px 15px;  margin: 0;
+    margin-top: 10px;
 }
 table {
     border-collapse: collapse;
@@ -217,8 +217,9 @@ code {
    -webkit-border-radius: 7px;
    -moz-border-radius: 7px;
    border-radius: 7px;
-   width: 183px;
-   margin: 5px;
+   width: 250px;
+   margin-top: 10px;
+   margin-left: 10px;
    -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
    -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
    box-shadow: rgba(0,0,0,1) 0 1px 0;
