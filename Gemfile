@@ -26,14 +26,18 @@ gem "mongoid"
 gem "state_machine"
 gem "devise"
 gem "yettings"
+gem "god"
 gem "net-ssh", :require => ['net/ssh']
 gem "net-ssh-multi", :require => ['net/ssh/multi']
 gem "net-scp", :require => ['net/scp']
 gem "kaminari"
 gem "decent_exposure"
 gem "carrierwave"
+gem 'beanstalk-client'
+gem 'stalker'
 gem "simple_form"
 gem "encrypted_strings"
+gem "passenger"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
 group :development, :testing do
