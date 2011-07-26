@@ -39,4 +39,7 @@ end
 
 before 'deploy:update_code', 'deploy:stop_god'
 after 'deploy:update_code', 'deploy:make_upload_dir'
+after 'deploy:update_code' do
+  run "cd #{release_path}; RAILS_ENV=production rake assets:precompile"
+end
 after "deploy:symlink", "deploy:start_god"
