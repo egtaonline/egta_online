@@ -33,8 +33,9 @@ gem "net-scp", :require => ['net/scp']
 gem "kaminari"
 gem "decent_exposure"
 gem "carrierwave"
-gem 'beanstalk-client'
-gem 'stalker'
+gem "beanstalk-client"
+gem "stalker"
+gem "capistrano"
 gem "simple_form"
 gem "encrypted_strings"
 gem "passenger"
