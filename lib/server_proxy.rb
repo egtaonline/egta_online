@@ -23,8 +23,8 @@ class ServerProxy
   end
 
   def queue_pending_simulations
-    queue_account = Account.first
     while Simulation.pending.count > 0
+      puts "step"
       first_sim = Simulation.pending.first
       queue_account = Account.active.sample
       if queue_account != nil
@@ -34,9 +34,12 @@ class ServerProxy
           simulations << simulation
         end
         simulations.each do |simulation|
+          puts "creating yaml"
           create_yaml(simulation)
+          puts "creating hierarchy"
           setup_hierarchy(simulation)
         end
+        puts "nyx processing"
         nyx_processing(simulations)
       end
     end
