@@ -10,7 +10,6 @@ class Scheduler
   field :jobs_per_request, :type => Integer
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer
-  belongs_to :run_time_configuration
   field :parameter_hash, :type => Hash, :default => {}
   belongs_to :simulator
 
