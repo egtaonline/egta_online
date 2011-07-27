@@ -24,5 +24,5 @@
   %td= entry.jobs_per_request
 %tr
   %th Active?
-  %td= entry.active
+  %td= entry.active.to_s
 = render :partial => "parameter", :collection => entry.parameter_hash.to_a

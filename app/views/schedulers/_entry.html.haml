@@ -2,5 +2,5 @@
   %td= link_to entry.name, scheduler_path(entry)
   %td= link_to entry.class, scheduler_path(entry)
   %td= link_to entry.simulator.fullname, simulator_path(entry.simulator)
-  %td= link_to entry.active, scheduler_path(entry)
+  %td= link_to entry.active.to_s, scheduler_path(entry)
   %td= link_to 'Destroy', url_for(:action => "destroy", :id => entry.id), :confirm => 'Are you sure?', :method => :delete
