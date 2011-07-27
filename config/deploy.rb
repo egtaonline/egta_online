@@ -45,5 +45,5 @@ end
 
 before 'deploy:update_code', 'deploy:stop_god'
 after 'deploy:update_code', 'deploy:make_upload_dir'
-before 'deploy:symlink', 'assets:precompile_assets'
+before 'deploy:symlink', 'deploy:precompile_assets'
 after "deploy:symlink", "deploy:start_god"
