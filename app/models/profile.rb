@@ -6,13 +6,14 @@ class Profile < Analyzable
   has_many :features
   has_and_belongs_to_many :schedulers
   belongs_to :simulator
+  belongs_to :run_time_configuration
   has_and_belongs_to_many :games
   embeds_many :profile_entries
   field :proto_string
   field :parameter_hash, :type => Hash, :default => {}
   after_create :create_profile_entries
-#  validates_presence_of :simulator
-#  validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
+  validates_presence_of :simulator
+  validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
 
   def self.extract_strategies(profiles)
     profiles.reduce([]){|set, profile| set.concat profile.strategy_array.uniq }.uniq
