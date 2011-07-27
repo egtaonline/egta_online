@@ -19,7 +19,6 @@ class Simulation
 
   field :number, :type=>Integer
   sequence :number
-  key :number
 
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')

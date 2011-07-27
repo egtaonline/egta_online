@@ -11,7 +11,6 @@ class Account
   field :encrypted_password
   field :active, :type => Boolean, :default => false
   scope :active, where(active: true)
-  key :username
 
   def login
     begin
