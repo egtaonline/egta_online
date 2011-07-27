@@ -9,7 +9,7 @@ class Profile
   has_many :features
   has_and_belongs_to_many :schedulers
   belongs_to :simulator
-  belongs_to :run_time_configuration
+
   has_and_belongs_to_many :games
   embeds_many :profile_entries
   field :proto_string
