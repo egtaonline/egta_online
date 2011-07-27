@@ -3,7 +3,7 @@ class Game
   include StrategyManipulation
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
-  has_many :analysis_items, :inverse_of => :analyzable
+  has_many :analysis_items, :as => :analyzable
 
   field :name
   field :size, :type => Integer

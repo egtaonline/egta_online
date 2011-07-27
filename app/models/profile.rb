@@ -3,7 +3,7 @@
 class Profile
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
-  has_many :analysis_items, :inverse_of => :analyzable
+  has_many :analysis_items, :as => :analyzable
 
   has_many :simulations, :dependent => :destroy
   has_many :features
