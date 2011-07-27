@@ -1,7 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 require 'bundler/capistrano'
-set :rvm_ruby_string, '1.9.2@railspre'
+set :rvm_ruby_string, 'ruby-1.9.2-p290@railspre'
 
 set :application, "EGTMAS Web Interface"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
