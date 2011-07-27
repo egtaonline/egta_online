@@ -18,6 +18,8 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+gem 'execjs'
+gem 'therubyracer'
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
 gem "hoptoad_notifier"
