@@ -35,11 +35,15 @@ namespace :deploy do
     before "deploy:symlink", "deploy:stop_god"
     run "touch #{current_release}/tmp/restart.txt"
   end
+
+  desc "precompile the assets"
+  task :precompile_assets, :roles => :web, :except => { :no_release => true } do
+    run "cd #{current_path}; rm -rf public/assets/*"
+    run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
+  end
 end
 
 before 'deploy:update_code', 'deploy:stop_god'
 after 'deploy:update_code', 'deploy:make_upload_dir'
-after 'deploy:update_code' do
-  run "cd #{release_path}; RAILS_ENV=production rake assets:precompile"
-end
+before 'deploy:symlink', 'assets:precompile_assets'
 after "deploy:symlink", "deploy:start_god"
