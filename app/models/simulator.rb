@@ -18,7 +18,7 @@ class Simulator
   has_many :schedulers, :dependent => :destroy
   has_many :games
   after_create :setup_simulator
-  has_many :run_time_configurations
+
   def location
     File.join(Rails.root,"simulator_uploads", fullname)
   end
