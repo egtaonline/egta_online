@@ -1,9 +1,9 @@
 # Each Profile instance represents a single possible Strategy set for a Game.
 
-class Profile < Analyzable
+class Profile
   include Mongoid::Document
-#  include Mongoid::Timestamps::Updated
-#  has_many :analysis_items, :inverse_of => :analyzable
+  include Mongoid::Timestamps::Updated
+  has_many :analysis_items, :inverse_of => :analyzable
 
   has_many :simulations, :dependent => :destroy
   has_many :features
