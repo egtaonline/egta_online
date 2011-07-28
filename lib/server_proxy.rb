@@ -143,7 +143,7 @@ class ServerProxy
         simulation.failure!
       end
     else
-      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.number}/out-#{simulation.number}").readline
+      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.number}/out-#{simulation.number}").read
       simulation.failure!
     end
   end
