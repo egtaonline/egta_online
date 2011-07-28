@@ -1,4 +1,3 @@
 %tr
   %td= link_to entry.state, simulation_path(entry)
   %td= link_to entry.profile.name, profile_path(entry.profile)
-  %td= link_to 'Destroy', url_for(:action => "destroy", :id => entry.id), :confirm => 'Are you sure?', :method => :delete

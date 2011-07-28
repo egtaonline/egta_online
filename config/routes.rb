@@ -4,11 +4,8 @@ EgtaOnline::Application.routes.draw do
   resources :accounts
   resources :analysis
   resources :profiles, :only => :show
-  resources :simulations, :except => [:edit, :update] do
-    collection do
-      post :purge
-    end
-  end
+  match "/simulations/destroy" => "simulations#destroy"
+  resources :simulations, :except => [:edit, :update]
   resources :schedulers, :symmetric_game_schedulers, :games do
     member do
       post :add_strategy, :remove_strategy
