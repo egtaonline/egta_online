@@ -102,7 +102,7 @@ class ServerProxy
   def create_wrapper(simulations)
     simulator = simulations[0].scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-    FileUtils.cp("#{Rails.root}/tmp/wrapper-template", "#{Rails.root}/tmp/wrapper")
+    FileUtils.cp("#{Rails.root}/lib/wrapper-template", "#{Rails.root}/tmp/wrapper")
     File.open("#{Rails.root}/tmp/wrapper", "a") do |file|
       if simulations[0].flux?
         file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
