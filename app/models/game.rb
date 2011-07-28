@@ -17,15 +17,21 @@ class Game
   def ensure_profiles
     strategy_array.repeated_combination(size).each do |prototype|
       prototype.sort!
-      profile = SymmetricProfile.find_or_create_by(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash)
-      unless self.profiles.include?(profile)
-        self.profiles << profile
-        profile.save!
+      if SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).count > 0 && SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).first.profile_entries.first.samples.count > 0
+        profile = SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).first;
+        unless self.profiles.include?(profile)
+          self.profiles << profile
+          profile.save!
+        end
       end
     end
   end
 
   def completion_percent
-    profiles.reduce(0) {|sum, profile| sum + (profile.profile_entries.first.samples.count == 0 ? 0 : 1)}*100/[profiles.count, 1].max
+    if strategy_array.size > 0
+      profiles.size*100/((size+strategy_array.size-1).downto(1).inject(:*)/(size.downto(1).inject(:*)*(strategy_array.size-1).downto(1).inject(:*)))
+    else
+      "N/A"
+    end
   end
 end

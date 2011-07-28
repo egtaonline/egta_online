@@ -44,9 +44,11 @@ Scenario: Creating a game with existing profiles finds those profiles
   Then I should see the following table rows:
     | Name       | Samples   |
     | A: 2       | 1 sample  |
+  And I should not see the following table rows:
     | A: 1, B: 1 | 0 samples |
     | B: 2       | 0 samples |
   When I am on the games page
+  And show me the page
   Then I should see the following table rows:
     | Name     | Simulator | Size | Percent Sampled |
     | test     | testing0  | 2    | 33              |
