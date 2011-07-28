@@ -26,6 +26,6 @@ class Game
   end
 
   def completion_percent
-    profiles.reduce(0) {|sum, profile| sum + (profile.profile_entries.first.samples.count == 0 ? 0 : 1)}*100/profiles.count
+    profiles.reduce(0) {|sum, profile| sum + (profile.profile_entries.first.samples.count == 0 ? 0 : 1)}*100/[profiles.count, 1].max
   end
 end
