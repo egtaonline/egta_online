@@ -1,8 +1,5 @@
-.breadcrumb
-  .bc
-    #{ link_to 'Home', root_path } Configuring Your Simulator
-%h3 How to...
-%h4 Set up run time configuration
+%h2 How to...
+%h3 Set up run time configuration
 %p
   To use the web interface for run time configuration of your simulator, you to need to create YAML file that specifies all the parameters that you want to adjust at run time, and provide default values for them.  Your file should look something like this:
 %code
@@ -16,7 +13,7 @@
 %p
   In this example, ':foo', and ':santa' become variables that can be modified in the web interface. The first 2 lines are required of all simulators subscribing to this interface, so as to alert the server that you want web access to the parameters.  The web interface will look for this file at the top of your hierarchy under the name simulation_spec.yaml.
 
-%h4 Set up your run script
+%h3 Set up your run script
 %p
   Your simulator will be invoked by calling script/batch [simulation folder] [number of samples to gather].  Accordingly, at the top folder of your simulator you should have a folder named script that contains a shell script named batch that sets up your simulation environment and takes these two command line arguments.  Here is an example of one such script:
 %code
@@ -30,8 +27,9 @@
 %p
   In this script, first an environment variable, "CLASSPATH", is set up to include a couple of jars since this simulator is run with jruby.  Then the simulator is started using jruby, with some optimization flags, passing "$@", which basically just means to pass through the command line arguments used to invoke this script.  Take note that the script will be run from the top of the folder hierarchy, hence why I can say "lib/main.rb" even though the relative path from the location of the script is "../lib/main.rb".
 
-%h4 Handle the run time configuration
-In the previous example, I just passed along the command line arguments to my simulator.  My main.rb is what is eventually responsible for handling run time configuration, and it looks like this:
+%h3 Handle the run time configuration
+%p
+  In the previous example, I just passed along the command line arguments to my simulator.  My main.rb is what is eventually responsible for handling run time configuration, and it looks like this:
 %code
   require 'yaml'
   %br/
@@ -79,7 +77,7 @@ In the previous example, I just passed along the command line arguments to my si
 %p
   This file says that we want to gather samples from the profile with three players playing A and one player playing B, with parameters foo=bar and santa=claus.  Handling this file can be made much simpler by using a YAML parser.  In ruby and java, and probably other popular languages, you can use existing libraries to handle yaml, as I do in my file above with "require 'yaml'".  The result of executing "YAML::load_documents( yf ){|y| sim_parms.push y}" is that each document, i.e each entry to begins with ---, is parsed and pushed onto the array sim_parms.  This leads sim_parms to become an array with two entries.  The first entry is an array with an entry for each strategy in the profile that we want to simulate.  The second entry is a hash that maps from a parameter name to its value for the current simulation, i.e. sim_parms[1]["foo"] = "bar".  Once I've set up my logging infrastructure, discussed in the next section, and my run time parameters, I run the simulation for ARGV[1] times.
 
-%h4 Set up logging
+%h3 Set up logging
 %p
   There are basically two components to logging for the web interface: payoff data and features. For payoff data, you create a file within [simulation folder] called "payoff_data".  Keeping with our running example, if you took two samples, your payoff_data file might look like the following:
 %code
