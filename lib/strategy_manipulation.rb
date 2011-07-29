@@ -3,9 +3,7 @@ module StrategyManipulation
     strategy_array << strategy_name
     strategy_array.uniq!
     self.save!
-    if self.respond_to?("add_profiles_from_strategy")
-      self.add_profiles_from_strategy(strategy_name)
-    elsif self.respond_to?("ensure_profiles")
+    if self.respond_to?("ensure_profiles")
       self.ensure_profiles
     end
   end
@@ -16,7 +14,11 @@ module StrategyManipulation
       profile_ids_to_delete =[]
       self.profiles.each do |profile|
         if profile.contains_strategy?(strategy_name)
-          profile.schedulers.delete(self)
+          if self.instance_of? Scheduler
+            profile.schedulers.delete(self)
+          elsif self.instance_of? Game
+            profile.games.delete(self)
+          end
           profile.save!
           profile_ids_to_delete << profile.id
         end

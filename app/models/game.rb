@@ -14,9 +14,9 @@ class Game
   validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles
 
-  def add_profiles_from_strategy(strategy)
-    SymmetricProfile.where(simulator_id: simulator.id, parameter_hash: parameter_hash).each do |prof|
-      if prof.contains_strategy?(strategy) && prof.profile_entries.first.samples.count > 0
+  def ensure_profiles
+    SymmetricProfile.where(:simulator_id => simulator.id, :parameter_hash => parameter_hash).sampled.each do |prof|
+      if prof.game_ids.include?(self.id) == false
         check = true
         prof.strategy_array.uniq.each {|s| check = (strategy_array.include?(s) ? check : false)}
         if check

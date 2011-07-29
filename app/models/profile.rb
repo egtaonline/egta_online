@@ -12,12 +12,14 @@ class Profile
 
   has_and_belongs_to_many :games
   embeds_many :profile_entries
+  field :sampled, :type => Boolean, :default => false
   field :proto_string
   field :parameter_hash, :type => Hash, :default => {}
   after_create :create_profile_entries
   after_create :find_games
   validates_presence_of :simulator
   validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
+  scope :sampled, where(sampled: true)
 
   def self.extract_strategies(profiles)
     profiles.reduce([]){|set, profile| set.concat profile.strategy_array.uniq }.uniq
