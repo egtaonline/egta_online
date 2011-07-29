@@ -18,15 +18,4 @@ class Scheduler
   validates_numericality_of :process_memory, :time_per_sample, :jobs_per_request, :only_integer => true
   validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
 
-  def find_account
-    account = nil
-    Account.all.each do |a|
-      if a.schedulable?
-        account = a
-        break
-      end
-    end
-
-    account
-  end
 end
