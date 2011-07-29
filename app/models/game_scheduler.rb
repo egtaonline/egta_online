@@ -6,17 +6,6 @@ class GameScheduler < Scheduler
   has_and_belongs_to_many :profiles
   validates_presence_of :size
 
-  def reschedule(simulation)
-    if self.active == true
-      new_simulation = simulation.profile.simulations.create!(
-        :size => simulation.size,
-        :state => 'pending',
-        :flux => (simulations.where(:flux => true, :state => 'queued').count < FLUX_CORES))
-      simulations << new_simulation
-      new_simulation.save!
-    end
-  end
-
   def schedule(n=1)
     1.upto n do
       scheduled_profile = find_profile

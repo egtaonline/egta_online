@@ -38,10 +38,6 @@ class Simulation
     state :complete
     state :failed
 
-    after_transition :on => :failure do |simulation, transition|
-      simulation.scheduler.reschedule(simulation)
-    end
-
     event :queue do
       transition :pending => :queued
     end

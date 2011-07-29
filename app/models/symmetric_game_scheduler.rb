@@ -10,12 +10,7 @@ class SymmetricGameScheduler < GameScheduler
       unless self.profiles.include?(profile)
         self.profiles << profile
         profile.save!
-        simulation = profile.simulations.create!(
-          :size => samples_per_simulation,
-          :state => 'pending',
-          :flux => (simulations.where(:flux => true, :state => 'queued').count < FLUX_CORES))
-        simulations << simulation
-        simulation.save!
+      end
       end
     end
   end
