@@ -13,7 +13,6 @@ Scenario: Adding a sample, no games
   When the profile_entry of that symmetric profile has a sample
   Then that analysis item is outdated
 
-@wip
 Scenario: Adding a sample, multiple games
   Given 1 simulator
   And that simulator has the following symmetric profile:

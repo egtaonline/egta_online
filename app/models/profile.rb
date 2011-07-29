@@ -15,6 +15,7 @@ class Profile
   field :proto_string
   field :parameter_hash, :type => Hash, :default => {}
   after_create :create_profile_entries
+  after_create :find_games
   validates_presence_of :simulator
   validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
 
@@ -35,4 +36,14 @@ class Profile
     profile_entries.where(:name => /^#{strategy}/).count > 0
   end
 
+  def find_games
+    Game.where(simulator_id: self.simulator_id, parameter_hash: self.parameter_hash, size: self.size).each do |game|
+      match = true
+      self.strategy_array.uniq.each {|strat| match = (game.strategy_array.include?(strat) ? match : false)}
+      if match == true
+        game.profiles << self
+        self.save!
+      end
+    end
+  end
 end
