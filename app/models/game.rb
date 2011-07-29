@@ -14,15 +14,11 @@ class Game
   validates_presence_of :simulator
   has_and_belongs_to_many :profiles
 
-  def ensure_profiles
-    strategy_array.repeated_combination(size).each do |prototype|
-      prototype.sort!
-      if SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).count > 0 && SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).first.profile_entries.first.samples.count > 0
-        profile = SymmetricProfile.where(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash).first;
-        unless self.profiles.include?(profile)
-          self.profiles << profile
-          profile.save!
-        end
+  def add_profiles_from_strategy(strategy)
+    SymmetricProfile.where(simulator_id: simulator.id, parameter_hash: parameter_hash).each do |prof|
+      if prof.contains_strategy?(strategy) && prof.profile_entries.first.samples.count > 0
+        self.profiles << prof
+        prof.save!
       end
     end
   end

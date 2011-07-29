@@ -3,7 +3,9 @@ module StrategyManipulation
     strategy_array << strategy_name
     strategy_array.uniq!
     self.save!
-    if self.respond_to?("ensure_profiles")
+    if self.respond_to?("add_profiles_from_strategy")
+      self.add_profiles_from_strategy(strategy_name)
+    elsif self.respond_to?("ensure_profiles")
       self.ensure_profiles
     end
   end
