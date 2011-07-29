@@ -19,5 +19,6 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy
     end
   end
+  match "/application/prep_work" => "application#prep_work"
   root :to => 'application#index'
 end
