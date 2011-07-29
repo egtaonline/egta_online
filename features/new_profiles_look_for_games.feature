@@ -59,3 +59,34 @@ Scenario: 2 games exist, no prior profiles, no matches
   Then I should not see the following table rows:
     | A: 2       | 0 samples |
 
+@wip
+Scenario: no prior games, 2 prior profiles exist
+  Given I am signed in
+  Given the following simulator:
+    | parameter_hash | {a: 2} |
+  And that simulator has the strategy array "['A', 'B']"
+  And that simulator has the following symmetric profile:
+    | proto_string   | A, B   |
+    | parameter_hash | {a: 2} |
+  And the profile_entry of that symmetric profile has a sample
+  And that simulator has the following symmetric profile:
+    | proto_string   | A, A   |
+    | parameter_hash | {a: 3} |
+  And the following game:
+    | size           | 2      |
+    | parameter_hash | {a: 2} |
+  And I am on the last game's page
+  And I select "A" from "strategy"
+  And I press "Add"
+  Then I should not see the following table rows:
+    | A: 2 | 0 samples |
+  When I select "B" from "strategy"
+  And I press "Add"
+  Then I should see the following table rows:
+    | Name       | Samples   |
+    | A: 1, B: 1 | 1 sample  |
+  And I should not see the following table rows:
+    | A: 2 | 0 samples |
+  When I follow "Remove"
+  Then I should not see the following table rows:
+    | A: 1, B: 1 | 1 sample |

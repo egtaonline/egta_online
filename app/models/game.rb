@@ -11,7 +11,7 @@ class Game
   field :parameter_hash, :type => Hash, :default => {}
 
   belongs_to :simulator
-  validates_presence_of :simulator
+  validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles
 
   def add_profiles_from_strategy(strategy)
