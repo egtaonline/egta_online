@@ -11,7 +11,6 @@ class SymmetricGameScheduler < GameScheduler
         self.profiles << profile
         profile.save!
       end
-      end
     end
   end
 
