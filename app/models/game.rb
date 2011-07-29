@@ -17,8 +17,12 @@ class Game
   def add_profiles_from_strategy(strategy)
     SymmetricProfile.where(simulator_id: simulator.id, parameter_hash: parameter_hash).each do |prof|
       if prof.contains_strategy?(strategy) && prof.profile_entries.first.samples.count > 0
-        self.profiles << prof
-        prof.save!
+        check = true
+        prof.strategy_array.uniq.each {|s| check = (strategy_array.include?(s) ? check : false)}
+        if check
+          self.profiles << prof
+          prof.save!
+        end
       end
     end
   end
