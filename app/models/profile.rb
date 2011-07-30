@@ -43,7 +43,7 @@ class Profile
     Game.where(simulator_id: self.simulator_id, parameter_hash: self.parameter_hash, size: self.size).each do |game|
       match = true
       self.strategy_array.uniq.each {|strat| match = (game.strategy_array.include?(strat) ? match : false)}
-      if match == true
+      if match == true && game.profiles.include?(self) == false
         game.profiles << self
         self.save!
       end
