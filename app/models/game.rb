@@ -29,7 +29,7 @@ class Game
 
   def completion_percent
     if strategy_array.size > 0
-      profiles.size*100/((size+strategy_array.size-1).downto(1).inject(:*)/(size.downto(1).inject(:*)*(strategy_array.size-1).downto(1).inject(:*)))
+      profiles.size*100/((size+strategy_array.size-1).downto(1).inject(:*)/(size.downto(1).inject(:*)*([strategy_array.size-1, 0].max).downto(1).inject(:*)))
     else
       "N/A"
     end
