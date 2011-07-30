@@ -59,6 +59,7 @@ Scenario: 2 games exist, no prior profiles, no matches
   Then I should not see the following table rows:
     | A: 2       | 0 samples |
 
+@wip
 Scenario: no prior games, 2 prior profiles exist
   Given I am signed in
   Given the following simulator:

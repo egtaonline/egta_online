@@ -12,7 +12,7 @@ class Game
 
   belongs_to :simulator
   validates_presence_of :simulator, :name, :size
-  has_and_belongs_to_many :profiles
+  has_and_belongs_to_many :profiles, :default => []
 
   def ensure_profiles
     SymmetricProfile.where(:simulator_id => simulator.id, :parameter_hash => parameter_hash).sampled.each do |prof|
