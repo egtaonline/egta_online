@@ -15,7 +15,7 @@ class Game
   has_and_belongs_to_many :profiles, :default => []
 
   def ensure_profiles
-    SymmetricProfile.where(:simulator_id => simulator.id, :parameter_hash => parameter_hash).sampled.each do |prof|
+    SymmetricProfile.where(:simulator_id => simulator.id, :parameter_hash => parameter_hash).each do |prof|
       if prof.game_ids.include?(self.id) == false
         check = true
         prof.strategy_array.uniq.each {|s| check = (strategy_array.include?(s) ? check : false)}

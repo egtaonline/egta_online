@@ -34,6 +34,9 @@ class Profile
     simulations.active.reduce(0){|sum, sim| sum + sim.size}.to_i + simulations.pending.reduce(0){|sum, sim| sum + sim.size}.to_i + profile_entries.first.samples.count
   end
 
+  def sample_count
+    profile_entries.first.samples.count
+  end
 
   def contains_strategy?(strategy)
     profile_entries.where(:name => /^#{strategy}/).count > 0
