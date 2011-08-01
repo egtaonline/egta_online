@@ -101,7 +101,8 @@ end
 God.watch do |w|
   w.name          = "resque"
   w.interval      = 30.seconds
-  w.start         = "rake environment RAILS_ENV=production resque:work QUEUE=*"
+  w.env = {"RAILS_ENV" => "production"}
+  w.start         = "rake resque:work QUEUE=*"
   w.start_grace   = 10.seconds
 
   # retart if memory gets too high
