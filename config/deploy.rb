@@ -24,11 +24,9 @@ namespace :deploy do
 
   task :stop_god do
     run "/usr/local/rvm/bin/bootup_god terminate" rescue nil
-    run "rvmsudo /etc/init.d/redis-server stop" rescue nil
   end
 
   task :start_god do
-    run "rvmsudo /etc/init.d/redis-server start"
     run "/usr/local/rvm/bin/bootup_god -c #{current_release}/config/egta.god"
   end
 
