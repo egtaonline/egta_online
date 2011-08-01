@@ -20,7 +20,8 @@ Scenario: Selecting a simulator changes the search parameters
   And the "C" field should contain "4"
 
 @javascript
-Scenario: Creating a game with existing profiles finds those profiles
+@wip
+Scenario: Creating a game finds existing profiles
   Given the following simulator:
     | parameter_hash | {a: "2"} |
   And that simulator has the strategy array "['A', 'B']"
@@ -28,25 +29,22 @@ Scenario: Creating a game with existing profiles finds those profiles
     | proto_string   | A, A   |
     | parameter_hash | {a: "2"} |
   And the profile_entry of that symmetric profile has a sample
+  Then that symmetric profile should have 1 sample
+  Given that simulator has the following symmetric profiles:
+    | proto_string | parameter_hash |
+    | A, B         | {a: "2"}       |
+    | B, B         | {a: "2"}       |
   When I am on the new game page
   And I fill in the following:
     | Name      | test |
     | Game size | 2    |
   And I press "Create Game"
   Then I should be on the last game's page
+  And the last game should have 3 profiles
   When I select "A" from "strategy"
   And I press "Add"
-  Then I should see the following table rows:
-    | Name       | Samples   |
-    | A: 2       | 1 sample  |
-  When I select "B" from "strategy"
+  And I select "B" from "strategy"
   And I press "Add"
-  Then I should see the following table rows:
-    | Name       | Samples   |
-    | A: 2       | 1 sample  |
-  And I should not see the following table rows:
-    | A: 1, B: 1 | 0 samples |
-    | B: 2       | 0 samples |
   When I am on the games page
   And show me the page
   Then I should see the following table rows:

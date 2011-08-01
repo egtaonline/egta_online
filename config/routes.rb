@@ -21,4 +21,5 @@ EgtaOnline::Application.routes.draw do
   end
   match "/application/prep_work" => "application#prep_work"
   root :to => 'application#index'
+  mount Resque::Server, :at => "/background_workers"
 end

@@ -10,7 +10,8 @@ module StrategyManipulation
 
   def delete_strategy_by_name(strategy_name)
     if self.respond_to?("ensure_profiles")
-      strategy_array.delete(strategy_name)
+      self.strategy_array.delete(strategy_name)
+      self.save!
       profile_ids_to_delete =[]
       self.profiles.each do |profile|
         if profile.contains_strategy?(strategy_name)

@@ -19,6 +19,8 @@ gem 'jquery-rails'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'execjs'
+gem 'resque', :require => 'resque/server'
+gem 'resque-scheduler'
 gem 'therubyracer'
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
@@ -43,7 +45,7 @@ gem "encrypted_strings"
 gem "passenger"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
-group :development, :testing do
+group :development, :test do
   gem "capybara"
   gem "growl"
   gem "spork"
@@ -52,4 +54,5 @@ group :development, :testing do
   gem "database_cleaner"
   gem "fabrication"
   gem "rspec-rails"
+  gem "resque_spec"
 end

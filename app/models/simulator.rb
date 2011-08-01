@@ -42,9 +42,7 @@ class Simulator
           parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
           update_attribute(:parameter_hash, parameters)
         end
-        sp = ServerProxy.new
-        sp.start
-        sp.setup_simulator(self)
+        NYX_PROXY.setup_simulator(self)
       else
         return
       end

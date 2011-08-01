@@ -35,6 +35,6 @@ Spork.each_run do
   # recommended as it will mask a lot of errors for you!
   #
   ActionController::Base.allow_rescue = false
-
+  ResqueSpec.reset!
   DatabaseCleaner.clean
 end

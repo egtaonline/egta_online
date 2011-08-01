@@ -5,12 +5,8 @@ class SymmetricGameScheduler < GameScheduler
 
   def ensure_profiles
     strategy_array.repeated_combination(size).each do |prototype|
-      prototype.sort!
-      profile = SymmetricProfile.find_or_create_by(simulator_id: simulator.id, proto_string: prototype.join(", "), parameter_hash: parameter_hash)
-      unless self.profiles.include?(profile)
-        self.profiles << profile
-        profile.save!
-      end
+      proto_string = prototype.sort.join(", ")
+      Resque.enqueue(SymmetricSchedulerAssociater, id, proto_string)
     end
   end
 

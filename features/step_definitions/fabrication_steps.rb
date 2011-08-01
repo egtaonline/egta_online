@@ -30,6 +30,10 @@ end
 
 World(FabricationMethods)
 
+When /^I delete that ([^"]*)$/ do |model_name|
+  instance_variable_get("@#{model_name.gsub(/\W+/,'_').downcase.sub(/^_/, '')}").destroy
+end
+
 Given /^(\d+) ([^"]*)$/ do |count, model_name|
   create_with_default_attributes(model_name, count.to_i)
 end
@@ -51,3 +55,18 @@ Given /^that ([^"]*) has the following ([^"]*):$/ do |parent, child, table|
 
   create_from_table(child, table, parent => parent_instance)
 end
+
+Given /^that ([^"]*) belongs to that ([^"]*)$/ do |parent, child|
+  p_instance = instance_variable_get("@#{parent.gsub(/\W+/,'_').downcase.sub(/^_/, '')}")
+  c_instance = instance_variable_get("@#{child.gsub(/\W+/,'_').downcase.sub(/^_/, '')}")
+  eval("p_instance.#{child}s << c_instance")
+  c_instance.save!
+  puts eval("p_instance.#{child}s.inspect")
+end
+
+Then /^the last ([^"]*) should have (\d+) ([^"]*)$/ do |parent, number, child|
+  p_instance = parent.camelize.constantize.last
+  eval("p_instance.#{child}").count.should == number.to_i
+end
+
+

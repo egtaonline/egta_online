@@ -1,5 +1,3 @@
-= link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")
-
 %h3 Strategies
 %table
   %tr
@@ -10,10 +8,4 @@
       %td= select_tag :strategy, options_for_select(entry.simulator.strategy_array-entry.strategy_array)
       %td= submit_tag "Add"
 
-%h3 Profiles
-%table
-  %tr
-    %th Name
-    %th Samples
-  =render :partial => "profile", :collection => @profiles
-= paginate(@profiles)
+= link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")

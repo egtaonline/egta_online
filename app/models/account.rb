@@ -12,6 +12,8 @@ class Account
   field :active, :type => Boolean, :default => false
   scope :active, where(active: true)
 
+  after_create { NYX_PROXY.add_account self; Resque.enqueue(AccountAdder, id)}
+
   def login
     begin
       Net::SSH.start(Yetting.host, username, :password => self.password, :timeout => 2)
