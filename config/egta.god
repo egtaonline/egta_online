@@ -83,9 +83,9 @@ end
   God.watch do |w|
     w.name          = "redis"
     w.interval      = 30.seconds
-    w.start         = "sudo /etc/init.d/redis-server start"
-    w.stop          = "sudo /etc/init.d/redis-server stop"
-    w.restart       = "sudo /etc/init.d/redis-server restart"
+    w.start         = "rvmsudo /etc/init.d/redis-server start"
+    w.stop          = "rvmsudo /etc/init.d/redis-server stop"
+    w.restart       = "rvmsudo /etc/init.d/redis-server restart"
     w.start_grace   = 10.seconds
     w.restart_grace = 10.seconds
 
