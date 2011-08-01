@@ -1,17 +1,17 @@
 schedule_simulations:
-  cron: */2 * * * *
+  cron: "*/2 * * * *"
   class: SchedulerInvoker
   args:
   description: "Invokes schedulers to create simulations"
 
 queue_simulations:
-  cron: */3 * * * *
+  cron: "*/3 * * * *"
   class: SimulationQueuer
   args:
   description: "Queues pending simulations"
 
 check_simulations:
-  cron: */5 * * * *
+  cron: "*/5 * * * *"
   class: SimulationChecker
   args:
   description: "Checks the cluster for the status of simulations"
