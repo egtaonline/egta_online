@@ -83,9 +83,9 @@ end
   God.watch do |w|
     w.name          = "redis"
     w.interval      = 30.seconds
-    w.start         = "rvmsudo /etc/init.d/redis-server start"
-    w.stop          = "rvmsudo /etc/init.d/redis-server stop"
-    w.restart       = "rvmsudo /etc/init.d/redis-server restart"
+    w.start         = "/etc/init.d/redis-server start"
+    w.stop          = "/etc/init.d/redis-server stop"
+    w.restart       = "/etc/init.d/redis-server restart"
     w.start_grace   = 10.seconds
     w.restart_grace = 10.seconds
 
@@ -101,8 +101,7 @@ end
 God.watch do |w|
   w.name          = "resque"
   w.interval      = 30.seconds
-  w.env = {"RAILS_ENV" => "production"}
-  w.start         = "rake resque:work QUEUE=*"
+  w.start         = "RAILS_ENV=production rake resque:work QUEUE=*"
   w.start_grace   = 10.seconds
 
   # retart if memory gets too high
