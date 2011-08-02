@@ -2,5 +2,4 @@
   %td= link_to entry.name, game_path(entry)
   %td= link_to entry.simulator.fullname, simulator_path(entry.simulator)
   %td= link_to entry.size, game_path(entry)
-  %td= link_to entry.completion_percent, game_path(entry)
   %td= link_to 'Destroy', url_for(:action => "destroy", :id => entry.id), :confirm => 'Are you sure?', :method => :delete
