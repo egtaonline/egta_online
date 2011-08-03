@@ -40,6 +40,7 @@ module PBS
       @time_per_sample = pbs_proxy.time_per_sample
       @script = script
       @simulation_id = simulation_id
+      @nodes = nodes
     end
 
     def pbs_wall_time
