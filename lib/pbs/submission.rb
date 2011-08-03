@@ -33,7 +33,7 @@ module PBS
 
     attr_accessor :process_memory, :qos, :time_per_sample, :script, :samples, :players, :simulation_id, :nodes
 
-    def initialize(pbs_proxy, samples, simulation_id, script)
+    def initialize(pbs_proxy, samples, simulation_id, script, nodes)
       @process_memory = pbs_proxy.process_memory
       @qos = "cac"
       @samples = samples

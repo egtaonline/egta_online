@@ -89,7 +89,7 @@ class ServerProxy
     simulator = simulations[0].scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     account = simulations[0].account
-    submission = PBS::MASSubmission.new(simulations[0].scheduler, simulations[0].size, simulations[0].number, "#{root_path}/script/wrapper")
+    submission = PBS::MASSubmission.new(simulations[0].scheduler, simulations[0].size, simulations[0].number, "#{root_path}/script/wrapper", simulations.size)
     submission.qos = "wellman_flux" if simulations[0].flux?
     create_wrapper(simulations)
     @staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
@@ -116,7 +116,7 @@ class ServerProxy
       if simulations[0].flux?
         file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
       else
-        file.syswrite("\n\#PBS -q route")
+        file.syswrite("\n\#PBS -A cac\n\#PBS -q cac")
       end
       file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
       str = "\#PBS -t "
