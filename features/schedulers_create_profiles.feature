@@ -21,9 +21,3 @@ Scenario: Profile already exists with the same configuration
   And I press "Add"
   And show me the page
   Then there should be 3 symmetric profiles
-  And I should be on the last symmetric game scheduler's page
-  And I should see the following table rows:
-    | Name       | Samples   |
-    | A: 2       | 1 sample  |
-    | A: 1, B: 1 | 0 samples |
-    | B: 2       | 0 samples |

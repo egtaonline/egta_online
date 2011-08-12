@@ -20,7 +20,6 @@ Scenario: Selecting a simulator changes the search parameters
   And the "C" field should contain "4"
 
 @javascript
-@wip
 Scenario: Creating a game finds existing profiles
   Given the following simulator:
     | parameter_hash | {a: "2"} |
@@ -48,5 +47,5 @@ Scenario: Creating a game finds existing profiles
   When I am on the games page
   And show me the page
   Then I should see the following table rows:
-    | Name     | Simulator | Size | Percent Sampled |
-    | test     | testing0  | 2    | 33              |
+    | Name | Simulator         | Size |
+    | test | epp_sim-testing1  | 2    |

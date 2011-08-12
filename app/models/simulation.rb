@@ -14,7 +14,6 @@ class Simulation
   field :state
   field :job_id
   field :error_message
-  field :flux, :type => Boolean
   field :created_at
 
   field :number, :type=>Integer
@@ -38,6 +37,8 @@ class Simulation
     state :complete
     state :failed
 
+    after_transition :on => [:failure, :finish], :do => :requeue
+
     event :queue do
       transition :pending => :queued
     end
@@ -54,5 +55,9 @@ class Simulation
       transition [:pending, :queued, :running, :failed] => :complete
     end
 
+  end
+
+  def requeue
+    Resque.enqueue(ProfileScheduler, scheduler.id, profile.id)
   end
 end

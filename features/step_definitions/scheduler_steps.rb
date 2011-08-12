@@ -2,9 +2,14 @@ When /^I add strategy "([^"]*)" to that symmetric game scheduler$/ do |arg1|
   @symmetric_game_scheduler.add_strategy_by_name(arg1)
 end
 
-Then /^I should have (\d+) simulations? scheduled$/ do |arg1|
+Then /^I should have (\d+) simulations?$/ do |arg1|
   Simulation.all.each {|sim| puts sim.profile.proto_string }
   Simulation.count.should == arg1.to_i
+end
+
+Then /^I should have (\d+) simulations? scheduled$/ do |arg1|
+  Simulation.all.each {|sim| puts sim.profile.proto_string }
+  (Simulation.active.count+Simulation.pending.count).should == arg1.to_i
 end
 
 Then /^that simulation should have profile "([^"]*)"$/ do |arg1|
@@ -25,8 +30,10 @@ Given /^that symmetric game scheduler is active$/ do
 end
 
 When /^I fail a simulation$/ do
-  @simulation = Simulation.first
-  @simulation.failure!
+  with_resque do
+    @simulation = Simulation.first
+    @simulation.failure!
+  end
 end
 
 Then /^a new simulation should exist with identical settings to that simulation$/ do

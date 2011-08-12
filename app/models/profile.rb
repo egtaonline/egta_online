@@ -14,8 +14,7 @@ class Profile
   embeds_many :profile_entries
   field :proto_string
   field :parameter_hash, :type => Hash, :default => {}
-  after_create :create_profile_entries
-  after_create :find_games
+  after_create :find_games, :create_profile_entries
   validates_presence_of :simulator
   validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
 

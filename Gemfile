@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.rc4'
+gem 'rails', '3.1.0.rc5'
 
 # Asset template engines
 gem 'sass-rails', "~> 3.1.0.rc"
@@ -20,7 +20,6 @@ gem 'jquery-rails'
 
 gem 'execjs'
 gem 'resque', :require => 'resque/server'
-gem 'resque-scheduler'
 gem 'therubyracer'
 gem "haml", ">= 3.0.0"
 gem "haml-rails"

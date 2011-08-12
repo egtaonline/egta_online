@@ -42,12 +42,12 @@ class Simulator
           parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
           update_attribute(:parameter_hash, parameters)
         end
-        NYX_PROXY.setup_simulator(self)
+        Resque.enqueue(SimulatorInitializer, self.id)
       else
         return
       end
     rescue
-      errors.add(:simulator_source, "couldn't be uploaded to destination or has invalid parameters")
+      errors.add(:simulator_source, "has invalid parameters")
     end
   end
 end
