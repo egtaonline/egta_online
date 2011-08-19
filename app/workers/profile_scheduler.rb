@@ -14,6 +14,7 @@ class ProfileScheduler
             simulation = profile.simulations.create!(size: num_samples, state: 'pending')
             scheduler.simulations << simulation
             simulation.save!
+            Resque.enqueue(SimulationQueuer, simulation.id)
           end
         end
       end

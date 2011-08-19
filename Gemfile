@@ -20,6 +20,7 @@ gem 'jquery-rails'
 
 gem 'execjs'
 gem 'resque', :require => 'resque/server'
+gem 'resque-scheduler'
 gem 'therubyracer'
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
@@ -36,8 +37,6 @@ gem "net-scp", :require => ['net/scp']
 gem "kaminari"
 gem "decent_exposure"
 gem "carrierwave"
-gem "beanstalk-client"
-gem "stalker"
 gem "capistrano"
 gem "simple_form"
 gem "encrypted_strings"

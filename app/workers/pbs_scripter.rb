@@ -1,61 +1,50 @@
 class PBSScripter
   @queue = :nyx_actions
 
-  def self.perform(simulation_ids)
-    first_simulation = Simulation.where(id: simulation_ids[0]).first
-    if first_simulation != nil
-      simulations = simulation_ids.collect{|sim| Simulation.where(id: sim)}.compact
-      simulator = first_simulation.scheduler.simulator
+  def self.perform(simulation_id)
+    simulation = Simulation.find(simulation_id) rescue nil
+    if simulation != nil
+      simulator = simulation.scheduler.simulator
       root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-      submission = Submission.new(first_simulation.scheduler, first_simulation.size, first_simulation.number, "#{root_path}/script/wrapper", simulations.size)
-      if (Simulation.active.flux.count+simulations.size) < FLUX_LIMIT
+      submission = Submission.new(simulation.scheduler, simulation.size, simulation.number, "#{root_path}/script/wrapper")
+      if (Simulation.active.flux.count+1) < FLUX_LIMIT
         simulations.each {|sim| sim.update_attribute(:flux, true)}
         submission.qos = "wellman_flux"
       end
-      create_wrapper(simulations)
+      create_wrapper(simulation)
       Resque::NYX_PROXY.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
       Resque::NYX_PROXY.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
       @job = get_job(Account.active.sample, simulator, submission)
       if submission
         if submission && @job != "" && @job != nil
-          simulations.each do |simulation|
-            simulation.send('queue!')
-            simulation.job_id = @job
-            simulation.save
-          end
+          simulation.send('queue!')
+          simulation.job_id = @job
+          simulation.save
         else
-          simulations.each{|simulation| simulation.send('failure!')}
+          simulation.send('failure!')
         end
       end
     end
   end
 
-  def create_wrapper(simulations)
-    simulator = simulations[0].scheduler.simulator
+  def create_wrapper(simulation)
+    simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     FileUtils.cp("#{Rails.root}/lib/wrapper-template", "#{Rails.root}/tmp/wrapper")
     File.open("#{Rails.root}/tmp/wrapper", "a") do |file|
-      if simulations[0].flux?
+      if simulation.flux?
         file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
       else
         file.syswrite("\n\#PBS -A cac\n\#PBS -q cac")
       end
       file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
-      str = "\#PBS -t "
-      simulations.each_index do |i|
-        if i == 0
-          str += "#{simulations[0].number}"
-        else
-          str += ",#{simulations[i].number}"
-        end
-      end
-      str += "\n"
+      str = "\#PBS -t #{simulation.number}\n"
       file.syswrite(str)
-      file.syswrite("\#PBS -o #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
-      file.syswrite("\#PBS -e #{root_path}/../simulations/${PBS_ARRAYID}/out\n")
-      file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{root_path}/../simulations/${PBS_ARRAYID} .\n")
-      file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/${PBS_ARRAYID} #{simulations[0].size}\n")
-      file.syswrite("cp -r ${PBS_ARRAYID} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}")
+      file.syswrite("\#PBS -o #{root_path}/../simulations/#{simulation.number}/out\n")
+      file.syswrite("\#PBS -e #{root_path}/../simulations/#{simulation.number}/out\n")
+      file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{root_path}/../simulations/#{simulation.number} .\n")
+      file.syswrite("/tmp/#{simulation.number}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}\n")
+      file.syswrite("cp -r #{simulation.number} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}")
     end
   end
 

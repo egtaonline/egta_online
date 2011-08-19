@@ -1,0 +1,6 @@
+check_simulations:
+  cron: "*/5 * * * *"
+  class: SimulationChecker
+  queue: nyx_actions
+  args:
+  description: "This job checks nyx for status updates on simulations, and gathers completed simulations."
