@@ -1,6 +1,3 @@
-require 'carrierwave/orm/mongoid'
-# This model class represents a Game server
-
 class Simulator
   include Mongoid::Document
   include StrategyManipulation
