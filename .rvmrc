@@ -1,1 +1,1 @@
-rvm --create use 1.9.2@railspre
+rvm --create use 1.9.2
