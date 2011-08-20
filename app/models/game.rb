@@ -13,7 +13,7 @@ class Game
   belongs_to :simulator, :index => true
   index :parameter_hash, background: true
   validates_presence_of :simulator, :name, :size
-  has_and_belongs_to_many :profiles, :default => []
+  has_and_belongs_to_many :profiles
   after_create :find_profiles
 
   def strategy_regex
