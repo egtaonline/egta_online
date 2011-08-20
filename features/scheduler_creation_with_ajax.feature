@@ -34,7 +34,6 @@ Scenario: Editing parameters results in a scheduler with the appropriate paramet
     | Samples per simulation | 5    |
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
-    | Jobs per request       | 2    |
     | C                      | 5    |
   And I press "Create Symmetric game scheduler"
   Then I should be on the last symmetric game scheduler's page
@@ -45,7 +44,6 @@ Scenario: Editing parameters results in a scheduler with the appropriate paramet
     | Samples per simulation | 5    |
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
-    | Jobs per request       | 2    |
     | A                      | 3    |
     | C                      | 5    |
 

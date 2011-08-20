@@ -1,7 +1,7 @@
 class FolderCreator
   @queue = :nyx_actions
 
-  def self.perfom(simulation_id)
+  def self.perform(simulation_id)
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
       simulator = simulation.scheduler.simulator

@@ -15,7 +15,6 @@ Scenario: 1 profile interacts with queue
     | Samples per simulation | 5    |
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
-    | Jobs per request       | 2    |
   And I check "Active"
   And I press "Create Symmetric game scheduler"
   And I select "A" from "strategy"
@@ -29,7 +28,6 @@ Scenario: 1 profile interacts with queue
     | Samples per simulation | 5    |
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
-    | Jobs per request       | 2    |
   And I check "Active"
   And I press "Create Symmetric game scheduler"
   And I select "A" from "strategy"
@@ -48,7 +46,6 @@ Scenario: a failed simulation gets rescheduled
     | Samples per simulation | 5    |
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
-    | Jobs per request       | 2    |
   And I check "Active"
   And I press "Create Symmetric game scheduler"
   And I select "A" from "strategy"

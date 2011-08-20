@@ -23,6 +23,8 @@ Scenario: Selecting a simulator changes the search parameters
 Scenario: Creating a game finds existing profiles
   Given the following simulator:
     | parameter_hash | {a: "2"} |
+    | name           | test     |
+    | version        | test     |
   And that simulator has the strategy array "['A', 'B']"
   And that simulator has the following symmetric profile:
     | proto_string   | A, A   |
@@ -47,5 +49,5 @@ Scenario: Creating a game finds existing profiles
   When I am on the games page
   And show me the page
   Then I should see the following table rows:
-    | Name | Simulator         | Size |
-    | test | epp_sim-testing1  | 2    |
+    | Name | Simulator | Size |
+    | test | test-test | 2    |
