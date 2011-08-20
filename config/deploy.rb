@@ -41,6 +41,16 @@ namespace :deploy do
     run "cd #{current_path}; rm -rf public/assets/*"
     run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
   end
+
+  desc "Disable requests to the app, show maintenance page"
+  web.task :disable, :roles => :web do
+    run "cp #{current_path}/public/maintenance.html  #{shared_path}/system/maintenance.html"
+  end
+
+  desc "Re-enable the web server by deleting any maintenance file"
+  web.task :enable, :roles => :web do
+    run "rm #{shared_path}/system/maintenance.html"
+  end
 end
 
 #before 'deploy:update_code', 'deploy:stop_god'
