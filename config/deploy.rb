@@ -92,18 +92,6 @@ namespace :deploy do
   desc "Kick Passenger"
   task :stop do
   end
-    
-  task :start, :roles => :app do
-    run "touch #{current_release}/tmp/restart"
-  end
-
-  task :stop_god do
-    run "/home/deployment/.rvm/bin/bootup_god terminate" rescue nil
-  end
-
-  task :start_god do
-    run "/home/deployment/.rvm/bin/bootup_god -c #{current_release}/config/egta.god"
-  end
 
   desc "precompile the assets"
   task :precompile_assets, :roles => :web, :except => { :no_release => true } do
