@@ -1,6 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 require 'bundler/capistrano'
+default_run_options[:pty] = true
 set :rvm_ruby_string, 'ruby-1.9.2'
 set :rvm_type, :user
 set :application, "EGTMAS Web Interface"
