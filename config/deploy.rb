@@ -1,7 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 require 'bundler/capistrano'
-default_run_options[:pty] = true
+
 set :rvm_ruby_string, 'ruby-1.9.2'
 set :rvm_type, :user
 set :application, "EGTMAS Web Interface"
@@ -25,7 +25,7 @@ namespace :deploy do
 
   task :stop_god do
     run "/home/deployment/.rvm/bin/bootup_god terminate" rescue nil
-    run "cd #{current_path} && rvmsudo rake resque:stop_workers RAILS_ENV=production"
+    run "cd #{current_path} && #{sudo} rake resque:stop_workers RAILS_ENV=production"
   end
 
   task :start_god do
