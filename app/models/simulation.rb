@@ -18,7 +18,7 @@ class Simulation
 
   field :number, :type=>Integer
   sequence :number
-
+  scope :flux, where(:flux => true)
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')
   scope :running, where(:state=>'running')

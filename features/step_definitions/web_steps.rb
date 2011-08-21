@@ -59,6 +59,10 @@ When /^(?:|I )press "([^"]*)"$/ do |button|
   end
 end
 
+When /^(?:|I )press "([^"]*)" without resque$/ do |button|
+  click_button(button)
+end
+
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   with_resque do
     click_link(link)

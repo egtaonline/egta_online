@@ -23,11 +23,11 @@ namespace :deploy do
   end
 
   task :stop_god do
-    run "/usr/local/rvm/bin/bootup_god terminate" rescue nil
+    run "/home/deployment/.rvm/bin/bootup_god terminate" rescue nil
   end
 
   task :start_god do
-    run "/usr/local/rvm/bin/bootup_god -c #{current_release}/config/egta.god"
+    run "/home/deployment/.rvm/bin/bootup_god -c #{current_release}/config/egta.god"
   end
 
   desc "Restart Application"
@@ -53,7 +53,7 @@ namespace :deploy do
   end
 end
 
-#before 'deploy:update_code', 'deploy:stop_god'
+before 'deploy:update_code', 'deploy:stop_god'
 after 'deploy:update_code', 'deploy:make_upload_dir'
 before 'deploy:symlink', 'deploy:precompile_assets'
-#after "deploy:symlink", "deploy:start_god"
+after "deploy:symlink", "deploy:start_god"

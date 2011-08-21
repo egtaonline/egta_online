@@ -11,7 +11,7 @@ class YAMLCreator
     end
   end
 
-  def numeralize(scheduler)
+  def self.numeralize(scheduler)
     p = Hash.new
     scheduler.parameter_hash.each_pair do |x, y|
       if is_a_number?(y)
@@ -23,7 +23,7 @@ class YAMLCreator
     p
   end
 
-  def is_a_number?(s)
+  def self.is_a_number?(s)
     s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 end

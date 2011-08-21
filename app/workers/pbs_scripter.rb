@@ -8,7 +8,7 @@ class PBSScripter
       root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
       submission = Submission.new(simulation.scheduler, simulation.size, simulation.number, "#{root_path}/script/wrapper")
       if (Simulation.active.flux.count+1) < FLUX_LIMIT
-        simulations.each {|sim| sim.update_attribute(:flux, true)}
+        simulation.update_attribute(:flux, true)
         submission.qos = "wellman_flux"
       end
       create_wrapper(simulation)
@@ -27,12 +27,12 @@ class PBSScripter
     end
   end
 
-  def create_wrapper(simulation)
+  def self.create_wrapper(simulation)
     simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     FileUtils.cp("#{Rails.root}/lib/wrapper-template", "#{Rails.root}/tmp/wrapper")
     File.open("#{Rails.root}/tmp/wrapper", "a") do |file|
-      if simulation.flux?
+      if simulation.flux == true
         file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
       else
         file.syswrite("\n\#PBS -A cac\n\#PBS -q cac")
@@ -48,10 +48,10 @@ class PBSScripter
     end
   end
 
-  def get_job(account, simulator, submission)
+  def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
-      server = @sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
+      server = Resque::NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
       channel = server.session(true).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"

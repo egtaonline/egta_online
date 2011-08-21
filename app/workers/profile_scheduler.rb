@@ -2,8 +2,10 @@ class ProfileScheduler
   @queue = :scheduling
 
   def self.perform(scheduler_id, profile_id)
+    File.open("test", 'a') {|f| f.write("profile") }
     profile = Profile.find(profile_id) rescue nil
     if profile != nil
+      File.open("test", "a") {|f| f.write("scheduling")}
       if profile.simulations.scheduled.count == 0
         sample_count = profile.simulations.active.scheduled.reduce(0) {|sum, sch| sum+sch.size} + profile.sample_count
         max_schedulable = profile.schedulers.active.collect {|s| s.max_samples}.push(0).max
