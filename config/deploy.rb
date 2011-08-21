@@ -69,8 +69,8 @@ namespace :deploy do
     # needed for some of the symlinks
     run "mkdir -p #{current_path}/tmp && \
          mkdir -p #{current_path}/public/system && \
-         mkdir -p #{current_path}/log
-         mkdir -p #{current_path/simulator_uploads}"
+         mkdir -p #{current_path}/log && \
+         mkdir -p #{current_path}/simulator_uploads"
 
     run <<-CMD
       cd #{current_path} &&
@@ -78,6 +78,10 @@ namespace :deploy do
     CMD
   end
   
+  desc "Clean up"
+  task :cleanup, :except => { :no_release => true } do
+    
+  end
   desc "Kick Passenger"
   task :start do
     run "touch #{current_path}/tmp/restart.txt"
@@ -138,4 +142,4 @@ namespace :foreman do
   end 
 end
 
-before 'deploy:symlink', 'deploy:precompile_assets'
+#before 'deploy:symlink', 'deploy:precompile_assets'
