@@ -24,16 +24,7 @@ namespace :deploy do
 
   task :stop_god do
     run "/home/deployment/.rvm/bin/bootup_god terminate" rescue nil
-    pids = Array.new
-
-    Resque.workers.each do |worker|
-      pids << worker.to_s.split(/:/).second
-    end
-
-    if pids.size > 0
-      system("kill -QUIT #{pids.join(' ')}")
-    end
-
+    run "cd #{current_path} && rake queue:stop_workers RAILS_ENV=production"
   end
 
   task :start_god do
