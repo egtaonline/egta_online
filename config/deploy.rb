@@ -4,9 +4,10 @@ require 'bundler/capistrano'
 
 set :rvm_ruby_string, 'ruby-1.9.2'
 set :rvm_type, :user
-set :application, "EGTMAS Web Interface"
+set :application, "EGTA Online"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
+set :branch, "origin/master"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :deploy_to, "/home/deployment"
@@ -15,10 +16,83 @@ role :app, "deployment@d-108-249.eecs.umich.edu"                          # This
 role :db,  "deployment@d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
 
 namespace :deploy do
-  task :make_upload_dir do
-    run "mkdir -p #{current_release}/simulator_uploads"
+  desc "Deploy app"
+  task :default do
+    update
+    restart
+    cleanup
+  end
+  
+  desc "Setup a GitHub-style deployment."
+  task :setup, :except => { :no_release => true } do
+    run "git clone #{repository} #{current_path}"
+  end
+ 
+  desc "Update the deployed code."
+  task :update_code, :except => { :no_release => true } do
+    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
+  end
+  
+  namespace :rollback do
+    desc "Rollback"
+    task :default do
+      code
+    end
+
+    desc "Rollback a single commit."
+    task :code, :except => { :no_release => true } do
+      set :branch, "HEAD^"
+      default
+    end
+  end
+  
+  desc "Make all the symlinks"
+  task :symlink, :roles => :app, :except => { :no_release => true } do
+    set :normal_symlinks, %w(
+      public/system
+      simulator_uploads
+    )
+    
+    commands = normal_symlinks.map do |path|
+      "rm -rf #{current_path}/#{path} && \
+       ln -s #{shared_path}/#{path} #{current_path}/#{path}"
+    end
+
+    # set :weird_symlinks, {
+    #   "path_on_disk" => "path_to_symlink"
+    # }
+    # commands += weird_symlinks.map do |from, to|
+    #   "rm -rf #{current_path}/#{to} && \
+    #    ln -s #{shared_path}/#{from} #{current_path}/#{to}"
+    # end
+
+    # needed for some of the symlinks
+    run "mkdir -p #{current_path}/tmp && \
+         mkdir -p #{current_path}/public/system && \
+         mkdir -p #{current_path}/log
+         mkdir -p #{current_path/simulator_uploads}"
+
+    run <<-CMD
+      cd #{current_path} &&
+      #{commands.join(" && ")}
+    CMD
+  end
+  
+  desc "Kick Passenger"
+  task :start do
+    run "touch #{current_path}/tmp/restart.txt"
   end
 
+  desc "Kick Passenger"
+  task :restart do
+    stop
+    start
+  end
+
+  desc "Kick Passenger"
+  task :stop do
+  end
+    
   task :start, :roles => :app do
     run "touch #{current_release}/tmp/restart"
   end
@@ -29,12 +103,6 @@ namespace :deploy do
 
   task :start_god do
     run "/home/deployment/.rvm/bin/bootup_god -c #{current_release}/config/egta.god"
-  end
-
-  desc "Restart Application"
-  task :restart, :roles => :app do
-    before "deploy:symlink", "deploy:stop_god"
-    run "touch #{current_release}/tmp/restart.txt"
   end
 
   desc "precompile the assets"
@@ -54,7 +122,32 @@ namespace :deploy do
   end
 end
 
-before 'deploy:update_code', 'deploy:stop_god'
-after 'deploy:update_code', 'deploy:make_upload_dir'
+namespace :foreman do
+  desc "Start the application services"
+  task :start, :roles => :app do
+    sudo "start #{application}"
+  end
+
+  desc "Stop the application services"
+  task :stop, :roles => :app do
+    sudo "stop #{application}"
+  end
+
+  desc "Restart the application services"
+  task :restart, :roles => :app do
+    run "sudo start #{application} || sudo restart #{application}"
+  end
+
+  desc "Display logs for a certain process - arg example: PROCESS=web-1"
+  task :logs, :roles => :app do
+    run "cd #{current_path}/log && cat #{ENV["PROCESS"]}.log"
+  end
+
+  desc "Export the Procfile to upstart scripts"
+  task :export, :roles => :app do
+    # 5 resque workers, 1 resque scheduler
+    run "cd #{release_path} && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile.production"
+  end 
+end
+
 before 'deploy:symlink', 'deploy:precompile_assets'
-after "deploy:symlink", "deploy:start_god"

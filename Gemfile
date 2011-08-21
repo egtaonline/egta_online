@@ -9,15 +9,6 @@ gem 'uglifier'
 
 gem 'jquery-rails'
 
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
 gem 'execjs'
 gem 'resque', :require => 'resque/server'
 gem 'resque-scheduler'
@@ -30,7 +21,7 @@ gem "mongoid"
 gem "state_machine"
 gem "devise"
 gem "yettings"
-gem "god"
+gem "foreman"
 gem "net-ssh", :require => ['net/ssh']
 gem "net-ssh-multi", :require => ['net/ssh/multi']
 gem "net-scp", :require => ['net/scp']
