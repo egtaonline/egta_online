@@ -4,7 +4,7 @@ require 'bundler/capistrano'
 
 set :rvm_ruby_string, 'ruby-1.9.2'
 set :rvm_type, :user
-set :application, "EGTA Online"
+set :application, "egtaonline"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
 set :branch, "origin/master"
@@ -134,7 +134,7 @@ namespace :foreman do
   desc "Export the Procfile to upstart scripts"
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
-    run "cd #{release_path} && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile"
+    run "cd /home/deployment/current && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
   end 
 end
 
