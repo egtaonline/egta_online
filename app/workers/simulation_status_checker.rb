@@ -39,7 +39,6 @@ class SimulationStatusChecker
     if File.open("#{Rails.root}/db/#{simulation.number}/out-#{simulation.number}").read == ""
       if File.exist?("#{Rails.root}/db/#{simulation.number}/payoff_data")
         Resque.enqueue(DataParser, simulation.number)
-        simulation.finish!
       else
         simulation.error_message = "Payoff data is missing, cause unknown."
         simulation.failure!

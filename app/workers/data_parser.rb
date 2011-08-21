@@ -1,7 +1,7 @@
 class DataParser
   @queue = :nyx_actions
 
-  def self.perform(simulation_number, location="#{Rails.root}/db")
+  def self.perform(number, location="#{Rails.root}/db")
     feature_files = Hash.new
     feature_hash_array = Array.new
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each {|x| feature_files[x] = File.open(location+"/#{number}/features/"+x) }
@@ -23,7 +23,12 @@ class DataParser
     end
     payoff_data = Array.new
     File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
-    store_in_profile(Simulation.where(:number => number).first.profile, payoff_data, feature_hash_array)
+    begin
+      store_in_profile(Simulation.where(:number => number).first.profile, payoff_data, feature_hash_array)
+      Simulation.where(number: number).first.finish!
+    rescue
+      Simulation.where(number: number).first.failure!
+    end
   end
 
   def store_in_profile(profile, payoffs, features)
