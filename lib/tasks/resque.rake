@@ -10,7 +10,7 @@ task "resque:stop_workers" => :environment do
   end
 
   if pids.size > 0
-    system("kill -QUIT #{pids.join(' ')}")
+    system("sudo kill -QUIT #{pids.join(' ')}")
   end
 
 end
