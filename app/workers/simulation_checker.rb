@@ -19,12 +19,12 @@ class SimulationChecker
     Resque.enqueue(SimulationChecker)
   end
 
-  def check_existance(root_path, simulation)
+  def self.check_existance(root_path, simulation)
     output = Resque::NYX_PROXY.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
     output == "exists"
   end
 
-  def check_for_errors(simulation)
+  def self.check_for_errors(simulation)
     if File.open("#{Rails.root}/db/#{simulation.number}/out-#{simulation.number}").read == ""
       if File.exist?("#{Rails.root}/db/#{simulation.number}/payoff_data")
         Resque.enqueue(DataParser, simulation.number)
@@ -39,7 +39,7 @@ class SimulationChecker
     end
   end
 
-  def check_status(simulation, job_id, state_info)
+  def self.check_status(simulation, job_id, state_info)
     simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     if job_id.include?(simulation.job_id)
