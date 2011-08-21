@@ -3,6 +3,7 @@ Feature: Scheduling with resque
   As a user
   I want scheduling to occur through resque automatically
 
+@wip
 Scenario: 1 profile interacts with queue
   Given I am signed in
   And 1 simulator
@@ -34,6 +35,7 @@ Scenario: 1 profile interacts with queue
   And I press "Add"
   Then I should have 1 simulation scheduled
 
+@wip
 Scenario: a failed simulation gets rescheduled
   Given I am signed in
   And 1 simulator
@@ -56,7 +58,6 @@ Scenario: a failed simulation gets rescheduled
   And I should have 1 simulation scheduled
   And a new simulation should exist with identical settings to that simulation
 
-@wip
 Scenario: a scheduled simulation gets queued
   Given a fake server proxy
   Given I am signed in
