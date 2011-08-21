@@ -2,6 +2,7 @@ class SimulationStatusChecker
   @queue = :nyx_actions
 
   def self.perform(simulation_id, job_id, state_info)
+
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
       simulator = simulation.scheduler.simulator

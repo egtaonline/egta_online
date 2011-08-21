@@ -7,7 +7,7 @@ queues.each do |q|
     w.name          = "resque-#{q}"
     w.interval      = 30.seconds
     w.pid_file      = File.join(RAILS_ROOT, "tmp/pids/resque-#{q}.pid")
-    w.start         = "cd #{RAILS_ROOT} && rake environment RAILS_ENV=production resque:work QUEUE=#{q}"
+    w.start         = "cd #{RAILS_ROOT} && PIDFILE=#{RAILS_ROOT}/tmp/pids/resque=#{q}.pid rake environment RAILS_ENV=production resque:work QUEUE=#{q}"
     w.start_grace   = 10.seconds
 
     w.behavior(:clean_pid_file)
