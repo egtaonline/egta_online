@@ -134,8 +134,8 @@ namespace :foreman do
   desc "Export the Procfile to upstart scripts"
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
-    run "cd /home/deployment/current && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile.production"
+    run "cd #{release_path} && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile"
   end 
 end
 
-#before 'deploy:symlink', 'deploy:precompile_assets'
+before 'deploy:symlink', 'deploy:precompile_assets'
