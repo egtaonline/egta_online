@@ -9,12 +9,13 @@ set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
 set :branch, "origin/master"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
+set :user, "deployment"
 
 set :deploy_to, "/home/deployment"
-role :web, "deployment@d-108-249.eecs.umich.edu"                          # Your HTTP server, Apache/etc
-role :app, "deployment@d-108-249.eecs.umich.edu"                          # This may be the same as your `Web` server
-role :db,  "deployment@d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
-
+role :web, "d-108-249.eecs.umich.edu"                          # Your HTTP server, Apache/etc
+role :app, "d-108-249.eecs.umich.edu"                          # This may be the same as your `Web` server
+role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
+default_run_options[:pty] = true
 namespace :deploy do
   desc "Deploy app"
   task :default do
@@ -30,7 +31,7 @@ namespace :deploy do
  
   desc "Update the deployed code."
   task :update_code, :except => { :no_release => true } do
-    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
+    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle"
   end
   
   namespace :rollback do
@@ -68,7 +69,6 @@ namespace :deploy do
 
     # needed for some of the symlinks
     run "mkdir -p #{current_path}/tmp && \
-         mkdir -p #{current_path}/public/system && \
          mkdir -p #{current_path}/log && \
          mkdir -p #{current_path}/simulator_uploads"
 
@@ -78,10 +78,6 @@ namespace :deploy do
     CMD
   end
   
-  desc "Clean up"
-  task :cleanup, :except => { :no_release => true } do
-    
-  end
   desc "Kick Passenger"
   task :start do
     run "touch #{current_path}/tmp/restart.txt"
@@ -138,7 +134,7 @@ namespace :foreman do
   desc "Export the Procfile to upstart scripts"
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
-    run "cd #{release_path} && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile.production"
+    run "cd /home/deployment/current && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f #{release_path}/Procfile.production"
   end 
 end
 
