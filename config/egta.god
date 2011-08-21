@@ -99,7 +99,7 @@ RAILS_ROOT = File.expand_path("../..", __FILE__)
 # end
 
 queues = ["profile_actions", "nyx_actions"]
-queue.each do |q|
+queues.each do |q|
   God.watch do |w|
     w.name          = "resque-#{q}"
     w.interval      = 30.seconds
