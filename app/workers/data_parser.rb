@@ -31,7 +31,7 @@ class DataParser
     end
   end
 
-  def store_in_profile(profile, payoffs, features)
+  def self.store_in_profile(profile, payoffs, features)
     payoffs.each do |payoff|
       profile.profile_entries.each do |entry|
         entry.samples.create!(:payoff => payoff[entry.name.split(": ")[0]])
