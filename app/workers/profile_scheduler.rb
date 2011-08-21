@@ -1,5 +1,5 @@
 class ProfileScheduler
-  @queue = :scheduling
+  @queue = :profile_actions
 
   def self.perform(scheduler_id, profile_id)
     File.open("test", 'a') {|f| f.write("profile") }

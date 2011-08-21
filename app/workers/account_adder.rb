@@ -1,5 +1,5 @@
 class AccountAdder
-  @queue = :admin
+  @queue = :nyx_actions
 
   def self.perform(account_id)
     account = Account.find(account_id) rescue nil
