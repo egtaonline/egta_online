@@ -56,7 +56,7 @@ class SimulationChecker
       end
     else
       if check_existance(root_path, simulation)
-        server = Resque::NYX_PROXY.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+        server = Resque::NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
         server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
         check_for_errors(simulation)
       else
