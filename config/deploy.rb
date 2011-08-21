@@ -24,7 +24,7 @@ namespace :deploy do
 
   task :stop_god do
     run "/home/deployment/.rvm/bin/bootup_god terminate" rescue nil
-    run "cd #{current_path} && rake resque:stop_workers RAILS_ENV=production"
+    run "cd #{current_path} && rvmsudo rake resque:stop_workers RAILS_ENV=production"
   end
 
   task :start_god do
