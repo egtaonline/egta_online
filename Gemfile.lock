@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/chriseppstein/compass.git
-  revision: 8a407a6df78e67c3ace22a559e17e234057fa968
+  revision: f23bf58e8db84e17e6fab37cc73e5a539924cca0
   branch: rails31
   specs:
-    compass (0.12.0.alpha.0.8a407a6)
+    compass (0.12.0.alpha.0.f23bf58)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
@@ -100,7 +100,7 @@ GEM
       term-ansicolor (~> 1.0.5)
       thor (>= 0.13.6)
     fssm (0.2.7)
-    gherkin (2.4.11)
+    gherkin (2.4.14)
       json (>= 1.4.6)
     growl (1.0.3)
     haml (3.1.2)
@@ -132,7 +132,7 @@ GEM
     mime-types (1.16)
     mongo (1.3.1)
       bson (>= 1.3.1)
-    mongoid (2.1.8)
+    mongoid (2.1.9)
       activemodel (~> 3.0)
       mongo (~> 1.3)
       tzinfo (~> 0.3.22)
@@ -232,7 +232,7 @@ GEM
     sprockets (2.0.0.beta.14)
       hike (~> 1.2)
       rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
+      tilt (!= 1.3.0, ~> 1.1)
     state_machine (1.0.2)
     term-ansicolor (1.0.6)
     therubyracer (0.9.3)
