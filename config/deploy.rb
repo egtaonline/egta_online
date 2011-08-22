@@ -32,7 +32,7 @@ namespace :deploy do
  
   desc "Update the deployed code."
   task :update_code, :except => { :no_release => true } do
-    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; sudo bundle"
+    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle"
   end
   
   namespace :rollback do
