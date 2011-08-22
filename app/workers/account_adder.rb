@@ -3,6 +3,6 @@ class AccountAdder
 
   def self.perform(account_id)
     account = Account.find(account_id) rescue nil
-    NYX_PROXY.add_account(account) if account != nil
+    add_account(account) if account != nil
   end
 end

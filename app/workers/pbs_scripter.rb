@@ -12,8 +12,8 @@ class PBSScripter
         submission.qos = "wellman_flux"
       end
       create_wrapper(simulation)
-      NYX_PROXY.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
-      NYX_PROXY.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
+      @@staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
+      @@staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
       @job = get_job(Account.active.sample, simulator, submission)
       if submission
         if submission && @job != "" && @job != nil
@@ -51,7 +51,7 @@ class PBSScripter
   def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
-      server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
+      server = @@sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
       channel = server.session(true).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
