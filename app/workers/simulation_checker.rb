@@ -2,10 +2,6 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
-    if NYX_PROXY == nil
-      NYX_PROXY = ServerProxy.new
-      NYX_PROXY.start
-    end
     puts "Checking for simulations"
     if Simulation.active.length > 0
       puts "Simulations found"
