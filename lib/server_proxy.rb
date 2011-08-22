@@ -1,21 +1,33 @@
-module ServerProxy
+class ServerProxy
+
+  attr_accessor :sessions, :staging_session
+  @@instance = ServerProxy.new
+
+  def initialize
+    @sessions = Net::SSH::Multi.start
+    if Account.all.count > 0
+      @staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
+    end
+    @sessions.group :scheduling do
+      Account.all.each {|account| self.add_account(account)}
+    end
+  end
+
+  def self.instance
+    return @@instance
+  end
+
   def add_account(account)
-    if @@staging_session == nil
-      @@staging_session = Net::SSH.start(Yetting.host, account.username, :password => account.password)
+    if @staging_session == nil
+      @staging_session = Net::SSH.start(Yetting.host, account.username, :password => account.password)
     end
-    @@sessions.use(Yetting.host, :user => account.username, :password => account.password)
+    @sessions.use(Yetting.host, :user => account.username, :password => account.password)
   end
-  
-  @@sessions = Net::SSH::Multi.start
-  if Account.all.count > 0
-    @@staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
+
+  def stop
+    @sessions.close
+    @staging_session.close
   end
-  @@sessions.group :scheduling do
-    Account.all.each do |account|
-      if @@staging_session == nil
-        @@staging_session = Net::SSH.start(Yetting.host, account.username, :password => account.password)
-      end
-      @@sessions.use(Yetting.host, :user => account.username, :password => account.password)
-    end
-  end
+
+  private_class_method :new
 end

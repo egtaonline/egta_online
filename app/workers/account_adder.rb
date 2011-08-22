@@ -1,9 +1,9 @@
 class AccountAdder
   @queue = :nyx_actions
-  include ServerProxy
 
   def self.perform(account_id)
+    @sp ||= ServerProxy.instance
     account = Account.find(account_id) rescue nil
-    add_account(account) if account != nil
+    @sp.add_account(account) if account != nil
   end
 end
