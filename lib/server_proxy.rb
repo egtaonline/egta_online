@@ -11,9 +11,11 @@ module ServerProxy
     @@staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
   end
   @@sessions.group :scheduling do
-    if @@staging_session == nil
-      @@staging_session = Net::SSH.start(Yetting.host, account.username, :password => account.password)
+    Account.all.each do |account|
+      if @@staging_session == nil
+        @@staging_session = Net::SSH.start(Yetting.host, account.username, :password => account.password)
+      end
+      @@sessions.use(Yetting.host, :user => account.username, :password => account.password)
     end
-    @@sessions.use(Yetting.host, :user => account.username, :password => account.password)
   end
 end
