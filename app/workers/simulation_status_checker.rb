@@ -21,14 +21,16 @@ class SimulationStatusChecker
           simulation.start!
         end
       else
-        puts "checking existance"
+        puts "I am checking existance"
         if check_existance(root_path, simulation)
+          puts "existed"
           server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
           puts "downloading"
           server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
           puts "checking for errors"
           check_for_errors(simulation)
         else
+          puts "did not exist"
           simulation.failure!
         end
       end
@@ -37,9 +39,14 @@ class SimulationStatusChecker
 
   def self.check_existance(root_path, simulation)
     puts Account.count
-    output = NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
-    puts output
-    output == "exists"
+    NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi") do |ch, stream, data|
+      if stream == :stderr
+        puts "ERROR: #{data}"
+      else
+        puts data
+      end
+      data == "exists"
+    end
   end
 
   def self.check_for_errors(simulation)
