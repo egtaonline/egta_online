@@ -1,4 +1,10 @@
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+
+require 'bundler/capistrano'
+require 'rvm/capistrano'
+
 set :rvm_ruby_string, 'ruby-1.9.2'
+set :rvm_type, :user
 set :application, "egtaonline"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
@@ -91,7 +97,7 @@ namespace :deploy do
   desc "precompile the assets"
   task :precompile_assets, :roles => :web, :except => { :no_release => true } do
     run "cd #{current_path}; rm -rf public/assets/*"
-    run "cd #{current_path}; RAILS_ENV=production sudo bundle exec rake assets:precompile"
+    run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
   end
 
   desc "Disable requests to the app, show maintenance page"
