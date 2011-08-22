@@ -3,10 +3,10 @@ Then /^I should have (\d+) account associated with the server proxy$/ do |arg1|
 end
 
 Given /^a fake server proxy$/ do
-  Resque::NYX_PROXY.staging_session = double("staging_session")
-  Resque::NYX_PROXY.sessions = double("sessions")
-  Resque::NYX_PROXY.staging_session.stub("exec!")
-  Resque::NYX_PROXY.staging_session.stub_chain("scp.upload!")
+  NYX_PROXY.staging_session = double("staging_session")
+  NYX_PROXY.sessions = double("sessions")
+  NYX_PROXY.staging_session.stub("exec!")
+  NYX_PROXY.staging_session.stub_chain("scp.upload!")
   serv = stub("servers_for")
   serv2 = stub("server")
   sess = stub("sess")
@@ -16,7 +16,7 @@ Given /^a fake server proxy$/ do
   sess.stub("exec").and_return(channel)
   serv2.stub("session").and_return(sess)
   serv.stub_chain("flatten.detect").and_return(serv2)
-  Resque::NYX_PROXY.sessions.stub("servers_for").and_return(serv)
+  NYX_PROXY.sessions.stub("servers_for").and_return(serv)
 end
 
 

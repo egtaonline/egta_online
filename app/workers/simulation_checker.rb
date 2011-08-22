@@ -2,11 +2,15 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
+    if NYX_PROXY == nil
+      NYX_PROXY = ServerProxy.new
+      NYX_PROXY.start
+    end
     puts "Checking for simulations"
     if Simulation.active.length > 0
       puts "Simulations found"
       simulations = Simulation.active
-      output = Resque::NYX_PROXY.staging_session.exec!("qstat -a | grep mas-")
+      output = NYX_PROXY.staging_session.exec!("qstat -a | grep mas-")
       job_id = []
       state_info = []
       if output != nil && output != ""

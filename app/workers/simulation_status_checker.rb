@@ -2,7 +2,6 @@ class SimulationStatusChecker
   @queue = :nyx_actions
 
   def self.perform(simulation_id, job_id, state_info)
-
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
       puts "checking against jobs"
@@ -14,7 +13,7 @@ class SimulationStatusChecker
         if state == "C"
           puts "checking existance"
           if check_existance(root_path, simulation)
-            server = Resque::NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+            server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
             server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
             check_for_errors(simulation)
           end
@@ -24,7 +23,7 @@ class SimulationStatusChecker
       else
         puts "checking existance"
         if check_existance(root_path, simulation)
-          server = Resque::NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+          server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
           puts "downloading"
           server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
           puts "checking for errors"
@@ -37,7 +36,7 @@ class SimulationStatusChecker
   end
 
   def self.check_existance(root_path, simulation)
-    output = Resque::NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
+    output = NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
     output == "exists"
   end
 

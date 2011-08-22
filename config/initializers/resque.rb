@@ -13,5 +13,5 @@ unless defined?(RESQUE_LOGGER)
 ActiveSupport::BufferedLogger.new("#{Rails.root}/log/resque.log")
   RESQUE_LOGGER.auto_flushing = true
 end
-Resque::NYX_PROXY = ServerProxy.new
-Resque::NYX_PROXY.start
+NYX_PROXY = ServerProxy.new
+NYX_PROXY.start
