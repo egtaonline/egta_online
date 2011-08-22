@@ -6,3 +6,5 @@ require "data_parser"
 
 SECRET_KEY = "srgegta"
 FLUX_LIMIT = 30
+NYX_PROXY = ServerProxy.new
+NYX_PROXY.start
