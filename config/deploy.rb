@@ -3,7 +3,6 @@ require "rvm/capistrano"
 require 'bundler/capistrano'
 
 set :rvm_ruby_string, 'ruby-1.9.2'
-set :rvm_type, :user
 set :application, "egtaonline"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
@@ -31,7 +30,7 @@ namespace :deploy do
  
   desc "Update the deployed code."
   task :update_code, :except => { :no_release => true } do
-    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle"
+    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; sudo bundle"
   end
   
   namespace :rollback do
