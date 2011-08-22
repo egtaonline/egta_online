@@ -26,7 +26,7 @@ class Account
     if pass == "" || pass == nil
       errors.add(:password, "can't be empty")
     else
-      self.update_attributes(:encrypted_password => pass.encrypt(:symmetric, :password => SECRET_KEY))
+      self.update_attributes(:encrypted_password => pass.encrypt(:symmetric, :password => "srgegta"))
     end
   end
 
@@ -34,7 +34,7 @@ class Account
     if self.encrypted_password == nil
       ''
     else
-      self.encrypted_password.decrypt(:symmetric, :password => SECRET_KEY)
+      self.encrypted_password.decrypt(:symmetric, :password => "srgegta")
     end
   end
 end
