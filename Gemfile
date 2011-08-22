@@ -30,7 +30,7 @@ gem "mongoid"
 gem "state_machine"
 gem "devise"
 gem "yettings"
-gem "god"
+gem "foreman"
 gem "net-ssh", :require => ['net/ssh']
 gem "net-ssh-multi", :require => ['net/ssh/multi']
 gem "net-scp", :require => ['net/scp']
