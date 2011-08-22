@@ -2,6 +2,7 @@ class PBSScripter
   @queue = :nyx_actions
 
   def self.perform(simulation_id)
+    @sp ||= ServerProxy.instance
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
       simulator = simulation.scheduler.simulator
@@ -12,8 +13,8 @@ class PBSScripter
         submission.qos = "wellman_flux"
       end
       create_wrapper(simulation)
-      Resque::NYX_PROXY.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
-      Resque::NYX_PROXY.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
+      @sp.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
+      @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
       @job = get_job(Account.active.sample, simulator, submission)
       if submission
         if submission && @job != "" && @job != nil
@@ -51,7 +52,7 @@ class PBSScripter
   def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
-      server = Resque::NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
+      server = @sp.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
       channel = server.session(true).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"

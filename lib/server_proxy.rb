@@ -1,8 +1,11 @@
-class ServerProxy
+require 'singleton'
 
+class ServerProxy
+  include Singleton
+  
   attr_accessor :sessions, :staging_session
 
-  def start
+  def initialize
     @sessions = Net::SSH::Multi.start
     if Account.all.count > 0
       @staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
@@ -24,4 +27,5 @@ class ServerProxy
     @staging_session.close
   end
 
+  private_class_method :new
 end
