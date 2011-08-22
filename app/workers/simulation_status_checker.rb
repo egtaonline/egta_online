@@ -2,6 +2,9 @@ class SimulationStatusChecker
   @queue = :nyx_actions
 
   def self.perform(simulation_id, job_id, state_info)
+    if NYX_PROXY == nil
+      puts "FAIL"
+    end
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
       puts "checking against jobs"
