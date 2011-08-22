@@ -1,4 +1,5 @@
 class SimulationStatusChecker
+  include ServerProxy
   @queue = :nyx_actions
 
   def self.perform(simulation_id, job_id, state_info)
@@ -13,7 +14,7 @@ class SimulationStatusChecker
         if state == "C"
           puts "checking existance"
           if check_existance(root_path, simulation)
-            server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+            server = @@sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
             server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
             check_for_errors(simulation)
           end
@@ -24,7 +25,7 @@ class SimulationStatusChecker
         puts "I am checking existance"
         if check_existance(root_path, simulation)
           puts "existed"
-          server = NYX_PROXY.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
+          server = @@sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
           puts "downloading"
           server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
           puts "checking for errors"
@@ -39,9 +40,9 @@ class SimulationStatusChecker
 
   def self.check_existance(root_path, simulation)
     puts Account.count
-    puts NYX_PROXY.staging_session.host
-    puts NYX_PROXY.staging_session.closed?
-    NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi") do |ch, stream, data|
+    puts @@staging_session.host
+    puts @@staging_session.closed?
+    @@staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi") do |ch, stream, data|
       if stream == :stderr
         puts "ERROR: #{data}"
       else

@@ -6,7 +6,7 @@ class SimulationChecker
     if Simulation.active.length > 0
       puts "Simulations found"
       simulations = Simulation.active
-      output = NYX_PROXY.staging_session.exec!("qstat -a | grep mas-")
+      output = @@staging_session.exec!("qstat -a | grep mas-")
       job_id = []
       state_info = []
       if output != nil && output != ""
