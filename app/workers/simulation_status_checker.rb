@@ -39,8 +39,8 @@ class SimulationStatusChecker
   end
 
   def self.check_existance(root_path, simulation)
-    puts NYX_PROXY.staging_session.inspect
     puts Account.count
+    puts NYX_PROXY.staging_session.inspect
     output = NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
     output == "exists"
   end
