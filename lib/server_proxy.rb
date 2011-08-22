@@ -1,7 +1,9 @@
-class ServerProxy
+require 'singleton'
 
+class ServerProxy
+  include Singleton
+  
   attr_accessor :sessions, :staging_session
-  @@instance = ServerProxy.new
 
   def initialize
     @sessions = Net::SSH::Multi.start
@@ -11,10 +13,6 @@ class ServerProxy
     @sessions.group :scheduling do
       Account.all.each {|account| self.add_account(account)}
     end
-  end
-
-  def self.instance
-    return @@instance
   end
 
   def add_account(account)
