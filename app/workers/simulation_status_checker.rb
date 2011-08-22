@@ -39,17 +39,9 @@ class SimulationStatusChecker
   end
 
   def self.check_existance(root_path, simulation)
-    puts Account.count
-    puts @sp.staging_session.host
-    puts @sp.staging_session.closed?
-    @sp.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi") do |ch, stream, data|
-      if stream == :stderr
-        puts "ERROR: #{data}"
-      else
-        puts data
-      end
-      data == "exists"
-    end
+    output = @sp.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
+    puts output
+    output == "exists"
   end
 
   def self.check_for_errors(simulation)
