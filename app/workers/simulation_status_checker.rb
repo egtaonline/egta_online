@@ -5,6 +5,7 @@ class SimulationStatusChecker
 
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
+      puts "checking status"
       simulator = simulation.scheduler.simulator
       root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
       if job_id.include?(simulation.job_id)
