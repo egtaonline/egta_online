@@ -39,6 +39,8 @@ class SimulationStatusChecker
 
   def self.check_existance(root_path, simulation)
     puts Account.count
+    puts NYX_PROXY.staging_session.host
+    puts NYX_PROXY.staging_session.closed?
     NYX_PROXY.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi") do |ch, stream, data|
       if stream == :stderr
         puts "ERROR: #{data}"
