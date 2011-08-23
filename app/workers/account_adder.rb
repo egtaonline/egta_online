@@ -4,6 +4,9 @@ class AccountAdder
   def self.perform(account_id)
     @sp ||= ServerProxy.instance
     account = Account.find(account_id) rescue nil
-    @sp.add_account(account) if account != nil
+    if account != nil
+      @sp.add_account(account)
+      puts "adding account #{account.username}"
+    end
   end
 end

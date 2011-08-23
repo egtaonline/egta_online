@@ -4,6 +4,7 @@ class SimulationQueuer
   def self.perform(simulation_id)
     simulation = Simulation.pending.find(simulation_id) rescue nil
     if simulation != nil
+      puts "preparing to queue #{simulation.number}"
       Resque.enqueue(YAMLCreator, simulation_id)
       Resque.enqueue(FolderCreator, simulation_id)
       Resque.enqueue(PBSScripter, simulation_id)

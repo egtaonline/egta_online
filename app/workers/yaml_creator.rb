@@ -4,6 +4,7 @@ class YAMLCreator
   def self.perform(simulation_id)
     simulation = Simulation.find(simulation_id) rescue nil
     if simulation != nil
+      puts "creating simulation_spec.yaml"
       File.open( "#{Rails.root}/tmp/temp.yaml", 'w' ) do |out|
         YAML.dump(Profile.find(simulation.profile_id).yaml_rep, out)
         YAML.dump(numeralize(simulation.scheduler), out)

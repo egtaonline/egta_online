@@ -24,6 +24,7 @@ class Simulation
   scope :running, where(:state=>'running')
   scope :complete, where(:state=>'complete')
   scope :failed, where(:state=>'failed')
+  scope :stale, where(:state.in=>['queued', 'complete', 'failed']).and(:updated_at.lt => (Time.current-300000))
   scope :active, where(:state.in=>['queued','running'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
 

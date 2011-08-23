@@ -75,7 +75,7 @@ Scenario: a scheduled simulation gets queued
   And I press "Create Symmetric game scheduler"
   And I select "A" from "strategy"
   And I press "Add" without resque
-  Then "SymmetricSchedulerAssociater" should have "1" job queued
+  Then "SymmetricProfileAssociater" should have "1" job queued
   When I process the next job for "profile_actions"
   Then "ProfileScheduler" should have "1" job queued
   Then I should have a "ProfileScheduler" job queued with "[Scheduler.last.id, Profile.last.id]"

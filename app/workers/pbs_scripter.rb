@@ -7,12 +7,15 @@ class PBSScripter
     if simulation != nil
       simulator = simulation.scheduler.simulator
       root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
+      puts "creating submission"
       submission = Submission.new(simulation.scheduler, simulation.size, simulation.number, "#{root_path}/script/wrapper")
       if (Simulation.active.flux.count+1) < FLUX_LIMIT
         simulation.update_attribute(:flux, true)
         submission.qos = "wellman_flux"
       end
+      puts "creating wrapper"
       create_wrapper(simulation)
+      puts "scheduling simulation"
       @sp.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
       @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
       @job = get_job(Account.active.sample, simulator, submission)
@@ -22,6 +25,7 @@ class PBSScripter
           simulation.job_id = @job
           simulation.save
         else
+          puts "submission failed"
           simulation.send('failure!')
         end
       end
