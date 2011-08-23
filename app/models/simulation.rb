@@ -59,6 +59,6 @@ class Simulation
   end
 
   def requeue
-    Resque.enqueue(ProfileScheduler, scheduler.id, profile.id)
+    Resque.enqueue(ProfileScheduler, profile.id)
   end
 end
