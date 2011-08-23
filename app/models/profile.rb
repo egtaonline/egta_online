@@ -14,7 +14,7 @@ class Profile
   embeds_many :profile_entries
   field :proto_string
   field :parameter_hash, :type => Hash, :default => {}
-  after_create :find_games, :create_profile_entries
+  after_create :setup
   validates_presence_of :simulator
   validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
 
@@ -42,7 +42,17 @@ class Profile
     profile_entries.where(:name => /^#{strategy}/).count > 0
   end
 
+  def setup
+    create_profile_entries
+    find_games
+    try_scheduling
+  end
+
   def find_games
     Resque.enqueue(GameAssociater, id)
+  end
+  
+  def try_scheduling
+    Resque.enqueue(ProfileScheduler, id)
   end
 end
