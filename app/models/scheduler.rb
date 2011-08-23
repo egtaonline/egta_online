@@ -17,7 +17,6 @@ class Scheduler
   validates_presence_of :process_memory, :name, :time_per_sample
   validates_numericality_of :process_memory, :time_per_sample, :only_integer => true
   validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
-  after_save :check_schedulability
   
   def check_schedulability
     profile_ids.each {|p| Resque.enqueue(ProfileScheduler, self.id, p)}
