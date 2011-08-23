@@ -18,11 +18,13 @@ class PBSScripter
       puts "scheduling simulation"
       @sp.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
       @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
-      @job = get_job(Account.active.sample, simulator, submission)
+      account = Account.active.sample 
+      @job = get_job(account, simulator, submission)
       if submission
         if submission && @job != "" && @job != nil
           simulation.send('queue!')
           simulation.job_id = @job
+          simulation.account = account
           simulation.save
         else
           puts "submission failed"
