@@ -39,7 +39,7 @@ class SimulationStatusChecker
   end
 
   def self.check_existance(root_path, simulation)
-    output = @sp.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out-#{simulation.number}; then printf \"exists\"; fi")
+    output = @sp.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out; then printf \"exists\"; fi")
     puts output
     output == "exists"
   end
