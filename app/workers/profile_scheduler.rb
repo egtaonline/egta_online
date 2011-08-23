@@ -12,7 +12,7 @@ class ProfileScheduler
         puts max_schedulable
         puts sample_count
         if max_schedulable > sample_count
-          scheduler = profile.schedulers.active.where(max_samples: max_scheduable).sample
+          scheduler = profile.schedulers.active.where(max_samples: max_schedulable).sample
           puts "scheduling a simulation for #{profile.proto_string}"
           num_samples = [scheduler.samples_per_simulation, max_schedulable-sample_count].min
           simulation = profile.simulations.create!(size: num_samples, state: 'pending')

@@ -27,6 +27,7 @@ class SymmetricProfileAssociater
       # Then the Ruby object is persisted to a database document, at which point the document of the parent is also updated to reference the child
       scheduler.profiles << profile
       profile.save!
+      puts profile.schedulers.count
     end
   end
 end
