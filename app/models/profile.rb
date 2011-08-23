@@ -45,7 +45,6 @@ class Profile
   def setup
     create_profile_entries
     find_games
-    try_scheduling
   end
 
   def find_games
