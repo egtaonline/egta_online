@@ -15,6 +15,7 @@ class Simulation
   field :job_id
   field :error_message
   field :created_at
+  field :flux, :type => Boolean, :default => false
 
   field :number, :type=>Integer
   sequence :number
