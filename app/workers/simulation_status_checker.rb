@@ -14,8 +14,7 @@ class SimulationStatusChecker
         if state == "C"
           puts "checking existance"
           if check_existance(root_path, simulation)
-            puts "downloading"
-            @sp.sftp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
+            download(simulation)
             puts "checking for errors"
             check_for_errors(simulation)
           end
@@ -25,8 +24,7 @@ class SimulationStatusChecker
       else
         puts "I am checking existance"
         if check_existance(root_path, simulation)
-          puts "downloading"
-          @sp.sftp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
+          download(simulation)
           puts "checking for errors"
           check_for_errors(simulation)
         else
@@ -37,6 +35,11 @@ class SimulationStatusChecker
     end
   end
 
+  def self.download(simulation)
+    puts "downloading"
+    @sp.sessions.with(simulation.account.username.to_sym).exec("chmod ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}/out").wait
+    @sp.sftp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
+  end
   def self.check_existance(root_path, simulation)
     output = @sp.staging_session.exec!("if test -e #{root_path}/../simulations/#{simulation.number}/out; then printf \"exists\"; fi")
     puts output
