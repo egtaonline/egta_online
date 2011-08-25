@@ -38,7 +38,8 @@ class SimulationStatusChecker
   def self.download(simulation)
     puts "downloading"
     simulator = simulation.scheduler.simulator
-    @sp.sessions.with(simulation.account.username.to_sym).exec("chmod ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}/out").wait
+    str = "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}"
+    @sp.sessions.with(simulation.account.username.to_sym).exec("chmod ug+rwx #{str}/out; chmod ug+rwx #{str}/payoff_data").wait
     @sp.sftp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
   end
   def self.check_existance(root_path, simulation)
