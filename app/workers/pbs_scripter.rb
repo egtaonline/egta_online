@@ -16,15 +16,13 @@ class PBSScripter
       puts "creating wrapper"
       create_wrapper(simulation)
       puts "scheduling simulation"
-      @sp.staging_session.scp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/")
-      @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}; chgrp -R wellman #{root_path}")
-      account = Account.active.sample 
-      @job = get_job(account, simulator, submission)
+      @sp.sftp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/", owner: @sp.staging_session.user, gid: WELLMAN)
+      @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}")
+      @job = get_job(simulation.account, simulator, submission)
       if submission
         if submission && @job != "" && @job != nil
           simulation.send('queue!')
           simulation.job_id = @job
-          simulation.account = account
           simulation.save
         else
           puts "submission failed"
@@ -56,8 +54,7 @@ class PBSScripter
   def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
-      server = @sp.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == account.username}
-      channel = server.session(true).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
+      @sp.sessions.with(account.username).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
         job_return.strip! if job_return != nil

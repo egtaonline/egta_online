@@ -5,3 +5,4 @@ require "submission"
 require "data_parser"
 
 FLUX_LIMIT = 30
+WELLMAN = 141825

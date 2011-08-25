@@ -3,7 +3,7 @@ class SimulationStatusChecker
 
   def self.perform(simulation_id, job_id, state_info)
     @sp ||= ServerProxy.instance
-    simulation = Simulation.find(simulation_id) rescue nil
+    simulation = Simulation.active.find(simulation_id) rescue nil
     if simulation != nil
       puts "checking against jobs"
       simulator = simulation.scheduler.simulator
@@ -14,8 +14,9 @@ class SimulationStatusChecker
         if state == "C"
           puts "checking existance"
           if check_existance(root_path, simulation)
-            server = @sp.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
-            server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
+            puts "downloading"
+            @sp.sftp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
+            puts "checking for errors"
             check_for_errors(simulation)
           end
         elsif state == "R" && simulation.state != "running"
@@ -24,10 +25,8 @@ class SimulationStatusChecker
       else
         puts "I am checking existance"
         if check_existance(root_path, simulation)
-          puts "existed"
-          server = @sp.sessions.servers_for(:scheduling).flatten.detect{|serv| serv.user == simulation.account.username}
           puts "downloading"
-          server.session(true).scp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/", :recursive => true)
+          @sp.sftp.download!("#{root_path}/../simulations/#{simulation.number}", "#{Rails.root}/db/#{simulation.number}", :recursive => true)
           puts "checking for errors"
           check_for_errors(simulation)
         else

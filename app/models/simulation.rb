@@ -30,6 +30,7 @@ class Simulation
   scope :scheduled, where(:state.in=>['pending','queued','running'])
 
   validates_presence_of :state, :on => :create, :message => "can't be blank"
+  validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
 
   state_machine :state, :initial => :pending do

@@ -15,7 +15,7 @@ class ProfileScheduler
           scheduler = profile.schedulers.active.where(max_samples: max_schedulable).sample
           puts "scheduling a simulation for #{profile.proto_string}"
           num_samples = [scheduler.samples_per_simulation, max_schedulable-sample_count].min
-          simulation = profile.simulations.create!(size: num_samples, state: 'pending')
+          simulation = profile.simulations.create!(size: num_samples, state: 'pending', account_id: Account.active.sample.id)
           scheduler.simulations << simulation
           simulation.save!
           Resque.enqueue(SimulationQueuer, simulation.id)
