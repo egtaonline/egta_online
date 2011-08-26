@@ -1,7 +1,7 @@
 EgtaOnline::Application.routes.draw do
 
   devise_for :users
-  resources :accounts
+  resources :accounts, :except => [:edit, :update]
   resources :analysis
   resources :profiles, :only => :show
   match "/simulations/destroy" => "simulations#destroy"
