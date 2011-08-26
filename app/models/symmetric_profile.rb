@@ -5,10 +5,6 @@ class SymmetricProfile < Profile
     strategy_array
   end
 
-  def size
-    profile_entries.reduce(0) {|sum, pe| sum + pe.name.split(": ")[1].to_i}
-  end
-
   def strategy_array
     ret_array = Array.new
     profile_entries.each{|pe| pe.name.split(": ")[1].to_i.times{ret_array << pe.name.split(": ")[0]}}
