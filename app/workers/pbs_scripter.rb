@@ -16,6 +16,8 @@ class PBSScripter
       puts "creating wrapper"
       create_wrapper(simulation)
       puts "scheduling simulation"
+      @sp.staging_session.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}")
+      puts @sp.staging_session.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}")
       @sp.sftp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/wrapper", owner: @sp.staging_session.options[:user], gid: WELLMAN)
       @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}")
       @job = get_job(simulation.account, simulator, submission)
