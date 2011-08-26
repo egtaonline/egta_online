@@ -27,6 +27,7 @@ class Simulation
   scope :failed, where(:state=>'failed')
   scope :stale, where(:state.in=>['queued', 'complete', 'failed']).and(:updated_at.lt => (Time.current-300000))
   scope :active, where(:state.in=>['queued','running'])
+  scope :finished, where(:state.in=>['complete', 'failed'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
 
   validates_presence_of :state, :on => :create, :message => "can't be blank"
