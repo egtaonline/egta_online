@@ -16,7 +16,9 @@ class PBSScripter
       puts "creating wrapper"
       create_wrapper(simulation)
       puts "scheduling simulation"
-      @sp.sftp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/", owner: @sp.staging_session.user, gid: WELLMAN)
+      @sp.staging_session.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}")
+      puts @sp.staging_session.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}")
+      @sp.sftp.upload!("#{Rails.root}/tmp/wrapper", "#{root_path}/script/wrapper", owner: @sp.staging_session.options[:user], gid: WELLMAN)
       @sp.staging_session.exec!("chmod -R ug+rwx #{root_path}")
       @job = get_job(simulation.account, simulator, submission)
       if submission
@@ -47,6 +49,7 @@ class PBSScripter
       file.syswrite("\#PBS -e #{root_path}/../simulations/#{simulation.number}/out\n")
       file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{root_path}/../simulations/#{simulation.number} .\n")
       file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}\n")
+      file.syswrite("chmod -R ug+rwx /tmp/${PBS_JOBID}/#{simulation.number}\n")
       file.syswrite("cp -r /tmp/${PBS_JOBID}/#{simulation.number} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}")
     end
   end
@@ -54,7 +57,8 @@ class PBSScripter
   def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
-      @sp.sessions.with(account.username.to_sym).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
+      @sp.staging_session.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; ")
+      channel = @sp.sessions.with(account.username.to_sym).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
         job_return.strip! if job_return != nil
