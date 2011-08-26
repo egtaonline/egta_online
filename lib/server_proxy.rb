@@ -8,8 +8,8 @@ class ServerProxy
   def initialize
     @sessions = Net::SSH::Multi.start
     if Account.all.count > 0
-      @sftp = Net::SFTP.start(Yetting.host, Account.first.username, :password => Account.first.password)
-      @staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
+      @sftp = Net::SFTP.start(Yetting.host, Account.first.username)
+      @staging_session = Net::SSH.start(Yetting.host, Account.first.username)
     end
     @sessions.group :scheduling do
       Account.all.each {|account| self.add_account(account)}
@@ -18,12 +18,12 @@ class ServerProxy
 
   def add_account(account)
     if @sftp == nil
-      @sftp = Net::SFTP.start(Yetting.host, account.username, :password => account.password)
-      @staging_session = Net::SSH.start(Yetting.host, Account.first.username, :password => Account.first.password)
+      @sftp = Net::SFTP.start(Yetting.host, account.username)
+      @staging_session = Net::SSH.start(Yetting.host, Account.first.username)
     end
-    @sessions.use(Yetting.host, :user => account.username, :password => account.password)
+    @sessions.use(Yetting.host, :user => account.username)
     @sessions.group account.username do
-      @sessions.use(Yetting.host, :user => account.username, :password => account.password)
+      @sessions.use(Yetting.host, :user => account.username)
     end
   end
 
