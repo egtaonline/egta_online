@@ -6,4 +6,3 @@ tmp/
 *.zip
 public/upload/*
 spec/fabricators/account_fabricator.rb
-features/account*
