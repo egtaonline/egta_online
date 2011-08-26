@@ -55,6 +55,7 @@ class PBSScripter
   def self.get_job(account, simulator, submission)
     job_return = ""
     if submission != nil
+      @sp.staging_session.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; ")
       channel = @sp.sessions.with(account.username.to_sym).exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
         job_return = data
         puts "[#{ch[:host]} : #{stream}] #{data}"
