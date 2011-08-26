@@ -20,6 +20,7 @@ class SymmetricProfileAssociater
       puts "adding #{proto_string} to #{scheduler.name}"
       profile = SymmetricProfile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,
+                                                size: scheduler.size,
                                                 proto_string: proto_string)
 
       # This is the standard pattern in Mongoid for adding referenced documents to the referencer

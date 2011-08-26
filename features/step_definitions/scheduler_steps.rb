@@ -47,3 +47,9 @@ end
 Then /^a new simulation should not be created$/ do
   Simulation.count.should == 1
 end
+
+Given /^that symmetric profile belongs to the last scheduler$/ do
+   scheduler = Scheduler.last
+   scheduler.profiles << @symmetric_profile
+   @symmetric_profile.save!
+end

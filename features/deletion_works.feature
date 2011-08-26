@@ -12,3 +12,15 @@ Scenario: 1 game with 1 profile, deleting the game
   And that symmetric profile belongs to that game
   When I delete that game
   Then there should be 1 symmetric profiles
+
+@wip
+Scenario: 1 scheduler with 1 profile, deleting the scheduler
+  Given 1 simulator
+  And that simulator has the following symmetric game scheduler:
+    | name | name |
+		| size | 2    |
+  And that simulator has the following symmetric profile:
+    | proto_string | A, A |
+  And that symmetric profile belongs to the last scheduler
+  When I delete that symmetric game scheduler
+  Then there should be 1 symmetric profiles
