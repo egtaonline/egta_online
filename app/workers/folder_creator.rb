@@ -7,6 +7,7 @@ class FolderCreator
     if simulation != nil
       puts "creating folder hierarchy for #{simulation.number}"
       simulator = simulation.scheduler.simulator
+      @sp.staging_session.exec!("rm -rf #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{simulation.number}")
       Dir.mkdir("tmp/#{simulation.number}")
       Dir.mkdir("tmp/#{simulation.number}/features")
       FileUtils.mv("tmp/temp.yaml", "tmp/#{simulation.number}/simulation_spec.yaml")
