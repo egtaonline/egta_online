@@ -10,6 +10,16 @@ class SimulatorSelectorController < StrategyController
     end
   end
 
+  def update
+    if @entry = klass.find(params[:id])
+      @entry.update_attributes!(params[single_name].merge(params[:selector]))
+      flash[:notice] = "#{klass_name} was successfully updated."
+      redirect_to url_for(:action => "show", :id => @entry.id)
+    else
+      render :edit
+    end
+  end
+
   def update_parameters
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|
