@@ -7,6 +7,7 @@ Background:
   Given I am signed in
 
 @javascript
+@wip
 Scenario: Selecting a simulator changes the search parameters
   Given the following simulators:
     | name  | version | parameter_hash |

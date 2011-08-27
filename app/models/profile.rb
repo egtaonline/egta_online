@@ -7,10 +7,8 @@ class Profile
 
   has_many :simulations, :dependent => :destroy
   has_many :features
-  has_and_belongs_to_many :schedulers
   belongs_to :simulator, :index => true
   index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true, background: true
-  has_and_belongs_to_many :games
   embeds_many :profile_entries
   field :size, type: Integer
   field :proto_string

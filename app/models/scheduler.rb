@@ -10,7 +10,7 @@ class Scheduler
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
-  has_and_belongs_to_many :profiles
+  field :profile_ids, :type => Array, :default => []
   belongs_to :simulator
 
   validates_uniqueness_of :name

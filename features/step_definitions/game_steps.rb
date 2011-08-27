@@ -9,3 +9,8 @@ end
 Then /^the last game should have a profile with 1 sample$/ do
   Game.last.profiles.each {|p| puts p.sampled }
 end
+
+Given /^that game has that symmetric profile$/ do
+  @game.profile_ids << @symmetric_profile.id
+  @game.save!
+end
