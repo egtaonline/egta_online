@@ -11,6 +11,7 @@ Spork.prefork do
   require 'fabrication'
   require 'cucumber/rails'
   Capybara.default_selector = :css
+  Capybara.javascript_driver = :webkit
   require 'database_cleaner'
   require 'database_cleaner/cucumber'
   DatabaseCleaner.orm = "mongoid"
