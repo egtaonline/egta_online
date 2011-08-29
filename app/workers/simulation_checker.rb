@@ -30,6 +30,7 @@ class SimulationChecker
                     puts "checking existance"
                     if ssh.exec!("if test -e #{root_path}/../simulations/#{s.number}/out; then printf \"exists\"; fi") == "exists"
                       scp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
+                      ssh.loop{ channel.active? }
                       puts "checking for errors"
                       check_for_errors(s)
                     end
