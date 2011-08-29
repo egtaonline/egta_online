@@ -7,7 +7,7 @@ class SimulationChecker
     if Simulation.active.length > 0
       puts "Simulations found"
       simulations = Simulation.active
-      output = Net::SSH.start(Yetting.host, Account.all.sample.username)exec!("qstat -a | grep mas-")
+      output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
       job_id = []
       state_info = []
       if output != nil && output != ""
