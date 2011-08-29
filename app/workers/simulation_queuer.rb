@@ -40,35 +40,36 @@ class SimulationQueuer
   
   def self.schedule(simulations)
     Account.all.each do |account|
-      Net::SSH.start(Yetting.host, account.username) do |ssh|
-        Net::SCP.new(ssh) do |scp|
-          simulations.where(account_id: account.id).each do |s|
-            begin
-              simulator = s.scheduler.simulator
-              puts "uploading"
-              channel = scp.upload("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations")
-              ssh.loop{ channel.active? }
-            rescue
-              s.error_message = "failed to upload to nyx"
-              s.failure!
-            end
-          end
-        end
+      ssh = Net::SSH.start(Yetting.host, account.username)
+      ssh.scp do |scp|
         simulations.where(account_id: account.id).each do |s|
           begin
             simulator = s.scheduler.simulator
-            puts ssh.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
-            ssh.exec!("chgrp -R wellman #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}; chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
-            root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-            puts "creating submission"
-            submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}/wrapper")
-            if (Simulation.active.flux.count+1) < FLUX_LIMIT
-              s.update_attribute(:flux, true)
-              submission.qos = "wellman_flux"
-            end
-            puts "scheduling simulation"
-            if submission != nil
-              ssh.exec("cd #{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}/script; #{submission.command}") do |ch, stream, data|
+            puts "uploading"
+            puts scp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations")
+          rescue
+            s.error_message = "failed to upload to nyx"
+            s.failure!
+          end
+        end
+      end
+      simulations.where(account_id: account.id).each do |s|
+        begin
+          simulator = s.scheduler.simulator
+          root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
+          str = ["ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}",
+                 "chgrp -R wellman #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}",
+                 "chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}"].join(" && ")
+          puts "creating submission"
+          submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}/wrapper")
+          if (Simulation.active.flux.count+1) < FLUX_LIMIT
+            s.update_attribute(:flux, true)
+            submission.qos = "wellman_flux"
+          end
+          puts "scheduling simulation"
+          if submission != nil
+            puts ssh.exec!(str)
+            ssh.exec!("#{submission.command}") do |ch, stream, data|
                 job_return = data
                 puts "[#{ch[:host]} : #{stream}] #{data}"
                 job_return.strip! if job_return != nil
@@ -79,7 +80,7 @@ class SimulationQueuer
                   s.save!
                 else
                   puts "submission failed"
-                  s.error_message = "submission failed"
+                  s.error_message = "submission failed: #{job_return}"
                   s.failure!
                 end
               end
