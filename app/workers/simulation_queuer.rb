@@ -56,7 +56,7 @@ class SimulationQueuer
         simulations.where(account_id: account.id).each do |s|
           begin
             simulator = s.scheduler.simulator
-            puts ssh.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}"
+            puts ssh.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
             ssh.exec!("chgrp -R wellman #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}; chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
             root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
             puts "creating submission"
