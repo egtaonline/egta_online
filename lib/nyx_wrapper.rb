@@ -3,7 +3,7 @@ class NyxWrapper
     simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     FileUtils.cp("#{Rails.root}/lib/wrapper-template", "#{Rails.root}/tmp/#{simulation.account.username}/#{simulation.number}/wrapper")
-    File.open("#{Rails.root}/tmp/#{simulation.number}/wrapper", "a") do |file|
+    File.open("#{Rails.root}/tmp/#{simulation.account.username}/#{simulation.number}/wrapper", "a") do |file|
       if simulation.flux == true
         file.syswrite("\n\#PBS -A wellman_flux\n\#PBS -q flux")
       else
