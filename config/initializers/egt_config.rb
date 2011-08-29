@@ -1,6 +1,6 @@
 require "strategy_manipulation"
 require "sequence"
-require "server_proxy"
+require "nyx_wrapper"
 require "submission"
 require "data_parser"
 
