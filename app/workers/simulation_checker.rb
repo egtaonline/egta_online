@@ -44,11 +44,11 @@ class SimulationChecker
                     check_for_errors(s)
                   else
                     puts "did not exist"
-                    s.update_attributes(state: failed, error_message: "Did not exist on nyx")
+                    s.update_attributes(state: "failed", error_message: "Did not exist on nyx")
                   end
                 end
               rescue
-                s.update_attributes(state: failed, error_message: "Unknown failure checking status")
+                s.update_attributes(state: "failed", error_message: "Unknown failure checking status")
               end
             end
           end
