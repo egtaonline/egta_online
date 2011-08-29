@@ -24,23 +24,23 @@ class SimulationQueuer
       cleanup
     end
   end
-  
+
   def self.create_folder(simulation)
     puts "creating folder hierarchy for #{simulation.number}"
     FileUtils.mkdir_p("tmp/#{simulation.account.username}/#{simulation.number}/features")
     puts "hierarchy completed for #{simulation.number}"
   end
-  
+
   def self.cleanup
     Account.all.each do |a|
       FileUtils.rm_rf("tmp/#{a.username}")
     end
   end
-  
+
   def self.schedule(simulations)
     Account.all.each do |account|
       scp = Net::SCP.start(Yetting.host, account.username)
-      scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations/#{account.username}", recursive: true) do |ch, name, sent, total|
+      scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
         puts "#{name}: #{sent}/#{total}"
       end
       Net::SSH.start(Yetting.host, account.username) do |ssh|
@@ -87,7 +87,7 @@ class SimulationQueuer
       end
     end
   end
-   
+
   def self.create_yaml(simulation)
     puts "creating simulation_spec.yaml"
     File.open( "#{Rails.root}/tmp/#{simulation.account.username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
