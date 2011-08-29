@@ -18,4 +18,4 @@ class NyxWrapper
       file.syswrite("cp -r /tmp/${PBS_JOBID}/#{simulation.number} #{root_path}/../simulations; /bin/rm -rf /tmp/${PBS_JOBID}")
     end
   end
-  
+end
