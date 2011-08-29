@@ -45,7 +45,6 @@ class SimulationQueuer
             begin
               simulator = s.scheduler.simulator
               sftp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", owner: account.username, gid: WELLMAN)
-              ssh.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
             rescue
               s.error_message = "failed to upload to nyx"
               s.failure!
@@ -55,6 +54,7 @@ class SimulationQueuer
         simulations.where(account_id: account.id).each do |s|
           begin
             simulator = s.scheduler.simulator
+            puts ssh.exec!("ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}; chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
             root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
             puts "creating submission"
             submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}/wrapper")
