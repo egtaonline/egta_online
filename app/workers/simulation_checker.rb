@@ -19,7 +19,7 @@ class SimulationChecker
       puts "Updating status"
       Account.all.each do |account|
         Net::SSH.start(Yetting.host, account.username) do |ssh|
-          Net::SFTP::Session.new(ssh) do |sftp|
+          Net::SCP.new(ssh) do |scp|
             simulations.where(account_id: account.id).each do |s|
               begin
                 simulator = s.scheduler.simulator
@@ -29,7 +29,7 @@ class SimulationChecker
                   if state == "C"
                     puts "checking existance"
                     if ssh.exec!("if test -e #{root_path}/../simulations/#{s.number}/out; then printf \"exists\"; fi") == "exists"
-                      sftp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
+                      scp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
                       puts "checking for errors"
                       check_for_errors(s)
                     end
@@ -39,7 +39,7 @@ class SimulationChecker
                 else
                   puts "I am checking existance"
                   if ssh.exec!("if test -e #{root_path}/../simulations/#{s.number}/out; then printf \"exists\"; fi") == "exists"
-                    sftp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
+                    scp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
                     puts "checking for errors"
                     check_for_errors(s)
                   else

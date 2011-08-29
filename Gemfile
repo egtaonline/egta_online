@@ -25,7 +25,6 @@ gem "foreman"
 gem "net-ssh", :require => ['net/ssh']
 gem "net-ssh-multi", :require => ['net/ssh/multi']
 gem "net-scp", :require => ['net/scp']
-gem "net-sftp", require: 'net/sftp'
 gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
