@@ -4,6 +4,7 @@ class SimulationQueuer
   def self.perform
     simulations = Simulation.pending.all
     puts "finding simulations"
+    cleanup(simulations)
     simulations.each do |s|
       begin
         puts "preparing to queue #{s.number}"
@@ -44,6 +45,7 @@ class SimulationQueuer
           simulations.where(account_id: account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
+              puts "uploading"
               sftp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", owner: account.username, gid: WELLMAN)
             rescue
               s.error_message = "failed to upload to nyx"
