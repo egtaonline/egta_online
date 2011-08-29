@@ -18,44 +18,36 @@ class SimulationChecker
       end
       puts "Updating status"
       Account.all.each do |account|
-        Net::SSH.start(Yetting.host, account.username) do |ssh|
-          Net::SCP.new(ssh) do |scp|
-            simulations.where(account_id: account.id).each do |s|
-              begin
-                simulator = s.scheduler.simulator
-                root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-                if job_id.include?(s.job_id)
-                  state = state_info[job_id.index(s.job_id)][9]
-                  if state == "C"
-                    puts "checking existance"
-                    if ssh.exec!("if test -e #{root_path}/../simulations/#{s.number}/out; then printf \"exists\"; fi") == "exists"
-                      scp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
-                      ssh.loop{ channel.active? }
-                      puts "checking for errors"
-                      check_for_errors(s)
-                    end
-                  elsif state == "R" && s.state != "running"
-                    s.start!
-                  end
-                else
-                  puts "I am checking existance"
-                  if ssh.exec!("if test -e #{root_path}/../simulations/#{s.number}/out; then printf \"exists\"; fi") == "exists"
-                    scp.download!("#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", "#{Rails.root}/db/#{s.number}", :recursive => true)
-                    puts "checking for errors"
-                    check_for_errors(s)
-                  else
-                    puts "did not exist"
-                    s.error_message = "Did not exist on nyx"
-                    s.failure!
-                  end
+        system("sudo rsync -ave ssh #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
+        simulations.where(account_id: account.id).each do |s|
+          begin
+            simulator = s.scheduler.simulator
+            if job_id.include?(s.job_id)
+              state = state_info[job_id.index(s.job_id)][9]
+              if state == "C"
+                puts "checking existance"
+                if File.exists?("#{Rails.root}/db/#{account.username}/s.number/out")
+                  puts "checking for errors"
+                  check_for_errors(s)
                 end
-              rescue
-                s.error_message = "Unknown failure checking status"
+              elsif state == "R" && s.state != "running"
+                s.start!
+              end
+            else
+              puts "I am checking existance"
+              if File.exists?("#{Rails.root}/db/#{account.username}/s.number/out")
+                puts "checking for errors"
+                check_for_errors(s)
+              else
+                puts "did not exist"
+                s.error_message = "Did not exist on nyx"
                 s.failure!
               end
             end
+          rescue
+            s.error_message = "Unknown failure checking status"
+            s.failure!
           end
-          ssh.loop
         end
       end
     end

@@ -4,7 +4,7 @@ class SimulationQueuer
   def self.perform
     simulations = Simulation.pending.all
     puts "finding simulations"
-    cleanup(simulations)
+    cleanup
     simulations.each do |s|
       begin
         puts "preparing to queue #{s.number}"
@@ -21,68 +21,62 @@ class SimulationQueuer
     end
     if simulations != nil && simulations != []
       schedule(simulations)
-      cleanup(simulations)
+      cleanup
     end
   end
   
   def self.create_folder(simulation)
     puts "creating folder hierarchy for #{simulation.number}"
-    Dir.mkdir("tmp/#{simulation.number}")
-    Dir.mkdir("tmp/#{simulation.number}/features")
+    FileUtils.mkdir_p("tmp/#{simulation.account.username}/#{simulation.number}/features")
     puts "hierarchy completed for #{simulation.number}"
   end
   
-  def self.cleanup(simulations)
-    simulations.each do |s|
-      FileUtils.rm_rf("tmp/#{s.number}")
+  def self.cleanup
+    Account.all.each do |a|
+      FileUtils.rm_rf("tmp/#{a.username}")
     end
   end
   
   def self.schedule(simulations)
     Account.all.each do |account|
-      ssh = Net::SSH.start(Yetting.host, account.username)
-      ssh.scp do |scp|
+      Net::SCP.start(Yetting.host, account.username).upload!("tmp/#{account.username}, #{Yetting.deploy_path}/simulations/#{account.username}") do |ch, name, sent, total|
+        puts "#{name}: #{sent}/#{total}"
+      end
+      Net::SSH.start(Yetting.host, account.username) do |ssh|
         simulations.where(account_id: account.id).each do |s|
           begin
             simulator = s.scheduler.simulator
-            puts "uploading"
-            puts scp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations")
-          rescue
-            s.error_message = "failed to upload to nyx"
-            s.failure!
-          end
-        end
-      end
-      simulations.where(account_id: account.id).each do |s|
-        begin
-          simulator = s.scheduler.simulator
-          root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-          str = ["ls -l #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}",
-                 "chgrp -R wellman #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}",
-                 "chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}"].join(" && ")
-          puts "creating submission"
-          submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}/wrapper")
-          if (Simulation.active.flux.count+1) < FLUX_LIMIT
-            s.update_attribute(:flux, true)
-            submission.qos = "wellman_flux"
-          end
-          puts "scheduling simulation"
-          if submission != nil
-            puts ssh.exec!(str)
-            ssh.exec!("#{submission.command}") do |ch, stream, data|
-              job_return = data
-              puts "[#{ch[:host]} : #{stream}] #{data}"
-              job_return.strip! if job_return != nil
-              job_return = job_return.split(".").first
-              if job_return != "" and job_return != nil and is_a_number?(job_return)
-                s.send('queue!')
-                s.job_id = job_return
-                s.save!
-              else
-                puts "submission failed"
-                s.error_message = "submission failed: #{job_return}"
-                s.failure!
+            root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
+            puts "creating submission"
+            submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper")
+            if (Simulation.active.flux.count+1) < FLUX_LIMIT
+              s.update_attribute(:flux, true)
+              submission.qos = "wellman_flux"
+            end
+            puts "scheduling simulation"
+            if submission != nil
+              channel = ssh.exec("#{submission.command}") do |ch, stream, data|
+                if stream == :std_err
+                  puts "submission failed"
+                  s.error_message = "submission failed: #{data}"
+                  s.failure!
+                else
+                job_return = data
+                  puts "[#{ch[:host]} : #{stream}] #{data}"
+                  job_return.strip! if job_return != nil
+                  job_return = job_return.split(".").first
+                  if job_return != "" and job_return != nil and is_a_number?(job_return)
+                    s.send('queue!')
+                    s.job_id = job_return
+                    s.save!
+                  else
+                    puts "submission failed"
+                    s.error_message = "submission failed: #{job_return}"
+                    s.failure!
+                  end
+                end
               end
+              channel.wait
             end
           end
         rescue
