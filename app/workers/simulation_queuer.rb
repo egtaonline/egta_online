@@ -11,7 +11,8 @@ class SimulationQueuer
         create_yaml(s)
         NyxWrapper.create_wrapper(s)
       rescue
-        s.update_attributes(state: "failed", error_message: "failed to create files for nyx")
+        s.error_message = "failed to create files for nyx"
+        s.failure!
       end
     end
     if simulations != nil && simulations != []
@@ -44,7 +45,8 @@ class SimulationQueuer
               sftp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}", owner: account.username, gid: WELLMAN)
               ssh.exec!("chmod -R ug+rwx #{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
             rescue
-              s.update_attributes(state: "failed", error_message: "failed to upload to nyx")
+              s.error_message = "failed to upload to nyx"
+              s.failure!
             end
           end
         end
@@ -71,12 +73,14 @@ class SimulationQueuer
                   s.save!
                 else
                   puts "submission failed"
-                  s.update_attributes(state: "failed", error_message: "submission failed")
+                  s.error_message = "submission failed"
+                  s.failure!
                 end
               end
             end
           rescue
-            s.update_attributes(state: "failed", error_message: "failed in the submission step")
+            s.error_message = "failed in the submission step"
+            s.failure!
           end
         end
         ssh.loop
