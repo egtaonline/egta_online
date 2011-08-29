@@ -281,7 +281,6 @@ DEPENDENCIES
   launchy
   mongoid
   net-scp
-  net-sftp
   net-ssh
   net-ssh-multi
   passenger
