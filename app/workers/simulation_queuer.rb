@@ -39,7 +39,8 @@ class SimulationQueuer
   
   def self.schedule(simulations)
     Account.all.each do |account|
-      Net::SCP.start(Yetting.host, account.username).upload!("tmp/#{account.username}, #{Yetting.deploy_path}/simulations/#{account.username}") do |ch, name, sent, total|
+      scp = Net::SCP.start(Yetting.host, account.username)
+      scp.upload!("tmp/#{account.username}, #{Yetting.deploy_path}/simulations/#{account.username}") do |ch, name, sent, total|
         puts "#{name}: #{sent}/#{total}"
       end
       Net::SSH.start(Yetting.host, account.username) do |ssh|
