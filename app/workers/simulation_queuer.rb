@@ -8,8 +8,11 @@ class SimulationQueuer
       begin
         puts "preparing to queue #{simulation.number}"
         create_folder(s)
+        puts "folder made"
         create_yaml(s)
+        puts "yaml made"
         NyxWrapper.create_wrapper(s)
+        puts "wrapper made"
       rescue
         s.error_message = "failed to create files for nyx"
         s.failure!
@@ -23,7 +26,6 @@ class SimulationQueuer
   
   def self.create_folder(simulation)
     puts "creating folder hierarchy for #{simulation.number}"
-    simulator = simulation.scheduler.simulator
     Dir.mkdir("tmp/#{simulation.number}")
     Dir.mkdir("tmp/#{simulation.number}/features")
     puts "hierarchy completed for #{simulation.number}"
