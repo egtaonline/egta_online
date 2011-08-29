@@ -3,7 +3,6 @@ class SimulationChecker
 
   def self.perform
     puts "Checking for simulations"
-    @sp ||= ServerProxy.instance
     if Simulation.active.length > 0
       puts "Simulations found"
       simulations = Simulation.active
