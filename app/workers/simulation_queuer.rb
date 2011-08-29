@@ -34,7 +34,7 @@ class SimulationQueuer
   def self.schedule(simulations)
     Account.all.each do |account|
       Net::SSH.start(Yetting.host, account.username) do |ssh|
-        Net::SFTP.start(ssh) do |sftp|
+        Net::SFTP::Session.new(ssh) do |sftp|
           simulations.where(account_id: account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
