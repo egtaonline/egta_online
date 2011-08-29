@@ -70,19 +70,18 @@ class SimulationQueuer
           if submission != nil
             puts ssh.exec!(str)
             ssh.exec!("#{submission.command}") do |ch, stream, data|
-                job_return = data
-                puts "[#{ch[:host]} : #{stream}] #{data}"
-                job_return.strip! if job_return != nil
-                job_return = job_return.split(".").first
-                if job_return != "" and job_return != nil and is_a_number?(job_return)
-                  s.send('queue!')
-                  s.job_id = job_return
-                  s.save!
-                else
-                  puts "submission failed"
-                  s.error_message = "submission failed: #{job_return}"
-                  s.failure!
-                end
+              job_return = data
+              puts "[#{ch[:host]} : #{stream}] #{data}"
+              job_return.strip! if job_return != nil
+              job_return = job_return.split(".").first
+              if job_return != "" and job_return != nil and is_a_number?(job_return)
+                s.send('queue!')
+                s.job_id = job_return
+                s.save!
+              else
+                puts "submission failed"
+                s.error_message = "submission failed: #{job_return}"
+                s.failure!
               end
             end
           rescue
