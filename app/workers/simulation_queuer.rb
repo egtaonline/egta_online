@@ -46,7 +46,7 @@ class SimulationQueuer
             begin
               simulator = s.scheduler.simulator
               puts "uploading"
-              scp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations/#{s.number}")
+              scp.upload!("tmp/#{s.number}", "#{Yetting.deploy_path}/#{simulator.fullname}/simulations")
             rescue
               s.error_message = "failed to upload to nyx"
               s.failure!
