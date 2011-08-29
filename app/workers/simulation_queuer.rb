@@ -3,6 +3,7 @@ class SimulationQueuer
 
   def self.perform
     simulations = Simulation.pending.all
+    puts "finding simulations"
     simulations.each do |s|
       begin
         puts "preparing to queue #{simulation.number}"
@@ -13,8 +14,10 @@ class SimulationQueuer
         s.update_attributes(state: "failed", error_message: "failed to create files for nyx")
       end
     end
-    schedule(simulations)
-    cleanup(simulations)
+    if simulations != nil && simulations != []
+      schedule(simulations)
+      cleanup(simulations)
+    end
   end
   
   def self.create_folder(simulation)
