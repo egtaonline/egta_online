@@ -85,10 +85,9 @@ class SimulationQueuer
               end
             end
           end
-          rescue
-            s.error_message = "failed in the submission step"
-            s.failure!
-          end
+        rescue
+          s.error_message = "failed in the submission step"
+          s.failure!
         end
       end
     end
