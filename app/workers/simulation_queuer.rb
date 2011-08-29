@@ -6,7 +6,7 @@ class SimulationQueuer
     puts "finding simulations"
     simulations.each do |s|
       begin
-        puts "preparing to queue #{simulation.number}"
+        puts "preparing to queue #{s.number}"
         create_folder(s)
         puts "folder made"
         create_yaml(s)
