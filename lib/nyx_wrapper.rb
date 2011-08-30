@@ -10,8 +10,8 @@ class NyxWrapper
         file.syswrite("\n\#PBS -A cac\n\#PBS -q cac")
       end
       file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
-      file.syswrite("\#PBS -o #{root_path}/../simulations/#{simulation.number}/out\n")
-      file.syswrite("\#PBS -e #{root_path}/../simulations/#{simulation.number}/out\n")
+      file.syswrite("\#PBS -o #{Yetting.deploy_path}/simulations/#{simulation.account.username}/#{simulation.number}/out\n")
+      file.syswrite("\#PBS -e #{Yetting.deploy_path}/simulations/#{simulation.account.username}/#{simulation.number}/out\n")
       file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{Yetting.deploy_path}/simulations/#{simulation.account.username}/#{simulation.number} .\n")
       file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}\n")
       file.syswrite("chmod -R ug+rwx /tmp/${PBS_JOBID}/#{simulation.number}\n")
