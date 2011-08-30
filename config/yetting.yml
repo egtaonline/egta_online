@@ -3,7 +3,7 @@ development:
     deploy_path: "/home/wellmangroup/many-agent-simulations"
 
 test:
-    host: "nyx-login.engin.umich.edu"
+    host: "d-108-200"
     deploy_path: "/home/wellmangroup/many-agent-simulations"
 
 production:

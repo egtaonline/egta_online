@@ -1,7 +1,7 @@
 class DataParser
   @queue = :nyx_actions
 
-  def self.perform(number, location="#{Rails.root}/db")
+  def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account.username}")
     feature_files = Hash.new
     feature_hash_array = Array.new
     puts "finding feature names"

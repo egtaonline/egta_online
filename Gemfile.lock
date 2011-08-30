@@ -286,7 +286,6 @@ DEPENDENCIES
   mongo_ext
   mongoid
   net-scp
-  net-sftp
   net-ssh
   net-ssh-multi
   passenger
