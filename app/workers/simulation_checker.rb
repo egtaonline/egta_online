@@ -29,10 +29,6 @@ class SimulationChecker
                 if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
                   puts "checking for errors"
                   check_for_errors(s)
-                else
-                  puts "did not exist"
-                  s.error_message = "Did not exist on nyx"
-                  s.failure!
                 end
               elsif state == "R" && s.state != "running"
                 s.start!
