@@ -18,7 +18,7 @@ class SimulationChecker
       end
       puts "Updating status"
       Account.all.each do |account|
-        system("sudo rsync -re ssh #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
+        system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
         simulations.where(account_id: account.id).each do |s|
           begin
             simulator = s.scheduler.simulator
