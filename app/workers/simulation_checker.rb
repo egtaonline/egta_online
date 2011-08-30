@@ -26,7 +26,7 @@ class SimulationChecker
               state = state_info[job_id.index(s.job_id)][9]
               if state == "C"
                 puts "checking existance"
-                if File.exists?("#{Rails.root}/db/#{account.username}/s.number/out")
+                if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
                   puts "checking for errors"
                   check_for_errors(s)
                 else
@@ -39,7 +39,7 @@ class SimulationChecker
               end
             else
               puts "I am checking existance"
-              if File.exists?("#{Rails.root}/db/#{account.username}/s.number/out")
+              if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
                 puts "checking for errors"
                 check_for_errors(s)
               else
