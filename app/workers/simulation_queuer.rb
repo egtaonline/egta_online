@@ -50,7 +50,7 @@ class SimulationQueuer
             root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
             puts "creating submission"
             submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper")
-            if (Simulation.active.flux.count+1) < FLUX_LIMIT
+            if (Simulation.active.flux.count+1) <= FLUX_LIMIT
               s.update_attribute(:flux, true)
               submission.qos = "wellman_flux"
             end
