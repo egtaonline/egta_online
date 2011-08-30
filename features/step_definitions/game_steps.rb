@@ -14,3 +14,8 @@ Given /^that game has that symmetric profile$/ do
   @game.profile_ids << @symmetric_profile.id
   @game.save!
 end
+
+Then /^the last game should have (\d+) profiles$/ do |arg1|
+  Game.last.profile_ids.size.should == arg1.to_i
+end
+

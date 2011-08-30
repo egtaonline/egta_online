@@ -25,7 +25,7 @@ class Scheduler
     aflag = false
     if parameter_hash_changed?
       puts "found a change"
-      self.profiles = []
+      self.profile_ids = []
       pflag = true
     end
     if (active_changed? and active_was == false) or max_samples_changed?
@@ -35,8 +35,8 @@ class Scheduler
     yield
     if pflag
       ensure_profiles
-    elsif aflag and self.profiles != nil
-      profiles.each{|p| p.try_scheduling}
+    elsif aflag and self.profile_ids != nil
+      profile_ids.each{|p| Resque.enqueue(ProfileScheduler, p)}
     end
   end
 end

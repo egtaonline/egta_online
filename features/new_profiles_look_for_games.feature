@@ -3,6 +3,7 @@ Feature: New profiles look for games
   As a db admin
   I want profiles to be assigned to relevant games on creation
 
+@wip
 Scenario: 1 game exists, no prior profiles
   Given I am signed in
   Given the following simulator:
