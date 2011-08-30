@@ -65,7 +65,7 @@ class SimulationChecker
         simulation.failure!
       end
     else
-      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.number}/out").read
+      simulation.error_message = File.open("#{Rails.root}/db/#{account.username}/#{simulation.number}/out").read
       simulation.failure!
     end
   end
