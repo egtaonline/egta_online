@@ -59,8 +59,8 @@ class SimulationChecker
   end
 
   def self.check_for_errors(simulation)
-    if File.open("#{Rails.root}/db/#{simulation.number}/out").read == ""
-      if File.exist?("#{Rails.root}/db/#{simulation.number}/payoff_data")
+    if File.open("#{Rails.root}/db/#{account.username}/#{simulation.number}/out").read == ""
+      if File.exist?("#{Rails.root}/db/#{account.username}/#{simulation.number}/payoff_data")
         puts "enqueue data parsing"
         Resque.enqueue(DataParser, simulation.number)
       else
