@@ -29,7 +29,7 @@ class Scheduler
       pflag = true
     end
     if (active_changed? and active_was == false) or max_samples_changed?
-      puts "found a change"
+      puts "found a different change"
       aflag = true
     end
     yield
