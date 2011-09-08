@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.rc6'
+gem 'rails'
 
 # Asset template engines
-gem 'sass-rails', "~> 3.1.0.rc"
+gem 'sass-rails'
 gem 'coffee-script'
 gem 'uglifier'
 
@@ -13,7 +13,7 @@ gem 'execjs'
 gem 'resque', :require => 'resque/server'
 gem 'resque-scheduler'
 gem 'therubyracer'
-gem "haml", ">= 3.0.0"
+gem "haml"
 gem "haml-rails"
 gem "hoptoad_notifier"
 gem "bson_ext"
