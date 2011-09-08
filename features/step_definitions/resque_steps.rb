@@ -33,6 +33,10 @@ end
 When /^I process the next job for "([^"]*)"$/ do |arg1|
   ResqueSpec.perform_next(arg1)
 end
+
+When /^I process all jobs for "([^"]*)"$/ do |arg1|
+  ResqueSpec.perform_all(arg1)
+end
 Then /^"([^"]*)" should have "([^"]*)" jobs? queued$/ do |arg1, arg2|
   arg1.constantize.should have_queue_size_of(arg2.to_i)
 end

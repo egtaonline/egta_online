@@ -10,7 +10,7 @@ class Scheduler
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
-  has_and_belongs_to_many :profiles
+  field :profile_ids, :type => Array, :default => []
   belongs_to :simulator
 
   validates_uniqueness_of :name
@@ -25,18 +25,18 @@ class Scheduler
     aflag = false
     if parameter_hash_changed?
       puts "found a change"
-      self.profiles = []
+      self.profile_ids = []
       pflag = true
     end
     if (active_changed? and active_was == false) or max_samples_changed?
-      puts "found a change"
+      puts "found a different change"
       aflag = true
     end
     yield
     if pflag
       ensure_profiles
-    elsif aflag and self.profiles != nil
-      profiles.each{|p| p.try_scheduling}
+    elsif aflag and self.profile_ids != nil
+      profile_ids.each{|p| Resque.enqueue(ProfileScheduler, p)}
     end
   end
 end

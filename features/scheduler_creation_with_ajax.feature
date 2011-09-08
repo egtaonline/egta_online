@@ -16,8 +16,8 @@ Scenario: AJAX parameter switching works
   Then the "A" field should contain "2"
   And the "B" field should contain "1"
   When I select "testB" from "Simulator"
-  Then the "A" field should contain "3"
   And the "C" field should contain "4"
+  Then the "A" field should contain "3"
 
 @javascript
 Scenario: Editing parameters results in a scheduler with the appropriate parameter hash

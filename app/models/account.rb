@@ -11,8 +11,6 @@ class Account
   field :active, :type => Boolean, :default => false
   scope :active, where(active: true)
 
-  after_create {Resque.enqueue(AccountAdder, id)}
-
   def login
     begin
       Net::SSH.start(Yetting.host, username, :timeout => 2)

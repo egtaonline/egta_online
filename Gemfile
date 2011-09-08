@@ -18,6 +18,7 @@ gem "haml-rails"
 gem "hoptoad_notifier"
 gem "bson_ext"
 gem "mongoid"
+gem "mongo_ext"
 gem "state_machine"
 gem "devise"
 gem "yettings"
@@ -36,8 +37,9 @@ gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 
 
 group :development, :test do
   gem "capybara"
+	gem "capybara-webkit"
   gem "growl"
-  gem "spork"
+  gem "spork", '~> 0.9.0.rc'
   gem "cucumber-rails"
   gem "launchy"
   gem "database_cleaner"

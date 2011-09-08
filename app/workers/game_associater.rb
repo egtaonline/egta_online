@@ -6,8 +6,8 @@ class GameAssociater
     if profile != nil
       puts "associating #{profile.proto_string} to games"
       Game.where(simulator_id: profile.simulator_id, parameter_hash: profile.parameter_hash, size: profile.size).each do |game|
-        game.profiles << profile
-        profile.save!
+        game.profile_ids << profile.id
+        game.save!
       end
     end
   end

@@ -64,9 +64,4 @@ Given /^that ([^"]*) belongs to that ([^"]*)$/ do |parent, child|
   puts eval("p_instance.#{child}s.inspect")
 end
 
-Then /^the last ([^"]*) should have (\d+) ([^"]*)$/ do |parent, number, child|
-  p_instance = parent.camelize.constantize.last
-  eval("p_instance.#{child}").count.should == number.to_i
-end
-
 

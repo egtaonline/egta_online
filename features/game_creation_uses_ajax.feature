@@ -16,8 +16,8 @@ Scenario: Selecting a simulator changes the search parameters
   Then the "A" field should contain "2"
   And the "B" field should contain "1"
   When I select "testB-beta" from "Simulator"
+  Then the "C" field should contain "4"
   Then the "A" field should contain "3"
-  And the "C" field should contain "4"
 
 @javascript
 Scenario: Creating a game finds existing profiles
@@ -44,6 +44,7 @@ Scenario: Creating a game finds existing profiles
   And the last game should have 3 profiles
   When I select "A" from "strategy"
   And I press "Add"
+	And show me the page
   And I select "B" from "strategy"
   And I press "Add"
   When I am on the games page

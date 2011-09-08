@@ -13,7 +13,7 @@ class Game
   belongs_to :simulator, :index => true
   index :parameter_hash, background: true
   validates_presence_of :simulator, :name, :size
-  has_and_belongs_to_many :profiles
+  field :profile_ids, :type => Array, :default => []
   after_create :find_profiles
 
   def strategy_regex
@@ -26,13 +26,5 @@ class Game
 
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
-  end
-
-  def completion_percent
-    if strategy_array.size > 0
-      profiles.select{|p| p.sampled == true}.count*100/((size+strategy_array.size-1).downto(1).inject(:*)/(size.downto(1).inject(:*)*([strategy_array.size-1, 1].max).downto(1).inject(:*)))
-    else
-      "N/A"
-    end
   end
 end

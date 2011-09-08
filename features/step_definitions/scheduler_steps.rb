@@ -53,3 +53,9 @@ Given /^that symmetric profile belongs to the last scheduler$/ do
    scheduler.profiles << @symmetric_profile
    @symmetric_profile.save!
 end
+
+Given /^the last scheduler has that symmetric profile$/ do
+  scheduler = Scheduler.last
+  scheduler.profile_ids << @symmetric_profile.id
+  scheduler.save!
+end
