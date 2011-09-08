@@ -1,8 +1,10 @@
+# TODO: FINISH DATA PARSER
+
 class DataParser
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account.username}")
-    feature_files = Hash.new
+    feature_hash = create_feature_hash(number, location)
     feature_hash_array = Array.new
     puts "finding feature names"
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each {|x| feature_files[x] = File.open(location+"/#{number}/features/"+x) }
@@ -37,18 +39,8 @@ class DataParser
       Simulation.where(number: number).first.failure!
     end
   end
-
-  def self.store_in_profile(profile, payoffs, features)
-    payoffs.each do |payoff|
-      profile.profile_entries.each do |entry|
-        entry.samples.create!(:payoff => payoff[entry.name.split(": ")[0]])
-      end
-    end
-    features.each do |observation|
-      observation.each_pair do |name, value|
-        feature = profile.features.find_or_create_by(:name => name)
-        feature.samples.create!(:value => value)
-      end
-    end
+  
+  def self.create_feature_hash(number, location)
+    feature_hash
   end
 end

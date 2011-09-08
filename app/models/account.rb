@@ -6,6 +6,7 @@ class Account
 
   has_many :simulations, :inverse_of => :account
   field :username
+  index :username, unique: true
   validates_presence_of :username
   validate :login
   field :active, :type => Boolean, :default => false
