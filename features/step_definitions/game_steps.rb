@@ -19,3 +19,13 @@ Then /^the last game should have (\d+) profiles$/ do |arg1|
   Game.last.profile_ids.size.should == arg1.to_i
 end
 
+
+Given /^the last game has the strategy "([^"]*)"$/ do |arg1|
+  game = Game.last
+  game.strategy_array << arg1
+  game.save!
+end
+
+When /^I delete the strategy "([^"]*)" from that game$/ do |arg1|
+  @game.delete_strategy_by_name(arg1)
+end
