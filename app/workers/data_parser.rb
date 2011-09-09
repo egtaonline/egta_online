@@ -41,6 +41,9 @@ class DataParser
   end
   
   def self.create_feature_hash(number, location)
-    feature_hash
+    feature_hash = {}
+    (Dir.entries(location+"/#{number}/features")-[".", ".."]).each do |x|
+      
+    end
   end
 end
