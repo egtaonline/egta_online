@@ -25,13 +25,14 @@ class SymmetricProfileAssociater
                                                 parameter_hash: scheduler.parameter_hash,
                                                 size: scheduler.size,
                                                 proto_string: proto_string)
+        profile.try_scheduling
         # This is the standard pattern in Mongoid for adding referenced documents to the referencer
         # First the Ruby object is added to the reference array of the parent
         # Then the Ruby object is persisted to a database document, at which point the document of the parent is also updated to reference the child
         profile_ids << profile.id
       end
       scheduler.update_attribute(:profile_ids, profile_ids)
-      puts Scheduler.last.inspect
+      
     end
   end
 end
