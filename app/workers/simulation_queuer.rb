@@ -12,6 +12,9 @@ class SimulationQueuer
         puts "folder made"
         create_yaml(s)
         puts "yaml made"
+        if (Simulation.active.flux.count+1) <= FLUX_LIMIT
+          s.update_attribute(:flux, true)
+        end
         NyxWrapper.create_wrapper(s)
         puts "wrapper made"
       rescue
@@ -51,8 +54,7 @@ class SimulationQueuer
               root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
               puts "creating submission"
               submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper")
-              if (Simulation.active.flux.count+1) <= FLUX_LIMIT
-                s.update_attribute(:flux, true)
+              if s.flux == true
                 submission.qos = "wellman_flux"
               end
               puts "scheduling simulation"
