@@ -13,14 +13,8 @@ module StrategyManipulation
       self.strategy_array.delete(strategy_name)
       self.save!
       profile_ids_to_delete =[]
-      self.profiles.each do |profile|
+      Profile.find(self.profile_ids).each do |profile|
         if profile.contains_strategy?(strategy_name)
-          if self.instance_of? Scheduler
-            profile.schedulers.delete(self)
-          elsif self.instance_of? Game
-            profile.games.delete(self)
-          end
-          profile.save!
           profile_ids_to_delete << profile.id
         end
       end
