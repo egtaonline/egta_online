@@ -17,4 +17,4 @@ clean_simulations:
   class: SimulationCleaner
   queue: nyx_actions
   args:
-  description: "This job removes stale simulations from the database."
+  description: "This job removes stale simulations from the database and ensures simulations get requeued if they had a dirty exit earlier."
