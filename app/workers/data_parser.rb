@@ -5,8 +5,6 @@ class DataParser
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account.username}")
     feature_hash = create_feature_hash(number, location)
-    feature_hash_array = Array.new
-    puts "finding feature names"
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each {|x| feature_files[x] = File.open(location+"/#{number}/features/"+x) }
     keys = feature_files.keys
     unless keys.size == 0
@@ -43,7 +41,9 @@ class DataParser
   def self.create_feature_hash(number, location)
     feature_hash = {}
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each do |x|
-      
+      File.open(location+"/#{number}/features") do |f|
+        
+      end
     end
   end
 end
