@@ -37,7 +37,7 @@ Scenario: 1 scheduler with 1 profile, deleting a strategy
 	Then there should be 1 symmetric profiles
 	And the last scheduler should have 0 profiles
 	
-Scenario: 1 scheduler with 1 profile, deleting a strategy
+Scenario: 1 game with 1 profile, deleting a strategy
 	Given 1 simulator
 	And that simulator has the following game:
 	  | name | name |
