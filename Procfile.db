@@ -1,0 +1,2 @@
+mongo: rm /data/db/mongod.lock; mongod run --repair; mongod
+redis: redis-server
