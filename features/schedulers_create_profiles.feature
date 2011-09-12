@@ -11,7 +11,7 @@ Scenario: Profile already exists with the same configuration
   And that simulator has the following symmetric profile:
     | proto_string   | A, A   |
     | parameter_hash | {a: 2} |
-  And the profile_entry of that symmetric profile has a sample
+  And that symmetric profile has 1 sample record
   And that simulator has the following symmetric game scheduler:
     | parameter_hash | {a: 2} |
   And I am on the last symmetric game scheduler's page

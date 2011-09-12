@@ -1,7 +1,3 @@
-Given /^the profile_entry of that symmetric profile has a sample$/ do
-  @symmetric_profile.profile_entries.first.samples.create!(:payoff => 1)
-end
-
 Then /^there should be (\d+) symmetric profiles$/ do |arg1|
   SymmetricProfile.count.should == arg1.to_i
 end
@@ -11,6 +7,10 @@ Given /^that analysis item belongs to that symmetric profile$/ do
   @analysis_item.save!
 end
 
-Then /^that symmetric profile should have 1 sample$/ do
-  SymmetricProfile.last.sample_count.should == 1
+Given /^that symmetric profile has (\d+) sample record$/ do |arg1|
+  payoffs = {}
+  @symmetric_profile.proto_string.split(", ").uniq.each do |s|
+    payoffs[s] = 1
+  end
+  @symmetric_profile.sample_records.create!(feature_hash: {}, payoffs: payoffs)
 end

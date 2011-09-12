@@ -29,8 +29,7 @@ Scenario: Creating a game finds existing profiles
   And that simulator has the following symmetric profile:
     | proto_string   | A, A   |
     | parameter_hash | {a: "2"} |
-  And the profile_entry of that symmetric profile has a sample
-  Then that symmetric profile should have 1 sample
+  And that symmetric profile has 1 sample record
   Given that simulator has the following symmetric profiles:
     | proto_string | parameter_hash |
     | A, B         | {a: "2"}       |
