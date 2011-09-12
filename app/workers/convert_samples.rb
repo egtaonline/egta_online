@@ -1,11 +1,11 @@
 class ConvertSamples
   @queue = :profile_actions
-  
+
   def self.perform(profile_id)
     profile = Profile.find(profile_id) rescue nil
     if profile != nil
       puts "converting"
-      profile.sample_count.times do |i|
+      profile.profile_entries.first.samples.count.times do |i|
         payoff_hash = {}
         profile.profile_entries.each {|pe| payoff_hash[pe.name.split(":")[0]] = pe.samples[i].payoff}
         feature_hash = {}
