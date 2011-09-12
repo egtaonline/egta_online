@@ -1,4 +1,5 @@
 class DataParser
+  include Resque::Plugins::UniqueJob
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account.username}")
