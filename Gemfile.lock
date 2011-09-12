@@ -193,6 +193,8 @@ GEM
       redis-namespace (~> 1.0.2)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
+    resque-loner (1.0.1)
+      resque (~> 1.0)
     resque-scheduler (1.9.9)
       redis (>= 2.0.1)
       resque (>= 1.8.0)
@@ -293,6 +295,7 @@ DEPENDENCIES
   passenger
   rails
   resque
+  resque-loner
   resque-scheduler
   resque_spec
   rspec-rails

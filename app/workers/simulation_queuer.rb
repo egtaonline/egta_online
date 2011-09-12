@@ -1,4 +1,5 @@
 class SimulationQueuer
+  include Resque::Plugins::UniqueJob
   @queue = :nyx_actions
 
   def self.perform

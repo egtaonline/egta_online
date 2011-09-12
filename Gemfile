@@ -33,6 +33,7 @@ gem "capistrano"
 gem "simple_form"
 gem "encrypted_strings"
 gem "passenger"
+gem "resque-loner"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
 group :development, :test do
