@@ -3,7 +3,7 @@ class DataParser
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account.username}")
-    puts "loading feature values" 
+    puts "loading feature values"
     feature_hash = create_feature_hash(number, location)
     payoff_data = Array.new
     puts "opening payoff_data"
@@ -15,7 +15,7 @@ class DataParser
         feature_hash.keys.each do |key|
           feature_hash_record[key] = feature_hash[key][i]
         end
-        Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], feature_hash: feature_hash_record)
+        Simulation.where(:number => number).first.profile.sample_records.find_or_create_by(payoffs: payoff_data[i], feature_hash: feature_hash_record)
       end
       Simulation.where(number: number).first.finish!
     rescue
@@ -24,7 +24,7 @@ class DataParser
       Simulation.where(number: number).first.failure!
     end
   end
-  
+
   def self.create_feature_hash(number, location)
     feature_hash = {}
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each do |x|

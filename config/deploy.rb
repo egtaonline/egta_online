@@ -24,17 +24,17 @@ namespace :deploy do
     restart
     cleanup
   end
-  
+
   desc "Setup a GitHub-style deployment."
   task :setup, :except => { :no_release => true } do
     run "git clone #{repository} #{current_path}"
   end
- 
+
   desc "Update the deployed code."
   task :update_code, :except => { :no_release => true } do
     run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle"
   end
-  
+
   namespace :rollback do
     desc "Rollback"
     task :default do
@@ -47,14 +47,13 @@ namespace :deploy do
       default
     end
   end
-  
+
   desc "Make all the symlinks"
   task :symlink, :roles => :app, :except => { :no_release => true } do
     set :normal_symlinks, %w(
-      public/system
       simulator_uploads
     )
-    
+
     commands = normal_symlinks.map do |path|
       "rm -rf #{current_path}/#{path} && \
        ln -s #{shared_path}/#{path} #{current_path}/#{path}"
@@ -63,9 +62,8 @@ namespace :deploy do
     # set :weird_symlinks, {
     #   "path_on_disk" => "path_to_symlink"
     # }
-    # commands += weird_symlinks.map do |from, to|
-    #   "rm -rf #{current_path}/#{to} && \
-    #    ln -s #{shared_path}/#{from} #{current_path}/#{to}"
+    commands += ["rm -rf #{current_path}/public/system && \
+     ln -s #{shared_path}/system #{current_path}/public/system"]
     # end
 
     # needed for some of the symlinks
@@ -78,7 +76,7 @@ namespace :deploy do
       #{commands.join(" && ")}
     CMD
   end
-  
+
   desc "Kick Passenger"
   task :start do
     run "touch #{current_path}/tmp/restart.txt"
@@ -138,7 +136,7 @@ namespace :foreman do
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
     run "cd /home/deployment/current && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
-  end 
+  end
 end
 
 before 'deploy:symlink', 'deploy:precompile_assets'

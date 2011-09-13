@@ -26,7 +26,7 @@ class Profile
     sample_record.payoffs.each do |key, value|
       if payoff_avgs[key] == nil
         payoff_avgs[key] = value
-        payoff_stds[key] = [1, value, value**2, nil] 
+        payoff_stds[key] = [1, value, value**2, nil]
       else
         payoff_avgs[key] = (payoff_avgs[key]*(sample_records.count-1)+value)/sample_records.count
         s0 = payoff_stds[key][0]+1
@@ -35,10 +35,10 @@ class Profile
         payoff_stds[key] = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
       end
     end
-    sample_record.feature_hash.each do |key, value|
+    sample_record.features.each do |key, value|
       if feature_avgs[key] == nil
         feature_avgs[key] = value
-        feature_stds[key] = [1, value, value**2, nil] 
+        feature_stds[key] = [1, value, value**2, nil]
       else
         feature_avgs[key] = (feature_avgs[key]*(sample_records.count-1)+value)/sample_records.count
         s0 = feature_stds[key][0]+1
@@ -53,7 +53,7 @@ class Profile
   def self.extract_strategies(profiles)
     profiles.reduce([]){|set, profile| set.concat profile.strategy_array.uniq }.uniq
   end
-  
+
   def keys
     proto_string.split(", ").uniq
   end
@@ -81,7 +81,7 @@ class Profile
   def find_games
     Resque.enqueue(GameAssociater, id)
   end
-  
+
   def try_scheduling
     Resque.enqueue(ProfileScheduler, id)
   end
