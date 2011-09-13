@@ -1,4 +1,4 @@
-Fabricator(:symmetric_game_scheduler) do
+Fabricator(:game_scheduler) do
   name { Fabricate.sequence(:name) { |i| "testing#{i}" } }
   size 2
   process_memory 1000

@@ -59,6 +59,8 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
+    capybara-webkit (0.6.1)
+      capybara (~> 1.0.0)
     carrierwave (0.5.7)
       activesupport (~> 3.0)
     carrierwave-mongoid (0.1.2)
@@ -94,6 +96,7 @@ GEM
     execjs (1.2.4)
       multi_json (~> 1.0)
     fabrication (1.1.0)
+    facets (2.9.2)
     fastthread (1.0.7)
     ffi (1.0.9)
     foreman (0.20.0)
@@ -266,6 +269,7 @@ DEPENDENCIES
   bson_ext
   capistrano
   capybara
+  capybara-webkit
   carrierwave-mongoid
   coffee-script
   compass!
@@ -276,6 +280,7 @@ DEPENDENCIES
   encrypted_strings
   execjs
   fabrication
+  facets
   foreman
   growl
   haml

@@ -10,8 +10,8 @@ Then /^the last game should have a profile with 1 sample$/ do
   Game.last.profiles.each {|p| puts p.sampled }
 end
 
-Given /^that game has that symmetric profile$/ do
-  @game.profile_ids << @symmetric_profile.id
+Given /^that game has that profile$/ do
+  @game.profile_ids << @profile.id
   @game.save!
 end
 
@@ -22,10 +22,14 @@ end
 
 Given /^the last game has the strategy "([^"]*)"$/ do |arg1|
   game = Game.last
-  game.strategy_array << arg1
+  game.add_strategy_by_name("All", arg1)
   game.save!
 end
 
 When /^I delete the strategy "([^"]*)" from that game$/ do |arg1|
-  @game.delete_strategy_by_name(arg1)
+  Game.last.delete_strategy_by_name("All", arg1)
+end
+
+Then /^that game should have role_strategy_hash, "([^"]*)"$/ do |arg1|
+  Game.last.role_strategy_hash.should == eval(arg1)
 end

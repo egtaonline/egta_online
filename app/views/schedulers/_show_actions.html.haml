@@ -1,14 +1,9 @@
 = link_to "Edit #{klass_name}", "/#{plural_name}/#{entry.id}/edit"
-
-%h3 Strategies
-%table
-  %tr
-    %th Name
-  =render :partial => "strategy", :collection => entry.strategy_array
-  =form_tag url_for(:action=>:add_strategy, :id => entry.id), :method=>:post do
-    %tr
-      %td= select_tag :strategy, options_for_select(entry.simulator.strategy_array-entry.strategy_array)
-      %td= submit_tag "Add"
+=render :partial => "role", :collection => entry.role_strategy_hash.keys, locals: {entry: entry}
+.action
+  =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
+    = select_tag "role", options_for_select(entry.simulator.role_strategy_hash.keys-entry.role_strategy_hash.keys)
+    = submit_tag "Add Role"
 
 %h3 Profiles
 %table

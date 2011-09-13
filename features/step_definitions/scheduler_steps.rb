@@ -54,20 +54,20 @@ Given /^that symmetric profile belongs to the last scheduler$/ do
    @symmetric_profile.save!
 end
 
-Given /^the last scheduler has that symmetric profile$/ do
+Given /^the last scheduler has that profile$/ do
   scheduler = Scheduler.last
-  scheduler.profile_ids << @symmetric_profile.id
+  scheduler.profile_ids << @profile.id
   scheduler.save!
 end
 
 Given /^the last scheduler has the strategy "([^"]*)"$/ do |arg1|
   scheduler = Scheduler.last
-  scheduler.strategy_array << arg1
+  scheduler.add_strategy_by_name("All", arg1)
   scheduler.save!
 end
 
 When /^I delete the strategy "([^"]*)"$/ do |arg1|
-  Scheduler.last.delete_strategy_by_name(arg1)
+  Scheduler.last.delete_strategy_by_name("All", arg1)
 end
 
 Then /^the last scheduler should have (\d+) profiles$/ do |arg1|

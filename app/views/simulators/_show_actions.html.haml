@@ -1,9 +1,6 @@
-%h3 Strategies
-%table
-  %tr
-    %th Name
-  =render :partial => "strategy", :collection => entry.strategy_array
-  =form_tag url_for(:action=> "add_strategy", :id => entry.id), :method=>:post do
-    %tr
-      %td= text_field_tag :strategy
-      %td= submit_tag "Add"
+%h3 Roles/Strategies
+=render :partial => "role", :collection => entry.role_strategy_hash.keys, locals: {entry: entry}
+.action
+  =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
+    = text_field_tag :role
+    = submit_tag "Add Role"

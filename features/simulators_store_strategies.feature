@@ -9,10 +9,19 @@ Background:
 Scenario: Simulator has no strategies
   Given 1 simulator
   And I am on the last simulator's page
-  When I fill in "strategy" with "ABC"
-  And I press "Add"
+  When I fill in "role" with "Player1"
+  And I press "Add Role"
   Then I am on the last simulator's page
-  And I should see "ABC"
+  And I should see "Player1"
+	When I fill in "Player1_strategy" with "A"
+	And I press "Add Strategy"
+	Then I am on the last simulator's page
+  And I should see "Player1"
+	And I should see "A"
+	And that simulator should have role_strategy_hash, "{'Player1'=> ['A']}"
+	When I fill in "Player1_strategy" with "B"
+	And I press "Add Strategy"
+	Then that simulator should have role_strategy_hash, "{'Player1'=> ['A', 'B']}"
 
 
 

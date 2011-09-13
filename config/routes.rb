@@ -6,9 +6,9 @@ EgtaOnline::Application.routes.draw do
   resources :profiles, :only => :show
   match "/simulations/destroy" => "simulations#destroy"
   resources :simulations, :except => [:edit, :update]
-  resources :schedulers, :symmetric_game_schedulers, :games do
+  resources :schedulers, :game_schedulers, :games do
     member do
-      post :add_strategy, :remove_strategy
+      post :add_strategy, :remove_strategy, :add_role, :remove_role
     end
     collection do
       post :update_parameters
@@ -16,7 +16,7 @@ EgtaOnline::Application.routes.draw do
   end
   resources :simulators, :except => [:edit, :update] do
     member do
-      post :add_strategy, :remove_strategy
+      post :add_strategy, :remove_strategy, :add_role, :remove_role
     end
   end
   match "/application/prep_work" => "application#prep_work"

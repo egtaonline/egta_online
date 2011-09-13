@@ -3,23 +3,31 @@ Feature: New profiles look for games
   As a db admin
   I want profiles to be assigned to relevant games on creation
 
+@wip
 Scenario: 1 game exists, no prior profiles
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: 2} |
   And that simulator has the strategy array "['A', 'B']"
-  And that simulator has the following symmetric game scheduler:
+  And that simulator has the following game scheduler:
     | parameter_hash | {a: 2} |
   And the following game:
     | size           | 2      |
     | parameter_hash | {a: 2} |
   And I am on the last game's page
-  And I select "A" from "strategy"
-  And I press "Add"
-  When I am on the last symmetric game scheduler's page
-  When I select "A" from "strategy"
-  And I press "Add"
-  Then there should be 1 symmetric profiles
+	When I select "All" from "role"
+  And I press "Add Role"
+  Then I am on the last game's page
+  And I should see "All"
+	And show me the page
+	When I select "A" from "All_strategy"
+	And I press "Add Strategy"
+  When I am on the last game scheduler's page
+	When I select "All" from "role"
+  And I press "Add Role"
+  When I select "A" from "All_strategy"
+  And I press "Add Strategy"
+  Then there should be 1 profiles
   And the last game should have 1 profiles
 
 Scenario: 2 games exist, no prior profiles, no matches

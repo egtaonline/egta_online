@@ -1,2 +1,0 @@
-class SymmetricGameSchedulersController < SchedulersController
-end

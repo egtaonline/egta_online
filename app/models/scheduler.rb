@@ -34,7 +34,7 @@ class Scheduler
     end
     yield
     if pflag
-      ensure_profiles
+      Resque.enqueue(ProfileAssociater, self.id)
     elsif aflag and self.profile_ids != nil
       profile_ids.each{|p| Resque.enqueue(ProfileScheduler, p)}
     end

@@ -1,20 +1,35 @@
 class Simulator
   include Mongoid::Document
-  include StrategyManipulation
 
   mount_uploader :simulator_source, SimulatorUploader
   field :name
   field :description
   field :version
-  field :setup, :type => Boolean, :default => false
-  field :strategy_array, :type => Array, :default => []
-  field :parameter_hash, :type => Hash, :default => {}
+  field :setup, type: Boolean, default: false
+  field :role_strategy_hash, type: Hash, default: {}
+  field :parameter_hash, type: Hash, default: {}
   validates_presence_of :name, :version
-  validates_uniqueness_of :version, :scope => :name
-  has_many :profiles, :dependent => :destroy
-  has_many :schedulers, :dependent => :destroy
-  has_many :games, :dependent => :destroy
+  validates_uniqueness_of :version, scope: :name
+  has_many :profiles, dependent: :destroy
+  has_many :schedulers, dependent: :destroy
+  has_many :games, dependent: :destroy
   after_create :setup_simulator
+
+  def add_strategy_by_name(role, strategy)
+    role_strategy_hash[role] = [] if role_strategy_hash[role] == nil
+    role_strategy_hash[role] << strategy
+    hash = role_strategy_hash
+    self.update_attribute(:role_strategy_hash, nil)
+    self.update_attribute(:role_strategy_hash, hash)
+  end
+  
+  def remove_strategy_by_name(role, strategy)
+    role_strategy_hash[role].delete(strategy)
+    hash = role_strategy_hash
+    profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
+    self.update_attribute(:role_strategy_hash, nil)
+    self.update_attribute(:role_strategy_hash, hash)
+  end
 
   def location
     File.join(Rails.root,"simulator_uploads", fullname)

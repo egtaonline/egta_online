@@ -26,14 +26,14 @@ Scenario: Creating a game finds existing profiles
     | name           | test     |
     | version        | test     |
   And that simulator has the strategy array "['A', 'B']"
-  And that simulator has the following symmetric profile:
-    | proto_string   | A, A   |
-    | parameter_hash | {a: "2"} |
-  And that symmetric profile has 1 sample record
-  Given that simulator has the following symmetric profiles:
+  And that simulator has the following profile:
+    | proto_string   | All: A, A |
+    | parameter_hash | {a: "2"}  |
+  And that profile has 1 sample record
+  Given that simulator has the following profiles:
     | proto_string | parameter_hash |
-    | A, B         | {a: "2"}       |
-    | B, B         | {a: "2"}       |
+    | All: A, B    | {a: "2"}       |
+    | All: B, B    | {a: "2"}       |
   When I am on the new game page
   And I fill in the following:
     | Name      | test |
@@ -41,11 +41,22 @@ Scenario: Creating a game finds existing profiles
   And I press "Create Game"
   Then I should be on the last game's page
   And the last game should have 3 profiles
-  When I select "A" from "strategy"
-  And I press "Add"
+	When I select "All" from "role"
+  And I press "Add Role"
+  Then I am on the last game's page
+  And I should see "All"
 	And show me the page
-  And I select "B" from "strategy"
-  And I press "Add"
+	When I select "A" from "All_strategy"
+	And I press "Add Strategy"
+	Then I am on the last game's page
+  And I should see "All"
+	And I should see "A"
+	And that game should have role_strategy_hash, "{'All'=> ['A']}"
+	When I select "B" from "All_strategy"
+	And I press "Add Strategy"
+	Then I should be on the last game's page
+	And the last game should have 3 profiles
+	Then that game should have role_strategy_hash, "{'All'=> ['A', 'B']}"
   When I am on the games page
   And show me the page
   Then I should see the following table rows:

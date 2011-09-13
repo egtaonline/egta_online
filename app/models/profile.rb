@@ -3,37 +3,36 @@
 class Profile
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
-  has_many :analysis_items, :as => :analyzable
-
-  has_many :simulations, :dependent => :destroy
-  has_many :features
+  has_many :simulations, dependent: :destroy
   has_many :sample_records
-  belongs_to :simulator, :index => true
-  index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true, background: true
-  embeds_many :profile_entries
-  field :size, type: Integer
+  belongs_to :simulator, index: true
+  index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   field :proto_string
-  field :parameter_hash, :type => Hash, :default => {}
-  field :payoff_avgs, :type => Hash, :default => {}
-  field :payoff_stds, :type => Hash, :default => {}
-  field :feature_avgs, :type => Hash, :default => {}
-  field :feature_stds, :type => Hash, :default => {}
+  field :parameter_hash, type: Hash, default: {}
+  field :payoff_avgs, type: Hash, default: {}
+  field :payoff_stds, type: Hash, default: {}
+  field :feature_avgs, type: Hash, default: {}
+  field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
   after_create :setup
-  validates_presence_of :simulator, :proto_string
-  validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
+  validates_presence_of :simulator, :proto_string, :parameter_hash
+  validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 
   def update_avgs_and_stds(sample_record)
     sample_record.payoffs.each do |key, value|
-      if payoff_avgs[key] == nil
-        payoff_avgs[key] = value
-        payoff_stds[key] = [1, value, value**2, nil]
-      else
-        payoff_avgs[key] = (payoff_avgs[key]*(sample_records.count-1)+value)/sample_records.count
-        s0 = payoff_stds[key][0]+1
-        s1 = payoff_stds[key][1]+value
-        s2 = payoff_stds[key][2]+value**2
-        payoff_stds[key] = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
+      payoff_avgs[key] = {} if payoff_avgs[key] == nil
+      payoff_stds[key] = {} if payoff_stds[key] == nil
+      value.each do |subkey, subvalue|
+        if payoff_avgs[key][subkey] == nil
+          payoff_avgs[key][subkey] = subvalue
+          payoff_stds[key][subkey] = [1, subvalue, subvalue**2, nil]
+        else
+          payoff_avgs[key][subkey] = (payoff_avgs[key][subkey]*(sample_records.count-1)+subvalue)/sample_records.count
+          s0 = payoff_stds[key][subkey][0]+1
+          s1 = payoff_stds[key][subkey][1]+subvalue
+          s2 = payoff_stds[key][subkey][2]+subvalue**2
+          payoff_stds[key][subkey] = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
+        end
       end
     end
     sample_record.features.each do |key, value|
@@ -50,31 +49,39 @@ class Profile
     end
     self.save!
   end
-
-  def self.extract_strategies(profiles)
-    profiles.reduce([]){|set, profile| set.concat profile.strategy_array.uniq }.uniq
+  # 
+  # def self.extract_strategies(profiles)
+  #   profiles.reduce([]){|set, profile| set.concat profile.strategy_array.uniq }.uniq
+  # end
+  # 
+  # def keys
+  #   proto_string.split(", ").uniq
+  # end
+  # 
+  # def name
+  #   proto_string
+  # end
+  # 
+  # def scheduled_count
+  #   simulations.active.reduce(0){|sum, sim| sum + sim.size}.to_i + simulations.pending.reduce(0){|sum, sim| sum + sim.size}.to_i + sample_count
+  # end
+  # 
+  # def sampled
+  #   self.sample_count > 0
+  # end
+  # 
+  # def sample_count
+  #   sample_records.count
+  # end
+  #
+  def contains_strategy?(role, strategy)
+    retval = false
+    proto_string.split("; ").each do |atom|
+      retval = true if atom.split(": ")[0] == role && atom.split(": ")[1].delete("[]").split(", ").include?(strategy)
+    end
+    return retval
   end
-
-  def keys
-    proto_string.split(", ").uniq
-  end
-
-  def name
-    proto_string
-  end
-
-  def scheduled_count
-    simulations.active.reduce(0){|sum, sim| sum + sim.size}.to_i + simulations.pending.reduce(0){|sum, sim| sum + sim.size}.to_i + sample_count
-  end
-
-  def sampled
-    self.sample_count > 0
-  end
-
-  def sample_count
-    sample_records.count
-  end
-
+  
   def setup
     find_games
   end
@@ -82,8 +89,8 @@ class Profile
   def find_games
     Resque.enqueue(GameAssociater, id)
   end
-
-  def try_scheduling
-    Resque.enqueue(ProfileScheduler, id)
-  end
+  # 
+  # def try_scheduling
+  #   Resque.enqueue(ProfileScheduler, id)
+  # end
 end

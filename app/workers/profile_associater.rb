@@ -2,7 +2,7 @@
 # If a matching SymmetricProfile does not already exist, a new one is created
 # Scheduler is untyped for a flexibility, since more than one type of scheduler may want to schedule SymmetricProfiles, e.g. a SymmetricDeviationScheduler
 
-class SymmetricProfileAssociater
+class ProfileAssociater
   # All asynchronous jobs must specify a queue to be pushed on
   # All actions that involve profile creation and assignment should use this queue to ensure consistency
   @queue = :profile_actions
@@ -17,11 +17,10 @@ class SymmetricProfileAssociater
     # Make sure that the scheduler still exists
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
-      profile_ids = []
-      scheduler.strategy_array.repeated_combination(scheduler.size).each do |prototype|
-        proto_string = prototype.sort.join(", ")
+      proto_strings = scheduler.ensure_profiles
+      proto_strings.each do |proto_string|
         puts "adding #{proto_string} to #{scheduler.name}"
-        profile = SymmetricProfile.find_or_create_by(simulator_id: scheduler.simulator_id,
+        profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,
                                                 size: scheduler.size,
                                                 proto_string: proto_string)
@@ -32,7 +31,6 @@ class SymmetricProfileAssociater
         profile_ids << profile.id
       end
       scheduler.update_attribute(:profile_ids, profile_ids)
-      
     end
   end
 end

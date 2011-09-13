@@ -1,4 +1,3 @@
-require "strategy_manipulation"
 require "sequence"
 require "nyx_wrapper"
 require "submission"
