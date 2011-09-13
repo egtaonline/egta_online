@@ -18,6 +18,7 @@ class Profile
   field :payoff_stds, :type => Hash, :default => {}
   field :feature_avgs, :type => Hash, :default => {}
   field :feature_stds, :type => Hash, :default => {}
+  field :feature_expected_values, type: Hash, default: {}
   after_create :setup
   validates_presence_of :simulator, :proto_string
   validates_uniqueness_of :proto_string, :scope => [:simulator_id, :parameter_hash]
