@@ -15,7 +15,7 @@ class DataParser
         feature_hash.keys.each do |key|
           feature_hash_record[key] = feature_hash[key][i]
         end
-        Simulation.where(:number => number).first.profile.sample_records.find_or_create_by(payoffs: payoff_data[i], feature_hash: feature_hash_record)
+        Simulation.where(:number => number).first.profile.sample_records.find_or_create_by(payoffs: payoff_data[i], features: feature_hash_record)
       end
       Simulation.where(number: number).first.finish!
     rescue
