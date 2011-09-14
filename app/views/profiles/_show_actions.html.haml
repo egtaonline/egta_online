@@ -4,7 +4,7 @@
     %th Name
     %th Payoff
     %th Standard Dev.
-  =render partial: "payoffs"
+  =render partial: "payoffs", locals: {entry: entry}
 
 %h3 Features
 %table
@@ -13,4 +13,4 @@
     %th Expected Value
     %th Average
     %th Standard Dev.
-  =render :partial => "features"
+  =render :partial => "features", locals: {entry: entry}
