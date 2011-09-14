@@ -19,35 +19,37 @@ class SimulationChecker
       end
       puts "Updating status"
       Account.all.each do |account|
-        system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
-        simulations.where(account_id: account.id).each do |s|
-          begin
-            simulator = s.scheduler.simulator
-            if job_id.include?(s.job_id)
-              state = state_info[job_id.index(s.job_id)][9]
-              if state == "C"
-                puts "checking existance"
+        if simulations.where(account_id: account.id).count != 0
+          system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
+          simulations.where(account_id: account.id).each do |s|
+            begin
+              simulator = s.scheduler.simulator
+              if job_id.include?(s.job_id)
+                state = state_info[job_id.index(s.job_id)][9]
+                if state == "C"
+                  puts "checking existance"
+                  if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
+                    puts "checking for errors"
+                    check_for_errors(s)
+                  end
+                elsif state == "R" && s.state != "running"
+                  s.start!
+                end
+              else
+                puts "I am checking existance"
                 if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
                   puts "checking for errors"
                   check_for_errors(s)
+                else
+                  puts "did not exist"
+                  s.error_message = "Did not exist on nyx"
+                  s.failure!
                 end
-              elsif state == "R" && s.state != "running"
-                s.start!
               end
-            else
-              puts "I am checking existance"
-              if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
-                puts "checking for errors"
-                check_for_errors(s)
-              else
-                puts "did not exist"
-                s.error_message = "Did not exist on nyx"
-                s.failure!
-              end
+            rescue
+              s.error_message = "Unknown failure checking status"
+              s.failure!
             end
-          rescue
-            s.error_message = "Unknown failure checking status"
-            s.failure!
           end
         end
       end
