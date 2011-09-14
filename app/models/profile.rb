@@ -6,7 +6,6 @@ class Profile
   has_many :analysis_items, :as => :analyzable
 
   has_many :simulations, :dependent => :destroy
-  has_many :features
   has_many :sample_records
   belongs_to :simulator, :index => true
   index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true, background: true
