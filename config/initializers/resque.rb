@@ -14,11 +14,10 @@ unless defined?(RESQUE_LOGGER)
 end
 
 require 'resque/failure/multiple'
-require 'resque/failure/hoptoad'
+require 'resque/failure/airbrake'
 require 'resque/failure/redis'
-Resque::Failure::Hoptoad.configure do |config|
+Resque::Failure::Airbrake.configure do |config|
   config.api_key = '860cc72b7fb01397170a67a7997a7322'
-  config.secure = true
 end
-Resque::Failure::Multiple.classes = [Resque::Failure::Redis, Resque::Failure::Hoptoad]
+Resque::Failure::Multiple.classes = [Resque::Failure::Redis, Resque::Failure::Airbrake]
 Resque::Failure.backend = Resque::Failure::Multiple

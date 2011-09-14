@@ -15,7 +15,7 @@ gem 'resque-scheduler'
 gem 'therubyracer'
 gem "haml"
 gem "haml-rails"
-gem "hoptoad_notifier"
+gem "airbrake"
 gem "bson_ext"
 gem "mongoid"
 gem "mongo_ext"
