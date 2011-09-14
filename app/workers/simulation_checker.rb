@@ -20,7 +20,10 @@ class SimulationChecker
       puts "Updating status"
       Account.all.each do |account|
         if simulations.where(account_id: account.id).count != 0
-          system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu:/home/wellmangroup/many-agent-simulations/simulations/#{account.username} /home/deployment/current/db/")
+          location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username/}"
+          numbers = simulations.where(account_id: account.id).collect{|s| location+"#{s.number}"}
+          numbers.join(" ")
+          system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} /home/deployment/current/db/#{account.username}")
           simulations.where(account_id: account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
