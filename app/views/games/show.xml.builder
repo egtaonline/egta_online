@@ -17,7 +17,7 @@ xml.nfg(:name=>@entry.simulator.fullname, :description=>@entry.parameter_hash) d
         profile.strategy_array.uniq.each do |strategy|
           payoff.outcome(:action=>strategy,
                          :count=>profile.strategy_array.count(strategy),
-                         :value=>profile.payoff_to_strategy(strategy))
+                         :value=>profile.payoff_avgs[strategy])
         end
       end
     end
