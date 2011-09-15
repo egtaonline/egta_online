@@ -25,6 +25,8 @@ class GameScheduler < Scheduler
   
   def ensure_profiles
     proto_strings = []
-    
+    role_strategy_hash.each do |key, value|
+      
+    end
   end
 end
