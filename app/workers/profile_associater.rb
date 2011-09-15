@@ -18,6 +18,7 @@ class ProfileAssociater
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
       proto_strings = scheduler.ensure_profiles
+      profile_ids = []
       proto_strings.each do |proto_string|
         puts "adding #{proto_string} to #{scheduler.name}"
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,

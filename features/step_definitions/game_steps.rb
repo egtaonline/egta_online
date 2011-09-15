@@ -33,3 +33,7 @@ end
 Then /^that game should have role_strategy_hash, "([^"]*)"$/ do |arg1|
   Game.last.role_strategy_hash.should == eval(arg1)
 end
+
+Then /^the first game should have (\d+) profiles$/ do |arg1|
+  Game.first.profile_ids.size.should == arg1.to_i
+end

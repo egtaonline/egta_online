@@ -25,8 +25,22 @@ class GameScheduler < Scheduler
   
   def ensure_profiles
     proto_strings = []
+    first_ar = nil
+    all_other_ars = []
     role_strategy_hash.each do |key, value|
-      
+      if first_ar == nil
+        first_ar = value.repeated_combination(role_count_hash[key])
+      else
+        all_other_ars << value.repeated_combination(role_count_hash[key])
+      end
+    end
+    if role_strategy_hash.keys.size == 1
+      return first_ar.collect {|e| "All: "+e.join(", ")}
+    else
+      return first_ar.product(all_other_ars).collect do |prof|
+        count = -1
+        role_strategy_hash.keys.collect {|key| count+=1; key+": "+prof[count].join(", ")}.join("; ")
+      end
     end
   end
 end

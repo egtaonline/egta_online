@@ -1,9 +1,12 @@
 = link_to "Edit #{klass_name}", "/#{plural_name}/#{entry.id}/edit"
 =render :partial => "role", :collection => entry.role_strategy_hash.keys, locals: {entry: entry}
 .action
-  =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
-    = select_tag "role", options_for_select(entry.simulator.role_strategy_hash.keys-entry.role_strategy_hash.keys)
-    = submit_tag "Add Role"
+  -temp = entry.role_count_hash.values.reduce(:+)
+  -if temp == nil || entry.size-temp > 0
+    =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
+      = select_tag "role", options_for_select(entry.simulator.role_strategy_hash.keys-entry.role_strategy_hash.keys)
+      = text_field_tag "role_count", nil, size: 30, placeholder: "Number of players in role..."
+      = submit_tag "Add Role"
 
 %h3 Profiles
 %table

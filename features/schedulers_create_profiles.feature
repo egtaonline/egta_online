@@ -3,6 +3,7 @@ Feature: Schedulers create profiles
   As a db-admin
   I want schedulers to be responsible for creating profiles
 
+@wip
 Scenario: Profile already exists with the same configuration
   Given I am signed in
   Given the following simulator:

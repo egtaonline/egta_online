@@ -34,7 +34,7 @@ gem "simple_form"
 gem "encrypted_strings"
 gem "passenger"
 gem "resque-loner"
-gem "facets", :require => "facets/core/array"
+gem "facets", :require => "facets/array"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
 group :development, :test do

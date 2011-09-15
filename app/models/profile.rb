@@ -58,9 +58,9 @@ class Profile
   #   proto_string.split(", ").uniq
   # end
   # 
-  # def name
-  #   proto_string
-  # end
+  def name
+    proto_string
+  end
   # 
   # def scheduled_count
   #   simulations.active.reduce(0){|sum, sim| sum + sim.size}.to_i + simulations.pending.reduce(0){|sum, sim| sum + sim.size}.to_i + sample_count
@@ -69,11 +69,11 @@ class Profile
   # def sampled
   #   self.sample_count > 0
   # end
-  # 
-  # def sample_count
-  #   sample_records.count
-  # end
-  #
+  
+  def sample_count
+    sample_records.count
+  end
+  
   def contains_strategy?(role, strategy)
     retval = false
     proto_string.split("; ").each do |atom|
@@ -89,8 +89,8 @@ class Profile
   def find_games
     Resque.enqueue(GameAssociater, id)
   end
-  # 
-  # def try_scheduling
-  #   Resque.enqueue(ProfileScheduler, id)
-  # end
+  
+  def try_scheduling
+    Resque.enqueue(ProfileScheduler, id)
+  end
 end

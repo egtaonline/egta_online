@@ -5,6 +5,7 @@ class Game
   field :name
   field :size, type: Integer
   field :role_strategy_hash, type: Hash, default: {}
+  field :role_count_hash, type: Hash, default: {}
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true
