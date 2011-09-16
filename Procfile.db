@@ -1,2 +1,3 @@
 mongo: rm /data/db/mongod.lock; mongod run --repair; mongod
 redis: redis-server
+mongoose: python /home/deployment/sleepy.mongoose/httpd.py

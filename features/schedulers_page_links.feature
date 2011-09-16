@@ -7,8 +7,8 @@ Scenario: Visiting the schedulers index page shows links for creating new schedu
   Given I am signed in
   And I am on the schedulers page
   And 1 simulator
-  When I follow "New Symmetric Game Scheduler"
-  Then I am on the new symmetric game scheduler page
+  When I follow "New Game Scheduler"
+  Then I am on the new game scheduler page
   # When I am on the schedulers page
   # And I follow "New Asymmetric Game Scheduler"
   # Then I am on the new asymmetric game scheduler page
