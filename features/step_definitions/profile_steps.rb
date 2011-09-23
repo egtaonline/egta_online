@@ -1,4 +1,5 @@
 Then /^there should be (\d+) profiles$/ do |arg1|
+  Profile.all.each{|p| puts p.name}
   Profile.count.should == arg1.to_i
 end
 
@@ -8,6 +9,7 @@ Given /^that analysis item belongs to that symmetric profile$/ do
 end
 
 Given /^that profile has (\d+) sample record$/ do |arg1|
+  @profile = Profile.last
   payoffs = {}
   @profile.proto_string.split("; ").each do |r|
     rpayoffs = {}

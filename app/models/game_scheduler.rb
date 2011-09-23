@@ -24,6 +24,9 @@ class GameScheduler < Scheduler
   end
   
   def ensure_profiles
+    if role_strategy_hash.keys.size == 0
+      return []
+    end
     proto_strings = []
     first_ar = nil
     all_other_ars = []

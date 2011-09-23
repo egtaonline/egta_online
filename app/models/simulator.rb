@@ -23,7 +23,7 @@ class Simulator
     self.update_attribute(:role_strategy_hash, hash)
   end
   
-  def remove_strategy_by_name(role, strategy)
+  def delete_strategy_by_name(role, strategy)
     role_strategy_hash[role].delete(strategy)
     hash = role_strategy_hash
     profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}

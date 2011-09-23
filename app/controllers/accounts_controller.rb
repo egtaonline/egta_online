@@ -9,7 +9,7 @@ class AccountsController < EntitiesController
       redirect_to url_for(:action => "show", :id => @entry.id)
     else
       flash[:alert] = "#{klass_name} failed to save."
-      render :new
+      render "new"
     end
   end
 end

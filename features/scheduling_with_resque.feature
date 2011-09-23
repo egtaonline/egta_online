@@ -8,9 +8,10 @@ Background:
 	
 Scenario: 1 profile interacts with queue
   Given I am signed in
-  And 1 simulator
+  Given the following simulator:
+    | parameter_hash | {a: 2} |
   And that simulator has the strategy array "['A', 'B']"
-  When I am on the new symmetric game scheduler page
+  When I am on the new game scheduler page
   And I fill in the following:
     | Name                   | sch  |
     | Game size              | 2    |
@@ -19,12 +20,16 @@ Scenario: 1 profile interacts with queue
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
   And I check "Active"
-  And I press "Create Symmetric game scheduler"
-  And I select "A" from "strategy"
-  And I press "Add" without resque
+  And I press "Create Game scheduler"
+  Then I am on the last game scheduler's page
+  When I select "All" from "role"
+  And I fill in "role_count" with "2"
+  And I press "Add Role"
+  And I select "A" from "All_strategy"
+  And I press "Add Strategy" without resque
 	When I process all jobs for "profile_actions"
   Then I should have 1 simulation scheduled
-  When I am on the new symmetric game scheduler page
+  When I am on the new game scheduler page
   And I fill in the following:
     | Name                   | sch2  |
     | Game size              | 2    |
@@ -33,17 +38,22 @@ Scenario: 1 profile interacts with queue
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
   And I check "Active"
-  And I press "Create Symmetric game scheduler"
-  And I select "A" from "strategy"
-  And I press "Add" without resque
-	When I process the next job for "profile_actions"
+  And I press "Create Game scheduler"
+  Then I am on the last game scheduler's page
+  And I select "All" from "role"
+  And I fill in "role_count" with "2"
+  And I press "Add Role"
+  And I select "A" from "All_strategy"
+  And I press "Add Strategy" without resque
+	When I process all jobs for "profile_actions"
   Then I should have 1 simulation scheduled
 
 Scenario: a failed simulation gets rescheduled
   Given I am signed in
-  And 1 simulator
+  Given the following simulator:
+    | parameter_hash | {a: 2} |
   And that simulator has the strategy array "['A', 'B']"
-  When I am on the new symmetric game scheduler page
+  When I am on the new game scheduler page
   And I fill in the following:
     | Name                   | sch  |
     | Game size              | 2    |
@@ -52,9 +62,13 @@ Scenario: a failed simulation gets rescheduled
     | Process memory (in MB) | 1000 |
     | Time per sample        | 40   |
   And I check "Active"
-  And I press "Create Symmetric game scheduler"
-  And I select "A" from "strategy"
-  And I press "Add" without resque
+  And I press "Create Game scheduler"
+  Then I am on the last game scheduler's page
+  When I select "All" from "role"
+  And I fill in "role_count" with "2"
+  And I press "Add Role"
+  And I select "A" from "All_strategy"
+  And I press "Add Strategy" without resque
 	When I process all jobs for "profile_actions"
   Then I should have 1 simulation scheduled
   When I fail a simulation

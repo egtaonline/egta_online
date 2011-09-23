@@ -16,12 +16,10 @@ Scenario: 1 game exists, no prior profiles
     | parameter_hash | {a: 2} |
   And I am on the last game's page
 	When I select "All" from "role"
-	And show me the page
 	And I fill in "role_count" with "2"
   And I press "Add Role"
   Then I am on the last game's page
   And I should see "All"
-	And show me the page
 	When I select "A" from "All_strategy"
 	And I press "Add Strategy"
   When I am on the last game scheduler's page

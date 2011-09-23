@@ -19,7 +19,6 @@ Scenario: Selecting a simulator changes the search parameters
   Then the "C" field should contain "4"
   Then the "A" field should contain "3"
 
-@javascript
 Scenario: Creating a game finds existing profiles
   Given the following simulator:
     | parameter_hash | {a: "2"} |
@@ -42,10 +41,9 @@ Scenario: Creating a game finds existing profiles
   Then I should be on the last game's page
   And the last game should have 3 profiles
 	When I select "All" from "role"
+	And I fill in "role_count" with "2"
   And I press "Add Role"
-  Then I am on the last game's page
   And I should see "All"
-	And show me the page
 	When I select "A" from "All_strategy"
 	And I press "Add Strategy"
 	Then I am on the last game's page
@@ -58,7 +56,6 @@ Scenario: Creating a game finds existing profiles
 	And the last game should have 3 profiles
 	Then that game should have role_strategy_hash, "{'All'=> ['A', 'B']}"
   When I am on the games page
-  And show me the page
   Then I should see the following table rows:
     | Name | Simulator | Size |
     | test | test-test | 2    |

@@ -4,5 +4,5 @@ class SampleRecord
   field :payoffs, type: Hash
   field :features, type: Hash
   validates_uniqueness_of :payoffs
-  after_create {profile.update_avgs_and_stds(self)}
+  validates_presence_of :payoffs
 end

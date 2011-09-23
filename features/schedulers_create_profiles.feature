@@ -3,15 +3,17 @@ Feature: Schedulers create profiles
   As a db-admin
   I want schedulers to be responsible for creating profiles
 
+@wip
 Scenario: Profile already exists with the same configuration
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: 2} |
-  And that simulator has the strategy array "['A', 'B']"
+  And that simulator has the role strategy hash "{All: ['A', 'B']}"
   And that simulator has the following profile:
-    | proto_string   | All: A, A   |
-    | parameter_hash | {a: 2}      |
+    | proto_string   | All: A, A |
+    | parameter_hash | {a: 2}    |
   And that profile has 1 sample record
+  Then there should be 1 profiles
   And that simulator has the following game scheduler:
     | parameter_hash | {a: 2} |
     | size           | 2      |
@@ -23,5 +25,4 @@ Scenario: Profile already exists with the same configuration
   And I press "Add Strategy"
   When I select "B" from "All_strategy"
   And I press "Add Strategy"
-  And show me the page
   Then there should be 3 profiles
