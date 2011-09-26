@@ -3,8 +3,10 @@ Given /^that simulator has the strategy array "([^"]*)"$/ do |arg1|
   @simulator.save!
 end
 
-Then /^that simulator should have role_strategy_hash, "([^"]*)"$/ do |arg1|
-  Simulator.last.role_strategy_hash.should == eval(arg1)
+Then /^that simulator should have a role named "([^"]*)" with the strategy array "([^"]*)"$/ do |arg1, arg2|
+  r = Simulator.last.roles.where(name: arg1).first
+  r.should_not == nil
+  r.strategy_array.should == eval(arg2)
 end
 
 Given /^that simulator has the role strategy hash "([^"]*)"$/ do |arg1|

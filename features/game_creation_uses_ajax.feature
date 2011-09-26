@@ -24,7 +24,8 @@ Scenario: Creating a game finds existing profiles
     | parameter_hash | {a: "2"} |
     | name           | test     |
     | version        | test     |
-  And that simulator has the strategy array "['A', 'B']"
+  And that simulator has the following role:
+    | name           | All        |
   And that simulator has the following profile:
     | proto_string   | All: A, A |
     | parameter_hash | {a: "2"}  |
@@ -49,12 +50,12 @@ Scenario: Creating a game finds existing profiles
 	Then I am on the last game's page
   And I should see "All"
 	And I should see "A"
-	And that game should have role_strategy_hash, "{'All'=> ['A']}"
+	And that game should have a role named "All" with the strategy array "['A']"
 	When I select "B" from "All_strategy"
 	And I press "Add Strategy"
 	Then I should be on the last game's page
 	And the last game should have 3 profiles
-	Then that game should have role_strategy_hash, "{'All'=> ['A', 'B']}"
+	Then that game should have a role named "All" with the strategy array "['A', 'B']"
   When I am on the games page
   Then I should see the following table rows:
     | Name | Simulator | Size |

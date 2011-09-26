@@ -11,6 +11,7 @@ class Scheduler
   field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
   field :profile_ids, :type => Array, :default => []
+  embeds_many :roles
   belongs_to :simulator
 
   validates_uniqueness_of :name

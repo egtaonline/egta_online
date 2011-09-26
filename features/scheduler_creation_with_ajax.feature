@@ -36,7 +36,6 @@ Scenario: Editing parameters results in a scheduler with the appropriate paramet
     | Time per sample        | 40   |
     | C                      | 5    |
   And I press "Create Game scheduler"
-  And show me the page
   Then I should be on the last game scheduler's page
   And I should see the following table rows:
     | Name                   | sch  |

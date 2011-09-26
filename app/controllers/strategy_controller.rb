@@ -2,13 +2,10 @@ class StrategyController < EntitiesController
   def add_role
     @entry = klass.find(params[:id])
     if @entry.is_a?(Simulator)
-      @entry.role_strategy_hash[params[:role]] = []
-      @entry.save!
+      @entry.roles.find_or_create_by(name: params[:role])
       redirect_to url_for(:action => "show", :id => @entry.id)
-    elsif (1..(@entry.size-(@entry.role_count_hash.values.reduce(:+) == nil ? 0 : @entry.role_count_hash.values.reduce(:+)))).include?(params[:role_count].to_i)
-      @entry.role_strategy_hash[params[:role]] = []
-      @entry.role_count_hash[params[:role]] = params[:role_count].to_i
-      @entry.save!
+    elsif (1..(@entry.size-(@entry.roles.collect{|r| r.count}.reduce(:+) == nil ? 0 : @entry.size-(@entry.roles.collect{|r| r.count}.reduce(:+))))).include?(params[:role_count].to_i)
+      @entry.roles.create!(name: params[:role], count: params[:role_count].to_i)
       redirect_to url_for(:action => "show", :id => @entry.id)
     else
       flash[:alert] = "Number of players per role must be an integer > 0 and <= the number of unassigned players."
@@ -18,17 +15,13 @@ class StrategyController < EntitiesController
   
   def remove_role
     @entry = klass.find(params[:id])
-    @entry.role_strategy_hash.delete params[:role]
-    @entry.role_count_hash.delete params[:role]
-    @entry.save!
+    @entry.roles.where(name: params[:role]).first.delete
     redirect_to url_for(:action => "show", :id => @entry.id)
   end
   
   def add_strategy
     @entry = klass.find(params[:id])
     role = params[:role]
-    puts role
-    puts params["#{role}_strategy"]
     @entry.add_strategy_by_name(role, params["#{role}_strategy"])
     @entry.save!
     redirect_to url_for(:action => "show", :id => @entry.id)

@@ -6,7 +6,7 @@ class Simulator
   field :description
   field :version
   field :setup, type: Boolean, default: false
-  field :role_strategy_hash, type: Hash, default: {}
+  embeds_many :roles
   field :parameter_hash, type: Hash, default: {}
   validates_presence_of :name, :version
   validates_uniqueness_of :version, scope: :name
@@ -16,19 +16,16 @@ class Simulator
   after_create :setup_simulator
 
   def add_strategy_by_name(role, strategy)
-    role_strategy_hash[role] = [] if role_strategy_hash[role] == nil
-    role_strategy_hash[role] << strategy
-    hash = role_strategy_hash
-    self.update_attribute(:role_strategy_hash, nil)
-    self.update_attribute(:role_strategy_hash, hash)
+    role_i = roles.find_or_create_by(name: role)
+    role_i.strategy_array << strategy
+    role_i.save!
   end
   
   def delete_strategy_by_name(role, strategy)
-    role_strategy_hash[role].delete(strategy)
-    hash = role_strategy_hash
+    role_i = roles.where(name: role).first
+    role_i.strategy_array.delete(strategy)
+    role_i.save!
     profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
-    self.update_attribute(:role_strategy_hash, nil)
-    self.update_attribute(:role_strategy_hash, hash)
   end
 
   def location

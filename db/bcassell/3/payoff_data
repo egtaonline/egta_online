@@ -1,10 +1,15 @@
 --- 
-BayesianPricing:noRA:0: 2992.73172891313
---- 
-BayesianPricing:noRA:0: 2991.94137519601
---- 
-BayesianPricing:noRA:0: 2957.24141614658
---- 
-BayesianPricing:noRA:0: 2957.60372235637
---- 
-BayesianPricing:noRA:0: 2931.17122038337
+All:
+  BayesianPricing:noRA:0: 2992.73172891313
+---
+All:
+  BayesianPricing:noRA:0: 2991.94137519601
+---
+All:
+  BayesianPricing:noRA:0: 2957.24141614658
+---
+All:
+  BayesianPricing:noRA:0: 2957.60372235637
+---
+All:
+  BayesianPricing:noRA:0: 2931.17122038337

@@ -18,8 +18,10 @@ class DataParser
         Simulation.where(:number => number).first.profile.sample_records.find_or_create_by(payoffs: payoff_data[i], features: feature_hash_record)
       end
       Simulation.where(number: number).first.finish!
-    rescue
-      puts "malformed payoff data"
+    rescue => e
+      puts e.inspect
+      puts e.backtrace
+      puts "malformed payoff d"
       Simulation.where(number: number).first.update_attribute(:error_message, "Payoff data was malformed")
       Simulation.where(number: number).first.failure!
     end

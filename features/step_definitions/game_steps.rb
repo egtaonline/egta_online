@@ -30,10 +30,11 @@ When /^I delete the strategy "([^"]*)" from that game$/ do |arg1|
   Game.last.delete_strategy_by_name("All", arg1)
 end
 
-Then /^that game should have role_strategy_hash, "([^"]*)"$/ do |arg1|
-  Game.last.role_strategy_hash.should == eval(arg1)
+Then /^that game should have a role named "([^"]*)" with the strategy array "([^"]*)"$/ do |arg1, arg2|
+  r = Game.last.roles.where(name: arg1).first
+  r.should_not == nil
+  r.strategy_array.should == eval(arg2)
 end
-
 Then /^the first game should have (\d+) profiles$/ do |arg1|
   Game.first.profile_ids.size.should == arg1.to_i
 end

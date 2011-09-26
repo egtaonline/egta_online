@@ -4,8 +4,7 @@ class Game
 
   field :name
   field :size, type: Integer
-  field :role_strategy_hash, type: Hash, default: {}
-  field :role_count_hash, type: Hash, default: {}
+  embeds_many :roles
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true
@@ -15,24 +14,19 @@ class Game
   after_create :find_profiles
 
   def add_strategy_by_name(role, strategy)
-    puts role_strategy_hash
-    role_strategy_hash[role] = [] if role_strategy_hash[role] == nil
-    role_strategy_hash[role] << strategy
-    hash = role_strategy_hash
-    self.update_attribute(:role_strategy_hash, nil)
-    self.update_attribute(:role_strategy_hash, hash)
-    puts Game.last.role_strategy_hash
+    role_i = roles.find_or_create_by(name: role)
+    role_i.strategy_array << strategy
+    role_i.save!
   end
   
   def delete_strategy_by_name(role, strategy)
-    role_strategy_hash[role].delete(strategy)
-    hash = role_strategy_hash
-    self.update_attribute(:role_strategy_hash, nil)
-    self.update_attributes(role_strategy_hash: hash)
+    role_i = roles.where(name: role).first
+    role_i.strategy_array.delete(strategy)
+    role_i.save!
   end
 
   def strategy_regex(role)
-    Regexp.new("^(#{role_strategy_hash[role].sort.join('(, )?)*(')}(, )?)*$")
+    Regexp.new("^(#{roles.collect{|r| r.name}.sort.join('(, )?)*(')}(, )?)*$")
   end
 
   def find_profiles

@@ -8,11 +8,12 @@ describe "#find_games" do
   it "should associate a profile to a game" do
     simulator = Fabricate(:simulator)
     game = Fabricate(:game, parameter_hash: simulator.parameter_hash)
-    SymmetricProfile.create!(simulator_id: simulator.id, parameter_hash: game.parameter_hash, size: game.size, proto_string: "A, A")
+    Profile.create!(simulator_id: simulator.id, parameter_hash: game.parameter_hash, size: game.size, proto_string: "All: A, A")
     GameAssociater.should have_queued(Profile.last.id)
     ResqueSpec.perform_all(:profile_actions)
     GameAssociater.should_not have_queued(Profile.last.id)
-    Game.last.profiles.count.should == 1
-    Game.last.profiles.first.should == Profile.last
+    puts Game.last.profile_ids
+    Game.last.profile_ids.count.should == 1
+    Game.last.profile_ids.first.should == Profile.last.id
   end
 end

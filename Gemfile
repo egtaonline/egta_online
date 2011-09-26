@@ -47,5 +47,8 @@ group :development, :test do
   gem "database_cleaner"
   gem "fabrication"
   gem "rspec-rails"
+  gem "guard-rspec"
+  gem "guard-cucumber"
+  gem "guard-spork"
   gem "resque_spec"
 end

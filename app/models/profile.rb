@@ -3,19 +3,19 @@
 class Profile
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
+  embeds_many :role_instances
   has_many :simulations, dependent: :destroy
   has_many :sample_records
   belongs_to :simulator, index: true
   field :proto_string
+  field :size, type: Integer
   index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   field :parameter_hash, type: Hash, default: {}
-  field :payoff_avgs, type: Hash, default: {}
-  field :payoff_stds, type: Hash, default: {}
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
   after_create :find_games
-  validates_presence_of :simulator, :proto_string, :parameter_hash
+  validates_presence_of :simulator, :proto_string, :parameter_hash, :size
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 
   def name

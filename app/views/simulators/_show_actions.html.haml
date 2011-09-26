@@ -1,5 +1,5 @@
 %h3 Roles/Strategies
-=render :partial => "role", :collection => entry.role_strategy_hash.keys, locals: {entry: entry}
+=render :partial => "role", :collection => entry.roles, locals: {entry: entry}
 .action
   =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
     = text_field_tag :role
