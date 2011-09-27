@@ -20,7 +20,7 @@ class GameScheduler < Scheduler
   end
   
   def ensure_profiles
-    if roles.size == 0 || roles.reduce {|sum, r| sum + r.strategy_array.size} == 0
+    if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategy_array.size}.min < 1
       return []
     end
     proto_strings = []
@@ -28,18 +28,22 @@ class GameScheduler < Scheduler
     all_other_ars = []
     roles.each do |role|
       if first_ar == nil
-        first_ar = role.strategy_array.repeated_combination(role.count)
+        first_ar = role.strategy_array.repeated_combination(role.count).to_a
       else
-        all_other_ars << role.strategy_array.repeated_combination(role.count)
+        all_other_ars << role.strategy_array.repeated_combination(role.count).to_a
       end
     end
-    if roles.size == 1
-      return first_ar.collect {|e| "All: "+e.join(", ")}
+    puts first_ar.inspect
+    puts all_other_ars.inspect
+    if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategy_array.size} == roles.first.strategy_array.size
+      return first_ar.collect {|e| "#{roles.first}: "+e.join(", ")}
     else
-      return first_ar.product(all_other_ars).collect do |prof|
+      ret = []
+      first_ar.to_a.product(*all_other_ars).each do |prof|
         count = -1
-        roles.collect {|r| count+=1; r.name+": "+prof[count].join(", ")}.join("; ")
+        ret << roles.collect {|r| count+=1; r.name+": "+prof[count].join(", ")}.join("; ")
       end
     end
+    ret
   end
 end

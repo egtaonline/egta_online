@@ -25,3 +25,42 @@ Scenario: Profile already exists with the same configuration
   When I select "B" from "All_strategy"
   And I press "Add Strategy"
   Then there should be 3 profiles
+  
+Scenario: Asymmetric profile generation
+  Given I am signed in
+  Given the following simulator:
+    | parameter_hash | {a: 2} |
+  And I am on the last simulator's page
+  When I fill in "role" with "Player1"
+  And I press "Add Role"
+  And I fill in "Player1_strategy" with "A"
+  And I press "Add Strategy"
+  And I fill in "Player1_strategy" with "B"
+  And I press "Add Strategy"
+  When I fill in "role" with "Player2"
+  And I press "Add Role"
+  Then I should see "Player2"
+  And I fill in "Player2_strategy" with "A"
+  And I press "Player2"
+  And I fill in "Player2_strategy" with "B"
+  And I press "Player2"
+  Then I should see "B"
+  And that simulator has the following game scheduler:
+    | parameter_hash | {a: 2} |
+  And I am on the last game scheduler's page
+  When I select "Player1" from "role"
+  And I fill in "role_count" with "1"
+  And I press "Add Role"
+  When I select "Player2" from "role"
+  And I fill in "role_count" with "1"
+  And I press "Add Role"
+  When I select "A" from "Player1_strategy"
+  And I press "Add Strategy"
+  When I select "B" from "Player1_strategy"
+  And I press "Add Strategy"
+  When I select "A" from "Player2_strategy"
+  And I press "Player2"
+  When I select "B" from "Player2_strategy"
+  And I press "Player2"
+  And show me the page
+  Then there should be 4 profiles
