@@ -16,7 +16,7 @@ class StrategyController < EntitiesController
   def remove_role
     @entry = klass.find(params[:id])
     @entry.roles.where(name: params[:role]).first.delete
-    redirect_to url_for(:action => "show", :id => @entry.id)
+    redirect_to url_for(:action => "show", :id => params[:id])
   end
   
   def add_strategy
@@ -32,6 +32,6 @@ class StrategyController < EntitiesController
     role = params[:role]
     @entry.delete_strategy_by_name(role, params[:strategy_name])
     @entry.save!
-    redirect_to url_for(:action => "show", :id => @entry.id)
+    redirect_to url_for(:action => "show", :id => params[:id])
   end
 end

@@ -62,5 +62,4 @@ Scenario: Asymmetric profile generation
   And I press "Player2"
   When I select "B" from "Player2_strategy"
   And I press "Player2"
-  And show me the page
   Then there should be 4 profiles

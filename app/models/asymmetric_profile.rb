@@ -1,2 +1,0 @@
-class AsymmetricProfile < Profile
-end

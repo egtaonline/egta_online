@@ -14,10 +14,10 @@ xml.nfg(:name=>@entry.simulator.fullname, :description=>@entry.parameter_hash) d
   nfg.payoffs do |payoffs|
     @profiles.each do |profile|
       payoffs.payoff do |payoff|
-        profile.strategy_array.uniq.each do |strategy|
+        profile.role_instances.first.strategy_array.uniq.each do |strategy|
           payoff.outcome(:action=>strategy,
-                         :count=>profile.strategy_array.count(strategy),
-                         :value=>profile.payoff_avgs[strategy])
+                         :count=>profile.role_instances.first.strategy_array.count(strategy),
+                         :value=>profile.role_instances.first.payoff_avgs[strategy])
         end
       end
     end

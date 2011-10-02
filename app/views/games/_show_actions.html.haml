@@ -7,4 +7,5 @@
       = select_tag "role", options_for_select(entry.simulator.roles-entry.roles)
       = text_field_tag "role_count", nil, size: 30, placeholder: "Number of players in role..."
       = submit_tag "Add Role"
-= link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")
+- if entry.roles.size == 1 && entry.roles.first.name == "All"
+  = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")

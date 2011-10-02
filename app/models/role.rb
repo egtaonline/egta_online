@@ -8,4 +8,5 @@ class Role
   embedded_in :game
   embedded_in :scheduler
   validates_presence_of :name
+  validates_uniqueness_of :name
 end
