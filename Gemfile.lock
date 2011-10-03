@@ -149,7 +149,7 @@ GEM
     mongo_ext (0.19.3)
     mongoid (2.2.2)
       activemodel (~> 3.0)
-      mongo (~> 1.3)
+      mongo (< 1.4, >= 1.3)
       tzinfo (~> 0.3.22)
     mongoid_rails_migrations (0.0.14)
       activesupport (>= 3.0.0)
