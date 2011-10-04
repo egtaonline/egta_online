@@ -1,9 +1,9 @@
 class SimulationQueuer
   include Resque::Plugins::UniqueJob
-  @queue = :nyx_actions
+  @queue = :nyx_queuing
 
   def self.perform
-    simulations = Simulation.pending.all
+    simulations = Simulation.pending.limit(100)
     puts "finding simulations"
     cleanup
     simulations.each do |s|
@@ -31,7 +31,7 @@ class SimulationQueuer
 
   def self.create_folder(simulation)
     puts "creating folder hierarchy for #{simulation.number}"
-    FileUtils.mkdir_p("tmp/#{simulation.account.username}/#{simulation.number}/features")
+    puts FileUtils.mkdir_p("tmp/#{simulation.account.username}/#{simulation.number}/features")
     puts "hierarchy completed for #{simulation.number}"
   end
 
