@@ -19,6 +19,7 @@ class SimulationQueuer
         NyxWrapper.create_wrapper(s)
         puts "wrapper made"
       rescue
+        puts "failed to create files for nyx"
         s.error_message = "failed to create files for nyx"
         s.failure!
       end

@@ -31,15 +31,15 @@
       =yield
     #root_footer
   %footer#footer
-    #bar
-      #first_box
-        %h3 Schedulers
-        EGTA Online has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
-      #middle_box
-        %h3 Simulations
-        EGTA Online has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
-      #last_box
-        %h3 Samples
-        EGTA Online has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.
+    / #bar
+    /   #first_box
+    /     %h3 Schedulers
+    /     EGTA Online has #{pluralize @active_scheduler_count, "active scheduler"} out of #{pluralize @scheduler_count, "scheduler"}.
+    /   #middle_box
+    /     %h3 Simulations
+    /     EGTA Online has #{pluralize @active_simulation_count, "active simulation"} and #{pluralize @complete_simulation_count, "complete simulation"}.
+    /   #last_box
+    /     %h3 Samples
+    /     EGTA Online has #{pluralize @sample_count, "sample"} with #{pluralize @clean_sample_count, "clean sample"}.
     #copyright
       &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;

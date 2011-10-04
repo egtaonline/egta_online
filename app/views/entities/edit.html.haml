@@ -1,5 +1,5 @@
-%h2= "Edit #{klass_name}"
-= simple_form_for @entry do |f|
+%h2= "Edit #{resource_class}"
+= simple_form_for resource do |f|
   = f.error_notification
-  = render :partial => "form", :locals => {:f => f}
+  = render :partial => "edit_form", :locals => {:f => f}
   = f.button :submit

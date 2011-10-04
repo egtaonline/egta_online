@@ -66,11 +66,11 @@ body {
 #root{
     min-height: 100%;
     height: auto !important;
-    margin: 0 auto -140px; /* the bottom margin is the negative value of the footer's height */
+    margin: 0 auto -32px; /* the bottom margin is the negative value of the footer's height */
 }
 
 #footer, #root_footer{
-    height: 140px;
+    height: 32px;
 }
 
 #object_nav{

@@ -1,8 +1,8 @@
-%h3= "#{plural_name.titleize}"
+%h2= "#{resource_class.to_s.pluralize.titleize}"
 =render :partial => 'new_links'
 %table
   %tr
     =render :partial => 'headers'
-  =render :partial => 'entry', :collection => entries
-=paginate entries
+  =render :partial => 'entry', :collection => collection
+=paginate collection
 =render :partial => 'index_actions'
