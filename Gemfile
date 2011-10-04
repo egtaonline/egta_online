@@ -41,7 +41,7 @@ gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 
 
 group :development, :test do
   gem "capybara"
-  gem "capybara-webkit"
+  #gem "capybara-webkit"
   gem "growl"
   gem "spork", '~> 0.9.0.rc'
   gem "cucumber-rails"

@@ -1,6 +1,7 @@
 class StrategyController < EntitiesController
+  custom_actions :resource => [:add_role, :remove_role, :add_strategy, :remove_strategy]
+
   def add_role
-    @entry = klass.find(params[:id])
     if @entry.is_a?(Simulator)
       @entry.roles.find_or_create_by(name: params[:role])
       redirect_to url_for(:action => "show", :id => @entry.id)
@@ -12,18 +13,17 @@ class StrategyController < EntitiesController
       render :show
     end
   end
-  
+
   def remove_role
     @entry = klass.find(params[:id])
     @entry.roles.where(name: params[:role]).first.delete
     redirect_to url_for(:action => "show", :id => params[:id])
   end
-  
+
   def add_strategy
     @entry = klass.find(params[:id])
     role = params[:role]
     @entry.add_strategy_by_name(role, params["#{role}_strategy"])
-    @entry.save!
     redirect_to url_for(:action => "show", :id => @entry.id)
   end
 
