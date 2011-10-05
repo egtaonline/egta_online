@@ -1,0 +1,2 @@
+class SymmetricProfile < Profile
+end
