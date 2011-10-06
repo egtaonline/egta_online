@@ -5,7 +5,7 @@ class Profile
   include Mongoid::Timestamps::Updated
   embeds_many :role_instances
   has_many :simulations, dependent: :destroy
-  has_many :sample_records
+  embeds_many :sample_records
   belongs_to :simulator, index: true
   field :proto_string
   field :size, type: Integer
@@ -15,7 +15,7 @@ class Profile
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
   after_create :find_games
-  validates_presence_of :simulator, :proto_string, :parameter_hash, :size
+  validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 
   def name
