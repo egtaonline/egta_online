@@ -3,7 +3,7 @@ class SimulationQueuer
   @queue = :nyx_queuing
 
   def self.perform
-    simulations = Simulation.pending.limit(100)
+    simulations = Simulation.pending.order_by([[:created_at, :asc]]).limit(30).to_a
     puts "finding simulations"
     cleanup
     simulations.each do |s|
@@ -25,7 +25,7 @@ class SimulationQueuer
       end
     end
     if simulations != nil && simulations != []
-      schedule(simulations)
+      schedule(Simulation.any_in(_id: simulations.collect{|s| s.id}))
       cleanup
     end
   end

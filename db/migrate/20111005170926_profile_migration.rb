@@ -1,7 +1,7 @@
 class ProfileMigration < Mongoid::Migration
   def self.up
     mongo_db = Profile.db
-    mongo_db.collection("profiles").update({}, {"$unset" => { "type" => 1}})
+    mongo_db.collection("profiles").update({}, {"$unset" => { "_type" => 1}}, multi: true)
     Profile.all.each do |p|
       puts "creating instance"
       p.role_instances.create!(name: "All", payoff_avgs: p["payoff_avgs"], payoff_stds: p["payoff_stds"])
