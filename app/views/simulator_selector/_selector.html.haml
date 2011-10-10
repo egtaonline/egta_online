@@ -3,4 +3,4 @@
 -else
   = label :selector, :simulator_id
   = collection_select :selector, :simulator_id, Simulator.all, :id, :fullname
-  #param= render :partial => "parameters", :object => Simulator.first.parameter_hash
+  #param= render :partial => "simulator_selector/parameters", :object => Simulator.first.parameter_hash

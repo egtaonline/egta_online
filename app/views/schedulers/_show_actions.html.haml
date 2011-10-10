@@ -1,7 +1,7 @@
-= link_to "Edit #{klass_name}", "/#{plural_name}/#{entry.id}/edit"
-=render :partial => "role", :collection => entry.roles, locals: {entry: entry}
+= link_to "Edit #{resource_class}", edit_resource_url
+=render :partial => "role", :collection => resource.roles, locals: {entry: resource}
 .action
-  -temp = entry.roles.collect{|r| r.count}.reduce(:+)
+  -temp = resource.roles.collect{|r| r.count}.reduce(:+)
   -if temp == nil || entry.size-temp > 0
     =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
       = select_tag "role", options_for_select(entry.simulator.roles.collect{|r| r.name}-entry.roles.collect{|r| r.name})
