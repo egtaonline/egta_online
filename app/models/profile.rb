@@ -18,6 +18,14 @@ class Profile
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 
+  def to_yaml
+    ret_hash = {}
+    proto_string.split("; ").each do |atom|
+      ret_hash[atom.split(": ")[0]] = atom.split(": ")[1].delete("[]").split(", ")
+    end
+    ret_hash
+  end
+
   def name
     proto_string
   end

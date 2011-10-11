@@ -5,6 +5,7 @@ class GameSchedulerMigration < Mongoid::Migration
     puts "got here"
     Scheduler.all.each do |g|
       puts g.roles.create!(name: "All", count: g.size, strategy_array: g["strategy_array"])
+      g.update_attributes(:active, false)
     end
     mongo_db = GameScheduler.db
     mongo_db.collection("schedulers").update({}, {"$unset" => { "strategy_array" => 1}}, multi: true)

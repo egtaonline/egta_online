@@ -8,6 +8,7 @@ Background:
 
 Scenario: Simulator is uploaded successfully
   Given I am on the simulators page
+  And 1 account
   When I follow "New Simulator"
   And I fill in the following:
     | Name        | epp_sim                 |

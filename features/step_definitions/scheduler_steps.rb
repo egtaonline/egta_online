@@ -1,5 +1,5 @@
 When /^I add strategy "([^"]*)" to that symmetric game scheduler$/ do |arg1|
-  @symmetric_game_scheduler.add_strategy_by_name(arg1)
+  @symmetric_game_scheduler.add_strategy(arg1)
 end
 
 Then /^I should have (\d+) simulations?$/ do |arg1|
@@ -62,12 +62,12 @@ end
 
 Given /^the last scheduler has the strategy "([^"]*)"$/ do |arg1|
   scheduler = Scheduler.last
-  scheduler.add_strategy_by_name("All", arg1)
+  scheduler.add_strategy("All", arg1)
   scheduler.save!
 end
 
 When /^I delete the strategy "([^"]*)"$/ do |arg1|
-  Scheduler.last.delete_strategy_by_name("All", arg1)
+  Scheduler.last.remove_strategy("All", arg1)
 end
 
 Then /^the last scheduler should have (\d+) profiles$/ do |arg1|

@@ -39,9 +39,9 @@ gem 'mongoid_rails_migrations', '0.0.14'
 gem "facets", :require => "facets/array"
 gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
 
-group :development, :test do
+group :test do
   gem "capybara"
-  #gem "capybara-webkit"
+  gem "capybara-webkit"
   gem "growl"
   gem "spork", '~> 0.9.0.rc'
   gem "cucumber-rails"

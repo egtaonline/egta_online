@@ -1,5 +1,6 @@
 class Simulator
   include Mongoid::Document
+  include RoleManipulator
 
   mount_uploader :simulator_source, SimulatorUploader
   field :name
@@ -14,27 +15,6 @@ class Simulator
   has_many :schedulers, dependent: :destroy
   has_many :games, dependent: :destroy
   after_create :setup_simulator
-
-  def add_role(name)
-    roles.find_or_create_by(name: name)
-  end
-
-  def remove_role(name)
-    roles.where(name: name).destroy_all
-  end
-
-  def add_strategy(role, strategy)
-    role_i = roles.find_or_create_by(name: role)
-    role_i.strategy_array << strategy
-    role_i.save!
-  end
-
-  def remove_strategy(role, strategy)
-    role_i = roles.where(name: role).first
-    role_i.strategy_array.delete(strategy)
-    role_i.save!
-    profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
-  end
 
   def location
     File.join(Rails.root,"simulator_uploads", fullname)

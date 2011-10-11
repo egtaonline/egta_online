@@ -1,0 +1,10 @@
+require 'rubygems'
+#require 'log4r'
+require 'trader'
+require 'order_book'
+require 'pricing_strategies'
+require 'yaml'
+require 'simulator'
+require 'yaml_logger'
+require 'instrumentation'
+#include Log4r

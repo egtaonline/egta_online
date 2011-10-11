@@ -1,5 +1,5 @@
-%h2= "Edit #{klass_name}"
-= simple_form_for @entry do |f|
+%h2= "Edit #{resource_class}"
+= simple_form_for resource do |f|
 	= f.error_notification
 	= f.input :name
 	= f.input :size, :label => "Game size"
@@ -8,5 +8,5 @@
 	= f.input :process_memory, :label => "Process memory (in MB)"
 	= f.input :time_per_sample
 	= f.input :active, :as => :boolean
-	= render :partial => "parameters", :object => @entry.parameter_hash
+	= render :partial => "simulator_selector/parameters", :object => resource.parameter_hash
 	= f.button :submit

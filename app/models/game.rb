@@ -1,6 +1,7 @@
 class Game
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
+  include RoleManipulator
 
   field :name
   field :size, type: Integer

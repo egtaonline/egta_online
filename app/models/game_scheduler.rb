@@ -3,14 +3,15 @@ class GameScheduler < Scheduler
   field :size, :type => Integer
   validates_presence_of :size
   
-  def add_strategy_by_name(role, strategy)
+  def add_strategy(role, strategy)
     role_i = roles.find_or_create_by(name: role)
     role_i.strategy_array << strategy
     role_i.save!
-    Resque.enqueue(ProfileAssociater, self.id)
+    puts "CALLED"
+    puts Resque.enqueue(ProfileAssociater, self.id)
   end
   
-  def delete_strategy_by_name(role, strategy)
+  def remove_strategy(role, strategy)
     role_i = roles.where(name: role).first
     role_i.strategy_array.delete(strategy)
     role_i.save!
@@ -45,5 +46,9 @@ class GameScheduler < Scheduler
       end
     end
     ret
+  end
+  
+  def unassigned_player_count
+    size-roles.reduce(0) {|n, r| n+r.count}
   end
 end

@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -S /bin/sh
+
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -N mas-epp_sim
+#PBS -o /home/wellmangroup/many-agent-simulations/simulations/bcassell/62238/out
+#PBS -e /home/wellmangroup/many-agent-simulations/simulations/bcassell/62238/out
+mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r /home/wellmangroup/many-agent-simulations/epp_sim-tt/epp_sim/* .; cp -r /home/wellmangroup/many-agent-simulations/simulations/bcassell/62238 .
+/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/62238 10
+chmod -R ug+rwx /tmp/${PBS_JOBID}/62238
+cp -r /tmp/${PBS_JOBID}/62238 /home/wellmangroup/many-agent-simulations/simulations/bcassell; /bin/rm -rf /tmp/${PBS_JOBID}

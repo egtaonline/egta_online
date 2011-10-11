@@ -4,8 +4,8 @@ development:
 
 test:
     host: "d-108-200"
-    deploy_path: "/home/wellmangroup/many-agent-simulations"
-
+    deploy_path: "/Users/bcassell/testing"
+    
 production:
     host: "nyx-login.engin.umich.edu"
     deploy_path: "/home/wellmangroup/many-agent-simulations"

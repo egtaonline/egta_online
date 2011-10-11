@@ -1,6 +1,8 @@
-class GamesController < SimulatorSelectorController
+class GamesController < EntitiesController
+  include SimulatorSelectorController
+  include StrategyController
+  
   def show
-    @entry = klass.find(params[:id])
     respond_to do |format|
       format.html
       # come back and speed up sample issue

@@ -6,7 +6,7 @@ class ProfileMigration < Mongoid::Migration
       puts "creating instance"
       p.role_instances.create!(name: "All", payoff_avgs: p["payoff_avgs"], payoff_stds: p["payoff_stds"])
       puts "getting samples"
-      samples = while_stand_alone_doc(SampleRecord) do  
+      samples = while_stand_alone_doc(SampleRecord) do
         SampleRecord.where(profile_id: p.id).to_a
       end
       puts samples.size

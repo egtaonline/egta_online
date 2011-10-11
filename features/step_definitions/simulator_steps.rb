@@ -1,5 +1,5 @@
 Given /^that simulator has the strategy array "([^"]*)"$/ do |arg1|
-  eval(arg1).each {|st| @simulator.add_strategy_by_name("All", st)}
+  eval(arg1).each {|st| @simulator.add_strategy("All", st)}
   @simulator.save!
 end
 
