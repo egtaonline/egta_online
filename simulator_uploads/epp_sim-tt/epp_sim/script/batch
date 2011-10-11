@@ -1,3 +1,0 @@
-#!/bin/bash
-export CLASSPATH=$CLASSPATH:/home/wellmangroup/many-agent-simulations/epp_sim-journal/epp_sim/lib/jmarketsim.jar:/home/wellmangroup/many-agent-simulations/epp_sim-journal/epp_sim/lib/commons-math-2.1.jar
-/home/wellmangroup/opt/local/jruby/bin/jruby --server --fast -Ilib lib/main.rb "$@"
