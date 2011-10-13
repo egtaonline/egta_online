@@ -11,7 +11,7 @@ describe "#testing updates" do
     simulator.roles.create!(name: "All")
     Account.create(username: "bcassell", active: true)
     scheduler.roles.create!(name: "All", count: 2)
-    scheduler.add_strategy_by_name("All", "A")
+    scheduler.add_strategy("All", "A")
     ResqueSpec.perform_all(:profile_actions)
     scheduler = Scheduler.last
     scheduler.update_attribute(:active, true)

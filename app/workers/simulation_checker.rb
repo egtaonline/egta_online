@@ -23,7 +23,7 @@ class SimulationChecker
           location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
           numbers = simulations.where(account_id: account.id).collect{|s| location+"#{s.number}"}
           numbers = numbers.join(" ")
-          system("sudo rsync -re --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
+          system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
           simulations.where(account_id: account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
