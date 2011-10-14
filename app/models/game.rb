@@ -27,7 +27,8 @@ class Game
   end
 
   def strategy_regex(role)
-    Regexp.new("^(#{roles.collect{|r| r.name}.sort.join('(, )?)*(')}(, )?)*$")
+    role = roles.where(name: role).first
+    Regexp.new("^#{role}: (#{role.strategy_array.sort.join('(, )?)*(')}(, )?)*$")
   end
 
   def find_profiles

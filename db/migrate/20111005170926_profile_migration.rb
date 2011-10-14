@@ -9,10 +9,12 @@ class ProfileMigration < Mongoid::Migration
       samples = while_stand_alone_doc(SampleRecord) do
         SampleRecord.where(profile_id: p.id).to_a
       end
-      puts samples.size
-      p.sample_records = samples
-      p.save!
-      puts p.sample_records.count
+      if samples != [] && samples != nil
+        puts samples.size
+        p.sample_records = samples
+        p.save!
+        puts p.sample_records.count
+      end
     end
   end
 
