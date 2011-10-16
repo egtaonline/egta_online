@@ -11,6 +11,7 @@ class SampleRecordObserver < Mongoid::Observer
         if role.payoff_avgs[subkey] == nil
           role.payoff_avgs[subkey] = subvalue
           role.payoff_stds[subkey] = [1, subvalue, subvalue**2, nil]
+          role.save!
         else
           role.payoff_avgs[subkey] = (role.payoff_avgs[subkey]*(profile.sample_records.count-1)+subvalue)/profile.sample_records.count
           s0 = role.payoff_stds[subkey][0]+1
