@@ -19,8 +19,8 @@ describe "#testing new data_parser" do
     arr = [2992.73172891313, 2991.94137519601, 2957.24141614658, 2957.60372235637, 2931.17122038337]
     avg = (eval arr.join('+'))/5
     role = profile.role_instances.where(name: "All").first
-    role.payoff_avgs["BayesianPricing:noRA:0"].should == avg
-    role.payoff_stds["BayesianPricing:noRA:0"][3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
+    role.strategy_instances.where(name: "BayesianPricing:noRA:0").first.payoff.should == avg
+    role.strategy_instances.where(name: "BayesianPricing:noRA:0").first.payoff_std[3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
     arr = [0.514654571782549, 0.51264473859671, 0.47771494416184, 0.484695863045296, 0.453008291906072]
     avg = (eval arr.join('+'))/5
     profile.feature_avgs["average_dividend"].should == avg

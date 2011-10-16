@@ -2,32 +2,8 @@ class SampleRecordObserver < Mongoid::Observer
   def after_create(sample_record)
     profile = sample_record.profile
     sample_record.payoffs.each do |key, value|
-      role = profile.role_instances.find_or_create_by(name: key)
-      if role.payoff_avgs == nil
-        role.payoff_avgs = Hash.new
-        role.payoff_stds = Hash.new
-        role.save!
-      end
       value.each do |subkey, subvalue|
-        if role.payoff_avgs[subkey] == nil
-          role.payoff_avgs[subkey] = subvalue
-          role.payoff_stds[subkey] = [1, subvalue, subvalue**2, nil]
-          puts role.inspect
-          role.save!
-          puts "made it to if"
-          puts role.inspect
-        else
-          role.payoff_avgs[subkey] = (role.payoff_avgs[subkey]*(profile.sample_records.count-1)+subvalue)/profile.sample_records.count
-          s0 = role.payoff_stds[subkey][0]+1
-          s1 = role.payoff_stds[subkey][1]+subvalue
-          s2 = role.payoff_stds[subkey][2]+subvalue**2
-          role.payoff_stds[subkey] = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
-          puts role.inspect
-          role.save!
-          puts "made it to else"
-          puts role.inspect
-
-        end
+        profile.add_value(key, subkey, subvalue)
       end
     end
     sample_record.features.each do |key, value|

@@ -50,4 +50,21 @@ class Profile
   def try_scheduling
     Resque.enqueue(ProfileScheduler, id)
   end
+  
+  def add_value(role, strategy, value)
+    strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(name: strategy)
+    if strategy.payoff == nil
+      strategy.payoff = value
+      strategy.payoff_std = [1, value, value**2, nil]
+      strategy.save!
+    else
+      strategy.payoff = (strategy.payoff*(sample_records.count-1)+value)/sample_records.count
+      s0 = strategy.payoff_std[0]+1
+      s1 = strategy.payoff_std[1]+value
+      s2 = strategy.payoff_std[2]+value**2
+      strategy.payoff_std = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
+      strategy.save!
+    end
+    self.save!
+  end
 end
