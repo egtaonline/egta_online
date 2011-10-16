@@ -18,7 +18,7 @@ xml.nfg(:name=>resource.simulator.fullname, :description=>resource.parameter_has
         strategies.uniq.each do |strategy|
           payoff.outcome(:action=>strategy,
                          :count=>strategies.count(strategy),
-                         :value=>profile.role_instances.first.payoff_avgs[strategy])
+                         :value=>profile.role_instances.first.strategy_instances.where(name: strategy).payoff)
         end
       end
     end
