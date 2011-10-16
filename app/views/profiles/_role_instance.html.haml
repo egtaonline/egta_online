@@ -1,3 +1,3 @@
 %tr
-  %th= role_instance
-=render partial: "payoffs", locals: {entry: role_instance}
+  %th= role_instance.name
+=render partial: "strategy_instance", collection: role_instance.strategy_instances
