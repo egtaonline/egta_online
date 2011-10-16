@@ -148,7 +148,7 @@ GEM
     mongo (1.4.0)
       bson (= 1.4.0)
     mongo_ext (0.19.3)
-    mongoid (2.3.0)
+    mongoid (2.3.2)
       activemodel (~> 3.1)
       mongo (~> 1.4)
       tzinfo (~> 0.3.22)

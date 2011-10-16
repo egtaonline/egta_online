@@ -1,2 +1,0 @@
-class SymmetricProfile < Profile
-end
