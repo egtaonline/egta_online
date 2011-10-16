@@ -3,6 +3,10 @@ class SampleRecordObserver < Mongoid::Observer
     profile = sample_record.profile
     sample_record.payoffs.each do |key, value|
       role = profile.role_instances.find_or_create_by(name: key)
+      if role.payoff_avgs == nil
+        role.payoff_avgs = Hash.new
+        role.payoff_stds = Hash.new
+      end
       value.each do |subkey, subvalue|
         if role.payoff_avgs[subkey] == nil
           role.payoff_avgs[subkey] = subvalue
