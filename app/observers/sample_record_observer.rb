@@ -6,6 +6,7 @@ class SampleRecordObserver < Mongoid::Observer
       if role.payoff_avgs == nil
         role.payoff_avgs = Hash.new
         role.payoff_stds = Hash.new
+        role.save!
       end
       value.each do |subkey, subvalue|
         if role.payoff_avgs[subkey] == nil
