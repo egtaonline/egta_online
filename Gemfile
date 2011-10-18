@@ -37,7 +37,7 @@ gem "passenger"
 gem "resque-loner"
 gem 'mongoid_rails_migrations', '0.0.14'
 gem "facets", :require => "facets/array"
-gem "compass", :git => 'git://github.com/chriseppstein/compass.git', :branch => 'rails31'
+gem "compass"
 
 group :test do
   gem "capybara"
