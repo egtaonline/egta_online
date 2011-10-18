@@ -14,10 +14,12 @@ class FixSampleRecords < Mongoid::Migration
       # now when you save your data, your fields will be embedded
       count = sample_records_attributes.size
       sample_records_attributes.each do |attributes|
-        profile = Profile.find(attributes["profile_id"])
-        profile.sample_records.create!(payoffs: {"All" => attributes["payoffs"]}, features: attributes["features"])
-        count -= 1
-        puts count
+        profile = Profile.find(attributes["profile_id"]) rescue nil
+        if profile != nil
+          profile.sample_records.create!(payoffs: {"All" => attributes["payoffs"]}, features: attributes["features"])
+          count -= 1
+          puts count
+        end
       end
 
       # remove all the documents from the original collection
