@@ -9,3 +9,5 @@
       = submit_tag "Add Role"
 - if entry.roles.size == 1 && entry.roles.first.name == "All"
   = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")
+- else
+  = link_to "Download JSON", url_for(:action => "show", :format => "json")
