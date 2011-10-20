@@ -10,7 +10,7 @@ KEY = 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqrTdv0q8SKL0tWXEYMu6GrNG+FZX4a7gpc6NN
 module InheritedResources
   module BaseHelpers
     def collection
-      get_collection_ivar || set_collection_ivar(end_of_association_chain.page params[:page])
+      get_collection_ivar || set_collection_ivar(end_of_association_chain.all)
     end
   end
 end

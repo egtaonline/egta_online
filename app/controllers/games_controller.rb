@@ -1,6 +1,7 @@
 class GamesController < EntitiesController
   include SimulatorSelectorController
   include StrategyController
+  before_filter :simulators, only: "new"
   
   def show
     respond_to do |format|
