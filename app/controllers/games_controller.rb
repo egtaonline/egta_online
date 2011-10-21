@@ -3,6 +3,11 @@ class GamesController < EntitiesController
   include StrategyController
   before_filter :simulators, only: "new"
   
+  def add_role
+    resource.add_role(role, params[:role_count])
+    redirect_to resource_url
+  end
+  
   def show
     respond_to do |format|
       format.html
