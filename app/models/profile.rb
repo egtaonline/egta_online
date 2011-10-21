@@ -15,7 +15,7 @@ class Profile
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
-  after_create :find_games
+  after_create :make_roles, :find_games
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 
@@ -35,10 +35,19 @@ class Profile
     sample_records.count
   end
   
+  def make_roles
+    proto_string.split("; ").each do |atom|
+      role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
+      atom.split(": ")[1].split(", ").each do |strat|
+        role.strategy_instances.find_or_create_by(name: strat)
+      end
+    end
+  end
+  
   def contains_strategy?(role, strategy)
     retval = false
     proto_string.split("; ").each do |atom|
-      retval = true if atom.split(": ")[0] == role && atom.split(": ")[1].delete("[]").split(", ").include?(strategy)
+      retval = true if atom.split(": ")[0] == role && atom.split(": ")[1].split(", ").include?(strategy)
     end
     return retval
   end
