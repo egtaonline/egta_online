@@ -9,12 +9,13 @@ class Profile
   belongs_to :simulator, index: true
   field :proto_string
   field :size, type: Integer
-  index :proto_string
   index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   field :parameter_hash, type: Hash, default: {}
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
+  field :sampled, type: Boolean, default: false
+  index :sampled
   after_create :make_roles, :find_games
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
@@ -30,11 +31,11 @@ class Profile
   def name
     proto_string
   end
-  
+
   def sample_count
     sample_records.count
   end
-  
+
   def make_roles
     proto_string.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
@@ -43,7 +44,7 @@ class Profile
       end
     end
   end
-  
+
   def contains_strategy?(role, strategy)
     retval = false
     proto_string.split("; ").each do |atom|
@@ -55,11 +56,11 @@ class Profile
   def find_games
     Resque.enqueue(GameAssociater, id)
   end
-  
+
   def try_scheduling
     Resque.enqueue(ProfileScheduler, id)
   end
-  
+
   def add_value(role, strategy, value)
     strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(name: strategy)
     if strategy.payoff == nil
@@ -74,6 +75,7 @@ class Profile
       strategy.payoff_std = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
       strategy.save!
     end
+    self.sampled = true
     self.save!
   end
 end
