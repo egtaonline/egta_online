@@ -29,9 +29,9 @@ class GameScheduler < Scheduler
     all_other_ars = []
     roles.each do |role|
       if first_ar == nil
-        first_ar = role.strategy_array.repeated_combination(role.count).to_a
+        first_ar = role.strategy_array.sort.repeated_combination(role.count).to_a
       else
-        all_other_ars << role.strategy_array.repeated_combination(role.count).to_a
+        all_other_ars << role.strategy_array.sort.repeated_combination(role.count).to_a
       end
     end
     puts first_ar.inspect
