@@ -39,6 +39,7 @@ gem 'mongoid_rails_migrations', '0.0.14'
 gem "facets", :require => "facets/array"
 gem "compass", "~> 0.12.alpha.0"
 gem 'rabl'
+gem 'high_voltage'
 
 group :test do
   gem "capybara"

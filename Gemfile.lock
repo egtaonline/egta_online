@@ -118,6 +118,7 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     has_scope (0.5.1)
+    high_voltage (1.0.1)
     highline (1.6.2)
     hike (1.2.1)
     i18n (0.6.0)
@@ -202,6 +203,7 @@ GEM
     rake (0.9.2)
     rdoc (3.11)
       json (~> 1.4)
+    redcarpet (1.17.2)
     redis (2.2.2)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
@@ -308,6 +310,7 @@ DEPENDENCIES
   haml
   haml-rails
   has_scope
+  high_voltage
   inherited_resources
   jquery-rails
   kaminari
@@ -321,6 +324,7 @@ DEPENDENCIES
   passenger
   rabl
   rails
+  redcarpet
   resque
   resque-loner
   resque-scheduler
