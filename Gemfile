@@ -40,6 +40,7 @@ gem "facets", :require => "facets/array"
 gem "compass", "~> 0.12.alpha.0"
 gem 'rabl'
 gem 'high_voltage'
+gem 'rdiscount'
 
 group :test do
   gem "capybara"

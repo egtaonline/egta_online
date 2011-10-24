@@ -20,7 +20,7 @@ EgtaOnline::Application.routes.draw do
     end
   end
   match "/application/prep_work" => "application#prep_work"
-  root :to => 'application#index'
+  root :to => 'high_voltage/pages#show', :id => 'home'
   authenticate :user do
     mount Resque::Server, :at => "/background_workers"
   end

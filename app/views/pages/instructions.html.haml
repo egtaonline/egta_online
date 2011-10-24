@@ -1,0 +1,108 @@
+:markdown
+  ## How to...
+  ### Set up run time configuration
+
+  To use the web interface for run time configuration of your simulator, you to need to create YAML file that specifies all the parameters that you want to adjust at run time, and provide default values for them.  Your file should look something like this:
+
+      ---
+      web parameters:
+        foo: bar
+        santa: claus
+
+
+  In this example, ':foo', and ':santa' become variables that can be modified in the web interface. The first 2 lines are required of all simulators subscribing to this interface, so as to alert the server that you want web access to the parameters.  The web interface will look for this file at the top of your hierarchy under the name simulation_spec.yaml.
+
+  ### Set up your run script
+
+  Your simulator will be invoked by calling script/batch [simulation folder] [number of samples to gather].  Accordingly, at the top folder of your simulator you should have a folder named script that contains a shell script named batch that sets up your simulation environment and takes these two command line arguments.  Here is an example of one such script:
+
+      #!/bin/bash
+      
+      export CLASSPATH=$CLASSPATH:/home/wellmangroup/many-agent-simulations/epp_sim/lib/jmarketsim.jar
+      export CLASSPATH=$CLASSPATH:/home/wellmangroup/many-agent-simulations/epp_sim/lib/commons-math-2.1.jar
+      /home/wellmangroup/opt/local/jruby/bin/jruby --server --fast -Ilib lib/main.rb "$@"
+
+  In this script, first an environment variable, "CLASSPATH", is set up to include a couple of jars since this simulator is run with jruby.  Then the simulator is started using jruby, with some optimization flags, passing "$@", which basically just means to pass through the command line arguments used to invoke this script.  Take note that the script will be run from the top of the folder hierarchy, hence why I can say "lib/main.rb" even though the relative path from the location of the script is "../lib/main.rb".
+
+  ### Handle the run time configuration
+
+  In the previous example, I just passed along the command line arguments to my simulator.  My main.rb is what is eventually responsible for handling run time configuration, and it looks like this:
+
+      require 'yaml'
+      require 'epp_sim'
+      
+      YAML_LOGGER = YAMLLogger.new(ARGV[0]+"/payoff_data", ARGV[0]+"/features")
+      sim_parms = Array.new
+      File.open( ARGV[0]+"/simulation_spec.yaml" ) { |yf| YAML::load_documents( yf ){|y| sim_parms.push y}}
+      ps = Simulator::ProfileSimulator.new(sim_parms[0], sim_parms[1])
+      1.upto(ARGV[1].to_i) do
+        ps.run
+      end
+
+  So what is going on here?  This code illustrates that ARGV[0], i.e. [simulation folder] has a few components.  [simulation folder] is laid out as follows:
+  
+      [simulation folder]/
+        features/
+        simulation_spec.yaml
+        
+  The features folder is initially empty, but is the place where your simulator should log feature information (discussed below).  Despite its reference in my code above, payoff_data does not initially exist; however, again, "[simulation folder]/payoff_data" is where the web interface will look for your logged payoff information.  The meaty bit here is understanding how to handle "simulation_spec.yaml".  This file is slightly transformed from the file you originally provided.  Let us consider a 6 player game with 3 Buyers and 3 Sellers, where Buyers and Sellers are roles defined on the simulator.  In this hypothetical game, Buyers can take on strategies A and B, and Sellers can take on strategies C and D.  Using the configuration given at the top of the page, the resulting "simulation_spec.yaml" might look like the following:
+      
+      ---
+      Buyers:
+      - A
+      - A
+      - B
+      Sellers:
+      - C
+      - D
+      - D
+      ---
+      foo: bar
+      santa: claus
+      
+  This file says that we want to gather samples from the profile with three players playing A and one player playing B, with parameters foo=bar and santa=claus.  Handling this file can be made much simpler by using a YAML parser.  In ruby and java, and probably other popular languages, you can use existing libraries to handle yaml, as I do in my file above with "require 'yaml'".  The result of executing "YAML::load_documents( yf ){|y| sim_parms.push y}" is that each document, i.e each entry to begins with ---, is parsed and pushed onto the array sim_parms.  This leads sim_parms to become an array with two entries.  The first entry is an array with an entry for each strategy in the profile that we want to simulate.  The second entry is a hash that maps from a parameter name to its value for the current simulation, i.e. sim_parms[1]["foo"] = "bar".  Once I've set up my logging infrastructure, discussed in the next section, and my run time parameters, I run the simulation for ARGV[1] times.
+
+  ### Set up logging
+  
+  There are basically two components to logging for the web interface: payoff data and features. For payoff data, you create a file within [simulation folder] called "payoff_data".  Keeping with our running example, if you took two samples, your payoff_data file might look like the following:
+      
+      ---
+      Buyers:
+        -A: 25.63
+        -B: 23.56
+      Sellers:
+        -C: 21.72
+        -D: 24.05
+      ---
+      Buyers:
+        -A: 24.65
+        -B: 23.54
+      Sellers:
+        -C: 25.70
+        -D: 23.45
+
+  Basically, each document started by a --- corresponds to one sample of the simulation.  For each sample, we have a hash that maps from a strategy played to the average payoff for playing that strategy.  As of right now, our automated interface only works for symmetric games, hence why we follow this convention.  To prevent weirdness, its probably best to generate this file with a yaml library.  For my simulations, once I've created the hash from strategy name to payoff, creating this payoff data is as simple as opening the payoff_data file for appending and then using yaml to dump the hash to the file.  See the code listing at the bottom of this page to see exactly how little code it takes to make this happen with yaml in ruby.
+  
+  The other component of logging in this framework is the logging of features.  If you want to track features from your simulation, the approach is very similar.  For each feature that you want to be tracked by the web interface, i.e. having an average calculated and being useable for control variates, you should create a file in the features folder with the name of the feature.  Currently the web interface only supports feature tracking on the granularity of one sample per simulation.  Recording these observations is as easy as dumping the value to the appropriate file in the same way as for payoff data.  For ruby, you can include the following file in your project to use for logging:
+
+      require 'yaml'
+      
+      class YAMLLogger
+        def initialize(payoff_data_location, feature_data_location)
+          @payoff_data_location, @feature_data_location = payoff_data_location, feature_data_location
+        end
+        
+        def record_payoff_data(payoff_data)
+          File.open(@payoff_data_location, 'a+') do |out|
+            YAML.dump(payoff_data, out )
+          end
+        end
+        
+        def record_feature(feature_name, feature_data)
+          File.open(@feature_data_location+"/"+feature_name, 'a+') do |out|
+            YAML.dump(feature_data, out)
+          end
+        end
+      end
+      
+  The web interface will automatically detect the names of your feature files.  If a feature with the same name already exists for that game, these samples will be associated with that feature.  If no such feature exists, one will be created automatically.  If you wish to use these features for control variates, make sure to edit them in the web interface to add an expected value.
