@@ -9,7 +9,7 @@ Background:
 Scenario: 1 profile interacts with queue
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | parameter_hash | {:a => "2"} |
   And that simulator has the strategy array "['A', 'B']"
   When I am on the new game scheduler page
   And I fill in the following:

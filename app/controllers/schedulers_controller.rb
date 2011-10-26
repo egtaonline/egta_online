@@ -1,7 +1,7 @@
 class SchedulersController < EntitiesController
   include SimulatorSelectorController
   before_filter :find_profiles, only: "show"
-    
+  
   protected
   
   def find_profiles
