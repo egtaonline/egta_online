@@ -6,7 +6,7 @@ class SimulationChecker
     puts "Checking for simulations"
     if Simulation.active.length > 0
       puts "Simulations found"
-      simulations = Simulation.active
+      simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
       job_id = []
       state_info = []
@@ -19,12 +19,12 @@ class SimulationChecker
       end
       puts "Updating status"
       Account.all.each do |account|
-        if simulations.where(account_id: account.id).count != 0
+        if Simulation.where(:_id.in => simulation_ids, :account_id => account.id).count != 0
           location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
-          numbers = simulations.where(account_id: account.id).collect{|s| location+"#{s.number}"}
+          numbers = Simulation.where(:_id.in => simulation_ids, :account_id => account.id).collect{|s| location+"#{s.number}"}
           numbers = numbers.join(" ")
           system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
-          simulations.where(account_id: account.id).each do |s|
+          Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
               if job_id.include?(s.job_id)
