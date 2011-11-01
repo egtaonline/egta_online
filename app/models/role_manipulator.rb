@@ -17,6 +17,5 @@ module RoleManipulator
     role_i = roles.where(name: role).first
     role_i.strategy_array.delete(strategy)
     role_i.save!
-    profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
   end
 end
