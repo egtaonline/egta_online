@@ -1,11 +1,14 @@
 development:
     host: "nyx-login.engin.umich.edu"
     deploy_path: "/home/wellmangroup/many-agent-simulations"
+    error_store: 512
 
 test:
     host: "d-108-200.eecs.umich.edu"
     deploy_path: "/Users/bcassell/testing"
+    error_store: 128
     
 production:
     host: "nyx-login.engin.umich.edu"
     deploy_path: "/home/wellmangroup/many-agent-simulations"
+    error_store: 1024

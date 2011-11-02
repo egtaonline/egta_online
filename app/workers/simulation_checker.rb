@@ -71,7 +71,7 @@ class SimulationChecker
         simulation.failure!
       end
     else
-      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.account.username}/#{simulation.number}/out").read(512)
+      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.account.username}/#{simulation.number}/out").read(Yetting.error_store)
       simulation.failure!
     end
   end
