@@ -9,7 +9,6 @@ class Profile
   belongs_to :simulator, index: true
   field :proto_string
   field :size, type: Integer
-  index ([[:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   field :parameter_hash, type: Hash, default: {}
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
