@@ -14,6 +14,7 @@ class Profile
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
   field :sampled, type: Boolean, default: false
+  index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   index :sampled
   after_create :make_roles, :find_games
   validates_presence_of :simulator, :proto_string, :parameter_hash
