@@ -1,3 +1,5 @@
 = f.input :username
-= f.input :password
+.input.string.required
+  = label_tag :password
+  = password_field_tag :password, nil, size: "50"
 = f.input :active, :as => :boolean
