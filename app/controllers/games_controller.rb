@@ -1,7 +1,6 @@
 class GamesController < EntitiesController
   include SimulatorSelectorController
   include StrategyController
-  before_filter :simulators, only: "new"
 
   def add_role
     resource.add_role(role, params[:role_count])

@@ -2,5 +2,5 @@
   %p Cannot construct this object without a simulator defined
 -else
   = label :selector, :simulator_id
-  = collection_select :selector, :simulator_id, @simulators, :id, :fullname
-  #param= render :partial => "simulator_selector/parameters", :object => @simulators.first.parameter_hash
+  = collection_select :selector, :simulator_id, Simulator.all.to_a, :id, :fullname
+  #param= render :partial => "simulator_selector/parameters", :object => Simulator.first.parameter_hash

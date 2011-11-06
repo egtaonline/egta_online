@@ -55,7 +55,7 @@ class SimulationQueuer
               simulator = s.scheduler.simulator
               root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
               puts "creating submission"
-              submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper")
+              submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper", s.scheduler.nodes)
               if s.flux == true
                 submission.qos = "wellman_flux"
               end

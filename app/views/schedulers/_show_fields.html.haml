@@ -20,6 +20,9 @@
   %th Time per sample
   %td= entry.time_per_sample
 %tr
+  %th Nodes required
+  %td= entry.nodes
+%tr
   %th Active?
   %td= entry.active.to_s
 = render :partial => "parameter", :collection => entry.parameter_hash.to_a

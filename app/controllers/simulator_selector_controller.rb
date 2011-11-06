@@ -15,10 +15,4 @@ module SimulatorSelectorController
       format.js {render "simulator_selector/update_parameters"}
     end
   end
-  
-  protected
-  
-  def simulators
-    @simulators = Simulator.all.to_a
-  end
 end
