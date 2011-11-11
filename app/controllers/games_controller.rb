@@ -7,6 +7,18 @@ class GamesController < EntitiesController
     redirect_to resource_url
   end
 
+  def from_scheduler
+    puts params
+    scheduler = Scheduler.find(params[:scheduler_id])
+    @game = Game.new(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
+    if @game.save!
+      scheduler.roles.each {|r| @game.roles.create!(name: r.name, count: r.count); r.strategy_array.each{|s| @game.add_strategy_by_name(r.name, s)}}
+      redirect_to game_url(@game)
+    else
+      render "new"
+    end
+  end
+
   def show
     respond_to do |format|
       format.html

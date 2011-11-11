@@ -5,4 +5,15 @@ class StrategyInstance
   validates_uniqueness_of :name
   field :payoff, type: Float, default: nil
   field :payoff_std, type: Array, default: []
+  
+  def count
+    role_instance.strategy_count(self.name)
+  end
+  
+  # def as_json(options={})
+  #   {
+  #     "classPath" => "datatypes.Strategy",
+  #     "object" => "{name: \"#{self.name}\"}"
+  #   }
+  # end
 end

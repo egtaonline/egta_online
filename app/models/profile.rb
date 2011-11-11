@@ -45,6 +45,13 @@ class Profile
     end
   end
 
+  def strategy_count(role, strategy)
+    proto_string.split("; ").each do |atom|
+      return atom.split(": ")[1].split(", ").count(strategy) if atom.split(": ")[0] == role
+    end
+    return 0
+  end
+  
   def contains_strategy?(role, strategy)
     retval = false
     proto_string.split("; ").each do |atom|
@@ -60,6 +67,13 @@ class Profile
   def try_scheduling
     Resque.enqueue(ProfileScheduler, id)
   end
+
+  # def as_json(options={})
+  #   {
+  #     "classPath" => "datatypes.Profile",
+  #     "object" => "{roles: [#{role_instances.collect{|r| r.as_json}.join(", ")}}"
+  #   }
+  # end
 
   def add_value(role, strategy, value)
     strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(name: strategy)

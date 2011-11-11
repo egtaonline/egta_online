@@ -7,6 +7,9 @@
       = number_field_tag "role_count", resource.unassigned_player_count, in: 1..resource.unassigned_player_count
       = submit_tag "Add Role"
 
+.action
+  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: resource.id)
+
 %h3 Profiles
 %table
   %tr

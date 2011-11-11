@@ -38,3 +38,13 @@ end
 Then /^the first game should have (\d+) profiles$/ do |arg1|
   Game.first.profile_ids.size.should == arg1.to_i
 end
+
+
+Then /^that game should have the role "([^"]*)" with strategies "([^"]*)" and "([^"]*)"$/ do |arg1, arg2, arg3|
+  Game.last.roles.first.name.should == arg1
+  Game.last.roles.first.strategy_array.should == [arg2, arg3]
+end
+
+Then /^that game should have (\d+) profiles$/ do |arg1|
+  Game.last.profile_ids.count.should == arg1.to_i
+end
