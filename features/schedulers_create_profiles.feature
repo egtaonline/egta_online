@@ -63,3 +63,46 @@ Scenario: Asymmetric profile generation
   When I select "B" from "Player2_strategy"
   And I press "Player2"
   Then there should be 4 profiles
+  
+@wip
+Scenario: Hierarchical scheduler
+  Given I am signed in
+  Given the following simulator:
+    | parameter_hash | {a: 2} |
+  And I am on the last simulator's page
+  When I fill in "role" with "Player1"
+  And I press "Add Role"
+  And I fill in "Player1_strategy" with "A"
+  And I press "Add Strategy"
+  And I fill in "Player1_strategy" with "B"
+  And I press "Add Strategy"
+  When I fill in "role" with "Player2"
+  And I press "Add Role"
+  And I fill in "Player2_strategy" with "A"
+  And I press "Player2"
+  And I fill in "Player2_strategy" with "B"
+  And I press "Player2"
+  And that simulator has the following hierarchical scheduler:
+    | parameter_hash    | {a: 2} |
+    | game_size         | 8      |
+    | agents_per_player | 4      |
+  And I am on the last hierarchical scheduler's page
+  When I select "Player1" from "role"
+  And I fill in "role_count" with "1"
+  And I press "Add Role"
+  When I select "Player2" from "role"
+  And I fill in "role_count" with "1"
+  And I press "Add Role"
+  When I select "A" from "Player1_strategy"
+  And I press "Add Strategy"
+  When I select "B" from "Player1_strategy"
+  And I press "Add Strategy"
+  When I select "A" from "Player2_strategy"
+  And I press "Player2"
+  When I select "B" from "Player2_strategy"
+  And I press "Player2"
+  Then there should be 4 profiles
+  And I should see "Player1: A, A, A, A; Player2: A, A, A, A"
+  And I should see "Player1: A, A, A, A; Player2: B, B, B, B"
+  And I should see "Player1: B, B, B, B; Player2: A, A, A, A"
+  And I should see "Player1: B, B, B, B; Player2: B, B, B, B"

@@ -1,0 +1,2 @@
+class HierarchicalSchedulersController < GameSchedulersController
+end

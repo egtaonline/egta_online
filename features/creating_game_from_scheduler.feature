@@ -1,6 +1,5 @@
 Feature: Creating game from scheduler
 
-@wip
 Scenario: scheduler exists
   Given I am signed in
   Given the following simulator:
@@ -26,7 +25,6 @@ Scenario: scheduler exists
   And I press "Add Strategy"
   And I follow "Create game from scheduler"
   Then I should be on the last game's page
-  And show me the page
   And I should see the following table rows:
     | Name      | a=2       |
     | Size      | 2         |
