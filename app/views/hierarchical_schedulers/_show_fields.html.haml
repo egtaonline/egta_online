@@ -1,0 +1,31 @@
+%tr
+  %th Name
+  %td= entry.name
+%tr
+  %th Full game size
+  %td= entry.size
+%tr
+  %th Agents per player
+  %td= entry.agents_per_player
+%tr
+  %th Simulator
+  %td= entry.simulator.fullname
+%tr
+  %th Max samples
+  %td= entry.max_samples
+%tr
+  %th Samples per simulation
+  %td= entry.samples_per_simulation
+%tr
+  %th Process memory (in MB)
+  %td= entry.process_memory
+%tr
+  %th Time per sample
+  %td= entry.time_per_sample
+%tr
+  %th Nodes required
+  %td= entry.nodes
+%tr
+  %th Active?
+  %td= entry.active.to_s
+= render :partial => "parameter", :collection => entry.parameter_hash.to_a

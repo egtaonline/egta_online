@@ -64,7 +64,6 @@ Scenario: Asymmetric profile generation
   And I press "Player2"
   Then there should be 4 profiles
   
-@wip
 Scenario: Hierarchical scheduler
   Given I am signed in
   Given the following simulator:
@@ -84,7 +83,7 @@ Scenario: Hierarchical scheduler
   And I press "Player2"
   And that simulator has the following hierarchical scheduler:
     | parameter_hash    | {a: 2} |
-    | game_size         | 8      |
+    | size              | 8      |
     | agents_per_player | 4      |
   And I am on the last hierarchical scheduler's page
   When I select "Player1" from "role"

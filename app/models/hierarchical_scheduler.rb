@@ -1,9 +1,9 @@
 class HierarchicalScheduler < GameScheduler
-  field :game_size, type: Integer
   field :agents_per_player, type: Integer
+  validates_presence_of :agents_per_player
   
   def ensure_profiles
-    if roles.reduce(0){|sum, r| sum + r.count*agents_per_player} != game_size || roles.collect{|r| r.strategy_array.size}.min < 1
+    if roles.reduce(0){|sum, r| sum + r.count*agents_per_player} != size || roles.collect{|r| r.strategy_array.size}.min < 1
       return []
     end
     proto_strings = []
@@ -29,6 +29,10 @@ class HierarchicalScheduler < GameScheduler
     end
     ret
   end
+
+  def unassigned_player_count
+    size/agents_per_player-roles.reduce(0) {|n, r| n+r.count}
+  end
   
   private
   
@@ -37,4 +41,5 @@ class HierarchicalScheduler < GameScheduler
     array.each {|a| agents_per_player.times{ar << a}}
     ar
   end
+
 end
