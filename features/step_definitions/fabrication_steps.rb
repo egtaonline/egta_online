@@ -64,4 +64,8 @@ Given /^that ([^"]*) belongs to that ([^"]*)$/ do |parent, child|
   puts eval("p_instance.#{child}s.inspect")
 end
 
+Given /^one account that has passed group validation$/ do
+  @account = Account.create(username: "bcassell", active: true, skip: true)
+end
+
 

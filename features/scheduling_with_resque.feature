@@ -4,7 +4,7 @@ Feature: Scheduling with resque
   I want scheduling to occur through resque automatically
 
 Background:
-	Given 1 account
+	Given one account that has passed group validation
 	
 Scenario: 1 profile interacts with queue
   Given I am signed in
