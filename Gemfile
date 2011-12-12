@@ -8,7 +8,6 @@ gem 'coffee-script'
 gem 'uglifier'
 
 gem 'jquery-rails'
-gem 'newrelic_rpm'
 gem 'execjs'
 gem 'resque', :require => 'resque/server'
 gem 'resque-scheduler'
