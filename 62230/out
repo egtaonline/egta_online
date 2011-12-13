@@ -1,1 +1,0 @@
-custom_require.rb:31:in `require': ./lib/simulator.rb:97: unterminated string meets end of file (SyntaxError)

@@ -17,7 +17,6 @@ Scenario: Simulator is uploaded successfully
   And I attach the file "features/support/epp_sim.zip" to "Simulator source"
   And I press "Create Simulator"
   Then I should be on the last simulator's page
-  And I should see "Simulator was successfully created."
   And I should see the following table rows:
     | Name             | epp_sim                 |
     | Version          | test123                 |

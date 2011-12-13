@@ -1,5 +1,4 @@
-class GamesController < EntitiesController
-  include SimulatorSelectorController
+class GamesController < SimulatorSelectorController
   include StrategyController
 
   def add_role

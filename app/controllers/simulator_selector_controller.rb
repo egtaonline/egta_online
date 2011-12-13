@@ -1,13 +1,4 @@
-module SimulatorSelectorController
-  def create
-    params[params[:controller].singularize] = params[params[:controller].singularize].merge(params[:selector])
-    create!
-  end
-
-  def update
-    params[params[:controller].singularize] = params[params[:controller].singularize].merge(params[:selector])
-    update!
-  end
+class SimulatorSelectorController < EntitiesController
 
   def update_parameters
     @simulator = Simulator.find(params[:simulator_id])

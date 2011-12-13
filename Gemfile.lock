@@ -81,6 +81,7 @@ GEM
       nokogiri (>= 1.5.0)
     daemon_controller (0.2.6)
     database_cleaner (0.6.7)
+    decent_exposure (1.0.1)
     devise (1.4.9)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -117,14 +118,10 @@ GEM
       activesupport (~> 3.0)
       haml (~> 3.0)
       railties (~> 3.0)
-    has_scope (0.5.1)
     high_voltage (1.0.1)
     highline (1.6.2)
     hike (1.2.1)
     i18n (0.6.0)
-    inherited_resources (1.3.0)
-      has_scope (~> 0.5.0)
-      responders (~> 0.6.0)
     jquery-rails (1.0.16)
       railties (~> 3.0)
       thor (~> 0.14)
@@ -207,7 +204,6 @@ GEM
     redis (2.2.2)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
-    responders (0.6.4)
     resque (1.19.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.0.2)
@@ -297,6 +293,7 @@ DEPENDENCIES
   compass (~> 0.12.alpha.0)
   cucumber-rails
   database_cleaner
+  decent_exposure
   devise
   encrypted_strings
   execjs
@@ -309,9 +306,7 @@ DEPENDENCIES
   guard-spork
   haml
   haml-rails
-  has_scope
   high_voltage
-  inherited_resources
   jquery-rails
   kaminari
   launchy

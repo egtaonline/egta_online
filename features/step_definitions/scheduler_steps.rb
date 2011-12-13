@@ -73,3 +73,24 @@ end
 Then /^the last scheduler should have (\d+) profiles$/ do |arg1|
   Scheduler.last.profile_ids.size.should == 0
 end
+
+Given /^there is a simulator with corresponding game scheduler$/ do
+  with_resque do
+    @simulator = Fabricate(:simulator)
+    @simulator.add_role("All")
+    @simulator.add_strategy("All", "A")
+    @simulator.add_strategy("All", "B")
+    @game_scheduler = Fabricate(:game_scheduler, :simulator_id => @simulator.id)
+    @game_scheduler.add_role("All", @game_scheduler.size)
+    @game_scheduler.add_strategy("All", "A")
+    @game_scheduler.add_strategy("All", "B")
+  end
+end
+
+Then /^that game should match the game scheduler$/ do
+  @game = Game.last
+  @game_scheduler = Scheduler.last
+  @game.parameter_hash.should == @game_scheduler.parameter_hash
+  Profile.where(:_id.in => @game.profile_ids).order_by(:proto_string).to_a.should == Profile.where(:_id.in => @game_scheduler.profile_ids).order_by(:proto_string).to_a
+  Profile.count.should == @game.profile_ids.size
+end

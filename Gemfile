@@ -26,8 +26,7 @@ gem "net-ssh", :require => ['net/ssh']
 gem "net-ssh-multi", :require => ['net/ssh/multi']
 gem "net-scp", :require => ['net/scp']
 gem "kaminari"
-gem "inherited_resources"
-gem "has_scope"
+gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem "capistrano"
 gem "simple_form"

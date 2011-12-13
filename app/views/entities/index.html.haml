@@ -3,6 +3,6 @@
 %table
   %tr
     =render :partial => 'headers'
-  =render :partial => 'entry', :collection => @collection
-=paginate @collection
+  =render :partial => 'entry', :collection => resources
+=paginate resources
 =render :partial => 'index_actions'
