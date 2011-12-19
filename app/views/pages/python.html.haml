@@ -1,24 +1,24 @@
 :markdown
   ## Additional Instructions*
   ### Getting and using a YAML parser
-  
+
   The Pyyaml module can be used for parsing yaml files, and is installed on nyx for the wellman group.  Using this module requires using python 2.6.4.  To use this module, the top of your batch script should look like:
-  
+
       #!/bin/bash -login
       module load python/2.6.4
-      
+
   To use this module in your simulator, include the following lines somewhere before trying to read the simulation_spec.yaml file:
-  
-      sys.path.append('/home/wellmangroup/lib64/python') 
+
+      sys.path.append('/home/wellmangroup/lib64/python')
       import yaml
-      
+
   Once you have created an I/O stream for the simulation_spec.yaml, to extract the strategies and parameters call:
-  
+
       sim_spec_list= list(yaml.load_all(stream))
-      
+
   Once your simulations have run, the payoff data needs be written to the payoff_data file in the corresponding simulation folder.  The simplest way to do this is to create a dictionary that maps from roles, e.g. Buyers and Sellers, to another dictionary that maps from strategies to the average payoff of playing that strategy.  Once you have this dictionary, which we'll call payoff_dict, and an I/O stream pointing to payoff_data, which we will call payoff_data, the following command can create the required output:
-  
+
       payoff_info = yaml.dump(payoff_dict,default_flow_style=False) .
       payoff_data.write(payoff_info)
-  
+
   \* Thanks to Sri Krishna Vempati for the additional python instructions.

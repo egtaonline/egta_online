@@ -4,11 +4,11 @@ class RoleInstance
   field :name
   embeds_many :strategy_instances
   validates_uniqueness_of :name
-  
+
   def strategy_count(strategy)
     profile.strategy_count(self.name, strategy)
   end
-  
+
   # def as_json(options={})
   #   {
   #     "classPath" => "datatypes.Role",

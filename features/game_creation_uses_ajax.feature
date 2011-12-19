@@ -39,7 +39,6 @@ Scenario: Creating a game finds existing profiles
     | Name      | test |
     | Game size | 2    |
   And I press "Create Game"
-  And show me the page
   Then I should be on the last game's page
   And the last game should have 3 profiles
 	When I select "All" from "role"

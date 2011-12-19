@@ -12,8 +12,6 @@ describe "#testing new data_parser" do
   it "the new data parser should make sample_records" do
     DataParser.perform(3)
     profile = Profile.last
-    puts "instances"
-    puts Profile.last.role_instances.first.inspect
     profile.sample_records.count.should == 5
     profile.sample_count.should == 5
     arr = [2992.73172891313, 2991.94137519601, 2957.24141614658, 2957.60372235637, 2931.17122038337]

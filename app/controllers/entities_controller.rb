@@ -21,7 +21,7 @@ class EntitiesController < ApplicationController
   expose(:resources_url){"/#{controller_name}"}
   expose(:resource_url){"/#{controller_name}/#{params[:id]}"}
   expose(:edit_resource_url){resource_url+"/edit"}
-  
+
   def create
     resource.save
     respond_with(resource)
@@ -31,7 +31,7 @@ class EntitiesController < ApplicationController
     resource.save
     respond_with(resource)
   end
-  
+
   def destroy
     resource.destroy
     respond_with(resource)

@@ -23,7 +23,7 @@ EgtaOnline::Application.routes.draw do
       get :from_scheduler
     end
   end
-  
+
   resources :simulators, :except => [:edit, :update] do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role

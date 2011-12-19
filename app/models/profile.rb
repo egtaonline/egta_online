@@ -51,7 +51,7 @@ class Profile
     end
     return 0
   end
-  
+
   def contains_strategy?(role, strategy)
     retval = false
     proto_string.split("; ").each do |atom|

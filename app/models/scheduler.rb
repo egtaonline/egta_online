@@ -1,7 +1,7 @@
 class Scheduler
   include Mongoid::Document
   include RoleManipulator
-  
+
   has_many :simulations, :inverse_of => :scheduler, :dependent => :destroy
   scope :active, where(active: true).excludes(simulator_id: nil)
   field :name

@@ -7,11 +7,10 @@ class GamesController < SimulatorSelectorController
   end
 
   def from_scheduler
-    puts params
     scheduler = Scheduler.find(params[:scheduler_id])
-    @game = Game.new(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
+    @game = Game.new_game_from_scheduler(scheduler)
     if @game.save!
-      scheduler.roles.each {|r| @game.roles.create!(name: r.name, count: r.count); r.strategy_array.each{|s| @game.add_strategy_by_name(r.name, s)}}
+      @game.add_roles_from_scheduler(scheduler)
       redirect_to game_url(@game)
     else
       render "new"

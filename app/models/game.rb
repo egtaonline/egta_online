@@ -14,23 +14,19 @@ class Game
   field :profile_ids, :type => Array, :default => []
   after_create :find_profiles
 
-  def add_strategy_by_name(role, strategy)
-    role_i = roles.find_or_create_by(name: role)
-    role_i.strategy_array << strategy
-    role_i.save!
-  end
-  
-  def delete_strategy_by_name(role, strategy)
-    role_i = roles.where(name: role).first
-    role_i.strategy_array.delete(strategy)
-    role_i.save!
-  end
-
   def strategy_regex
     Regexp.new("^"+roles.collect{|r| "#{r.name}: (#{r.strategy_array.sort.join('(, )?)*(')}(, )?)*"}.join("; ")+"$")
   end
 
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
+  end
+
+  def self.new_game_from_scheduler(scheduler)
+    game = Game.new(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
+  end
+
+  def add_roles_from_scheduler(scheduler)
+    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count); r.strategy_array.each{|s| add_strategy(r.name, s)}}
   end
 end

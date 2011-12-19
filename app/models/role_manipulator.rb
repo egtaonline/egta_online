@@ -18,4 +18,8 @@ module RoleManipulator
     role_i.strategy_array.delete(strategy)
     role_i.save!
   end
+
+  def unused_strategies(role)
+    simulator.roles.where(name: role.name).first.strategy_array-role.strategy_array
+  end
 end

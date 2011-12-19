@@ -32,7 +32,7 @@ class SimulationQueuer
 
   def self.create_folder(simulation)
     puts "creating folder hierarchy for #{simulation.number}"
-    puts FileUtils.mkdir_p("tmp/#{simulation.account.username}/#{simulation.number}/features")
+    puts FileUtils.mkdir_p("tmp/#{simulation.account_username}/#{simulation.number}/features")
     puts "hierarchy completed for #{simulation.number}"
   end
 
@@ -96,7 +96,7 @@ class SimulationQueuer
 
   def self.create_yaml(simulation)
     puts "creating simulation_spec.yaml"
-    File.open( "#{Rails.root}/tmp/#{simulation.account.username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
+    File.open( "#{Rails.root}/tmp/#{simulation.account_username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
       puts "dumping first"
       puts YAML.dump(Profile.find(simulation.profile_id).to_yaml, out)
       puts "dumping second"

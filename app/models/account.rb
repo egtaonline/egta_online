@@ -16,12 +16,13 @@ class Account
   def login
     if self["skip"] != true
       begin
-        Net::SSH.start(Yetting.host, username, :timeout => 2) do |ssh|
-          groups = ssh.exec!("groups")
-          errors.add(:username, "is not a member of wellman group.  Ask Mike to add you.") if groups.split(" ").include?("wellman") == false 
+        Net::SSH.start(Yetting.host, username, password: password, timeout: 2) do |s|
+          s.exec!("echo #{KEY} >> ~/.ssh/authorized_keys")
+          groups = s.exec!("groups")
+          errors.add(:username, "is not a member of wellman group.  Ask Mike to add you.") if groups.split(" ").include?("wellman") == false
         end
       rescue
-        errors.add(:username, "can't login to host")
+        errors.add(:username, "can't login to host.  Verify that your password is correct, or try again later.")
       end
     end
   end

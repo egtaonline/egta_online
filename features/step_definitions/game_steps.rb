@@ -22,7 +22,7 @@ end
 
 Given /^the last game has the strategy "([^"]*)"$/ do |arg1|
   game = Game.last
-  game.add_strategy_by_name("All", arg1)
+  game.add_strategy("All", arg1)
   game.save!
 end
 

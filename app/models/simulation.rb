@@ -10,6 +10,9 @@ class Simulation
   belongs_to :profile, :inverse_of => :simulations
   belongs_to :scheduler
 
+  delegate :username, :to => :account, :prefix => true
+  delegate :nodes, :to => :scheduler, :prefix => true
+
   field :size, :type => Integer
   field :state
   field :job_id
