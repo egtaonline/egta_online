@@ -3,9 +3,9 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
-    puts "Checking for simulations"
+    logger.info "Checking for simulations on nyx."
     if Simulation.active.length > 0
-      puts "Simulations found"
+      logger.info "Simulations found on nyx."
       simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
       job_id = []
@@ -60,19 +60,21 @@ class SimulationChecker
     puts "Finishing"
   end
 
-  def self.check_for_errors(simulation)
-    if File.open("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/out").read == ""
-      if File.exist?("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/payoff_data")
-        puts "enqueue data parsing"
-        Resque.enqueue(DataParser, simulation.number)
-      else
-        puts "missing payoff data"
-        simulation.error_message = "Payoff data is missing, cause unknown."
-        simulation.failure!
-      end
+  def self.check_for_errors(simulation, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
+    error_message = errors_from_folder(folder_name)
+    if error_message == ""
+      Resque.enqueue(DataParser, simulation.number)
     else
-      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/out").read(Yetting.error_store)
+      simulation.error_message = error_message
       simulation.failure!
+    end
+  end
+  
+  def self.errors_from_folder(folder_name)
+    if File.open(folder_name+"/out").read == ""
+      File.exist?(folder_name+"/payoff_data") ? "" : "Missing payoff data file."
+    else
+      File.open(folder_name+"/out").read(Yetting.error_store)
     end
   end
 end

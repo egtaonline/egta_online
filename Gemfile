@@ -9,7 +9,7 @@ gem 'uglifier'
 
 gem 'jquery-rails'
 gem 'execjs'
-gem 'resque', :require => 'resque/server'
+gem 'resque', :require => 'resque/server', :git => 'git://github.com/defunkt/resque.git'
 gem 'resque-scheduler'
 gem 'therubyracer'
 gem "haml"
@@ -54,4 +54,5 @@ group :test do
   gem "guard-cucumber"
   gem "guard-spork"
   gem "resque_spec"
+  gem "simplecov", :require => false
 end
