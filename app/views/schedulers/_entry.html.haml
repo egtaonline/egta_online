@@ -2,5 +2,5 @@
   %td= link_to entry.name, url_for(:controller => entry.class.to_s.tableize, :action => "show", :id => entry.id)
   %td= link_to entry.class, url_for(:controller => entry.class.to_s.tableize, :action => "show", :id => entry.id)
   %td= link_to entry.simulator.fullname, simulator_path(entry.simulator)
-  %td= link_to entry.active.to_s, scheduler_path(entry)
+  %td= link_to entry.active.to_s, url_for(:controller => entry.class.to_s.tableize, :action => "show", :id => entry.id)
   %td= link_to 'Destroy', url_for(:action => "destroy", :id => entry.id), :confirm => 'Are you sure?', :method => :delete
