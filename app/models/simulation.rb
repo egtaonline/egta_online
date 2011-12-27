@@ -48,7 +48,7 @@ class Simulation
     after_transition :on => [:failure, :finish], :do => :requeue
 
     event :queue do
-      transition :pending => :queued
+      transition [:queued, :pending] => :queued
     end
 
     event :failure do
@@ -56,7 +56,7 @@ class Simulation
     end
 
     event :start do
-      transition :queued => :running
+      transition [:queued, :running] => :running
     end
 
     event :finish do

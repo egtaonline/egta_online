@@ -29,7 +29,13 @@ class Profile
   end
 
   def name
-    proto_string
+    proto_string.split("; ").collect do |role|
+      role_name = role.split(": ").first
+      strategies = role.split(": ").last.split(", ")
+      role_name += ": "
+      singular_strategies = strategies.uniq.collect {|s| "#{strategies.count(s)} "+s}
+      role_name += singular_strategies.join(", ")
+    end.join("; ")
   end
 
   def sample_count

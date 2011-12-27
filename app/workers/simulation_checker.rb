@@ -3,76 +3,63 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
-    puts "Checking for simulations"
+    logger.info "Checking for simulations on nyx."
     if Simulation.active.length > 0
-      puts "Simulations found"
+      logger.info "Simulations found on nyx."
       simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
-      job_id = []
-      state_info = []
-      if output != nil && output != ""
-        outputs = output.split("\n")
-        outputs.each do |job|
-          job_id << job.split(".").first
-          state_info << job.split(/\s+/)
-        end
-      end
-      puts "Updating status"
+      state_info = parse_nyx_output(output)
+      logger.info "Updating status"
       Account.all.each do |account|
         if Simulation.where(:_id.in => simulation_ids, :account_id => account.id).count != 0
           location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
           numbers = Simulation.where(:_id.in => simulation_ids, :account_id => account.id).collect{|s| location+"#{s.number}"}
           numbers = numbers.join(" ")
           system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
-          Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each do |s|
-            begin
-              simulator = s.scheduler.simulator
-              if job_id.include?(s.job_id)
-                state = state_info[job_id.index(s.job_id)][9]
-                if state == "C"
-                  puts "checking existance"
-                  if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
-                    puts "checking for errors"
-                    check_for_errors(s)
-                  end
-                elsif state == "R" && s.state != "running"
-                  s.start!
-                end
-              else
-                puts "I am checking existance"
-                if File.exists?("#{Rails.root}/db/#{account.username}/#{s.number}/out")
-                  puts "checking for errors"
-                  check_for_errors(s)
-                else
-                  puts "did not exist"
-                  s.error_message = "Did not exist on nyx"
-                  s.failure!
-                end
-              end
-            rescue
-              s.error_message = "Unknown failure checking status"
-              s.failure!
-            end
-          end
+          Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each {|s| update_simulation_status(s, state_info[s.job_id])}
         end
       end
     end
-    puts "Finishing"
+    logger.info "Finishing"
   end
 
-  def self.check_for_errors(simulation)
-    if File.open("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/out").read == ""
-      if File.exist?("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/payoff_data")
-        puts "enqueue data parsing"
-        Resque.enqueue(DataParser, simulation.number)
+  def self.update_simulation_status(simulation, status, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
+    case status
+    when "R"
+      simulation.start!
+    when "C", ""
+      if File.exists?(folder_name+"/out")
+        check_for_errors(simulation, folder_name)
       else
-        puts "missing payoff data"
-        simulation.error_message = "Payoff data is missing, cause unknown."
+        simulation.error_message = "Files were not found on nyx."
         simulation.failure!
       end
     else
-      simulation.error_message = File.open("#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}/out").read(Yetting.error_store)
+      simulation.queue!
+    end
+  end
+
+  def self.parse_nyx_output(output)
+    parsed_output = {}
+    output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
+    parsed_output
+  end
+
+  def self.check_for_errors(simulation, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
+    error_message = errors_from_folder(folder_name)
+    if error_message == ""
+      Resque.enqueue(DataParser, simulation.number)
+    else
+      simulation.error_message = error_message
       simulation.failure!
+    end
+  end
+  
+  def self.errors_from_folder(folder_name)
+    if File.open(folder_name+"/out").read == ""
+      File.exist?(folder_name+"/payoff_data") ? "" : "Missing payoff data file."
+    else
+      File.open(folder_name+"/out").read(Yetting.error_store)
     end
   end
 end
