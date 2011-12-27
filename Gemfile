@@ -42,6 +42,7 @@ gem 'rdiscount'
 
 group :test do
   gem "capybara"
+  gem "rb-fsevent"
   gem "capybara-webkit"
   gem "growl"
   gem "spork", '~> 0.9.0.rc'
