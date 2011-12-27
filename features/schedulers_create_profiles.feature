@@ -63,45 +63,50 @@ Scenario: Asymmetric profile generation
   When I select "B" from "Player2_strategy"
   And I press "Player2"
   Then there should be 4 profiles
-  
+
 Scenario: Hierarchical scheduler
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: 2} |
   And I am on the last simulator's page
-  When I fill in "role" with "Player1"
+  When I fill in "role" with "Buyer"
   And I press "Add Role"
-  And I fill in "Player1_strategy" with "A"
+  And I fill in "Buyer_strategy" with "A"
   And I press "Add Strategy"
-  And I fill in "Player1_strategy" with "B"
+  And I fill in "Buyer_strategy" with "B"
   And I press "Add Strategy"
-  When I fill in "role" with "Player2"
+  When I fill in "role" with "Seller"
   And I press "Add Role"
-  And I fill in "Player2_strategy" with "A"
-  And I press "Player2"
-  And I fill in "Player2_strategy" with "B"
-  And I press "Player2"
+  And I fill in "Seller_strategy" with "A"
+  And I press "Seller"
+  And I fill in "Seller_strategy" with "B"
+  And I press "Seller"
   And that simulator has the following hierarchical scheduler:
     | parameter_hash    | {a: 2} |
-    | size              | 8      |
-    | agents_per_player | 4      |
+    | size              | 40     |
+    | agents_per_player | 10     |
   And I am on the last hierarchical scheduler's page
-  When I select "Player1" from "role"
-  And I fill in "role_count" with "1"
+  When I select "Buyer" from "role"
+  And I fill in "role_count" with "2"
   And I press "Add Role"
-  When I select "Player2" from "role"
-  And I fill in "role_count" with "1"
+  When I select "Seller" from "role"
+  And I fill in "role_count" with "2"
   And I press "Add Role"
-  When I select "A" from "Player1_strategy"
+  When I select "A" from "Buyer_strategy"
   And I press "Add Strategy"
-  When I select "B" from "Player1_strategy"
+  When I select "B" from "Buyer_strategy"
   And I press "Add Strategy"
-  When I select "A" from "Player2_strategy"
-  And I press "Player2"
-  When I select "B" from "Player2_strategy"
-  And I press "Player2"
-  Then there should be 4 profiles
-  And I should see "Player1: A, A, A, A; Player2: A, A, A, A"
-  And I should see "Player1: A, A, A, A; Player2: B, B, B, B"
-  And I should see "Player1: B, B, B, B; Player2: A, A, A, A"
-  And I should see "Player1: B, B, B, B; Player2: B, B, B, B"
+  When I select "A" from "Seller_strategy"
+  And I press "Seller"
+  When I select "B" from "Seller_strategy"
+  And I press "Seller"
+  Then there should be 9 profiles
+  And I should see "Buyer: 20 A; Seller: 20 A"
+  And I should see "Buyer: 10 A, 10 B; Seller: 20 A"
+  And I should see "Buyer: 20 B; Seller: 20 A"
+  And I should see "Buyer: 20 A; Seller: 10 A, 10 B"
+  And I should see "Buyer: 10 A, 10 B; Seller: 10 A, 10 B"
+  And I should see "Buyer: 20 B; Seller: 10 A, 10 B"
+  And I should see "Buyer: 20 A; Seller: 20 B"
+  And I should see "Buyer: 10 A, 10 B; Seller: 20 B"
+  And I should see "Buyer: 20 B; Seller: 20 B"
