@@ -1,6 +1,7 @@
 class HierarchicalScheduler < GameScheduler
   field :agents_per_player, type: Integer
   validates_presence_of :agents_per_player
+  validate :divisibility
   
   def ensure_profiles
     if roles.reduce(0){|sum, r| sum + r.count*agents_per_player} != size || roles.collect{|r| r.strategy_array.size}.min < 1
@@ -40,6 +41,10 @@ class HierarchicalScheduler < GameScheduler
     ar = []
     array.each {|a| agents_per_player.times{ar << a}}
     ar
+  end
+  
+  def divisibility
+    errors.add(:agents_per_player, "does not divide size.") if size % agents_per_player != 0
   end
 
 end
