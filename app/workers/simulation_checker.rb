@@ -3,13 +3,13 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
-    logger.info "Checking for simulations on nyx."
+    puts "Checking for simulations on nyx."
     if Simulation.active.length > 0
-      logger.info "Simulations found on nyx."
+      puts "Simulations found on nyx."
       simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
       state_info = parse_nyx_output(output)
-      logger.info "Updating status"
+      puts "Updating status"
       Account.all.each do |account|
         if Simulation.where(:_id.in => simulation_ids, :account_id => account.id).count != 0
           location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
@@ -20,7 +20,7 @@ class SimulationChecker
         end
       end
     end
-    logger.info "Finishing"
+    puts "Finishing"
   end
 
   def self.update_simulation_status(simulation, status, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
