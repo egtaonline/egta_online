@@ -15,7 +15,7 @@ gem 'therubyracer'
 gem "haml"
 gem "haml-rails"
 gem "airbrake"
-gem "bson_ext", "1.3.1"
+gem "bson_ext"
 gem "mongoid"
 gem "mongo_ext"
 gem "state_machine"
