@@ -4,7 +4,7 @@ class HierarchicalScheduler < GameScheduler
   validate :divisibility
   
   def ensure_profiles
-    if roles.reduce(0){|sum, r| sum + r.count*agents_per_player} != size || roles.collect{|r| r.strategy_array.size}.min < 1
+    if roles.reduce(0){|sum, r| sum + r.count}*agents_per_player != size || roles.collect{|r| r.strategy_array.size}.min < 1
       return []
     end
     proto_strings = []
@@ -17,8 +17,6 @@ class HierarchicalScheduler < GameScheduler
         all_other_ars << role.strategy_array.sort.repeated_combination(role.count).to_a
       end
     end
-    puts first_ar.inspect
-    puts all_other_ars.inspect
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategy_array.size} == roles.first.strategy_array.size
       return first_ar.collect {|e| "#{roles.first}: "+ multiply(e).join(", ")}
     else

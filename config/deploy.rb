@@ -3,7 +3,7 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require 'bundler/capistrano'
 require 'rvm/capistrano'
 
-set :rvm_ruby_string, 'ruby-1.9.2'
+set :rvm_ruby_string, 'ruby-1.9.3'
 set :rvm_type, :user
 set :application, "egtaonline"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
