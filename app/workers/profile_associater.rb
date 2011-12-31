@@ -20,7 +20,9 @@ class ProfileAssociater
         profile_ids << profile.id
         puts profile.proto_string
       end
+      puts profile_ids.size
       scheduler.update_attribute(:profile_ids, profile_ids)
+      puts scheduler.profile_ids.size
     end
   end
 end
