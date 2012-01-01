@@ -13,7 +13,7 @@ check_simulations:
   description: "This job checks nyx for status updates on simulations, and gathers completed simulations."
 
 clean_simulations:
-  cron: "0 0 * * *"
+  cron: "0 23 * * *"
   class: SimulationCleaner
   queue: nyx_actions
   args:

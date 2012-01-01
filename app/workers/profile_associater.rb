@@ -11,14 +11,13 @@ class ProfileAssociater
       proto_strings = scheduler.ensure_profiles
       profile_ids = []
       proto_strings.each do |proto_string|
-        puts "adding #{proto_string} to #{scheduler.name}"
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,
                                                 size: scheduler.size,
                                                 proto_string: proto_string)
+        puts "adding #{profile.name} to #{scheduler.name}"
         profile.try_scheduling
         profile_ids << profile.id
-        puts profile.proto_string
       end
       puts profile_ids.size
       scheduler.update_attribute(:profile_ids, profile_ids)

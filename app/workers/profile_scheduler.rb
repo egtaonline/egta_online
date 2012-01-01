@@ -4,7 +4,7 @@ class ProfileScheduler
   def self.perform(profile_id)
     profile = Profile.find(profile_id) rescue nil
     if profile != nil
-      puts "deciding to schedule a simulation for #{profile.proto_string}"
+      puts "deciding to schedule a simulation for #{profile.name}"
       if profile.simulations.scheduled.count == 0
         sample_count = profile.simulations.active.scheduled.reduce(0) {|sum, sch| sum+sch.size} + profile.sample_count
         max_schedulable = Scheduler.where(profile_ids: profile.id).active.collect {|s| s.max_samples}.push(0).max

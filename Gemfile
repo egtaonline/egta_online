@@ -30,11 +30,11 @@ gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem "capistrano"
 gem "simple_form"
-gem "encrypted_strings"
+#gem "encrypted_strings"
 gem "passenger"
 gem "resque-loner"
 gem 'mongoid_rails_migrations', '0.0.14'
-gem "facets", :require => "facets/array"
+#gem "facets", :require => "facets/array"
 gem "compass", "~> 0.12.alpha.0"
 gem 'rabl'
 gem 'high_voltage'
