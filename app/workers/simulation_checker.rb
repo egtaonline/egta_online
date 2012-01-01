@@ -41,7 +41,7 @@ class SimulationChecker
 
   def self.parse_nyx_output(output)
     parsed_output = {}
-    output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
+    output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]} if output != nil
     parsed_output
   end
 

@@ -3,7 +3,7 @@ EgtaOnline::Application.routes.draw do
   devise_for :users
   resources :accounts
   resources :analysis
-  resources :profiles, :only => :show, :create
+  resources :profiles, :only => :show
   match "/simulations/destroy" => "simulations#destroy"
   resources :simulations, :except => [:edit, :update]
   resources :schedulers, :game_schedulers, :hierarchical_schedulers do
