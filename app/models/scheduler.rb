@@ -13,7 +13,7 @@ class Scheduler
   field :parameter_hash, :type => Hash, :default => {}
   field :profile_ids, :type => Array, :default => []
   field :nodes, :type => Integer, :default => 1
-  embeds_many :roles
+  embeds_many :roles, :as => :role_owner
   belongs_to :simulator
 
   validates_uniqueness_of :name

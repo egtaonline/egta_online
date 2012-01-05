@@ -1,12 +1,16 @@
 class Role
   include Mongoid::Document
+  has_and_belongs_to_many :strategies, inverse_of: nil
+  embedded_in :role_owner, polymorphic: true
+  
   field :name
   field :count, type: Integer
-  field :strategy_array, type: Array, default: []
   alias :to_s :name
-  embedded_in :simulator
-  embedded_in :game
-  embedded_in :scheduler
+
   validates_presence_of :name
   validates_uniqueness_of :name
+  
+  def strategy_array
+    strategies.only(:name).collect{|s| s.name}
+  end
 end

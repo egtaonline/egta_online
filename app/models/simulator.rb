@@ -6,14 +6,14 @@ class Simulator
   field :name
   field :description
   field :version
-  field :setup, type: Boolean, default: false
-  embeds_many :roles
-  field :parameter_hash, type: Hash, default: {}
+  field :setup, :type => Boolean, :default => false
+  embeds_many :roles, :as => :role_owner
+  field :parameter_hash, :type => Hash, :default => {}
   validates_presence_of :name, :version
-  validates_uniqueness_of :version, scope: :name
-  has_many :profiles, dependent: :destroy
-  has_many :schedulers, dependent: :destroy
-  has_many :games, dependent: :destroy
+  validates_uniqueness_of :version, :scope => :name
+  has_many :profiles, :dependent => :destroy
+  has_many :schedulers, :dependent => :destroy
+  has_many :games, :dependent => :destroy
   after_create :setup_simulator
 
   def location

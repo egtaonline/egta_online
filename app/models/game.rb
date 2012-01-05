@@ -5,7 +5,7 @@ class Game
 
   field :name
   field :size, type: Integer
-  embeds_many :roles
+  embeds_many :roles, :as => :role_owner
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true
