@@ -27,15 +27,13 @@ class SimulationChecker
     case status
     when "R"
       simulation.start!
-    when "C", ""
+    when "C", "", nil
       if File.exists?(folder_name+"/out")
         check_for_errors(simulation, folder_name)
       else
         simulation.error_message = "Files were not found on nyx."
         simulation.failure!
       end
-    else
-      simulation.queue!
     end
   end
 
