@@ -7,8 +7,8 @@ Scenario: 1 game exists, no prior profiles
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: 2} |
-  And that simulator has the following role:
-    | name | All |
+  And that simulator has 1 role
+  And that role has the strategies "A" and "B"
   And that simulator has the following game scheduler:
 		| size					 | 2      |
     | parameter_hash | {a: 2} |
@@ -36,8 +36,8 @@ Scenario: 2 games exist, no prior profiles, no matches
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: 2} |
-  And that simulator has the following role:
-    | name | All |
+  And that simulator has 1 role
+  And that role has the strategies "A" and "B"
   And that simulator has the following game scheduler:
     | parameter_hash | {a: 2} |
     | size           | 2      |
@@ -59,15 +59,15 @@ Scenario: no prior games, 2 prior profiles exist
   Given I am signed in
   Given the following simulator:
     | parameter_hash | {a: "2"} |
-  And that simulator has the following role:
-    | name | All |
+  And that simulator has 1 role
+  And that role has the strategies "A" and "B"
   And that simulator has the following profile:
-    | proto_string   | All: A, B   |
-    | parameter_hash | {a: "2"} |
+    | proto_string   | All: 1, 2 |
+    | parameter_hash | {a: "2"}  |
   And that profile has 1 sample record
   And that simulator has the following profile:
-    | proto_string   | All: A, A   |
-    | parameter_hash | {a: "3"} |
+    | proto_string   | All: 1, 1 |
+    | parameter_hash | {a: "3"}  |
   When I am on the new game page
   And I fill in the following:
     | Name      | test |

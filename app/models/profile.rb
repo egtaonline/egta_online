@@ -33,7 +33,8 @@ class Profile
       role_name = role.split(": ").first
       strategies = role.split(": ").last.split(", ")
       role_name += ": "
-      singular_strategies = strategies.uniq.collect {|s| "#{strategies.count(s)} "+s}
+      puts ::Strategy.last.inspect
+      singular_strategies = ::Strategy.where(:number.in => strategies.uniq).collect {|s| "#{strategies.count(s.number.to_s)} #{s.name}"}
       role_name += singular_strategies.join(", ")
     end.join("; ")
   end
@@ -46,7 +47,7 @@ class Profile
     proto_string.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
       atom.split(": ")[1].split(", ").each do |strat|
-        role.strategy_instances.find_or_create_by(name: strat)
+        role.strategy_instances.find_or_create_by(:strategy_id => ::Strategy.where(:number => strat).first.id)
       end
     end
   end
@@ -60,8 +61,11 @@ class Profile
 
   def contains_strategy?(role, strategy)
     retval = false
-    proto_string.split("; ").each do |atom|
-      retval = true if atom.split(": ")[0] == role && atom.split(": ")[1].split(", ").include?(strategy)
+    strategy = ::Strategy.where(:name => strategy).first.number
+    if strategy != nil
+      proto_string.split("; ").each do |atom|
+        retval = (atom.split(": ")[0] == role && atom.split(": ")[1].split(", ").include?(strategy.to_s))
+      end
     end
     return retval
   end
@@ -82,7 +86,7 @@ class Profile
   # end
 
   def add_value(role, strategy, value)
-    strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(name: strategy)
+    strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(:strategy_id => ::Strategy.where(:name => strategy).first.id)
     if strategy.payoff == nil
       strategy.payoff = value
       strategy.payoff_std = [1, value, value**2, nil]

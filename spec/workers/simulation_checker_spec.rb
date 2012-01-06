@@ -14,6 +14,7 @@ describe SimulationChecker do
   describe "SimulationChecker.check_for_errors" do
     before :each do
       @simulator = Fabricate(:simulator)
+      strategy = Fabricate(:strategy)
       @profile = Fabricate(:profile, :simulator_id => @simulator.id, :parameter_hash => @simulator.parameter_hash)
       @simulation = Fabricate(:simulation, :profile_id => @profile.id, :number => 1)
     end
@@ -42,6 +43,7 @@ describe SimulationChecker do
   describe "SimulationChecker.update_simulation_status" do
     before :each do
       @simulator = Fabricate(:simulator)
+      strategy = Fabricate(:strategy)
       @profile = Fabricate(:profile, :simulator_id => @simulator.id, :parameter_hash => @simulator.parameter_hash)
       @simulation = Fabricate(:simulation, :profile_id => @profile.id, :number => 1)
     end

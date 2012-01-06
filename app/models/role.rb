@@ -9,8 +9,4 @@ class Role
 
   validates_presence_of :name
   validates_uniqueness_of :name
-  
-  def strategy_array
-    strategies.only(:name).collect{|s| s.name}
-  end
 end

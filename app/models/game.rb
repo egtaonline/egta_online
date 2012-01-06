@@ -27,6 +27,6 @@ class Game
   end
 
   def add_roles_from_scheduler(scheduler)
-    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count); r.strategy_array.each{|s| add_strategy(r.name, s)}}
+    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count); r.strategies.each{|s| add_strategy(r.name, s.name)}}
   end
 end

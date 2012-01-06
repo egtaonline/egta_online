@@ -24,16 +24,16 @@ Scenario: Creating a game finds existing profiles
     | parameter_hash | {a: "2"} |
     | name           | test     |
     | version        | test     |
-  And that simulator has the following role:
-    | name           | All        |
+  And that simulator has 1 role
+  And that role has the strategies "A" and "B"
   And that simulator has the following profile:
-    | proto_string   | All: A, A |
+    | proto_string   | All: 1, 1 |
     | parameter_hash | {a: "2"}  |
   And that profile has 1 sample record
   Given that simulator has the following profiles:
     | proto_string | parameter_hash |
-    | All: A, B    | {a: "2"}       |
-    | All: B, B    | {a: "2"}       |
+    | All: 1, 2    | {a: "2"}       |
+    | All: 2, 2    | {a: "2"}       |
   When I am on the new game page
   And I fill in the following:
     | Name      | test |

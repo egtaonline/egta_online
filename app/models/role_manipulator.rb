@@ -7,19 +7,19 @@ module RoleManipulator
     roles.where(name: name).destroy_all
   end
 
-  def add_strategy(role, strategy)
+  def add_strategy(role, strategy_name)
     role_i = roles.find_or_create_by(name: role)
-    role_i.strategy_array << strategy
+    role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
     role_i.save!
   end
 
-  def remove_strategy(role, strategy)
+  def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
-    role_i.strategy_array.delete(strategy)
+    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name).to_a
     role_i.save!
   end
 
   def unused_strategies(role)
-    simulator.roles.where(name: role.name).first.strategy_array-role.strategy_array
+    (simulator.roles.where(name: role.name).first.strategies.to_a-role.strategies.to_a).collect{|s| s.name}
   end
 end

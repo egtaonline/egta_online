@@ -3,37 +3,38 @@ class GameScheduler < Scheduler
   field :size, :type => Integer
   validates_presence_of :size
 
-  def add_strategy(role, strategy)
+  def add_strategy(role, strategy_name)
     role_i = roles.find_or_create_by(name: role)
-    role_i.strategy_array << strategy
+    role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
     role_i.save!
     puts Resque.enqueue(ProfileAssociater, self.id)
   end
 
-  def remove_strategy(role, strategy)
+  def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
-    role_i.strategy_array.delete(strategy)
+    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
     role_i.save!
     pids = []
-    Profile.find(profile_ids).each {|profile| pids << profile.id if profile.contains_strategy?(role, strategy) == false}
+    Profile.find(profile_ids).each {|profile| pids << profile.id if profile.contains_strategy?(role, strategy_name) == false}
     self.update_attributes(profile_ids: pids)
   end
 
   def ensure_profiles
-    if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategy_array.size}.min < 1
+    if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategies.count}.min < 1
       return []
     end
     proto_strings = []
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
+      strategy_nums = role.strategies.only(:number).collect{|s| s.number}
       if first_ar == nil
-        first_ar = role.strategy_array.sort.repeated_combination(role.count).to_a
+        first_ar = strategy_nums.sort.repeated_combination(role.count).to_a
       else
-        all_other_ars << role.strategy_array.sort.repeated_combination(role.count).to_a
+        all_other_ars << strategy_nums.sort.repeated_combination(role.count).to_a
       end
     end
-    if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategy_array.size} == roles.first.strategy_array.size
+    if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
       return first_ar.collect {|e| "#{roles.first}: "+e.join(", ")}
     else
       ret = []

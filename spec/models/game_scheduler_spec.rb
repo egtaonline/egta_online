@@ -6,6 +6,7 @@ describe GameScheduler do
   end
   describe "#destroy" do
     let!(:simulator){Fabricate(:simulator)}
+    let!(:strategy){Fabricate(:strategy, :name => "A")}
     let!(:profile){Fabricate(:profile, :simulator_id => simulator.id)}
     let!(:game_scheduler){Fabricate(:game_scheduler, :simulator_id => simulator.id)}
     it "should preserve profiles" do
