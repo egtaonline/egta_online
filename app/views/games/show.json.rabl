@@ -1,9 +1,9 @@
 object resource
 child :roles do
-  attributes :name, :count, :strategy_array
+  attributes :name, :count
 end
 child @profiles => :profiles do
-  attributes :proto_string
+  attributes :name
   child :role_instances => :roles do
     attributes :name
     child :strategy_instances => :strategies do

@@ -50,7 +50,7 @@ class Simulator
 
   def remove_strategy(role, strategy)
     role_i = roles.where(name: role).first
-    role_i.strategy_array.delete(strategy)
+    role_i.strategies = role_i.strategies.where(:name.ne => strategy)
     role_i.save!
     profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
   end
