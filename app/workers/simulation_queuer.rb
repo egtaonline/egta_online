@@ -43,7 +43,7 @@ class SimulationQueuer
   end
 
   def self.schedule(simulations)
-    Account.all.each do |account|
+    Account.active.each do |account|
       if simulations.where(account_id: account.id).count > 0
         scp = Net::SCP.start(Yetting.host, account.username)
         scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
