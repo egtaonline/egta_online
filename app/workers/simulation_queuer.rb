@@ -19,6 +19,7 @@ class SimulationQueuer
         NyxWrapper.create_wrapper(s)
         puts "wrapper made"
       rescue
+        puts "An error occurred: #{$!}"
         puts "failed to create files for nyx"
         s.error_message = "failed to create files for nyx"
         s.failure!
@@ -85,7 +86,6 @@ class SimulationQueuer
                 channel.wait
               end
             rescue
-              puts "An error occurred: #{$!}"
               s.error_message = "failed in the submission step"
               s.failure!
             end
