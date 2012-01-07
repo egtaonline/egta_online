@@ -85,6 +85,7 @@ class SimulationQueuer
                 channel.wait
               end
             rescue
+              puts "An error occurred: #{$!}"
               s.error_message = "failed in the submission step"
               s.failure!
             end
