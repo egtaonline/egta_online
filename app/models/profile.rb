@@ -47,14 +47,18 @@ class Profile
     proto_string.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
       atom.split(": ")[1].split(", ").each do |strat|
-        role.strategy_instances.find_or_create_by(:strategy_id => ::Strategy.where(:number => strat).first.id)
+        role.strategy_instances.find_or_create_by(:name => ::Strategy.where(:number => strat).first.name)
       end
     end
   end
 
   def strategy_count(role, strategy)
-    proto_string.split("; ").each do |atom|
-      return atom.split(": ")[1].split(", ").count(strategy) if atom.split(": ")[0] == role
+    name.split("; ").each do |role|
+      if role.split(": ")[0] == role
+        role.split(", ").each do |strat|
+          return strat.split(" ")[0].to_i if strat.split(" ")[1] == strategy
+        end
+      end
     end
     return 0
   end
@@ -86,7 +90,7 @@ class Profile
   # end
 
   def add_value(role, strategy, value)
-    strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(:strategy_id => ::Strategy.where(:name => strategy).first.id)
+    strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(:name => strategy)
     if strategy.payoff == nil
       strategy.payoff = value
       strategy.payoff_std = [1, value, value**2, nil]

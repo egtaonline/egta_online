@@ -7,18 +7,18 @@ xml.nfg(:name=>resource.simulator.fullname, :description=>resource.parameter_has
     end
   end
   nfg.actions do |actions|
-    resource.roles.first.strategy_array.each do |strategy|
-      actions.action(:id=>strategy)
+    resource.roles.first.strategies.each do |strategy|
+      actions.action(:id=>strategy.name)
     end
   end
   nfg.payoffs do |payoffs|
     @profiles.each do |profile|
       payoffs.payoff do |payoff|
-        strategies = profile.proto_string.split(": ")[1].split(", ")
-        strategies.uniq.each do |strategy|
-          payoff.outcome(:action=>strategy,
-                         :count=>strategies.count(strategy),
-                         :value=>profile.role_instances.first.strategy_instances.where(name: strategy).first.payoff)
+        strategies = profile.name.split(": ")[1].split(", ")
+        strategies.each do |strategy|
+          payoff.outcome(:action=>strategy.split(" ")[1],
+                         :count=>strategy.split(" ")[0],
+                         :value=>profile.role_instances.first.strategy_instances.where(name: strategy.split(" ")[1]).first.payoff)
         end
       end
     end
