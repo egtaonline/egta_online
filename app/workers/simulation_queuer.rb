@@ -53,9 +53,7 @@ class SimulationQueuer
             puts "#{name}: #{sent}/#{total}"
           end
         rescue
-          puts "failed, retrying"
-          puts "account: #{account.username}"
-          redo
+          puts "failed account: #{account.username}"
         end
         Net::SSH.start(Yetting.host, account.username) do |ssh|
           simulations.where(account_id: account.id).each do |s|
