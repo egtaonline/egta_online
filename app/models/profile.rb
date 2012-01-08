@@ -23,7 +23,7 @@ class Profile
   def to_yaml
     ret_hash = {}
     proto_string.split("; ").each do |atom|
-      ret_hash[atom.split(": ")[0]] = atom.split(": ")[1].delete("[]").split(", ")
+      ret_hash[atom.split(": ")[0]] = atom.split(": ")[1].split(", ").collect{|s| ::Strategy.where(:number => s).first.name }
     end
     ret_hash
   end
