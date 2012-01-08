@@ -48,8 +48,14 @@ class SimulationQueuer
     Account.active.each do |account|
       if simulations.where(account_id: account.id).count > 0
         scp = Net::SCP.start(Yetting.host, account.username)
-        scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
-          puts "#{name}: #{sent}/#{total}"
+        begin
+          scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
+            puts "#{name}: #{sent}/#{total}"
+          end
+        rescue
+          puts "failed, retrying"
+          puts "account: #{account.username}"
+          redo
         end
         Net::SSH.start(Yetting.host, account.username) do |ssh|
           simulations.where(account_id: account.id).each do |s|
