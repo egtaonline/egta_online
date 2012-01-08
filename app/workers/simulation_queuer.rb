@@ -20,6 +20,7 @@ class SimulationQueuer
         puts "wrapper made"
       rescue
         puts "An error occurred: #{$!}"
+        puts s.account.username
         puts "failed to create files for nyx"
         s.error_message = "failed to create files for nyx"
         s.failure!
