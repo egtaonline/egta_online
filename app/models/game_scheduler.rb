@@ -27,11 +27,11 @@ class GameScheduler < Scheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      strategy_nums = role.strategies.only(:number).collect{|s| s.number}
+      strategy_nums = role.strategies.order_by(:name => :asc).only(:number).collect{|s| s.number}
       if first_ar == nil
-        first_ar = strategy_nums.sort.repeated_combination(role.count).to_a
+        first_ar = strategy_nums.repeated_combination(role.count).to_a
       else
-        all_other_ars << strategy_nums.sort.repeated_combination(role.count).to_a
+        all_other_ars << strategy_nums.repeated_combination(role.count).to_a
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
