@@ -4,11 +4,11 @@ class Profile
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
   embeds_many :role_instances
-  has_many :simulations, dependent: :destroy
+  has_many :simulations, :dependent => :destroy
   embeds_many :sample_records
-  belongs_to :simulator, index: true
+  belongs_to :simulator, :index => true
   field :proto_string
-  field :size, type: Integer
+  field :size, :type => Integer
   field :parameter_hash, type: Hash, default: {}
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
@@ -33,7 +33,6 @@ class Profile
       role_name = role.split(": ").first
       strategies = role.split(": ").last.split(", ")
       role_name += ": "
-      puts ::Strategy.last.inspect
       singular_strategies = ::Strategy.where(:number.in => strategies.uniq).collect {|s| "#{strategies.count(s.number.to_s)} #{s.name}"}
       role_name += singular_strategies.join(", ")
     end.join("; ")
@@ -81,13 +80,6 @@ class Profile
   def try_scheduling
     Resque.enqueue(ProfileScheduler, id)
   end
-
-  # def as_json(options={})
-  #   {
-  #     "classPath" => "datatypes.Profile",
-  #     "object" => "{roles: [#{role_instances.collect{|r| r.as_json}.join(", ")}}"
-  #   }
-  # end
 
   def add_value(role, strategy, value)
     strategy = role_instances.find_or_create_by(name: role).strategy_instances.find_or_create_by(:name => strategy)

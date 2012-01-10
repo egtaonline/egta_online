@@ -61,7 +61,6 @@ Given /^that ([^"]*) belongs to that ([^"]*)$/ do |parent, child|
   c_instance = instance_variable_get("@#{child.gsub(/\W+/,'_').downcase.sub(/^_/, '')}")
   eval("p_instance.#{child}s << c_instance")
   c_instance.save!
-  puts eval("p_instance.#{child}s.inspect")
 end
 
 Given /^one account that has passed group validation$/ do

@@ -8,4 +8,6 @@ class Strategy
   sequence :number
   validates_presence_of :name
   validates_uniqueness_of :name
+  
+  default_scope order_by(:name, :asc)
 end

@@ -3,13 +3,10 @@ class DataParser
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account_username}")
-    puts "loading feature values"
     feature_hash = create_feature_hash(number, location)
     payoff_data = Array.new
-    puts "opening payoff_data"
     File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
     begin
-      puts "storing payoff data"
       payoff_data.size.times do |i|
         feature_hash_record = {}
         feature_hash.keys.each do |key|
@@ -19,9 +16,6 @@ class DataParser
       end
       Simulation.where(number: number).first.finish!
     rescue => e
-      puts e.inspect
-      puts e.backtrace
-      puts "malformed payoff d"
       Simulation.where(number: number).first.update_attribute(:error_message, "Payoff data was malformed")
       Simulation.where(number: number).first.failure!
     end

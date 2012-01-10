@@ -28,11 +28,8 @@ class Simulator
     begin
       if setup == false
         update_attribute(:setup, true)
-        puts location
         system("rm -rf #{location}/#{name}")
-        puts "removed"
         system("unzip -uqq #{simulator_source.path} -d #{location}")
-        puts "unzipped"
         parameters = Hash.new
         File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
           parameters = YAML.load(io)["web parameters"]

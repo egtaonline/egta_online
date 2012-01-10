@@ -15,7 +15,7 @@ class Game
   after_create :find_profiles
 
   def strategy_regex
-    Regexp.new("^"+roles.collect{|r| "#{r.name}: (#{r.strategies.order_by(:name => :asc).collect{|s| s.number}.join('(, )?)*(')}(, )?)*"}.join("; ")+"$")
+    Regexp.new("^"+roles.collect{|r| "#{r.name}: (#{r.strategy_numbers.join('(, )?)*(')}(, )?)*"}.join("; ")+"$")
   end
 
   def find_profiles

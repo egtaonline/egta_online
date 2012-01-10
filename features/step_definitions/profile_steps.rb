@@ -1,5 +1,4 @@
 Then /^there should be (\d+) profiles$/ do |arg1|
-  Profile.all.each{|p| puts p.name}
   Profile.count.should == arg1.to_i
 end
 

@@ -15,11 +15,11 @@ module RoleManipulator
 
   def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
-    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name).to_a
+    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
     role_i.save!
   end
 
   def unused_strategies(role)
-    (simulator.roles.where(name: role.name).first.strategies.to_a-role.strategies.to_a).collect{|s| s.name}
+    simulator.roles.where(name: role.name).first.strategy_names-role.strategy_names
   end
 end

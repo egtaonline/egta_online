@@ -11,11 +11,11 @@ class HierarchicalScheduler < GameScheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      strategy_nums = role.strategies.order_by(:name => :asc).only(:number).collect{|s| s.number}
+      combinations = role.strategy_numbers.repeated_combination(role.count).to_a
       if first_ar == nil
-        first_ar = strategy_nums.repeated_combination(role.count).to_a
+        first_ar = combinations
       else
-        all_other_ars << strategy_nums.repeated_combination(role.count).to_a
+        all_other_ars << combinations
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count

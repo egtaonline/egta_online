@@ -17,6 +17,7 @@ EgtaOnline::Application.routes.draw do
   resources :games do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
+      get :show_with_samples
     end
     collection do
       post :update_parameters

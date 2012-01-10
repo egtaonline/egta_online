@@ -7,7 +7,7 @@ class GameScheduler < Scheduler
     role_i = roles.find_or_create_by(name: role)
     role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
     role_i.save!
-    puts Resque.enqueue(ProfileAssociater, self.id)
+    Resque.enqueue(ProfileAssociater, self.id)
   end
 
   def remove_strategy(role, strategy_name)
@@ -27,11 +27,11 @@ class GameScheduler < Scheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      strategy_nums = role.strategies.order_by(:name => :asc).only(:number).collect{|s| s.number}
+      combinations = role.strategy_numbers.repeated_combination(role.count).to_a
       if first_ar == nil
-        first_ar = strategy_nums.repeated_combination(role.count).to_a
+        first_ar = combinations
       else
-        all_other_ars << strategy_nums.repeated_combination(role.count).to_a
+        all_other_ars << combinations
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count

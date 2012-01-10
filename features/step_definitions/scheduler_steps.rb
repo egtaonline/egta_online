@@ -3,12 +3,10 @@ When /^I add strategy "([^"]*)" to that symmetric game scheduler$/ do |arg1|
 end
 
 Then /^I should have (\d+) simulations?$/ do |arg1|
-  Simulation.all.each {|sim| puts sim.profile.proto_string }
   Simulation.count.should == arg1.to_i
 end
 
 Then /^I should have (\d+) simulations? scheduled$/ do |arg1|
-  Simulation.all.each {|sim| puts sim.profile.proto_string }
   (Simulation.active.count+Simulation.pending.count).should == arg1.to_i
 end
 

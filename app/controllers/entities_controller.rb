@@ -9,7 +9,6 @@ class EntitiesController < ApplicationController
         if request.get? == false
           params[name] = params[name].merge(params[:selector]) if params[:selector] != nil
           r.attributes = params[name]
-          puts params[name]
         end
       end
     else

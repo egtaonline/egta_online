@@ -15,13 +15,10 @@ class ProfileAssociater
                                                 parameter_hash: scheduler.parameter_hash,
                                                 size: scheduler.size,
                                                 proto_string: proto_string)
-        puts "adding #{profile.name} to #{scheduler.name}"
         profile.try_scheduling
         profile_ids << profile.id
       end
-      puts profile_ids.size
       scheduler.update_attribute(:profile_ids, profile_ids)
-      puts scheduler.profile_ids.size
     end
   end
 end

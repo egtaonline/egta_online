@@ -4,24 +4,16 @@ class SimulationQueuer
 
   def self.perform
     simulations = Simulation.pending.order_by([[:created_at, :asc]]).limit(30).to_a
-    puts "finding simulations"
     cleanup
     simulations.each do |s|
       begin
-        puts "preparing to queue #{s.number}"
         create_folder(s)
-        puts "folder made"
         create_yaml(s)
-        puts "yaml made"
         if (Simulation.active.flux.count+1) <= FLUX_LIMIT
           s.update_attribute(:flux, true)
         end
         NyxWrapper.create_wrapper(s)
-        puts "wrapper made"
       rescue
-        puts "An error occurred: #{$!}"
-        puts s.account.username
-        puts "failed to create files for nyx"
         s.error_message = "failed to create files for nyx"
         s.failure!
       end
@@ -33,9 +25,7 @@ class SimulationQueuer
   end
 
   def self.create_folder(simulation)
-    puts "creating folder hierarchy for #{simulation.number}"
-    puts FileUtils.mkdir_p("tmp/#{simulation.account_username}/#{simulation.number}/features")
-    puts "hierarchy completed for #{simulation.number}"
+    FileUtils.mkdir_p("tmp/#{simulation.account_username}/#{simulation.number}/features")
   end
 
   def self.cleanup
@@ -60,16 +50,13 @@ class SimulationQueuer
             begin
               simulator = s.scheduler.simulator
               root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
-              puts "creating submission"
               submission = Submission.new(s.scheduler, s.size, s.number, "#{Yetting.deploy_path}/simulations/#{account.username}/#{s.number}/wrapper", s.scheduler.nodes)
               if s.flux == true
                 submission.qos = "wellman_flux"
               end
-              puts "scheduling simulation"
               if submission != nil
                 channel = ssh.exec("#{submission.command}") do |ch, stream, data|
                   if stream == :std_err
-                    puts "submission failed"
                     s.error_message = "submission failed: #{data}"
                     s.failure!
                   else
@@ -82,7 +69,6 @@ class SimulationQueuer
                       s.job_id = job_return
                       s.save!
                     else
-                      puts "submission failed"
                       s.error_message = "submission failed: #{job_return}"
                       s.failure!
                     end
@@ -101,12 +87,9 @@ class SimulationQueuer
   end
 
   def self.create_yaml(simulation)
-    puts "creating simulation_spec.yaml"
     File.open( "#{Rails.root}/tmp/#{simulation.account_username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
-      puts "dumping first"
-      puts YAML.dump(Profile.find(simulation.profile_id).to_yaml, out)
-      puts "dumping second"
-      puts YAML.dump(numeralize(simulation.scheduler), out)
+      YAML.dump(Profile.find(simulation.profile_id).to_yaml, out)
+      YAML.dump(numeralize(simulation.scheduler), out)
     end
   end
 

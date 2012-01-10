@@ -13,7 +13,6 @@ describe "#find_games" do
     GameAssociater.should have_queued(Profile.last.id)
     ResqueSpec.perform_all(:profile_actions)
     GameAssociater.should_not have_queued(Profile.last.id)
-    puts Game.last.profile_ids
     Game.last.profile_ids.count.should == 1
     Game.last.profile_ids.first.should == Profile.last.id
   end

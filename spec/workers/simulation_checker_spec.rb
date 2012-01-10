@@ -34,7 +34,6 @@ describe SimulationChecker do
 6921265.nyx.engi     bcassell   cac      mas-epp_sim               15244   --   --    --  120:0 C 00:03"}
     it "should parse the output in a useful way" do
       parse_output = SimulationChecker.parse_nyx_output(output)
-      puts parse_output
       parse_output["6920852"].should == "Q"
       parse_output["6920853"].should == "R"
       parse_output["6921265"].should == "C"
