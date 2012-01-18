@@ -1,4 +1,4 @@
 Fabricator(:simulation) do
-  state :queued
+  state "queued"
   size 2
 end
