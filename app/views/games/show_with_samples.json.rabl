@@ -1,10 +1,15 @@
 object resource
 child :roles do
-  attributes :name, :count
+  attributes :name, :count => :numberOfPlayers
+  child :strategies => :actions do
+    attributes :name, :number
+  end
 end
 child @profiles => :profiles do
-  attributes :name
-  child :sample_records do
+  child :role_instances => :roleInstances do
+    attributes :name, :action_count_map => :actionCountMap
+  end
+  child :sample_records => :profileObservations do
     attributes :payoffs, :features
   end
 end
