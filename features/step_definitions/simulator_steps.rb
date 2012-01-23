@@ -35,3 +35,7 @@ Given /^that role has the strategies "([^"]*)" and "([^"]*)"$/ do |arg1, arg2|
   role.strategies << Strategy.create(:name => arg2)
   role.save!
 end
+
+Given /^the strategy "([^"]*)"$/ do |arg1|
+  @strategy = Fabricate(:strategy, :name => arg1)
+end
