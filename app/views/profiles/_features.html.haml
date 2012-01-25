@@ -1,6 +1,5 @@
 -entry.feature_avgs.each do |key, value|
   %tr
     %td= key.humanize
-    %td= entry.feature_expected_values[key] == nil ? "undefined" : entry.feature_expected_values[key]
     %td= value
     %td= entry.feature_stds[key][3]
