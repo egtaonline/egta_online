@@ -6,6 +6,17 @@ class GamesController < SimulatorSelectorController
     redirect_to resource_url
   end
 
+  def add_feature
+    resource.features.create(params)
+    redirect_to resource_url
+  end
+
+  def remove_feature
+    puts params
+    resource.features.where(:name => params[:name]).destroy
+    redirect_to resource_url
+  end
+
   def from_scheduler
     scheduler = Scheduler.find(params[:scheduler_id])
     @game = Game.new_game_from_scheduler(scheduler)

@@ -1,0 +1,4 @@
+%tr
+  %td= feature.name
+  %td= feature.expected_value
+  %td= link_to 'Remove', url_for(:action => :remove_feature, :name => feature.name), :method => :post

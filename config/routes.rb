@@ -16,7 +16,7 @@ EgtaOnline::Application.routes.draw do
   end
   resources :games do
     member do
-      post :add_strategy, :remove_strategy, :add_role, :remove_role
+      post :add_strategy, :remove_strategy, :add_role, :remove_role, :add_feature, :remove_feature
       get :show_with_samples
     end
     collection do

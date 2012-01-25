@@ -12,7 +12,7 @@ Scenario: 1 game exists, no prior profiles
   And that simulator has the following game scheduler:
 		| size					 | 2      |
     | parameter_hash | {a: 2} |
-  And the following game:
+  And that simulator has the following game:
     | size           | 2      |
     | parameter_hash | {a: 2} |
   And I am on the last game's page
@@ -41,7 +41,7 @@ Scenario: 2 games exist, no prior profiles, no matches
   And that simulator has the following game scheduler:
     | parameter_hash | {a: 2} |
     | size           | 2      |
-  And the following games:
+  And that simulator has the following games:
     | size | parameter_hash |
     | 2    | {a: 2}         |
     | 2    | {a: 3}         |
