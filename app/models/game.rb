@@ -24,7 +24,7 @@ class Game
   end
 
   def self.new_game_from_scheduler(scheduler)
-    game = Game.new(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
+    game = Game.create!(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
   end
 
   def add_roles_from_scheduler(scheduler)
