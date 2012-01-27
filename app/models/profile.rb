@@ -52,9 +52,9 @@ class Profile
   end
 
   def strategy_count(role, strategy)
-    name.split("; ").each do |role|
-      if role.split(": ")[0] == role
-        role.split(", ").each do |strat|
+    name.split("; ").each do |r|
+      if r.split(": ")[0] == role
+        r.split(": ")[1].split(", ").each do |strat|
           return strat.split(" ")[0].to_i if strat.split(" ")[1] == strategy
         end
       end
@@ -97,5 +97,19 @@ class Profile
     end
     self.sampled = true
     self.save!
+  end
+
+  def as_json(options={})
+    if options[:root] == true
+      {:classPath => "minimal-egat.datatypes.Profile", :object => "#{self.to_json(:root => false)}"}
+    else
+      role_hash = {}
+      role_instances.all.each do |r|
+        s_hash = {}
+        r.strategy_instances.each{|s| s_hash[s.name] = strategy_count(r.name, s.name)}
+        role_hash[r.name] = s_hash
+      end
+      {:roleInstances => role_hash, :profileObservations => sample_records.collect{|s| s.as_json(:root => false)}}
+    end
   end
 end

@@ -19,7 +19,7 @@ Given /^that simulator has (\d+) role$/ do |arg1|
 end
 
 Given /^that simulator has (\d+) game scheduler$/ do |arg1|
-  arg1.to_i.times {@simulator.schedulers << Fabricate(:game_scheduler)}
+  arg1.to_i.times {Fabricate(:game_scheduler, :simulator => @simulator)}
   @simulator.save!
 end
 

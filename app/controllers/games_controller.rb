@@ -39,7 +39,7 @@ class GamesController < SimulatorSelectorController
   
   def show_with_samples
     respond_to do |format|
-      format.json { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
+      format.json { render :json => resource, :root => true }
     end
   end
 end

@@ -5,10 +5,9 @@ describe GameScheduler do
     ResqueSpec.reset!
   end
   describe "#destroy" do
-    let!(:simulator){Fabricate(:simulator)}
     let!(:strategy){Fabricate(:strategy, :name => "A")}
-    let!(:profile){Fabricate(:profile, :simulator_id => simulator.id)}
-    let!(:game_scheduler){Fabricate(:game_scheduler, :simulator_id => simulator.id)}
+    let!(:profile){Fabricate(:profile)}
+    let!(:game_scheduler){Fabricate(:game_scheduler, :simulator => profile.simulator)}
     it "should preserve profiles" do
       game_scheduler.profile_ids << profile.id
       game_scheduler.save!
@@ -17,8 +16,7 @@ describe GameScheduler do
     end
   end
   describe "#remove_strategy" do
-    let!(:simulator){Fabricate(:simulator)}
-    let!(:game_scheduler){Fabricate(:game_scheduler, :simulator_id => simulator.id, :parameter_hash => simulator.parameter_hash)}
+    let!(:game_scheduler){Fabricate(:game_scheduler)}
     it "should preserve profiles" do
       game_scheduler.add_role("All", 2)
       game_scheduler.add_strategy("All", "A")

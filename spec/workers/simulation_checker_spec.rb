@@ -13,9 +13,8 @@ describe SimulationChecker do
   end
   describe "SimulationChecker.check_for_errors" do
     before :each do
-      @simulator = Fabricate(:simulator)
       strategy = Fabricate(:strategy)
-      @profile = Fabricate(:profile, :simulator_id => @simulator.id, :parameter_hash => @simulator.parameter_hash)
+      @profile = Fabricate(:profile)
       @simulation = Fabricate(:simulation, :profile_id => @profile.id, :number => 1)
     end
     it "should queue a DataParser job when the simulation folder looks correct" do
@@ -41,9 +40,8 @@ describe SimulationChecker do
   end
   describe "SimulationChecker.update_simulation_status" do
     before :each do
-      @simulator = Fabricate(:simulator)
       strategy = Fabricate(:strategy)
-      @profile = Fabricate(:profile, :simulator_id => @simulator.id, :parameter_hash => @simulator.parameter_hash)
+      @profile = Fabricate(:profile)
       @simulation = Fabricate(:simulation, :profile_id => @profile.id, :number => 1)
     end
     it "should set the state to queued if the passed in state is Q" do

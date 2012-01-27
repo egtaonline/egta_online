@@ -7,7 +7,7 @@ describe "#testing updates" do
   end
 
   let!(:simulator){Fabricate(:simulator)}
-  let!(:scheduler){Fabricate(:game_scheduler, simulator_id: simulator.id, active: false, parameter_hash: simulator.parameter_hash)}
+  let!(:scheduler){Fabricate(:game_scheduler, simulator: simulator, active: false, parameter_hash: simulator.parameter_hash)}
   it "should try to schedule profile on activation" do
     simulator.roles.create!(name: "All")
     Account.create(username: "bcassell", active: true)

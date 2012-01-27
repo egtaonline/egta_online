@@ -30,4 +30,12 @@ class Game
   def add_roles_from_scheduler(scheduler)
     scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count); r.strategies.each{|s| add_strategy(r.name, s.name)}}
   end
+  
+  def as_json(options={})
+    if options[:root] == true
+      {:classPath => "minimal-egat.datatypes.NormalFormGame", :object => "#{self.to_json(:root => false)}"}
+    else
+      {:roles => roles.collect{|r| r.as_json(:root => false)}, :features => features.collect{|s| s.as_json(:root => false)}, :profiles => Profile.where(:proto_string => strategy_regex, :_id.in => profile_ids, :sampled => true).collect{|s| s.as_json(:root => false)}}
+    end
+  end
 end

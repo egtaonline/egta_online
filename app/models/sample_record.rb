@@ -5,18 +5,11 @@ class SampleRecord
   field :features, type: Hash
   validates_presence_of :payoffs
   
-  def payoff_map
-    new_hash = {}
-    payoffs.each_pair do |key, value|
-      role_hash = {}
-      value.each do |subkey, subvalue|
-        role_hash[::Strategy.where(:name => subkey).first.as_json(:only => [:name, :number])] = subvalue
-      end
-      new_hash[profile.role_instances.where(:name => key).first.as_json] = role_hash
+  def as_json(options={})
+    if options[:root] == true
+      {:classPath => "minimal-egat.datatypes.ProfileObservation", :object => "#{self.to_json(:root => false)}"}
+    else
+      {:payoffMap => payoffs, :featureMap => features}
     end
-  end
-  
-  def feature_map
-    
   end
 end
