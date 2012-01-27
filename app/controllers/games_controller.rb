@@ -39,7 +39,7 @@ class GamesController < SimulatorSelectorController
   
   def show_with_samples
     respond_to do |format|
-      format.json { render :json => resource, :root => true }
+      format.json { render :json => resource, :root => params[:egat] == "true" }
     end
   end
 end
