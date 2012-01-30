@@ -17,6 +17,7 @@ class Profile
   index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   index :sampled
   after_create :make_roles, :find_games
+  validates :proto_string, :format => {:with => /(\S+: (\d+, )*\d+; )*\S+: (\d+, )*\d+/}
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
 

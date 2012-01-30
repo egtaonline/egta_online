@@ -1,8 +1,16 @@
 EgtaOnline::Application.routes.draw do
 
   devise_for :users
+
+  namespace :api do
+    resources :schedulers do
+      member do
+        post :add_profile
+      end
+    end
+  end
+
   resources :accounts
-  resources :analysis
   resources :profiles, :only => :show
   match "/simulations/destroy" => "simulations#destroy"
   resources :simulations, :except => [:edit, :update]
@@ -30,7 +38,7 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end
   end
-  match "/application/prep_work" => "application#prep_work"
+  
   root :to => 'high_voltage/pages#show', :id => 'home'
   authenticate :user do
     mount Resque::Server, :at => "/background_workers"
