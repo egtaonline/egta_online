@@ -17,9 +17,17 @@ class Profile
   index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
   index :sampled
   after_create :make_roles, :find_games
-  validates :proto_string, :format => {:with => /(\S+: (\d+, )*\d+; )*\S+: (\d+, )*\d+/}
+  validate :proto_string_has_correct_format
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
+
+  def proto_string_has_correct_format
+    if proto_string == "Non-existent strategy"
+      errors.add(:proto_string, "requested non-existent strategy")
+    elsif (proto_string =~ /^(\S+: (\d+, )*\d+; )*\S+: (\d+, )*\d+$/) == nil
+      errors.add(:proto_string, "was malformed")
+    end
+  end
 
   def to_yaml
     ret_hash = {}
@@ -102,10 +110,14 @@ class Profile
 
   def self.convert_to_proto_string(name_string)
     if name_string =~ /^(\S+: (\S+, )*\S+; )*\S+: (\S+, )*\S+$/
-      r = name_string.split("; ").sort.collect do |role|
-        role.split(": ")[0]+": "+role.split(": ")[1].split(", ").sort.collect{|s| ::Strategy.where(:name => s).first.number}.join(", ")
+      begin
+        r = name_string.split("; ").sort.collect do |role|
+          role.split(": ")[0]+": "+role.split(": ")[1].split(", ").sort.collect{|s| ::Strategy.where(:name => s).first.number}.join(", ")
+        end
+        r.join("; ")
+      rescue
+        "Non-existent strategy"
       end
-      r.join("; ")
     else
       ""
     end

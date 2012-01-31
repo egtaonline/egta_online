@@ -30,8 +30,21 @@ describe "/api/schedulers", :type => :api do
     end
     it "should create a profile if the profile name is valid" do
       post "#{url}/add_profile.json", :token => token, :profile_name => "Bidder: A, A; Seller: B, B"
-      puts last_response.body
       Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should == 1
+    end
+  end
+  
+  context "adding an invalid profile" do
+    let(:url) {"/api/schedulers/#{@scheduler.id}"}
+    
+    before do
+      Fabricate(:strategy, :name => "A", :number => 1)
+      Fabricate(:strategy, :name => "B", :number => 2)
+    end
+    it "should not create a profile if the profile name is invalid" do
+      post "#{url}/add_profile.json", :token => token, :profile_name => "Bidder: A, C; Seller: B, B"
+      Profile.count.should == 0
+      last_response.status.should eql(422)
     end
   end
 end

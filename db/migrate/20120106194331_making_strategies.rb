@@ -4,7 +4,7 @@ class MakingStrategies < Mongoid::Migration
       s.roles.each do |role|
         if role["strategy_array"] != nil
           role["strategy_array"].each do |strategy|
-            role.strategies.find_or_create_by(:name => strategy)
+            role.strategies << ::Strategy.find_or_create_by(:name => strategy)
           end
           role.unset(:strategy_array)
         end
@@ -30,8 +30,12 @@ class MakingStrategies < Mongoid::Migration
     end
     Profile.all.each do |p|
       str = p.proto_string
-      str = str.split("; ").collect{|role| role.split(": ")[0]+": "+role.split(": ")[1].split(", ").collect{|s| Strategy.where(:name => s).first.number}.join(", ")}.join("; ")
-      p.update_attribute(:proto_string, str)
+      begin
+        str = str.split("; ").collect{|role| role.split(": ")[0]+": "+role.split(": ")[1].split(", ").collect{|s| Strategy.where(:name => s).first.number}.join(", ")}.join("; ")
+        p.update_attribute(:proto_string, str)
+      rescue
+        puts p.inspect
+      end
     end
   end
 

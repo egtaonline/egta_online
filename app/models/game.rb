@@ -10,7 +10,7 @@ class Game
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true
-  index :parameter_hash, background: true
+  index :parameter_hash
   validates_presence_of :simulator, :name, :size
   field :profile_ids, :type => Array, :default => []
   after_create :find_profiles
