@@ -34,6 +34,21 @@ describe "/api/schedulers", :type => :api do
     end
   end
   
+  context "adding a new profile to an invalid scheduler" do
+    let(:url) {"/api/schedulers/234"}
+    
+    before do
+      Fabricate(:strategy, :name => "A", :number => 1)
+      Fabricate(:strategy, :name => "B", :number => 2)
+    end
+    it "should error out if the scheduler is invalid" do
+      post "#{url}/add_profile.json", :token => token, :profile_name => "Bidder: A, A; Seller: B, B"
+      Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should == 0
+      puts last_response.body
+      last_response.status.should eql(404)      
+    end
+  end
+  
   context "adding an invalid profile" do
     let(:url) {"/api/schedulers/#{@scheduler.id}"}
     
