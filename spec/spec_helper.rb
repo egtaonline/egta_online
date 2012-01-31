@@ -1,5 +1,3 @@
-require 'simplecov'
-SimpleCov.start 'rails'
 require 'spork'
 
 Spork.prefork do
