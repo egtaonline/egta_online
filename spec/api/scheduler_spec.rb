@@ -20,6 +20,36 @@ describe "/api/schedulers", :type => :api do
       end.should be_true
     end
   end
+
+  context "creating a scheduler" do
+    let(:url) {"/api/schedulers"}
+    
+    it "successful JSON" do
+      simulator = Simulator.last
+      post "#{url}.json", :token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
+                                                          :active => true, :process_memory => 1000,
+                                                          :time_per_sample => 120, :samples_per_simulation => 30,
+                                                          :max_samples => 30, :parameter_hash => simulator.parameter_hash,
+                                                          :nodes => 1}
+      scheduler = Scheduler.last
+      route = "/api/schedulers/#{scheduler.id}"
+      last_response.status.should eql(201)
+      last_response.headers["Location"].should eql(route)
+      last_response.body.should eql(scheduler.to_json)
+    end
+    
+    it "unsuccessful JSON" do
+      simulator = Simulator.last
+      post "#{url}.json", :token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
+                                                          :active => true,
+                                                          :time_per_sample => 120, :samples_per_simulation => 30,
+                                                          :max_samples => 30, :parameter_hash => simulator.parameter_hash,
+                                                          :nodes => 1}
+      last_response.status.should eql(422)
+      errors = {"process_memory" => ["can't be blank","is not a number"]}.to_json
+      last_response.body.should eql(errors)
+    end
+  end
   
   context "adding a new profile" do
     let(:url) {"/api/schedulers/#{@scheduler.id}"}

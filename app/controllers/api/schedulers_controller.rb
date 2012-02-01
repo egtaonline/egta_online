@@ -1,9 +1,17 @@
 class Api::SchedulersController < Api::BaseController
-  respond_to :json
   before_filter :find_scheduler, :only => :add_profile
   
   def index
     respond_with(ApiScheduler.all)
+  end
+  
+  def create
+    scheduler = ApiScheduler.create(params[:scheduler])
+    if scheduler.valid?
+      respond_with(scheduler, :location => api_scheduler_path(scheduler))
+    else
+      respond_with(scheduler)
+    end
   end
   
   def add_profile
