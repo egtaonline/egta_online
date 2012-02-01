@@ -2,7 +2,7 @@ class SchedulerObserver < Mongoid::Observer
   def around_update(scheduler)
     pflag = false
     aflag = false
-    if scheduler.parameter_hash_changed? && scheduler.parameter_hash != nil
+    if (scheduler.parameter_hash_changed? && scheduler.parameter_hash != nil) || (scheduler["size"] != nil && scheduler.size_changed?)
       scheduler.profile_ids = []
       pflag = true
     end

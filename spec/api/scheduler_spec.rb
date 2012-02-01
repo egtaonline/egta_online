@@ -70,6 +70,33 @@ describe "/api/schedulers", :type => :api do
       last_response.body.should eql([@scheduler].to_json)
       last_response.status.should eql(200)
     end
+    
+    it "unsuccessful search" do
+      get "#{url}/find.json", :token => token, :criteria => {:name => "e"}
+      last_response.body.should eql([].to_json)
+      last_response.status.should eql(200)
+    end
+  end
+  
+  context "update" do
+    let(:url) {"/api/schedulers/#{@scheduler.id}"}
+    
+    it "successful JSON" do
+      put "#{url}.json", :token => token, :scheduler => {:max_samples => 60}
+      last_response.status.should eql(200)
+      @scheduler.reload
+      @scheduler.max_samples.should eql(60)
+      last_response.body.should eql("{}")
+    end
+    
+    it "unsuccessful JSON" do
+      put "#{url}.json", :token => token, :scheduler => {:max_samples => ""}
+      last_response.status.should eql(422)
+      @scheduler.reload
+      @scheduler.max_samples.should eql(10)
+      errors = {:max_samples => ["can't be blank","is not a number"]}.to_json
+      last_response.body.should eql(errors)
+    end
   end
   
   context "adding a new profile" do
