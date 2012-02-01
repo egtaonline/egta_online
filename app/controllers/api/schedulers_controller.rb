@@ -1,5 +1,5 @@
 class Api::SchedulersController < Api::BaseController
-  before_filter :find_scheduler, :only => :add_profile
+  before_filter :find_scheduler, :only => [:add_profile, :show]
   
   def index
     respond_with(ApiScheduler.all)
@@ -12,6 +12,14 @@ class Api::SchedulersController < Api::BaseController
     else
       respond_with(scheduler)
     end
+  end
+  
+  def show
+    respond_with(@scheduler)
+  end
+  
+  def find
+    respond_with(ApiScheduler.where(params[:criteria]))
   end
   
   def add_profile

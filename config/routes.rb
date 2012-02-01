@@ -7,6 +7,9 @@ EgtaOnline::Application.routes.draw do
       member do
         post :add_profile
       end
+      collection do
+        get :find
+      end
     end
   end
 

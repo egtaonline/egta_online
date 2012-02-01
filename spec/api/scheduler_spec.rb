@@ -32,6 +32,7 @@ describe "/api/schedulers", :type => :api do
                                                           :max_samples => 30, :parameter_hash => simulator.parameter_hash,
                                                           :nodes => 1}
       scheduler = Scheduler.last
+      scheduler.simulator.should == simulator
       route = "/api/schedulers/#{scheduler.id}"
       last_response.status.should eql(201)
       last_response.headers["Location"].should eql(route)
@@ -48,6 +49,26 @@ describe "/api/schedulers", :type => :api do
       last_response.status.should eql(422)
       errors = {"process_memory" => ["can't be blank","is not a number"]}.to_json
       last_response.body.should eql(errors)
+    end
+  end
+  
+  context "show" do
+    let(:url) {"/api/schedulers/#{@scheduler.id}"}
+    
+    it "JSON" do
+      get "#{url}.json", :token => token
+      last_response.body.should eql(@scheduler.to_json)
+      last_response.status.should eql(200)
+    end
+  end
+  
+  context "find" do
+    let(:url) {"/api/schedulers"}
+    
+    it "JSON search" do
+      get "#{url}/find.json", :token => token, :criteria => {:name => "generic"}
+      last_response.body.should eql([@scheduler].to_json)
+      last_response.status.should eql(200)
     end
   end
   
@@ -74,7 +95,6 @@ describe "/api/schedulers", :type => :api do
     it "should error out if the scheduler is invalid" do
       post "#{url}/add_profile.json", :token => token, :profile_name => "Bidder: A, A; Seller: B, B"
       Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should == 0
-      puts last_response.body
       last_response.status.should eql(404)      
     end
   end
