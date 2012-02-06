@@ -10,6 +10,11 @@ class GameScheduler < Scheduler
     Resque.enqueue(ProfileAssociater, self.id)
   end
 
+  def remove_role(role_name)
+    super
+    self.update_attribute(:profile_ids, [])
+  end
+
   def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
     role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)

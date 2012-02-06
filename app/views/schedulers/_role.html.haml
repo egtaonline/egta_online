@@ -1,7 +1,7 @@
 %table
   %tr
     %th= role
-    %th= link_to 'Remove', url_for(:action => :remove_role, :role => role.name), :method => :post
+    %th= link_to 'Remove role', url_for(:action => :remove_role, :role => role.name), :method => :post
   =render :partial => "strategy/strategy", :collection => role.strategies, :locals => {role: role}
   -if (entry.unused_strategies(role)) != []
     =form_tag url_for(:action=>:add_strategy, :id => entry.id, :role => role.name), :method=>:post do
