@@ -1,2 +1,3 @@
-class AccountsController < EntitiesController
+class AccountsController < ApplicationController
+  
 end
