@@ -99,6 +99,16 @@ describe "/api/schedulers", :type => :api do
     end
   end
   
+  context "destroy" do
+    let(:url) {"/api/schedulers/#{@scheduler.id}"}
+    
+    it "JSON" do
+      delete "#{url}.json", :token => token
+      Scheduler.where(:id => @scheduler.id).count.should == 0
+      last_response.status.should eql(200)
+    end
+  end
+  
   context "adding a new profile" do
     let(:url) {"/api/schedulers/#{@scheduler.id}"}
     
