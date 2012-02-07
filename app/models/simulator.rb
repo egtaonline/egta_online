@@ -14,7 +14,36 @@ class Simulator
   has_many :profiles, :dependent => :destroy
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
-  after_create :setup_simulator
+  validate :simulator_setup, :on => :create
+
+  def simulator_setup
+    if setup == false
+      system("rm -rf #{location}/#{name}")
+      begin
+        system("unzip -uqq #{simulator_source.path} -d #{location}")
+      rescue
+        errors.add(:simulator_source, "Upload could not be unzipped.")
+        return
+      end
+      if File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
+        errors.add(:simulator_source, "Upload was missing a simulation_spec.yaml configuration file.")
+        return
+      else
+        begin
+          parameters = Hash.new
+          File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
+            parameters = YAML.load(io)["web parameters"]
+            parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
+          end
+          self.parameter_hash = parameters
+          Resque.enqueue(SimulatorInitializer, self.id)
+          self.setup = true
+        rescue
+          errors.add(:simulator_source, "Upload had a malformed simulation_spec.yaml file.")
+        end
+      end
+    end
+  end
 
   def location
     File.join(Rails.root,"simulator_uploads", fullname)
@@ -24,31 +53,8 @@ class Simulator
     name+"-"+version
   end
 
-  def setup_simulator
-    begin
-      if setup == false
-        update_attribute(:setup, true)
-        system("rm -rf #{location}/#{name}")
-        system("unzip -uqq #{simulator_source.path} -d #{location}")
-        parameters = Hash.new
-        File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
-          parameters = YAML.load(io)["web parameters"]
-          parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
-          update_attribute(:parameter_hash, parameters)
-        end
-        Resque.enqueue(SimulatorInitializer, self.id)
-      else
-        return
-      end
-    rescue
-      errors.add(:simulator_source, "has invalid parameters")
-    end
-  end
-
   def remove_strategy(role, strategy)
-    role_i = roles.where(name: role).first
-    role_i.strategies = role_i.strategies.where(:name.ne => strategy)
-    role_i.save!
+    super
     profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
   end
 end

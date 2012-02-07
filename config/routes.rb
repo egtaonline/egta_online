@@ -13,7 +13,7 @@ EgtaOnline::Application.routes.draw do
     end
   end
 
-  resources :accounts, :except => :destroy
+  resources :accounts
   resources :profiles, :only => :show
   match "/simulations/destroy" => "simulations#destroy"
   resources :simulations, :except => [:edit, :update]

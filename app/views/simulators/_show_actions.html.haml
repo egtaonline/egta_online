@@ -1,6 +1,6 @@
 %h3 Roles/Strategies
-=render :partial => "role", :collection => entry.roles, :locals => {:entry => entry}
+=render :partial => "role", :collection => simulator.roles
 .action
-  =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
+  =form_tag url_for(:action=> "add_role", :id => simulator.id), :method=>:post do
     = text_field_tag :role
     = submit_tag "Add Role"

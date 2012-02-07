@@ -1,0 +1,14 @@
+%table
+  %tr
+    %th= "Name"
+    %td= simulator.name
+  %tr
+    %th= "Version"
+    %td= simulator.version
+  %tr
+    %th= "Description"
+    %td= simulator.description
+  - simulator.parameter_hash.each_pair do |k, v|
+    %tr
+      %th= k.humanize
+      %td= v
