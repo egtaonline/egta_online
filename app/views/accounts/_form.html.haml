@@ -1,5 +1,8 @@
-= f.input :username
-.input.string.required
-  = label_tag :password
-  = password_field_tag :account, :password, size: "50"
-= f.input :active, :as => :boolean
+= simple_form_for account do |f|
+  = f.error_notification
+  = f.input :username
+  .input.string.required
+    = f.label :password
+    = f.password_field :password, size: "50"
+  = f.input :active, :as => :boolean
+  = f.button :submit

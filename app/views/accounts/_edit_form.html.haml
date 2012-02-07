@@ -1,2 +1,5 @@
-= f.input :username, disabled: true
-= f.input :active, as: :boolean
+= simple_form_for account do |f|
+  = f.error_notification
+  = f.input :username, :disabled => true
+  = f.input :active, :as => :boolean
+  = f.button :submit
