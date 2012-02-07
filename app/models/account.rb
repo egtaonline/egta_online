@@ -22,7 +22,7 @@ class Account
           errors.add(:username, "is not a member of wellman group.  Ask Mike to add you.") if groups.split(" ").include?("wellman") == false
         end
       rescue
-        errors.add(:username, "can't login to host.  Verify that your password is correct, or try again later.")
+        errors.add(:username, "Cannot authenticate on nyx as \'#{self.username}\' with provided password.")
       end
     end
   end

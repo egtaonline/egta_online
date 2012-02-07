@@ -38,6 +38,10 @@ gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
 
+group :test, :development do
+  gem "rspec-rails"
+end
+
 group :test do
   gem "capybara"
   gem "rb-fsevent"
@@ -45,10 +49,9 @@ group :test do
   gem "growl"
   gem "spork", '~> 0.9.0.rc'
   gem "cucumber-rails"
-  gem "launchy"
+  gem "capybara-screenshot"
   gem "database_cleaner"
   gem "fabrication"
-  gem "rspec-rails"
   gem "guard-rspec"
   gem "guard-cucumber"
   gem "guard-spork"
