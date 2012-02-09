@@ -14,7 +14,7 @@
     %th Expected Value
   =render :partial => "feature", :collection => entry.features, locals: {entry: entry}
   %tr
-    =form_tag url_for(:action=> "add_feature", :id => entry.id), :method=>:post do
+    =form_tag game_features_path(entry), :method=>:post do
       %td= text_field_tag "name", nil, size: 30, placeholder: "Name"
       %td= text_field_tag "expected_value", nil, size: 30, placeholder: "Expected Value"
       %td= submit_tag "Add Feature"

@@ -27,13 +27,14 @@ EgtaOnline::Application.routes.draw do
   end
   resources :games do
     member do
-      post :add_strategy, :remove_strategy, :add_role, :remove_role, :add_feature, :remove_feature
+      post :add_strategy, :remove_strategy, :add_role, :remove_role
       get :show_with_samples
     end
     collection do
       post :update_parameters
       get :from_scheduler
     end
+    resources :features, :only => [:create, :destroy]
   end
 
   resources :simulators, :except => [:edit, :update] do
