@@ -4,9 +4,7 @@ class GameScheduler < Scheduler
   validates_presence_of :size
 
   def add_strategy(role, strategy_name)
-    role_i = roles.find_or_create_by(name: role)
-    role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
-    role_i.save!
+    super
     Resque.enqueue(ProfileAssociater, self.id)
   end
 

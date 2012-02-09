@@ -54,10 +54,12 @@ class Profile
   def make_roles
     proto_string.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
+      self["Role_#{role.name}_count"] = atom.split(": ")[1].split(", ").size
       atom.split(": ")[1].split(", ").each do |strat|
         role.strategy_instances.find_or_create_by(:name => ::Strategy.where(:number => strat).first.name)
       end
     end
+    self.save
   end
 
   def strategy_count(role, strategy)
