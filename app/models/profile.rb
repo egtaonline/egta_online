@@ -26,6 +26,12 @@ class Profile
       errors.add(:proto_string, "requested non-existent strategy")
     elsif (proto_string =~ /^(\S+: (\d+, )*\d+; )*\S+: (\d+, )*\d+$/) == nil
       errors.add(:proto_string, "was malformed")
+    else
+      roles = proto_string.split("; ").collect{|r| r.split(": ")[0]}
+      self.proto_string = proto_string.split("; ").sort
+      if roles.uniq != roles
+        errors.add(:proto_string, "has duplicated roles")
+      end
     end
   end
 

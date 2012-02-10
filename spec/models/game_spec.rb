@@ -54,12 +54,16 @@ describe Game do
       
       it "should match against profiles that are made of the constituent strategies" do
         puts Profile.all.to_a.inspect
+        game.roles.create(:name => "Bidder", :count => 1)
+        game.roles.create(:name => "Seller", :count => 1)
         game.add_strategy("Bidder", "A")
         game.add_strategy("Seller", "A")
         game.display_profiles.count.should_not eql(0)
       end
       
       it "should match only profiles that have strategies within the strategy set" do
+        game.roles.create(:name => "Bidder", :count => 1)
+        game.roles.create(:name => "Seller", :count => 1)
         game.add_strategy("Bidder", "A")
         game.add_strategy("Bidder", "B")
         game.add_strategy("Seller", "A")
