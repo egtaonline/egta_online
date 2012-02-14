@@ -1,8 +1,32 @@
 class GameSchedulersController < SchedulersController
-  include StrategyController
-
+  respond_to :html
+  
+  expose(:game_schedulers){GameScheduler.page(params[:page])}
+  expose(:game_scheduler)
+  
+  def create
+    @game_scheduler = GameScheduler.new(params[:game_scheduler].merge(params[:selector]))
+    @game_scheduler.save
+    respond_with(@game_scheduler)
+  end
+  
   def add_role
-    resource.add_role(role, params[:role_count])
-    redirect_to resource_url
+    game_scheduler.add_role(params[:role], params[:role_count])
+    respond_with(game_scheduler)
+  end
+  
+  def add_strategy
+    game_scheduler.add_strategy(params[:role], params["#{params[:role]}_strategy"])
+    respond_with(game_scheduler)
+  end
+  
+  def remove_role
+    game_scheduler.remove_role(params[:role])
+    respond_with(game_scheduler)
+  end
+  
+  def remove_strategy
+    game_scheduler.remove_strategy(params[:role], params["#{params[:role]}_strategy"])
+    respond_with(game_scheduler)
   end
 end

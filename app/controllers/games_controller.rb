@@ -1,9 +1,35 @@
-class GamesController < SimulatorSelectorController
-  include StrategyController
+class GamesController < ApplicationController
+  respond_to :html
+  
+  expose(:games){Game.page(params[:page])}
+  expose(:game)
+  
+  def create
+    @game = Game.new(params[:game].merge(params[:selector]))
+    @game.save
+    respond_with(@game)
+  end
+  
+  def destroy
+    game.destroy
+    respond_with(game)
+  end
+  
+  def update_parameters
+    @simulator = Simulator.find(params[:simulator_id])
+    respond_to do |format|
+      format.js {render "simulator_selector/update_parameters"}
+    end
+  end
 
   def add_role
-    resource.add_role(role, params[:role_count])
-    redirect_to resource_url
+    game.add_role(params[:role], params[:role_count])
+    respond_with(game)
+  end
+
+  def add_strategy
+    game.add_strategy(params[:role], params["#{params[:role]}_strategy"])
+    respond_with(game)
   end
 
   def from_scheduler
@@ -16,19 +42,19 @@ class GamesController < SimulatorSelectorController
       render "new"
     end
   end
-
-  def show
-    respond_to do |format|
-      format.html
-      # come back and speed up sample issue
-      format.xml { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
-      format.json { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
-    end
-  end
-  
-  def show_with_samples
-    respond_to do |format|
-      format.json { render :json => resource, :root => params[:egat] == "true" }
-    end
-  end
+# 
+#   def show
+#     respond_to do |format|
+#       format.html
+#       # come back and speed up sample issue
+#       format.xml { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
+#       format.json { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
+#     end
+#   end
+#   
+#   def show_with_samples
+#     respond_to do |format|
+#       format.json { render :json => resource, :root => params[:egat] == "true" }
+#     end
+#   end
 end

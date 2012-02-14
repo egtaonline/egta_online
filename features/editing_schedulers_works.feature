@@ -3,6 +3,7 @@ Feature: Editing schedulers works
   As the db admin
   I want editing schedulers to work as expected
 
+@wip
 Scenario: Editing a scheduler leads to profiles being dropped and new profiles being created
   Given I am signed in
   Given 1 simulator

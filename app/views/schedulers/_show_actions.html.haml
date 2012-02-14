@@ -1,14 +1,7 @@
-= link_to "Edit #{resource_class}", edit_resource_url
-=render :partial => "role", :collection => resource.roles, locals: {entry: resource}
-.action
-  -if resource.unassigned_player_count > 0
-    =form_tag url_for(:action=> "add_role", :id => entry.id), :method=>:post do
-      = select_tag "role", options_for_select(entry.simulator.roles.collect{|r| r.name}-entry.roles.collect{|r| r.name})
-      = number_field_tag "role_count", resource.unassigned_player_count, in: 1..resource.unassigned_player_count
-      = submit_tag "Add Role"
+= link_to "Edit Scheduler", edit_scheduler_path(scheduler.id)
 
 .action
-  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: resource.id)
+  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: scheduler.id)
 
 %h3 Profiles
 %table

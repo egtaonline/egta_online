@@ -1,0 +1,10 @@
+%table
+  %tr
+    %th= role
+    %th= link_to 'Remove role', url_for(:action => :remove_role, :role => role.name), :method => :post
+  =render :partial => "strategy/strategy", :collection => role.strategies, :locals => {role: role}
+  -if (game_scheduler.unused_strategies(role)) != []
+    =form_tag url_for(:action=>:add_strategy, :id => game_scheduler.id, :role => role.name), :method=>:post do
+      %tr
+        %td= select_tag "#{role}_strategy", options_for_select(game_scheduler.unused_strategies(role))
+        %td= submit_tag "Add Strategy", {:id => role.name}

@@ -1,0 +1,14 @@
+%table
+  %tr
+    %th= "Name"
+    %td= game.name
+  %tr
+    %th= "Size"
+    %td= game.size
+  %tr
+    %th= "Simulator"
+    %td= game.simulator.fullname
+  - game.parameter_hash.each_pair do |k, v|
+    %tr
+      %th= k.humanize
+      %td= v

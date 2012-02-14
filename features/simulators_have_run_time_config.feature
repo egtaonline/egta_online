@@ -5,7 +5,7 @@ Feature: Simulators have a default configuration
 
 Background:
   Given I am signed in
-
+  
 Scenario: Simulator is uploaded successfully
   Given I am on the simulators page
   And one account that has passed group validation

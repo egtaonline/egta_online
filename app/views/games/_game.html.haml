@@ -1,0 +1,5 @@
+%tr
+  %td= link_to game.name, game_path(game)
+  %td= link_to game.simulator.fullname, simulator_path(game.simulator)
+  %td= link_to game.size, game_path(game)
+  %td= link_to 'Destroy', game_path(game.id), :confirm => 'Are you sure?', :method => :delete
