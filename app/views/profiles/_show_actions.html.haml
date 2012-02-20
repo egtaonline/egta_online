@@ -4,7 +4,7 @@
     %th Name
     %th Payoff
     %th Standard Dev.
-  =render partial: "role_instance", collection: resource.role_instances
+  =render partial: "role_instance", collection: profile.role_instances
 
 %h3 Features
 %table
@@ -12,4 +12,4 @@
     %th Name
     %th Average
     %th Standard Dev.
-  =render :partial => "features", locals: {entry: entry}
+  =render :partial => "features"

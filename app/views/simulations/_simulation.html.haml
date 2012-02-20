@@ -1,0 +1,5 @@
+%tr
+  %td= link_to simulation.state, simulation_path(simulation)
+  %td= link_to simulation.profile.name, profile_path(simulation.profile)
+  %td= link_to simulation.number, simulation_path(simulation)
+  %td= link_to (simulation.job_id != nil ? simulation.job_id : "N/A"), simulation_path(simulation)

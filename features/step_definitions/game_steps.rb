@@ -1,10 +1,10 @@
 Given /^that game has that profile$/ do
-  @game.profile_ids << @profile.id
+  @game.profiles << @profile
   @game.save!
 end
 
 Then /^the last game should have (\d+) profiles$/ do |arg1|
-  Game.last.profile_ids.size.should == arg1.to_i
+  Game.last.profiles.size.should == arg1.to_i
 end
 
 
@@ -24,7 +24,7 @@ Then /^that game should have a role named "([^"]*)" with the strategy array "([^
   r.strategy_names.should == eval(arg2)
 end
 Then /^the first game should have (\d+) profiles$/ do |arg1|
-  Game.first.profile_ids.size.should == arg1.to_i
+  Game.first.profiles.size.should == arg1.to_i
 end
 
 
@@ -34,5 +34,5 @@ Then /^that game should have the role "([^"]*)" with strategies "([^"]*)" and "(
 end
 
 Then /^that game should have (\d+) profiles$/ do |arg1|
-  Game.last.profile_ids.count.should == arg1.to_i
+  Game.last.profiles.count.should == arg1.to_i
 end

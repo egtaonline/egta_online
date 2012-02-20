@@ -1,0 +1,32 @@
+%table
+  %tr
+    %th Name
+    %td= scheduler.name
+  %tr
+    %th Full game size
+    %td= scheduler.size
+  %tr
+    %th Agents per player
+    %td= scheduler.agents_per_player
+  %tr
+    %th Simulator
+    %td= scheduler.simulator.fullname
+  %tr
+    %th Max samples
+    %td= scheduler.max_samples
+  %tr
+    %th Samples per simulation
+    %td= scheduler.samples_per_simulation
+  %tr
+    %th Process memory (in MB)
+    %td= scheduler.process_memory
+  %tr
+    %th Time per sample
+    %td= scheduler.time_per_sample
+  %tr
+    %th Nodes required
+    %td= scheduler.nodes
+  %tr
+    %th Active?
+    %td= scheduler.active.to_s
+  = render :partial => "parameter", :collection => scheduler.parameter_hash.to_a

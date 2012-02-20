@@ -1,7 +1,10 @@
 class AddRoleNumbers < Mongoid::Migration
   def self.up
     Profile.all.each do |p|
-      p.proto_string = p.proto_string[0] if p.proto_string.is_a?(String) == false
+      if p.proto_string.is_a?(String) == false
+        p.proto_string = p.proto_string[0]
+        puts "failed - " + p.proto_string
+      end
       p.proto_string.split("; ").each do |atom|
         puts p.inspect if atom == nil
         role = atom.split(": ")[0]

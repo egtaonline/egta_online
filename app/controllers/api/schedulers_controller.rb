@@ -39,8 +39,8 @@ class Api::SchedulersController < Api::BaseController
                                             size: Profile.size_of_profile(proto_string),
                                             proto_string: proto_string)
     if profile.valid?
-      @scheduler.profile_ids << profile.id
-      @scheduler.save!
+      @scheduler.profiles << profile
+      @scheduler.save
       respond_with(profile, :location => profile_path(profile))
     else
       respond_with(profile)

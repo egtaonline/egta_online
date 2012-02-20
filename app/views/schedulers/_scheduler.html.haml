@@ -1,0 +1,6 @@
+%tr
+  %td= link_to scheduler.name, url_for(:controller => scheduler.class.to_s.tableize, :action => "show", :id => scheduler.id)
+  %td= link_to scheduler.class, url_for(:controller => scheduler.class.to_s.tableize, :action => "show", :id => scheduler.id)
+  %td= link_to scheduler.simulator.fullname, simulator_path(scheduler.simulator)
+  %td= link_to scheduler.active.to_s, url_for(:controller => scheduler.class.to_s.tableize, :action => "show", :id => scheduler.id)
+  %td= link_to 'Destroy', url_for(:action => "destroy", :id => scheduler.id), :confirm => 'Are you sure?', :method => :delete

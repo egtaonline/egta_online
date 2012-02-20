@@ -12,7 +12,7 @@ class Game
   belongs_to :simulator, :index => true
   index :parameter_hash
   validates_presence_of :simulator, :name, :size
-  field :profile_ids, :type => Array, :default => []
+  has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :find_profiles
 
   def find_profiles
@@ -28,16 +28,16 @@ class Game
   end
   
   def display_profiles
-    query_hash = {:proto_string => strategy_regex, :_id.in => profile_ids, :sampled => true}
+    query_hash = {:proto_string => strategy_regex, :sampled => true}
     roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
-    Profile.where(query_hash)
+    profiles.where(query_hash)
   end
   
   def as_json(options={})
     if options[:root] == true
       {:classPath => "minimal-egat.datatypes.NormalFormGame", :object => "#{self.to_json(:root => false)}"}
     else
-      {:roles => roles.collect{|r| r.as_json(:root => false)}, :features => features.collect{|s| s.as_json(:root => false)}, :profiles => Profile.where(:proto_string => strategy_regex, :_id.in => profile_ids, :sampled => true).collect{|s| s.as_json(:root => false)}}
+      {:roles => roles.collect{|r| r.as_json(:root => false)}, :features => features.collect{|s| s.as_json(:root => false)}, :profiles => profiles.where(:proto_string => strategy_regex, :sampled => true).collect{|s| s.as_json(:root => false)}}
     end
   end
 

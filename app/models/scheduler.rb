@@ -1,6 +1,5 @@
 class Scheduler
   include Mongoid::Document
-  include RoleManipulator
 
   has_many :simulations, :inverse_of => :scheduler, :dependent => :destroy
   scope :active, where(active: true).excludes(simulator_id: nil)
@@ -11,8 +10,14 @@ class Scheduler
   field :samples_per_simulation, :type => Integer
   field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
-  field :profile_ids, :type => Array, :default => []
   field :nodes, :type => Integer, :default => 1
+  has_and_belongs_to_many :profiles, :inverse_of => nil do
+    def with_role_and_strategy(role, strategy)
+      s = Strategy.where(:name => strategy).first
+      return [] if s == nil
+      where(:proto_string => Regexp.new("#{role}: (\d+)*#{s.number}(,|;)"))
+    end
+  end
   embeds_many :roles, :as => :role_owner
   belongs_to :simulator
 

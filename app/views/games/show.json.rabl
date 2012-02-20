@@ -1,4 +1,4 @@
-object resource
+object game
 child :roles do
   attributes :name, :count
 end

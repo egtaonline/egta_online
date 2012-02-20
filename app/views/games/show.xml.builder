@@ -1,5 +1,5 @@
 xml.instruct! :xml, :version=>"1.0"
-xml.nfg(:name=>resource.simulator.fullname, :description=>resource.parameter_hash) do |nfg|
+xml.nfg(:name=>game.simulator.fullname, :description=>game.parameter_hash) do |nfg|
 
   nfg.players do |players|
     for i in 1..@profiles.first.proto_string.split(": ")[1].split(", ").count do
@@ -7,7 +7,7 @@ xml.nfg(:name=>resource.simulator.fullname, :description=>resource.parameter_has
     end
   end
   nfg.actions do |actions|
-    resource.roles.first.strategies.each do |strategy|
+    game.roles.first.strategies.each do |strategy|
       actions.action(:id=>strategy.name)
     end
   end

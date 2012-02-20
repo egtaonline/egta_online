@@ -9,16 +9,15 @@ class ProfileAssociater
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
       proto_strings = scheduler.ensure_profiles
-      profile_ids = []
       proto_strings.each do |proto_string|
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,
                                                 size: scheduler.size,
                                                 proto_string: proto_string)
         profile.try_scheduling
-        profile_ids << profile.id
+        scheduler.profiles << profile
       end
-      scheduler.update_attribute(:profile_ids, profile_ids)
+      scheduler.save
     end
   end
 end

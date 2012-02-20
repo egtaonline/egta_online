@@ -32,6 +32,16 @@ class GamesController < ApplicationController
     respond_with(game)
   end
 
+  def remove_role
+    game.remove_role(params[:role])
+    respond_with(game)
+  end
+  
+  def remove_strategy
+    game.remove_strategy(params[:role], params["#{params[:role]}_strategy"])
+    respond_with(game)
+  end
+
   def from_scheduler
     scheduler = Scheduler.find(params[:scheduler_id])
     @game = Game.new_game_from_scheduler(scheduler)
@@ -42,19 +52,19 @@ class GamesController < ApplicationController
       render "new"
     end
   end
-# 
-#   def show
-#     respond_to do |format|
-#       format.html
-#       # come back and speed up sample issue
-#       format.xml { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
-#       format.json { @profiles = Profile.where(:proto_string => resource.strategy_regex, :_id.in => resource.profile_ids, :sampled => true).to_a }
-#     end
-#   end
-#   
-#   def show_with_samples
-#     respond_to do |format|
-#       format.json { render :json => resource, :root => params[:egat] == "true" }
-#     end
-#   end
+
+  def show
+    respond_to do |format|
+      format.html
+      # come back and speed up sample issue
+      format.xml { @profiles = game.display_profiles }
+      format.json { @profiles = game.display_profiles }
+    end
+  end
+  
+  def show_with_samples
+    respond_to do |format|
+      format.json { render :json => resource, :root => params[:egat] == "true" }
+    end
+  end
 end

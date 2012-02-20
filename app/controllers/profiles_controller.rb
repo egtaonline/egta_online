@@ -1,5 +1,3 @@
 class ProfilesController < ApplicationController
-  def create
-    
-  end
+  expose(:profile)
 end

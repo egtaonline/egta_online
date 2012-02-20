@@ -1,4 +1,5 @@
 class GameScheduler < Scheduler
+  include RoleManipulator
 
   field :size, :type => Integer
   validates_presence_of :size
@@ -10,16 +11,16 @@ class GameScheduler < Scheduler
 
   def remove_role(role_name)
     super
-    self.update_attribute(:profile_ids, [])
+    self.profiles = []
+    self.save
   end
 
   def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
     role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
     role_i.save!
-    pids = []
-    Profile.find(profile_ids).each {|profile| pids << profile.id if profile.contains_strategy?(role, strategy_name) == false}
-    self.update_attributes(profile_ids: pids)
+    self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
+    self.save
   end
 
   def ensure_profiles
