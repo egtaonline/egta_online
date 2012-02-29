@@ -29,6 +29,15 @@ describe "Games" do
     end
   end
   
+  describe "GET /games/new" do
+    it "should render the new game form" do
+      visit new_game_path
+      page.should have_content("New Game")
+      page.should have_content("Name")
+      page.should have_content("Game size")
+    end
+  end
+    
   describe "POST /games" do
     before(:each) do
       ResqueSpec.reset!
@@ -54,5 +63,55 @@ describe "Games" do
       click_on "Destroy"
       Game.count.should eql(0)
     end
+  end
+  
+  describe "POST /games/:id/add_role" do
+    it "should add the required role" do
+      game = Fabricate(:game)
+      Simulator.last.add_role("All")
+      visit game_path(game.id)
+      click_button "Add Role"
+      page.should have_content("Inspect Game")
+      page.should have_content("All")
+      page.should_not have_content("Some errors were found")
+      Game.last.roles.count.should eql(1)
+    end
+  end
+  
+  describe "POST /games/:id/remove_role" do
+    it "removes the relevant role" do
+      game = Fabricate(:game)
+      Simulator.last.add_strategy("Bidder", "Strat1")
+      game.add_role("Bidder", game.size)
+      visit game_path(game.id)
+      Game.last.roles.count.should eql(1)
+      click_on "Remove Role"
+      page.should have_content("Inspect Game")
+      page.should_not have_content("Some errors were found")
+      Game.last.roles.count.should eql(0)
+    end
+  end
+
+  describe "POST /games/:id/add_strategy" do
+    it "adds the relevant role" do
+      game = Fabricate(:game)
+      Simulator.last.add_strategy("Bidder", "Strat1")
+      game.add_role("Bidder", game.size)
+      visit game_path(game.id)
+      click_button "Add Strategy"
+      page.should have_content("Inspect Game")
+      page.should have_content("Strat1")
+      page.should_not have_content("Some errors were found")
+      Game.last.roles.last.strategies.count.should eql(1)
+      Game.last.roles.last.strategies.last.name.should eql("Strat1")
+    end
+  end
+  
+  describe "POST /games/:id/remove_strategy" do
+    pending
+  end
+  
+  describe "POST /games/update_parameters" do
+    pending
   end
 end

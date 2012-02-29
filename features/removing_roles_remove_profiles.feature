@@ -15,5 +15,5 @@ Scenario: GameScheduler
   When I select "A" from "All_strategy"
   And I press "Add Strategy"
   Then I should see "All: 2 A"
-  When I follow "Remove role"
+  When I follow "Remove Role"
   Then I should not see "All: 2 A"

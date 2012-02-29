@@ -53,6 +53,7 @@ describe "Simulators" do
       click_on "Remove"
       page.should have_content("Inspect Simulator")
       page.should have_content(simulator.name)
+      page.should_not have_content("Bidder")
       page.should_not have_content("Some errors were found")
       Simulator.last.roles.count.should eql(0)
     end
@@ -64,6 +65,59 @@ describe "Simulators" do
       visit simulators_path
       click_on "Destroy"
       Simulator.count.should eql(0)
+    end
+  end
+  
+  describe "POST /simulators/:id/add_role" do
+    it "should add the required role" do
+      simulator = Fabricate(:simulator)
+      visit simulator_path(simulator.id)
+      fill_in "role", :with => "All"
+      click_button "Add Role"
+      page.should have_content("Inspect Simulator")
+      page.should have_content("All")
+      page.should_not have_content("Some errors were found")
+      Simulator.last.roles.count.should eql(1)
+    end
+  end
+  
+  describe "POST /simulators/:id/add_strategy" do
+    it "should add the required strategy" do
+      simulator = Fabricate(:simulator)
+      simulator.add_role("All")
+      visit simulator_path(simulator.id)
+      fill_in "All_strategy", :with => "StratA"
+      click_button "Add Strategy"
+      page.should have_content("Inspect Simulator")
+      page.should have_content("StratA")
+      page.should_not have_content("Some errors were found")
+      Simulator.last.roles.count.should eql(1)
+      Simulator.last.roles.last.strategies.count.should eql(1)
+    end
+  end
+  
+  describe "POST /simulators/:id/remove_strategy" do
+    it "should remove the required strategy" do
+      simulator = Fabricate(:simulator)
+      simulator.add_strategy("All", "StratA")
+      visit simulator_path(simulator.id)
+      click_on "Remove Strategy"
+      page.should have_content("Inspect Simulator")
+      page.should have_content("All")
+      page.should_not have_content("StratA")
+      page.should_not have_content("Some errors were found")
+      Simulator.last.roles.count.should eql(1)
+      Simulator.last.roles.last.strategies.count.should eql(0)
+    end
+  end
+  
+  describe "GET /simulators/new" do
+    it "should render the new simulator form" do
+      visit new_simulator_path
+      page.should have_content("New Simulator")
+      page.should have_content("Name")
+      page.should have_content("Version")
+      page.should have_content("Simulator source")
     end
   end
 end
