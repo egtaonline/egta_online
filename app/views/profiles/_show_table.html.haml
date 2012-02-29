@@ -1,0 +1,14 @@
+%table
+  %tr
+    %th= "Name"
+    %td= profile.name
+  %tr
+    %th= "Simulator"
+    %td= profile.simulator.fullname
+  - profile.parameter_hash.each_pair do |k, v|
+    %tr
+      %th= k.humanize
+      %td= v
+  %tr
+    %th= "Samples"
+    %td= profile.sample_count

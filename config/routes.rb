@@ -3,7 +3,7 @@ EgtaOnline::Application.routes.draw do
   devise_for :users
 
   namespace :api do
-    resources :schedulers do
+    resources :schedulers, :except => ["new", "edit"] do
       member do
         post :add_profile
       end
@@ -15,9 +15,13 @@ EgtaOnline::Application.routes.draw do
 
   resources :accounts, :except => :destroy
   resources :profiles, :only => :show
-  match "/simulations/destroy" => "simulations#destroy"
-  resources :simulations, :except => [:edit, :update]
-  resources :schedulers, :game_schedulers, :hierarchical_schedulers do
+  resources :simulations, :only => [:index, :show]
+  resources :schedulers do
+    collection do
+      post :update_parameters
+    end
+  end
+  resources :game_schedulers, :hierarchical_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end

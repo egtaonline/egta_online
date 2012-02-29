@@ -18,12 +18,31 @@ describe "Accounts" do
     end
   end
   
+  describe "GET /accounts/new" do
+    it "shows the new account page" do
+      visit new_account_path
+      page.should have_content("New Account")
+      page.should have_content("Username")
+      page.should have_content("Password")
+    end
+  end
+  
   describe "GET /accounts/:id" do
     it "displays the relevant account" do
       account = Fabricate(:account)
       visit account_path(account.id)
       page.should have_content("bcassell")
       page.should have_content("true")
+    end
+  end
+  
+  describe "GET /accounts/:id/edit" do
+    it "shows the edit account page" do
+      account = Fabricate(:account)
+      visit edit_account_path(account.id)
+      page.should have_content("Edit Account")
+      page.should have_content("Username")
+      page.should have_content("Active")
     end
   end
   

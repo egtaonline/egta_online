@@ -11,10 +11,10 @@ describe "Simulators" do
 
   describe "GET /simulators" do
     it "displays simulators" do
-      Fabricate(:simulator)
+      simulator = Fabricate(:simulator)
       visit simulators_path
-      page.should have_content("epp_sim")
-      page.should have_content("testing")
+      page.should have_content(simulator.name)
+      page.should have_content(simulator.version)
     end
   end
   
@@ -22,8 +22,8 @@ describe "Simulators" do
     it "displays the relevant simulator" do
       simulator = Fabricate(:simulator)
       visit simulator_path(simulator.id)
-      page.should have_content("epp_sim")
-      page.should have_content("testing")
+      page.should have_content(simulator.name)
+      page.should have_content(simulator.version)
     end
   end
   
@@ -42,6 +42,19 @@ describe "Simulators" do
       page.should have_content("testing")
       SimulatorInitializer.should have_queue_size_of(1)
       page.should_not have_content("Some errors were found")
+    end
+  end
+  
+  describe "POST /simulators/:id/remove_role" do
+    it "removes the relevant role" do
+      simulator = Fabricate(:simulator)
+      simulator.add_strategy("Bidder", "A")
+      visit simulator_path(simulator.id)
+      click_on "Remove"
+      page.should have_content("Inspect Simulator")
+      page.should have_content(simulator.name)
+      page.should_not have_content("Some errors were found")
+      Simulator.last.roles.count.should eql(0)
     end
   end
   

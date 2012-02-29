@@ -23,4 +23,14 @@ class SimulatorsController < ApplicationController
     simulator.add_strategy(params[:role], params["#{params[:role]}_strategy"])
     respond_with(simulator)
   end
+  
+  def remove_role
+    simulator.remove_role(params[:role])
+    respond_with(simulator)
+  end
+  
+  # def remove_strategy
+  #   game.remove_strategy(params[:role], params["#{params[:role]}_strategy"])
+  #   respond_with(game)
+  # end
 end
