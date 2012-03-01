@@ -53,6 +53,14 @@ class Profile
     end.join("; ")
   end
 
+  def extended_name
+    proto_string.split("; ").collect do |role|
+      role_name = role.split(": ").first
+      strategies = role.split(": ").last.split(", ")
+      role_name += ": "+strategies.collect{|s| ::Strategy.where(:number => s).first.name}.join(", ")
+    end.join("; ")
+  end
+
   def sample_count
     sample_records.count
   end
