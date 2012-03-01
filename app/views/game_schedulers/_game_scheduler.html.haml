@@ -1,0 +1,6 @@
+%tr
+  %td= link_to game_scheduler.name, game_scheduler_path(game_scheduler.id)
+  %td= link_to game_scheduler.class, game_scheduler_path(game_scheduler.id)
+  %td= link_to game_scheduler.simulator.fullname, simulator_path(game_scheduler.simulator)
+  %td= link_to game_scheduler.active.to_s, game_scheduler_path(game_scheduler.id)
+  %td= link_to 'Destroy', game_scheduler_path(game_scheduler.id), :confirm => 'Are you sure?', :method => :delete

@@ -10,6 +10,16 @@ class GameSchedulersController < SchedulersController
     respond_with(@game_scheduler)
   end
   
+  def update
+    game_scheduler.save
+    respond_with(game_scheduler)
+  end
+  
+  def destroy
+    game_scheduler.destroy
+    respond_with(game_scheduler)
+  end
+  
   def add_role
     game_scheduler.add_role(params[:role], params[:role_count])
     respond_with(game_scheduler)
@@ -26,7 +36,7 @@ class GameSchedulersController < SchedulersController
   end
   
   def remove_strategy
-    game_scheduler.remove_strategy(params[:role], params["#{params[:role]}_strategy"])
+    game_scheduler.remove_strategy(params[:role], params[:strategy_name])
     respond_with(game_scheduler)
   end
 end

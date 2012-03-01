@@ -38,7 +38,7 @@ class GamesController < ApplicationController
   end
   
   def remove_strategy
-    game.remove_strategy(params[:role], params["#{params[:role]}_strategy"])
+    game.remove_strategy(params[:role], params[:strategy_name])
     respond_with(game)
   end
 

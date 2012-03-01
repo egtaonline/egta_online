@@ -1,0 +1,6 @@
+%tr
+  %td= link_to hierarchical_scheduler.name, hierarchical_scheduler_path(hierarchical_scheduler.id)
+  %td= link_to hierarchical_scheduler.class, hierarchical_scheduler_path(hierarchical_scheduler.id)
+  %td= link_to hierarchical_scheduler.simulator.fullname, simulator_path(hierarchical_scheduler.simulator)
+  %td= link_to hierarchical_scheduler.active.to_s, hierarchical_scheduler_path(hierarchical_scheduler.id)
+  %td= link_to 'Destroy', hierarchical_scheduler_path(hierarchical_scheduler.id), :confirm => 'Are you sure?', :method => :delete

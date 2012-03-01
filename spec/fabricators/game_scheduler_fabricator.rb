@@ -1,5 +1,5 @@
 Fabricator(:game_scheduler) do
-  name "testing"
+  name {Fabricate.sequence(:name, 1) {|i| "scheduler#{i}"}}
   simulator!
   size 2
   process_memory 1000

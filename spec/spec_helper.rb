@@ -7,7 +7,8 @@ Spork.prefork do
   require 'rspec/rails'
   require 'capybara/rspec'
   require 'fabrication'
-
+  Capybara.default_selector = :css
+  Capybara.javascript_driver = :webkit
   RSpec.configure do |config|
 
     config.before(:each) do

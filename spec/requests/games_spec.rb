@@ -93,7 +93,7 @@ describe "Games" do
   end
 
   describe "POST /games/:id/add_strategy" do
-    it "adds the relevant role" do
+    it "adds the relevant strategy" do
       game = Fabricate(:game)
       Simulator.last.add_strategy("Bidder", "Strat1")
       game.add_role("Bidder", game.size)
@@ -108,10 +108,31 @@ describe "Games" do
   end
   
   describe "POST /games/:id/remove_strategy" do
-    pending
+    it "adds the relevant strategy" do
+      game = Fabricate(:game)
+      Simulator.last.add_strategy("Bidder", "Strat1")
+      game.add_role("Bidder", game.size)
+      game.add_strategy("Bidder", "Strat1")
+      visit game_path(game.id)
+      click_on "Remove Strategy"
+      page.should have_content("Inspect Game")
+      page.should_not have_content("Some errors were found")
+      Game.last.roles.last.strategies.count.should eql(0)
+    end
   end
   
-  describe "POST /games/update_parameters" do
-    pending
+  describe "POST /games/update_parameters", :js => true do
+    it "should update parameter info" do
+      sim1 = Fabricate(:simulator, :parameter_hash => {"Parm1"=>"2","Parm2"=>"3"})
+      sim2 = Fabricate(:simulator, :parameter_hash => {"Parm2"=>"7","Parm3"=>"6"})
+      visit new_game_path
+      page.should have_content("Parm1")
+      page.should have_content("Parm2")
+      page.should_not have_content("Parm3")
+      select sim2.fullname, :from => :simulator_id
+      page.should_not have_content("Parm1")
+      page.should have_content("Parm2")
+      page.should have_content("Parm3")
+    end
   end
 end
