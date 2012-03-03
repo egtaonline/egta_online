@@ -1,34 +1,49 @@
-!!!
-%head
-  %title Home - EGTA Online
-  = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"
-  = stylesheet_link_tag 'application'
-  =javascript_include_tag 'application'
-  =csrf_meta_tags
-
-%body
-  #root
-    %header#top_header
-      %h1#logo-text
-        =link_to 'EGTA Online', '/'
-      %nav#user_nav
-        -if user_signed_in?
-          = "Signed in as #{current_user.email} |"
-          = link_to "Sign out", destroy_user_session_path
+!!! 5
+%html
+  %head
+    %meta(charset="utf-8")
+    %title Home - EGTAOnline
+    /[if lt IE 9]
+      %script(src="http://html5shiv.googlecode.com/svn/trunk/html5.js")
+    =javascript_include_tag 'application'
+    = stylesheet_link_tag 'application'
+    =csrf_meta_tags
+    %meta{"name"=>"viewport","content"=>"width=device-width, initial-scale=1.0"}
+  %body
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          %a.btn.btn-navbar{"data-toggle"=>"collapse", "data-target"=>".nav-collapse"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.brand{"href"=>"/"}
+            EGTAOnline
+          .nav-collapse
+            %ul.nav
+              %li= link_to "Accounts", "/accounts"
+              %li= link_to "Simulators", "/simulators"
+              %li= link_to "Schedulers", "/schedulers"
+              %li= link_to "Simulations", "/simulations"
+              %li= link_to "Games", "/games"
+            %p.navbar-text.pull-right
+              -if user_signed_in?
+                ="Logged in as #{current_user.email} |"
+                = link_to "Sign out", destroy_user_session_path
+              -else
+                =link_to "Sign in", new_user_session_path
+    .container
+      -flash.each do |name, msg|
+        -if name == :notice
+          .alert.alert-success
+            %a.close{"data-dismiss"=>"alert"}
+              x
+            =msg
         -else
-          #{link_to "sign in", new_user_session_path}
-      %nav#object_nav
-        .box= link_to "Home", "/"
-        .box= link_to "Accounts", "/accounts"
-        .box= link_to "Simulators", "/simulators"
-        .box= link_to "Schedulers", "/schedulers"
-        .box= link_to "Simulations", "/simulations"
-        .box= link_to "Games", "/games"
-    %section#main_section
-      .notice= notice
-      .alert= alert
+          .alert.alert-error
+            %a.close{"data-dismiss"=>"alert"}
+              x
+            =msg
       =yield
-    #root_footer
-  %footer#footer
-    #copyright
-      &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;
+      %footer
+        %p.pull-right &nbsp; &copy;2010 Strategic Reasoning &nbsp; &nbsp;

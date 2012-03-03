@@ -4,14 +4,13 @@ gem 'rails'
 
 # Asset template engines
 gem 'sass-rails'
-gem 'coffee-script'
+gem 'coffee-rails'
 gem 'uglifier'
+gem 'twitter-bootstrap-rails'
 
 gem 'jquery-rails'
-gem 'execjs'
 gem 'resque', :require => 'resque/server', :git => 'git://github.com/defunkt/resque.git'
 gem 'resque-scheduler'
-gem 'therubyracer'
 gem "haml"
 gem "haml-rails"
 gem "airbrake"
