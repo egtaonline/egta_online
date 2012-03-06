@@ -1,6 +1,8 @@
-%table
-  %tr
-    %th Name
-    %th Active?
-  =render accounts
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Active?
+  %tbody
+    =render accounts
 =paginate accounts

@@ -1,4 +1,4 @@
-= link_to "Edit Scheduler", edit_game_scheduler_path(game_scheduler.id)
+= link_to "Edit Game Scheduler", edit_game_scheduler_path(game_scheduler), :class => 'btn btn-primary'
 =render :partial => "role", :collection => game_scheduler.roles
 .action
   -if game_scheduler.unassigned_player_count > 0

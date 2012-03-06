@@ -1,14 +1,14 @@
 class SchedulersController < ApplicationController
   respond_to :html
+  before_filter :merge, :only => :create
   
   expose(:schedulers){Scheduler.page(params[:page])}
   expose(:scheduler)
   expose(:profiles){scheduler.profiles.page(params[:page]).per(15)}
 
   def create
-    @scheduler = Scheduler.new(params[:scheduler].merge(params[:selector]))
-    @scheduler.save
-    respond_with(@scheduler)
+    scheduler.save
+    respond_with(scheduler)
   end
 
   def update
@@ -26,5 +26,11 @@ class SchedulersController < ApplicationController
     respond_to do |format|
       format.js {render "simulator_selector/update_parameters"}
     end
+  end
+  
+  private 
+  
+  def merge
+    params[:scheduler] = params[:scheduler].merge(params[:selector])
   end
 end

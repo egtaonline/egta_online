@@ -1,13 +1,13 @@
 class GameSchedulersController < SchedulersController
+  before_filter :merge, :only => :create
   respond_to :html
   
   expose(:game_schedulers){GameScheduler.page(params[:page])}
   expose(:game_scheduler)
   
   def create
-    @game_scheduler = GameScheduler.new(params[:game_scheduler].merge(params[:selector]))
-    @game_scheduler.save
-    respond_with(@game_scheduler)
+    game_scheduler.save
+    respond_with(game_scheduler)
   end
   
   def update
@@ -38,5 +38,11 @@ class GameSchedulersController < SchedulersController
   def remove_strategy
     game_scheduler.remove_strategy(params[:role], params[:strategy_name])
     respond_with(game_scheduler)
+  end
+  
+  private 
+  
+  def merge
+    params[:game_scheduler] = params[:game_scheduler].merge(params[:selector])
   end
 end

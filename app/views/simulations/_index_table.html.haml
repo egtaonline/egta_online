@@ -1,8 +1,10 @@
-%table
-  %tr
-    %th State
-    %th Profile
-    %th Number
-    %th Job Id
-  =render simulations
+%table.table.table-striped
+  %thead
+    %tr
+      %th State
+      %th Profile
+      %th Number
+      %th Job Id
+  %tbody
+    =render simulations
 =paginate simulations

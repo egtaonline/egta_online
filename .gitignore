@@ -8,3 +8,5 @@ config/mongoid.yml
 simulator_uploads/*
 coverage/
 bin/
+public/assets/
+uploads/

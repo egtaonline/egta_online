@@ -1,13 +1,13 @@
 class GamesController < ApplicationController
   respond_to :html
+  before_filter :merge, :only => :create
   
   expose(:games){Game.page(params[:page])}
   expose(:game)
   
   def create
-    @game = Game.new(params[:game].merge(params[:selector]))
-    @game.save
-    respond_with(@game)
+    game.save
+    respond_with(game)
   end
   
   def destroy
@@ -66,5 +66,11 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.json { render :json => resource, :root => params[:egat] == "true" }
     end
+  end
+  
+  private 
+  
+  def merge
+    params[:game] = params[:game].merge(params[:selector])
   end
 end

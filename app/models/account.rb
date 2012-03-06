@@ -9,7 +9,7 @@ class Account
   index :username, unique: true
   validates_presence_of :username
   validates_uniqueness_of :username
-  validate :login, :group_permission
+  validate :login, :group_permission, :on => :create
   field :active, :type => Boolean, :default => false
   scope :active, where(active: true)
 

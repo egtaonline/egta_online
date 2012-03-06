@@ -1,8 +1,5 @@
-= simple_form_for account do |f|
-  = f.error_notification
+= simple_form_for account, :html => {:class => 'form-inline' } do |f|
   = f.input :username
-  .input.string.required
-    = f.label :password
-    = f.password_field :password, size: "50"
+  = f.input :password, :required => true
   = f.input :active, :as => :boolean
   = f.button :submit

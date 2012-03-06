@@ -1,14 +1,20 @@
-%h2 Home
-%p Welcome to EGTA Online.  Here you can schedule simulations onto CAC administered clusters and perform empirical game-theoretic and statistical analysis on the results.
-%p This site looks best in #{link_to "Chrome", "http://www.google.com/chrome"}.
-%p
-  %a{:href=>"/accounts/new"}
-    .butt= "Register an Account"
-  %a{:href=>page_path("instructions")}
-    .butt= "Prepare your Simulator"
-  %a{:href=>"/simulators/new"}
-    .butt= "Upload a Simulator"
-  %a{:href=>"/game_schedulers/new"}
-    .butt= "Create a Scheduler"
-  %a{:href=>"/games/new"}
-    .butt= "Construct a Game"
+%h1 Welcome to EGTAOnline!
+%p EGTAOnline makes it simple to create simulation-based games.  You can harness the parallel computation afforded by our CAC-administered clusters to create larger games than ever before.  Read on to figure out how to get started.
+%p Quick note: this site is developed with #{link_to "Google Chrome", "http://www.google.com/chrome"}, so your mileage may vary with other browsers.
+%h2 Getting Started
+%ol
+  %li
+    %h3 Set up a scheduling account
+    %p If you are affiliated with the University of Michigan, you should sign up for an account at the #{link_to "Center for Advanced Computing", "http://cac.engin.umich.edu"}.  After you have an account, you should contact Michael Wellman to get added to our group on the cluster.  Once the group permissions on your account are fixed, you should #{link_to "register your account", new_account_path}.  Registering your account improves the throughput of EGTAOnline for all users.
+  %li
+    %h3 Ready your simulator
+    %p To utilize EGTAOnline, you'll need to prepare your simulator for interacting with the test bed through file I/O.  Click #{link_to "here", page_path("instructions")} to learn how to integrate your simulator into our system.  Once your simulator is ready, its time to #{link_to "upload it.", new_simulator_path}.  Your simulator is not truly complete until you add your roles and strategies to your simulator's record.  You can edit these at any time, but keep in mind that a.) you can only add roles and strategies to schedulers and games if you add them to your simulator first, and b.) if you delete a strategy from a simulator, you are saying that all of the data that is tied to that strategy is now invalid, and will be deleted.  To learn more about roles and strategies, click #{link_to "here", page_path("roles")}.
+  %li
+    %h3 Create a scheduler
+    %p The heart of EGTAOnline is scheduling simulations.  You have a couple of options for constructing the space of strategy profiles to sample in simulation.  You can #{link_to "create a game scheduler", new_game_scheduler_path}, which will schedule simulations for all the profiles in the space defined by the roles and strategies that you add to the scheduler.  If your game has a large number of players and/or strategies, you can #{link_to "create a hierarchical scheduler", new_hierarchical_scheduler_path} which will schedule simulations for all the profiles in a #{link_to "hierarchically-reduced game", "http://ai.eecs.umich.edu/people/wellman/pubs/aaai05.pdf"}.  If neither of these options cover your needs, you can #{link_to "create a generic scheduler", new_scheduler_path}, and add profiles to the scheduler using our #{link_to "API", page_path("api")}.
+  %li
+    %h3 Monitor your simulations
+    %p Your scheduler is going to launch simulations onto our cluster, and gather the results when the simulations are complete.  You can #{link_to "check on the status of your simulations", simulations_path}, and if the simulation fails, clicking the state 'failed' will show you the error message that accompanied the failure of your simulation.  Clicking on the name of the profile, either on the simulation page or on a scheduler page, will let you spot check the mean and standard deviation of the observations you have taken thus far.
+  %li
+    %h3 Construct a game
+    %p What do you do with all the data you've been gathering?  #{link_to "Construct a game.", new_game_path}  Choose which simulator, parameters, roles, and strategies from which to aggregate profiles, and choose one of several download formats, appropriate for use with our various analysis tools.

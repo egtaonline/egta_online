@@ -20,9 +20,9 @@ class Scheduler
   end
   embeds_many :roles, :as => :role_owner
   belongs_to :simulator
-
+  delegate :fullname, :to => :simulator, :prefix => true
   validates_uniqueness_of :name
-  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :max_samples
-  validates_numericality_of :process_memory, :time_per_sample, :only_integer => true
+  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :max_samples, :nodes
+  validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true
   validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
 end

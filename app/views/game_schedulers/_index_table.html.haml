@@ -1,8 +1,10 @@
-%table
-  %tr
-    %th Name
-    %th Type
-    %th Simulator
-    %th Active
-  =render game_schedulers
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Type
+      %th Simulator
+      %th Active
+  %tbody
+    =render game_schedulers
 =paginate game_schedulers

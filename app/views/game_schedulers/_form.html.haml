@@ -1,4 +1,4 @@
-= simple_form_for game_scheduler do |f|
+= simple_form_for game_scheduler, :html => {:class => 'form-inline' } do |f|
   = f.input :name
   = f.input :size, :label => "Game size"
   = f.input :max_samples

@@ -1,3 +1,6 @@
 %tr
-  %td= link_to account.username, account_path(account.id)
-  %td= link_to account.active, account_path(account.id)
+  %td= link_to account.username, account
+  %td= link_to (account.active == false ? "No" : "Yes"), account
+  %td
+    = link_to 'Edit', edit_account_path(account), :class => 'btn btn-mini'
+    = link_to 'Destroy', account, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

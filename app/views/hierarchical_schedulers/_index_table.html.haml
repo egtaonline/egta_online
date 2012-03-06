@@ -1,8 +1,10 @@
-%table
-  %tr
-    %th Name
-    %th Type
-    %th Simulator
-    %th Active
-  =render hierarchical_schedulers
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Type
+      %th Simulator
+      %th Active
+  %tbody
+    =render hierarchical_schedulers
 =paginate hierarchical_schedulers

@@ -6,6 +6,5 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap/bootstrap-alert
 //= require twitter/bootstrap
 //= require_tree .

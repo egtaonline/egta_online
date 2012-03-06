@@ -14,7 +14,7 @@ describe "Accounts" do
       Fabricate(:account)
       visit accounts_path
       page.should have_content("bcassell")
-      page.should have_content("true")
+      page.should have_content("Yes")
     end
   end
   
@@ -32,7 +32,7 @@ describe "Accounts" do
       account = Fabricate(:account)
       visit account_path(account.id)
       page.should have_content("bcassell")
-      page.should have_content("true")
+      page.should have_content("Yes")
     end
   end
   
@@ -71,7 +71,7 @@ describe "Accounts" do
       uncheck "Active"
       click_button "Update Account"
       page.should have_content("bcassell")
-      page.should have_content("false")
+      page.should have_content("No")
     end
   end
 end

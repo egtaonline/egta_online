@@ -1,5 +1,4 @@
-= simple_form_for account do |f|
-  = f.error_notification
+= simple_form_for account, :html => {:class => 'form-inline' } do |f|
   = f.input :username, :disabled => true
   = f.input :active, :as => :boolean
   = f.button :submit
