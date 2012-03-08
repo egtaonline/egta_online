@@ -1,19 +1,2 @@
-= link_to "Edit Game Scheduler", edit_game_scheduler_path(game_scheduler), :class => 'btn btn-primary'
-=render :partial => "role", :collection => game_scheduler.roles
-.action
-  -if game_scheduler.unassigned_player_count > 0
-    =form_tag url_for(:action=> "add_role", :id => game_scheduler.id), :method=>:post do
-      = select_tag "role", options_for_select(game_scheduler.simulator.roles.collect{|r| r.name}-game_scheduler.roles.collect{|r| r.name})
-      = number_field_tag "role_count", game_scheduler.unassigned_player_count, in: 1..game_scheduler.unassigned_player_count
-      = submit_tag "Add Role"
-
-.action
-  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: game_scheduler.id)
-
-%h3 Profiles
-%table
-  %tr
-    %th Name
-    %th Samples
-  =render :partial => "strategy/profile", :collection => profiles
-= paginate(profiles)
+#roles= render :partial => "roles/roles_table", :locals => {:role_owner => game_scheduler}
+#profiles= render "profiles/index"

@@ -3,7 +3,6 @@ Feature: Editing schedulers works
   As the db admin
   I want editing schedulers to work as expected
 
-@wip
 Scenario: Editing a scheduler leads to profiles being dropped and new profiles being created
   Given I am signed in
   Given 1 simulator
@@ -16,9 +15,8 @@ Scenario: Editing a scheduler leads to profiles being dropped and new profiles b
   And I press "Add Strategy"
   And I press "Add Strategy"
   Then there should be 3 profiles
-  When I follow "Edit GameScheduler"
-  And I fill in "3" for "A"
+  When I follow "Edit Game Scheduler"
+  And I fill in "54321" for "A"
   And I press "Update Game scheduler"
-  Then I should see the following table rows:
-    | A | 3 |
+  Then I should see "54321"
   And there should be 6 profiles

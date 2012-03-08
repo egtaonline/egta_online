@@ -49,8 +49,4 @@ class GameScheduler < Scheduler
     end
     ret
   end
-
-  def unassigned_player_count
-    size-roles.reduce(0) {|n, r| n+r.count}
-  end
 end

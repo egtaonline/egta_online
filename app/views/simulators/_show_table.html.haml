@@ -1,14 +1,6 @@
-%table
-  %tr
-    %th= "Name"
-    %td= simulator.name
-  %tr
-    %th= "Version"
-    %td= simulator.version
-  %tr
-    %th= "Description"
-    %td= simulator.description
-  - simulator.parameter_hash.each_pair do |k, v|
-    %tr
-      %th= k.humanize
-      %td= v
+=show_for simulator do |u|
+  %h3 Simulator Configuration
+  = u.attribute :name
+  = u.attribute :version
+  = u.attribute :description, :if_blank => "None"
+  = render :partial => "schedulers/parameter", :collection => simulator.parameter_hash.to_a

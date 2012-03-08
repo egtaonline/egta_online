@@ -17,12 +17,9 @@ Scenario: Simulator is uploaded successfully
   And I attach the file "features/support/epp_sim.zip" to "Simulator source"
   And I press "Create Simulator"
   Then I should be on the last simulator's page
-  And I should see the following table rows:
-    | Name             | epp_sim                 |
-    | Version          | test123                 |
-    | Description      | A simulator for testing |
-    | Number of agents | 120                     |
-
+  And I should see "epp_sim"
+  And I should see "test123"
+  And I should not see "error"
 
 
 

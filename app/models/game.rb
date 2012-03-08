@@ -14,7 +14,7 @@ class Game
   validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :find_profiles
-
+  delegate :fullname, :to => :simulator, :prefix => true
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
   end

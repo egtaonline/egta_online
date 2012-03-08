@@ -2,7 +2,7 @@
   %td= link_to game_scheduler.name, game_scheduler
   %td= link_to game_scheduler.class, game_scheduler
   %td= link_to game_scheduler.simulator.fullname, game_scheduler.simulator
-  %td= link_to game_scheduler.active.to_s, game_scheduler
+  %td= link_to (game_scheduler.active ? "Yes" : "No"), game_scheduler
   %td
     = link_to 'Edit', edit_game_scheduler_path(game_scheduler), :class => 'btn btn-mini'
     = link_to 'Destroy', game_scheduler, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

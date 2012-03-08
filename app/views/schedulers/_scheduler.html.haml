@@ -1,6 +1,8 @@
 %tr
-  %td= link_to scheduler.name, scheduler_path(scheduler.id)
-  %td= link_to scheduler.class, scheduler_path(scheduler.id)
-  %td= link_to scheduler.simulator.fullname, simulator_path(scheduler.simulator)
-  %td= link_to scheduler.active.to_s, scheduler_path(scheduler.id)
-  %td= link_to 'Destroy', scheduler_path(scheduler.id), :confirm => 'Are you sure?', :method => :delete
+  %td= link_to scheduler.name, scheduler
+  %td= link_to scheduler.class, scheduler
+  %td= link_to scheduler.simulator.fullname, scheduler.simulator
+  %td= link_to (scheduler.active ? "Yes" : "No"), scheduler
+  %td
+    = link_to 'Edit', edit_scheduler_path(scheduler), :class => 'btn btn-mini'
+    = link_to 'Destroy', scheduler, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

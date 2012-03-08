@@ -24,28 +24,21 @@ Scenario: Editing parameters results in a scheduler with the appropriate paramet
   Given the following simulators:
     | name  | version | parameter_hash |
     | testA | alpha   | {a: 2, b: 1}   |
-    | testB | beta    | {a: 3, c: 4}   |
+    | testB | beta    | {a: 54321, c: 4}   |
   When I am on the new game scheduler page
   And I select "testB" from "Simulator"
   And I fill in the following:
-    | Name                   | sch  |
-    | Game size              | 2    |
-    | Max samples            | 10   |
-    | Samples per simulation | 5    |
-    | Process memory (in MB) | 1000 |
-    | Time per sample        | 40   |
-    | C                      | 5    |
+    | Name                   | sch   |
+    | Game size              | 2     |
+    | Max samples            | 10    |
+    | Samples per simulation | 5     |
+    | Process memory (in MB) | 1000  |
+    | Time per sample        | 40    |
+    | C                      | 12345 |
   And I press "Create Game scheduler"
   Then I should be on the last game scheduler's page
-  And I should see the following table rows:
-    | Name                   | sch  |
-    | Game size              | 2    |
-    | Max samples            | 10   |
-    | Samples per simulation | 5    |
-    | Process memory (in MB) | 1000 |
-    | Time per sample        | 40   |
-    | A                      | 3    |
-    | C                      | 5    |
+  And I should see "54321"
+  And I should see "12345"
 
 
 

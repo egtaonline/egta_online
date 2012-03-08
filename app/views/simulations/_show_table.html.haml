@@ -1,25 +1,7 @@
-%table
-  %tr
-    %th Simulator
-    %td= simulation.scheduler.simulator.fullname
-  %tr
-    %th Profile
-    %td= simulation.profile.name
-  %tr
-    %th Account
-    %td= simulation.account_username
-  %tr
-    %th State
-    %td= simulation.state
-  %tr
-    %th Size
-    %td= simulation.size
-  %tr
-    %th Folder number
-    %td= simulation.number
-  %tr
-    %th Job id
-    %td= simulation.job_id
-  %tr
-    %th Error message
-    %td= simulation.error_message
+=show_for simulation do |u|
+  = u.attribute :simulator_fullname
+  = u.attribute :profile_name, :label => "Profile"
+  = u.attribute :account_username, :label => "Account"
+  = u.attributes :state, :size
+  = u.attribute :number, :label => "Folder number"
+  = u.attributes :job_id, :error_message

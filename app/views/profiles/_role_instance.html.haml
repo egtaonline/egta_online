@@ -1,3 +1,1 @@
-%tr
-  %th= role_instance.name
-=render partial: "strategy_instance", collection: role_instance.strategy_instances
+=render partial: "strategy_instance", collection: role_instance.strategy_instances, :locals => {:role_instance => role_instance}

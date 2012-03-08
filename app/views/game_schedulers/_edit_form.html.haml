@@ -1,0 +1,15 @@
+= simple_form_for game_scheduler, :html => {:class => 'form-inline' } do |f|
+  = f.input :name
+  = f.input :size, :label => "Game size"
+  = f.input :max_samples
+  = f.input :samples_per_simulation
+  = f.input :process_memory, :label => "Process memory (in MB)"
+  = f.input :time_per_sample, :label => "Time per sample (in seconds)"
+  = f.input :nodes, :label => "Nodes required"
+  = f.input :active, :as => :boolean
+  .control-group
+    = label :selector, :simulator_id, :class =>"control-label"
+    .controls
+      = collection_select :selector, :simulator_id, [game_scheduler.simulator], :id, :fullname
+  = render :partial => "simulator_selector/parameters", :object => game_scheduler.parameter_hash
+  = f.button :submit

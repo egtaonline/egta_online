@@ -6,5 +6,9 @@
   = f.input :time_per_sample, :label => "Time per sample (in seconds)"
   = f.input :nodes, :label => "Nodes required"
   = f.input :active, :as => :boolean
-  = render :partial => "simulator_selector/selector"
+  .control-group
+    = label :selector, :simulator_id, :class =>"control-label"
+    .controls
+      = collection_select :selector, :simulator_id, [scheduler.simulator], :id, :fullname
+  = render :partial => "simulator_selector/parameters", :object => scheduler.parameter_hash
   = f.button :submit

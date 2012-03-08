@@ -1,19 +1,2 @@
-= link_to "Edit Scheduler", edit_hierarchical_scheduler_path(hierarchical_scheduler.id)
-=render :partial => "role", :collection => hierarchical_scheduler.roles
-.action
-  -if hierarchical_scheduler.unassigned_player_count > 0
-    =form_tag url_for(:action=> "add_role", :id => hierarchical_scheduler.id), :method=>:post do
-      = select_tag "role", options_for_select(hierarchical_scheduler.simulator.roles.collect{|r| r.name}-hierarchical_scheduler.roles.collect{|r| r.name})
-      = number_field_tag "role_count", hierarchical_scheduler.unassigned_player_count, in: 1..hierarchical_scheduler.unassigned_player_count
-      = submit_tag "Add Role"
-
-.action
-  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: hierarchical_scheduler.id)
-
-%h3 Profiles
-%table
-  %tr
-    %th Name
-    %th Samples
-  =render :partial => "strategy/profile", :collection => profiles
-= paginate(profiles)
+#roles= render :partial => "roles/roles_table", :locals => {:role_owner => hierarchical_scheduler}
+#profiles= render "profiles/index"

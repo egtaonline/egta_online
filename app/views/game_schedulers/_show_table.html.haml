@@ -1,15 +1,14 @@
-=show_for scheduler do |u|
-  .row
-    .span6
-      %h3 Scheduler Configuration
-      = u.attribute :name
-      = u.attribute :size, :label => "Game size"
-      = u.attribute :simulator_fullname, :label => "Simulator"
-      = u.attributes :max_samples, :samples_per_simulation
-      = u.attribute :process_memory, :label => "Process memory (in MB)"
-      = u.attribute :time_per_sample, :label => "Time per sample (in seconds)"
-      = u.attribute :nodes, :label => "Nodes required"
-      = u.attribute :active
-    .span6
-      %h3 Simulator Configuration
-      = render :partial => "parameter", :collection => scheduler.parameter_hash.to_a
+=show_for game_scheduler do |u|
+  %h3 Scheduler Configuration
+  = u.attribute :name
+  = u.attribute :size, :label => "Game size"
+  = u.attribute :simulator_fullname, :label => "Simulator"
+  = u.attributes :max_samples, :samples_per_simulation
+  = u.attribute :process_memory, :label => "Process memory (in MB)"
+  = u.attribute :time_per_sample, :label => "Time per sample (in seconds)"
+  = u.attribute :nodes, :label => "Nodes required"
+  = u.attribute :active
+  %h3 Simulator Configuration
+  = render :partial => "parameter", :collection => game_scheduler.parameter_hash.to_a
+= link_to "Edit Game Scheduler", edit_game_scheduler_path(game_scheduler), :class => 'btn btn-primary'
+= link_to "Create Game to Match", url_for(controller: "games", action: "from_scheduler", scheduler_id: game_scheduler.id), :class => 'btn btn-primary'

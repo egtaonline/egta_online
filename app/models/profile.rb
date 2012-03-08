@@ -20,6 +20,7 @@ class Profile
   validate :proto_string_has_correct_format
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
+  delegate :fullname, :to => :simulator, :prefix => true
 
   def proto_string_has_correct_format
     if proto_string == "Non-existent strategy"

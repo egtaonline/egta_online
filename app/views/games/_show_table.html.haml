@@ -1,14 +1,11 @@
-%table
-  %tr
-    %th= "Name"
-    %td= game.name
-  %tr
-    %th= "Size"
-    %td= game.size
-  %tr
-    %th= "Simulator"
-    %td= game.simulator.fullname
-  - game.parameter_hash.each_pair do |k, v|
-    %tr
-      %th= k.humanize
-      %td= v
+=show_for game do |u|
+  %h3 Game Configuration
+  = u.attribute :name
+  = u.attribute :size
+  = u.attribute :simulator_fullname, :label => "Simulator"
+  %h3 Simulator Configuration
+  = render :partial => "parameter", :collection => game.parameter_hash.to_a
+- if game.roles.size == 1 && game.roles.first.name == "All"
+  = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml"), :class => 'btn btn-primary'
+= link_to "Download JSON", url_for(:action => "show", :format => "json"), :class => 'btn btn-primary'
+= link_to "Download JSON with samples", url_for(:action => "show_with_samples", :format => "json"), :class => 'btn btn-primary'

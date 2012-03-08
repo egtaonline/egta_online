@@ -1,25 +1,14 @@
-%h3 Roles/Strategies
-=render :partial => "role", :collection => game.roles, locals: {game: game}
-.action
-  -temp = game.roles.collect{|r| r.count}.reduce(:+)
-  -if temp == nil || game.size-temp > 0
-    =form_tag url_for(:action=> "add_role", :id => game.id), :method=>:post do
-      = select_tag "role", options_for_select(game.simulator.roles-game.roles)
-      = text_field_tag "role_count", nil, size: 30, placeholder: "Number of players in role..."
-      = submit_tag "Add Role"
+#roles= render :partial => "roles/roles_table", :locals => {:role_owner => game}
 %h3 Features
-%table
-  %tr
-    %th Name
-    %th Expected Value
-  =render :partial => "feature", :collection => game.features
-  %tr
-    =form_tag game_features_path(game), :method=>:post do
-      %td= text_field_tag "name", nil, size: 30, placeholder: "Name"
-      %td= text_field_tag "expected_value", nil, size: 30, placeholder: "Expected Value"
-      %td= submit_tag "Add Feature"
-.action
-  - if game.roles.size == 1 && game.roles.first.name == "All"
-    = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml")
-  = link_to "Download JSON", url_for(:action => "show", :format => "json")
-  = link_to "Download JSON with samples", url_for(:action => "show_with_samples", :format => "json")
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Expected Value
+  %tbody
+    =render :partial => "feature", :collection => game.features
+    %tr
+      =form_tag game_features_path(game), :method=>:post do
+        %td= text_field_tag "name", nil, size: 30, placeholder: "Name"
+        %td= text_field_tag "expected_value", nil, size: 30, placeholder: "Expected Value"
+        %td= submit_tag "Add Feature", :class => 'btn btn-mini btn-primary'

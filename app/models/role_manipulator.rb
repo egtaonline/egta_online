@@ -22,4 +22,8 @@ module RoleManipulator
   def unused_strategies(role)
     simulator.roles.where(name: role.name).first.strategy_names-role.strategy_names
   end
+  
+  def unassigned_player_count
+    size-roles.reduce(0) {|n, r| n+r.count}
+  end
 end

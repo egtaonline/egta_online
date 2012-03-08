@@ -3,8 +3,9 @@
     %tr
       %th State
       %th Profile
+      %th Account
       %th Number
       %th Job Id
   %tbody
     =render simulations
-=paginate simulations
+=paginate simulations, :remote => true

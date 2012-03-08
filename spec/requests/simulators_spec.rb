@@ -50,7 +50,7 @@ describe "Simulators" do
       simulator = Fabricate(:simulator)
       simulator.add_strategy("Bidder", "A")
       visit simulator_path(simulator.id)
-      click_on "Remove"
+      click_on "Remove Role"
       page.should have_content("Inspect Simulator")
       page.should have_content(simulator.name)
       page.should_not have_content("Bidder")

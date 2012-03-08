@@ -1,5 +1,5 @@
 class GameSchedulersController < SchedulersController
-  before_filter :merge, :only => :create
+  before_filter :merge, :only => [:create, :update]
   respond_to :html
   
   expose(:game_schedulers){GameScheduler.page(params[:page])}

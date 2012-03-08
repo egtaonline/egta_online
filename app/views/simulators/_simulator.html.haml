@@ -1,5 +1,6 @@
 %tr
-  %td= link_to simulator.name, simulator_path(simulator.id)
-  %td= link_to simulator.version, simulator_path(simulator.id)
-  %td= link_to simulator.description, simulator_path(simulator.id)
-  %td= link_to 'Destroy', simulator_path(simulator.id), :confirm => 'Are you sure?', :method => :delete
+  %td= link_to simulator.name, simulator
+  %td= link_to simulator.version, simulator
+  %td= link_to simulator.description, simulator
+  %td
+    = link_to 'Destroy', simulator, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

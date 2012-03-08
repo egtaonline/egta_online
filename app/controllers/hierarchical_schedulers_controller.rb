@@ -1,5 +1,5 @@
 class HierarchicalSchedulersController < GameSchedulersController
-  before_filter :merge, :only => :create
+  before_filter :merge, :only => [:create, :update]
   respond_to :html
   
   expose(:hierarchical_schedulers){HierarchicalScheduler.page(params[:page])}

@@ -1,15 +1,20 @@
-%h3 Profile Entries
-%table
-  %tr
-    %th Name
-    %th Payoff
-    %th Standard Dev.
-  =render partial: "role_instance", collection: profile.role_instances
+%h3 Payoff Data
+%table.table.table-striped
+  %thead
+    %tr
+      %th Role Name
+      %th Strategy Name
+      %th Payoff
+      %th Standard Dev.
+  %tbody
+    =render partial: "role_instance", collection: profile.role_instances
 
 %h3 Features
-%table
-  %tr
-    %th Name
-    %th Average
-    %th Standard Dev.
-  =render :partial => "features"
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Average
+      %th Standard Dev.
+  %tbody
+    =render :partial => "features"

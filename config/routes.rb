@@ -13,12 +13,15 @@ EgtaOnline::Application.routes.draw do
     end
   end
 
-  resources :accounts, :except => :destroy
+  resources :accounts
   resources :profiles, :only => :show
   resources :simulations, :only => [:index, :show]
   resources :schedulers do
     collection do
       post :update_parameters
+    end
+    member do
+      get :page_profiles
     end
   end
   resources :game_schedulers, :hierarchical_schedulers do

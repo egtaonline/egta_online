@@ -1,12 +1,1 @@
-= link_to "Edit Scheduler", edit_scheduler_path(scheduler.id)
-
-.action
-  = link_to "Create game from scheduler", url_for(controller: "games", action: "from_scheduler", scheduler_id: scheduler.id)
-
-%h3 Profiles
-%table
-  %tr
-    %th Name
-    %th Samples
-  =render :partial => "strategy/profile", :collection => profiles
-= paginate(profiles)
+#profiles= render "profiles/index"

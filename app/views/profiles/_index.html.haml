@@ -1,0 +1,9 @@
+%h3 Profiles
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Samples
+  %tbody
+    =render profiles
+= paginate(profiles, :remote => true)

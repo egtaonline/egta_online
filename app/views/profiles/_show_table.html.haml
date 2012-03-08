@@ -1,14 +1,7 @@
-%table
-  %tr
-    %th= "Name"
-    %td= profile.name
-  %tr
-    %th= "Simulator"
-    %td= profile.simulator.fullname
-  - profile.parameter_hash.each_pair do |k, v|
-    %tr
-      %th= k.humanize
-      %td= v
-  %tr
-    %th= "Samples"
-    %td= profile.sample_count
+=show_for profile do |u|
+  %h3 Profile Configuration
+  = u.attribute :name
+  = u.attribute :simulator_fullname, :label => "Simulator"
+  = u.attribute :sample_count
+  %h3 Simulator Configuration
+  = render :partial => "schedulers/parameter", :collection => profile.parameter_hash.to_a
