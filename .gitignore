@@ -10,3 +10,4 @@ coverage/
 bin/
 public/assets/
 uploads/
+.DS_Store

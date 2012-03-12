@@ -1,8 +1,0 @@
-%tr
-  %td= link_to hierarchical_scheduler.name, hierarchical_scheduler
-  %td= link_to hierarchical_scheduler.class, hierarchical_scheduler
-  %td= link_to hierarchical_scheduler.simulator.fullname, hierarchical_scheduler.simulator
-  %td= link_to (hierarchical_scheduler.active ? "Yes" : "No"), hierarchical_scheduler
-  %td
-    = link_to 'Edit', edit_hierarchical_scheduler_path(hierarchical_scheduler), :class => 'btn btn-mini'
-    = link_to 'Destroy', hierarchical_scheduler, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

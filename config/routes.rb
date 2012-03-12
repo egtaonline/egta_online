@@ -24,6 +24,7 @@ EgtaOnline::Application.routes.draw do
       get :page_profiles
     end
   end
+  resources :subgame_deviation_schedulers
   resources :game_schedulers, :hierarchical_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role

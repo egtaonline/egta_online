@@ -2,6 +2,6 @@ Fabricator(:simulation) do
   state "queued"
   profile
   account
-  scheduler {Fabricate(:scheduler)}
+  scheduler
   size 2
 end

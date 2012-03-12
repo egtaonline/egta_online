@@ -1,4 +1,4 @@
-=show_for game_scheduler do |u|
+=show_for scheduler do |u|
   %h3 Scheduler Configuration
   = u.attribute :name
   = u.attribute :size, :label => "Game size"
@@ -9,6 +9,6 @@
   = u.attribute :nodes, :label => "Nodes required"
   = u.attribute :active
   %h3 Simulator Configuration
-  = render :partial => "parameter", :collection => game_scheduler.parameter_hash.to_a
-= link_to "Edit Game Scheduler", edit_game_scheduler_path(game_scheduler), :class => 'btn btn-primary'
-= link_to "Create Game to Match", url_for(controller: "games", action: "from_scheduler", scheduler_id: game_scheduler.id), :class => 'btn btn-primary'
+  = render :partial => "parameter", :collection => scheduler.parameter_hash.to_a
+= link_to "Edit Game Scheduler", edit_game_scheduler_path(scheduler), :class => 'btn btn-primary'
+= link_to "Create Game to Match", url_for(controller: "games", action: "from_scheduler", scheduler_id: scheduler.id), :class => 'btn btn-primary'

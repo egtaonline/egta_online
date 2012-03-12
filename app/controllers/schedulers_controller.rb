@@ -2,8 +2,19 @@ class SchedulersController < ApplicationController
   respond_to :html
   before_filter :merge, :only => [:create, :update]
   
-  expose(:schedulers){Scheduler.page(params[:page])}
-  expose(:scheduler)
+  # These exposures are so that we can treat all different schedulers as scheduler in views, allowing view reuse where it's helpful
+  expose(:schedulers){model_name.classify.constantize.page(params[:page])}
+  expose(:scheduler) do
+    proxy = model_name.classify.constantize
+    if id = params["#{model_name}_id"] || params[:id]
+      proxy.find(id).tap do |r|
+        r.attributes = params[model_name] unless request.get?
+      end
+    else
+      proxy.new(params[model_name])
+    end
+  end
+  
   expose(:profiles){scheduler.profiles.page(params[:page])}
 
   def create
@@ -34,6 +45,6 @@ class SchedulersController < ApplicationController
   private 
   
   def merge
-    params[:scheduler] = params[:scheduler].merge(params[:selector])
+    params[model_name] = params[model_name].merge(params[:selector])
   end
 end

@@ -4,5 +4,5 @@
   %td= link_to scheduler.simulator.fullname, scheduler.simulator
   %td= link_to (scheduler.active ? "Yes" : "No"), scheduler
   %td
-    = link_to 'Edit', edit_scheduler_path(scheduler), :class => 'btn btn-mini'
+    = link_to 'Edit', "/#{model_name.pluralize}/#{scheduler.id}/edit", :class => 'btn btn-mini'
     = link_to 'Destroy', scheduler, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

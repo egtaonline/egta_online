@@ -6,5 +6,5 @@
       %th Simulator
       %th Active
   %tbody
-    =render schedulers
+    =render :partial => "scheduler", :collection => schedulers
 =paginate schedulers, :remote => true

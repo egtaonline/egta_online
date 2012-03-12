@@ -1,14 +1,7 @@
 require 'spec_helper'
 
 describe "Accounts" do
-  before(:each) do
-    user = Fabricate(:user)
-    visit "/"
-    fill_in 'Email', :with => user.email
-    fill_in 'Password', :with => user.password
-    click_button 'Sign in'
-  end
-
+  
   describe "GET /accounts" do
     it "displays accounts" do
       Fabricate(:account)

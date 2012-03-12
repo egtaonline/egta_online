@@ -9,12 +9,26 @@ Spork.prefork do
   require 'fabrication'
   Capybara.default_selector = :css
   Capybara.javascript_driver = :webkit
+  
   RSpec.configure do |config|
 
     config.before(:each) do
       Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
     end
-
+    
+    config.before(:each, :type => :request) do
+      ResqueSpec.reset!
+      user = Fabricate(:user)
+      visit "/"
+      fill_in 'Email', :with => user.email
+      fill_in 'Password', :with => user.password
+      click_button 'Sign in'
+    end
+    
+    config.after(:each, :type => :request) do
+      visit "/users/sign_out"
+    end
+    
     config.mock_with :rspec
 
   end

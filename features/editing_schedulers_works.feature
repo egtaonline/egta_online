@@ -16,7 +16,7 @@ Scenario: Editing a scheduler leads to profiles being dropped and new profiles b
   And I press "Add Strategy"
   Then there should be 3 profiles
   When I follow "Edit Game Scheduler"
-  And I fill in "54321" for "A"
+  And I fill in "54321" for "Parm1"
   And I press "Update Game scheduler"
   Then I should see "54321"
   And there should be 6 profiles

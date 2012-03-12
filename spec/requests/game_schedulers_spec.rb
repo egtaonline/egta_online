@@ -1,17 +1,9 @@
 require 'spec_helper'
 
-describe "GameSchedulers" do
-  before(:each) do
-    ResqueSpec.reset!
-    user = Fabricate(:user)
-    visit "/"
-    fill_in 'Email', :with => user.email
-    fill_in 'Password', :with => user.password
-    click_button 'Sign in'
-  end
+describe "game_scheduler" do
 
-  describe "GET /game_schedulers" do
-    it "should show all game schedulers" do
+  context "GET /game_schedulers" do
+    it "should shows only game schedulers" do
       s1 = Fabricate(:scheduler)
       s2 = Fabricate(:game_scheduler)
       visit game_schedulers_path
@@ -39,53 +31,6 @@ describe "GameSchedulers" do
       page.should have_content("1000")
       page.should have_content("40")
       page.should have_content("Inspect Game Scheduler")
-    end
-  end
-
-  describe "GET /game_schedulers/new" do
-    it "should show the new game scheduler page" do
-      Fabricate(:simulator)
-      visit new_game_scheduler_path
-      page.should have_content("New Game Scheduler")
-      page.should have_content("Name")
-    end
-  end
-
-  describe "GET /game_schedulers/:id/edit" do
-    it "should show the edit page" do
-      scheduler = Fabricate(:game_scheduler)
-      visit edit_game_scheduler_path(scheduler.id)
-      page.should have_content("Edit Game Scheduler")
-      page.should have_content("Name")
-    end
-  end
-
-  describe "GET /game_schedulers/:id" do
-    it "should show the relevant game scheduler" do
-      scheduler = Fabricate(:game_scheduler)
-      visit game_scheduler_path(scheduler.id)
-      page.should have_content("Inspect Game Scheduler")
-      page.should have_content(scheduler.name)
-    end
-  end
-
-  describe "PUT /game_schedulers/:id" do
-    it "should update the relevant scheduler" do
-      scheduler = Fabricate(:game_scheduler)
-      visit edit_game_scheduler_path(scheduler.id)
-      fill_in "Max samples", :with => "100"
-      click_button "Update Game scheduler"
-      page.should have_content("Inspect Game Scheduler")
-      page.should have_content("100")
-    end
-  end
-
-  describe "DELETE /game_schedulers/:id" do
-    it "should delete the scheduler" do
-      scheduler = Fabricate(:game_scheduler)
-      visit game_schedulers_path
-      click_on "Destroy"
-      GameScheduler.count.should eql(0)
     end
   end
 

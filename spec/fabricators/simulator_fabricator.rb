@@ -2,7 +2,7 @@ Fabricator(:simulator) do
   name "epp_sim"
   version {Fabricate.sequence(:version, 1) {|i| "test#{i}"}}
   setup { true }
-  parameter_hash { Hash["a" => "2"] }
+  parameter_hash { {"Parm1"=>"2","Parm2"=>"3"} }
   after_create {|sim| if sim.parameter_hash.is_a?(String); sim.update_attribute(:parameter_hash, eval(sim.parameter_hash)); end }
 end
 
