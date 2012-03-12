@@ -18,7 +18,6 @@ class Scheduler
       where(:proto_string => Regexp.new("#{role}: (\d+)*#{s.number}(,|;)"))
     end
   end
-  embeds_many :roles, :as => :role_owner
   belongs_to :simulator
   delegate :fullname, :to => :simulator, :prefix => true
   validates_uniqueness_of :name

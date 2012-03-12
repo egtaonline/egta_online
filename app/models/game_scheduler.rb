@@ -1,6 +1,7 @@
 class GameScheduler < Scheduler
   include RoleManipulator
 
+  embeds_many :roles, :as => :role_owner
   field :size, :type => Integer
   validates_presence_of :size
 
