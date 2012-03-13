@@ -1,6 +1,6 @@
 class Role
   include Mongoid::Document
-  has_and_belongs_to_many :strategies, inverse_of: nil
+  has_and_belongs_to_many :strategies, inverse_of: nil, order: :name.asc
   embedded_in :role_owner, polymorphic: true
   
   field :name

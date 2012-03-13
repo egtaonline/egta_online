@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "GameSchedulers" do
-  shared_examples "a game scheduler" do
+  shared_examples "a game scheduler on requests" do
     context "POST /#{described_class.to_s.tableize}/:id/add_role" do
       it "should add the required role" do
         Simulator.last.add_role("All123")
@@ -56,19 +56,19 @@ describe "GameSchedulers" do
   end
 
   describe GameScheduler do
-    it_behaves_like "a game scheduler" do
+    it_behaves_like "a game scheduler on requests" do
       let!(:game_scheduler){Fabricate(:game_scheduler)}
     end
   end
 
   describe HierarchicalScheduler do
-    it_behaves_like "a game scheduler" do
+    it_behaves_like "a game scheduler on requests" do
       let!(:game_scheduler){Fabricate(:hierarchical_scheduler)}
     end
   end
   
   describe DeviationScheduler do
-    it_behaves_like "a game scheduler" do
+    it_behaves_like "a game scheduler on requests" do
       let!(:game_scheduler){Fabricate(:deviation_scheduler)}
     end
   end

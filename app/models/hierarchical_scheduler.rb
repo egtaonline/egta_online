@@ -7,27 +7,26 @@ class HierarchicalScheduler < GameScheduler
     if roles.reduce(0){|sum, r| sum + r.count}*agents_per_player != size || roles.collect{|r| r.strategies.count}.min < 1
       return []
     end
-    proto_strings = []
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
       combinations = role.strategy_numbers.repeated_combination(role.count).to_a
       if first_ar == nil
-        first_ar = combinations
+        first_ar = combinations.collect{|c| [role.name].concat(c) }
       else
-        all_other_ars << combinations
+        all_other_ars << combinations.collect{|c| [role.name].concat(c) }
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
-      return first_ar.collect {|e| "#{roles.first}: "+ multiply(e).join(", ")}
+      return first_ar.collect {|r| "#{r[0]}: #{multiply(r.drop(1)).join(", ")}"}
     else
-      ret = []
+      profs = []
       first_ar.to_a.product(*all_other_ars).each do |prof|
-        count = -1
-        ret << roles.collect {|r| count+=1; r.name+": "+multiply(prof[count]).join(", ")}.join("; ")
+        prof.sort!{|x, y| x[0] <=> y[0]}
+        profs << prof.collect {|r| "#{r[0]}: #{multiply(r.drop(1)).join(", ")}"}.join("; ")
       end
     end
-    ret
+    profs
   end
 
   def unassigned_player_count

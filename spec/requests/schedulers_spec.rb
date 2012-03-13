@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Schedulers" do
 
-  shared_examples "a scheduler" do
+  shared_examples "a scheduler on requests" do
     context "POST /#{described_class.to_s.tableize}/update_parameters", :js => true do
       it "should update parameter info" do
         sim2 = Fabricate(:simulator, :parameter_hash => {"Parm2"=>"7","Parm3"=>"6"})
@@ -73,25 +73,25 @@ describe "Schedulers" do
   end
 
   describe Scheduler do
-    it_behaves_like "a scheduler" do
+    it_behaves_like "a scheduler on requests" do
       let!(:scheduler){Fabricate(:scheduler)}
     end
   end
   
   describe GameScheduler do
-    it_behaves_like "a scheduler" do
+    it_behaves_like "a scheduler on requests" do
       let!(:scheduler){Fabricate(:game_scheduler)}
     end
   end
   
   describe HierarchicalScheduler do
-    it_behaves_like "a scheduler" do
+    it_behaves_like "a scheduler on requests" do
       let!(:scheduler){Fabricate(:hierarchical_scheduler)}
     end
   end
   
   describe DeviationScheduler do
-    it_behaves_like "a scheduler" do
+    it_behaves_like "a scheduler on requests" do
       let!(:scheduler){Fabricate(:deviation_scheduler)}
     end
   end

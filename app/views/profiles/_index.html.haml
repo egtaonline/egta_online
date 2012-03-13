@@ -5,5 +5,5 @@
       %th Name
       %th Samples
   %tbody
-    =render profiles
+    =render :partial => "profiles/profile", :collection => profiles
 = paginate(profiles, :remote => true)

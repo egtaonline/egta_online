@@ -15,7 +15,7 @@ class Scheduler
     def with_role_and_strategy(role, strategy)
       s = Strategy.where(:name => strategy).first
       return [] if s == nil
-      where(:proto_string => Regexp.new("#{role}: (\d+)*#{s.number}(,|;)"))
+      where(:proto_string => Regexp.new("#{role}:( \d+,)* #{s.number}(,|;|\\z)"))
     end
   end
   belongs_to :simulator
