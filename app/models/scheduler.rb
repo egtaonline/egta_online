@@ -11,6 +11,10 @@ class Scheduler
   field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
   field :nodes, :type => Integer, :default => 1
+  field :simulator_fullname
+  
+  before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
+  
   has_and_belongs_to_many :profiles, :inverse_of => nil do
     def with_role_and_strategy(role, strategy)
       s = Strategy.where(:name => strategy).first
@@ -19,8 +23,6 @@ class Scheduler
     end
   end
   belongs_to :simulator
-  delegate :name, :to => :simulator, :prefix => true
-  delegate :fullname, :to => :simulator, :prefix => true
   validates_uniqueness_of :name
   validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :max_samples, :nodes
   validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true

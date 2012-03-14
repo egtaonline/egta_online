@@ -3,7 +3,7 @@
     %tr
       %th= sortable("name")
       %th= sortable("_type", "Type")
-      %th Simulator
+      %th= sortable("simulator_fullname", "Simulator")
       %th= sortable("active", "Active?")
   %tbody
     =render :partial => "scheduler", :collection => schedulers
