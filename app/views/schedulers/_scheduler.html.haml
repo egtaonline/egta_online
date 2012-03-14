@@ -1,7 +1,7 @@
 %tr
   %td= link_to scheduler.name, scheduler
   %td= link_to scheduler.class, scheduler
-  %td= link_to scheduler.simulator.fullname, scheduler.simulator
+  %td= link_to scheduler.simulator_fullname, scheduler.simulator
   %td= link_to (scheduler.active ? "Yes" : "No"), scheduler
   %td
     = link_to 'Edit', "/#{model_name.pluralize}/#{scheduler.id}/edit", :class => 'btn btn-mini'

@@ -1,9 +1,9 @@
 %table.table.table-striped
   %thead
     %tr
-      %th Name
+      %th= sortable "name"
       %th Simulator
-      %th Size
+      %th= sortable "size"
   %tbody
     =render games
 =paginate games, :remote => true

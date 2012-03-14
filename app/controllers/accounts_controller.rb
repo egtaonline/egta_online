@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   respond_to :html
   
-  expose(:accounts){Account.page(params[:page])}
+  expose(:accounts){Account.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:account)
   
   def create

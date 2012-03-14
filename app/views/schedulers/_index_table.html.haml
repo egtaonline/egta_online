@@ -1,10 +1,10 @@
 %table.table.table-striped
   %thead
     %tr
-      %th Name
-      %th Type
+      %th= sortable("name")
+      %th= sortable("_type", "Type")
       %th Simulator
-      %th Active
+      %th= sortable("active", "Active?")
   %tbody
     =render :partial => "scheduler", :collection => schedulers
 =paginate schedulers, :remote => true

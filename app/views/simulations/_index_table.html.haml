@@ -1,11 +1,11 @@
 %table.table.table-striped
   %thead
     %tr
-      %th State
+      %th= sortable "state"
       %th Profile
       %th Account
-      %th Number
-      %th Job Id
+      %th= sortable "number"
+      %th= sortable "job_id"
   %tbody
     =render simulations
 =paginate simulations, :remote => true

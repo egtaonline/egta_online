@@ -35,7 +35,6 @@ class Simulation
   scope :active, where(:state.in=>['queued','running'])
   scope :finished, where(:state.in=>['complete', 'failed'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
-  default_scope order_by(:state, :asc)
   validates_presence_of :state, :on => :create, :message => "can't be blank"
   validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0

@@ -1,3 +1,2 @@
 class ApiScheduler < Scheduler
-
 end

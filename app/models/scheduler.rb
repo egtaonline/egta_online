@@ -19,6 +19,7 @@ class Scheduler
     end
   end
   belongs_to :simulator
+  delegate :name, :to => :simulator, :prefix => true
   delegate :fullname, :to => :simulator, :prefix => true
   validates_uniqueness_of :name
   validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :max_samples, :nodes

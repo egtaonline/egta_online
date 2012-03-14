@@ -18,7 +18,7 @@ class Simulator
 
   def simulator_setup
     if setup == false
-      system("rm -rf #{location}/#{name}")
+      system("rm -rf #{location}")
       begin
         system("unzip -uqq #{simulator_source.path} -d #{location}")
       rescue
