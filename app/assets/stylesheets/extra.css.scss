@@ -1,3 +1,16 @@
 .take_up_space{
   visibility: hidden;
 }
+
+.table th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+.table th .asc { 
+  background-image: url("/assets/up_arrow.gif"); 
+}
+
+.table th .desc { 
+  background-image: url("/assets/down_arrow.gif"); 
+}

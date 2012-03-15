@@ -56,5 +56,15 @@ class Simulator
   def remove_strategy(role, strategy)
     super
     profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
+    schedulers do |scheduler|
+      scheduler.remove_strategy(role, strategy)
+    end
+  end
+  
+  def remove_role(role)
+    super
+    schedulers do |scheduler|
+      scheduler.remove_role(role)
+    end
   end
 end

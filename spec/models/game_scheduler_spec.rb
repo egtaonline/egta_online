@@ -47,12 +47,13 @@ describe GameScheduler do
           game_scheduler2.add_role("Bidder", 2)
           game_scheduler2.add_strategy("Bidder", "A")
           game_scheduler2.add_strategy("Seller", "C")
+          ResqueSpec.perform_all(:profile_actions)
           game_scheduler2.add_strategy("Seller", "A")
           game_scheduler2.add_strategy("Bidder", "B")
           ResqueSpec.perform_all(:profile_actions)
           game_scheduler = described_class.where(:size => 3).first
           game_scheduler.profiles.size.should eql(6)
-          game_scheduler.profiles.collect{|p| p.name}.should eql(["Bidder: 2 A; Seller: 1 A", "Bidder: 2 A; Seller: 1 C", "Bidder: 1 A, 1 B; Seller: 1 A", "Bidder: 1 A, 1 B; Seller: 1 C", "Bidder: 2 B; Seller: 1 A", "Bidder: 2 B; Seller: 1 C"])
+          game_scheduler.profiles.collect{|p| p.name}.sort.should eql(["Bidder: 2 A; Seller: 1 A", "Bidder: 2 A; Seller: 1 C", "Bidder: 1 A, 1 B; Seller: 1 A", "Bidder: 1 A, 1 B; Seller: 1 C", "Bidder: 2 B; Seller: 1 A", "Bidder: 2 B; Seller: 1 C"].sort)
         end
       end
     end

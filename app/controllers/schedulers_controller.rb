@@ -15,7 +15,7 @@ class SchedulersController < ApplicationController
     end
   end
   
-  expose(:profiles){scheduler.profiles.page(params[:page])}
+  expose(:profiles){scheduler.profiles.order_by(params[:sort], params[:direction]).page(params[:page])}
 
   def create
     scheduler.save

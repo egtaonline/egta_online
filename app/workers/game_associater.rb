@@ -5,8 +5,10 @@ class GameAssociater
     profile = Profile.find(profile_id) rescue nil
     if profile != nil
       Game.where(simulator_id: profile.simulator_id, parameter_hash: profile.parameter_hash, size: profile.size).each do |game|
-        game.profiles << profile if game.profiles.include?(profile) == false
-        game.save!
+        if (game.profiles.find(profile_id) rescue nil) == nil
+          game.profiles << profile
+          game.save!
+        end
       end
     end
   end

@@ -18,10 +18,12 @@ class GameScheduler < Scheduler
 
   def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
-    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
-    role_i.save!
-    self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
-    self.save
+    if role_i != nil
+      role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
+      role_i.save!
+      self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
+      self.save
+    end
   end
 
   def ensure_profiles

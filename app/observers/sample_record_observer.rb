@@ -1,6 +1,7 @@
 class SampleRecordObserver < Mongoid::Observer
   def after_create(sample_record)
     profile = sample_record.profile
+    profile.inc(:sample_count, 1)
     sample_record.payoffs.each do |key, value|
       value.each do |subkey, subvalue|
         profile.add_value(key, subkey, subvalue)

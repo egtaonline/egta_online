@@ -10,6 +10,9 @@ class Profile
   field :proto_string
   field :size, :type => Integer
   field :parameter_hash, type: Hash, default: {}
+  field :name
+  field :sample_count, type: Integer, default: 0
+  index :sample_count
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
@@ -21,6 +24,16 @@ class Profile
   validates_presence_of :simulator, :proto_string, :parameter_hash
   validates_uniqueness_of :proto_string, scope: [:simulator_id, :parameter_hash]
   delegate :fullname, :to => :simulator, :prefix => true
+
+  before_save(:on => :create) do
+    self.name = proto_string.split("; ").collect do |role|
+      role_name = role.split(": ").first
+      strategies = role.split(": ").last.split(", ")
+      role_name += ": "
+      singular_strategies = ::Strategy.where(:number.in => strategies.uniq).collect {|s| "#{strategies.count(s.number.to_s)} #{s.name}"}
+      role_name += singular_strategies.join(", ")
+    end.join("; ")
+  end
 
   def proto_string_has_correct_format
     if proto_string == "Non-existent strategy"
@@ -44,26 +57,12 @@ class Profile
     ret_hash
   end
 
-  def name
-    proto_string.split("; ").collect do |role|
-      role_name = role.split(": ").first
-      strategies = role.split(": ").last.split(", ")
-      role_name += ": "
-      singular_strategies = ::Strategy.where(:number.in => strategies.uniq).collect {|s| "#{strategies.count(s.number.to_s)} #{s.name}"}
-      role_name += singular_strategies.join(", ")
-    end.join("; ")
-  end
-
   def extended_name
     proto_string.split("; ").collect do |role|
       role_name = role.split(": ").first
       strategies = role.split(": ").last.split(", ")
       role_name += ": "+strategies.collect{|s| ::Strategy.where(:number => s).first.name}.join(", ")
     end.join("; ")
-  end
-
-  def sample_count
-    sample_records.count
   end
 
   def make_roles
