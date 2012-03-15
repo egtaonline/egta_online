@@ -15,6 +15,7 @@ class DeviationScheduler < GameScheduler
     role_i = deviating_roles.find_or_create_by(name: role_name)
     role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
     role_i.save!
+    Resque.enqueue(ProfileAssociater, self.id)
   end
   
   def remove_deviating_strategy(role, strategy_name)

@@ -11,7 +11,6 @@ class Simulation
   belongs_to :scheduler
 
   delegate :name, :to => :profile, :prefix => true
-  delegate :username, :to => :account, :prefix => true
   delegate :nodes, :to => :scheduler, :prefix => true
   delegate :simulator_fullname, :to => :scheduler
 
@@ -21,7 +20,8 @@ class Simulation
   field :error_message
   field :created_at
   field :flux, :type => Boolean, :default => false
-
+  field :account_username
+  field :profile_name
   field :number, :type=>Integer
   sequence :number
   index :state, Mongo::ASCENDING
@@ -38,6 +38,8 @@ class Simulation
   validates_presence_of :state, :on => :create, :message => "can't be blank"
   validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
+
+  before_save(:on => :create){self.account_username = self.account.username; self.profile_name = self.profile.name}
 
   state_machine :state, :initial => :pending do
     state :pending

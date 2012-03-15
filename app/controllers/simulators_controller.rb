@@ -1,7 +1,7 @@
 class SimulatorsController < ApplicationController
   respond_to :html
   
-  expose(:simulators){Simulator.page(params[:page])}
+  expose(:simulators){Simulator.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:simulator)
   
   def create

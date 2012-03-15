@@ -1,9 +1,9 @@
 %table.table.table-striped
   %thead
     %tr
-      %th Name
-      %th Version
-      %th Description
+      %th= sortable "name"
+      %th= sortable "version"
+      %th= sortable "description"
   %tbody
     =render simulators
 = paginate simulators, :remote => true
