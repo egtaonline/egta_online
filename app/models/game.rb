@@ -25,6 +25,9 @@ class Game
 
   def add_roles_from_scheduler(scheduler)
     scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count); r.strategies.each{|s| add_strategy(r.name, s.name)}}
+    if scheduler.is_a? DeviationScheduler
+      scheduler.deviating_roles.each{|r| r.strategies.each{|s| add_strategy(r.name, s.name)}}
+    end
   end
   
   def display_profiles
