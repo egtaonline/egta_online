@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
   before_filter :merge, :only => :create
   
   expose(:games){Game.order_by(params[:sort], params[:direction]).page(params[:page])}

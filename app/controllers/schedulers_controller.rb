@@ -1,5 +1,5 @@
 class SchedulersController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
   before_filter :merge, :only => [:create, :update]
   
   # These exposures are so that we can treat all different schedulers as scheduler in views, allowing view reuse where it's helpful
