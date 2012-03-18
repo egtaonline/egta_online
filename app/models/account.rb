@@ -5,19 +5,27 @@ class Account
   include Mongoid::Document
 
   has_many :simulations
+
   field :username
-  index :username, unique: true
+  field :active, :type => Boolean, :default => false
+  
+  # Unneccessary because Account is not high volume
+  # index :username, :unique => true
+  
+  # Allows us to get all active Accounts with Account.active
+  scope :active, where(:active => true)
+  
   validates_presence_of :username
   validates_uniqueness_of :username
   validate :login, :group_permission, :on => :create
-  field :active, :type => Boolean, :default => false
-  scope :active, where(active: true)
 
+  # Ensure that the password is not stored in the database, because public key login has been setup
   after_validation(:on => :create) do
     self["password"] = nil
     self["skip"] = true
   end
   
+  # Ensure that the credentials provided are correct
   def login
     if self["skip"] != true
       begin
@@ -30,6 +38,7 @@ class Account
     end
   end
   
+  # Ensure that the user has the wellman group permission on the cluster
   def group_permission
     if errors[:username] == [] && self["skip"] != true
       begin

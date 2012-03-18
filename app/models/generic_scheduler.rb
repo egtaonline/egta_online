@@ -1,0 +1,2 @@
+class GenericScheduler < Scheduler
+end

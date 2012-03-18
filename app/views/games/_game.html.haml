@@ -1,6 +1,6 @@
 %tr
   %td= link_to game.name, game
-  %td= link_to game.simulator.fullname, game.simulator
+  %td= link_to game.simulator_fullname, game.simulator
   %td= link_to game.size, game
   %td
     = link_to 'Destroy', game, :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'

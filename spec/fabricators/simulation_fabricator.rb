@@ -2,6 +2,6 @@ Fabricator(:simulation) do
   state "queued"
   profile
   account
-  scheduler
+  generic_scheduler!
   size 2
 end

@@ -72,9 +72,9 @@ describe "Schedulers" do
     end
   end
 
-  describe Scheduler do
+  describe GenericScheduler do
     it_behaves_like "a scheduler on requests" do
-      let!(:scheduler){Fabricate(:scheduler)}
+      let!(:scheduler){Fabricate(:generic_scheduler)}
     end
   end
   

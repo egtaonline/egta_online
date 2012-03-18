@@ -1,21 +1,13 @@
-class Api::SchedulersController < Api::BaseController
-  before_filter :find_scheduler, :only => [:add_profile, :show, :update, :destroy]
-  
-  def index
-    respond_with(ApiScheduler.all)
-  end
+class Api::V1::GenericSchedulersController < Api::V1::SchedulersController
+  before_filter :find_scheduler, :only => [:add_profile, :update, :destroy]
   
   def create
-    scheduler = ApiScheduler.create(params[:scheduler])
+    scheduler = GenericScheduler.create(params[:scheduler])
     if scheduler.valid?
-      respond_with(scheduler, :location => api_scheduler_path(scheduler))
+      respond_with(scheduler, :location => api_v1_generic_scheduler_path(scheduler))
     else
       respond_with(scheduler)
     end
-  end
-  
-  def show
-    respond_with(@scheduler)
   end
   
   def update

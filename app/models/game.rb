@@ -5,6 +5,7 @@ class Game
 
   field :name
   field :size, type: Integer
+  field :simulator_fullname
   embeds_many :roles, :as => :role_owner
   embeds_many :features
   field :parameter_hash, type: Hash, default: {}
@@ -14,7 +15,8 @@ class Game
   validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :find_profiles
-  delegate :fullname, :to => :simulator, :prefix => true
+  before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
+
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
   end
@@ -37,7 +39,7 @@ class Game
   end
   
   def as_json(options={})
-    if options[:root] == true
+    if options != nil && options[:root] == true
       {:classPath => "minimal-egat.datatypes.NormalFormGame", :object => "#{self.to_json(:root => false)}"}
     else
       {:roles => roles.collect{|r| r.as_json(:root => false)}, :features => features.collect{|s| s.as_json(:root => false)}, :profiles => profiles.where(:proto_string => strategy_regex, :sampled => true).collect{|s| s.as_json(:root => false)}}

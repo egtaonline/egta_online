@@ -1,5 +1,5 @@
 class SimulatorsController < ApplicationController
-  respond_to :html, :json
+  respond_to :html
   
   expose(:simulators){Simulator.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:simulator)

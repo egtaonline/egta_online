@@ -1,2 +1,0 @@
-class ApiScheduler < Scheduler
-end

@@ -75,7 +75,7 @@ describe "GameSchedulers" do
 
   context "GET /game_schedulers" do
     it "should shows only game schedulers" do
-      s1 = Fabricate(:scheduler)
+      s1 = Fabricate(:generic_scheduler)
       s2 = Fabricate(:game_scheduler)
       visit game_schedulers_path
       page.should have_content("Game Schedulers")
