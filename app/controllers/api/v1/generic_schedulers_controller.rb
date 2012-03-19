@@ -21,7 +21,7 @@ class Api::V1::GenericSchedulersController < Api::V1::SchedulersController
   end
   
   def find
-    respond_with(ApiScheduler.where(params[:criteria]))
+    respond_with(GenericScheduler.where(params[:criteria]))
   end
   
   def add_profile
@@ -43,7 +43,7 @@ class Api::V1::GenericSchedulersController < Api::V1::SchedulersController
   
   def find_scheduler
     begin
-      @scheduler = ApiScheduler.find(params[:id])
+      @scheduler = GenericScheduler.find(params[:id])
     rescue
       respond_with({:error => "the scheduler you were looking for could not be found"}, :status => 404, :location => nil)
     end

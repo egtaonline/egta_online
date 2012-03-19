@@ -8,11 +8,9 @@ EgtaOnline::Application.routes.draw do
         member do
           post :add_profile
         end
-        collection do
-          get :find
-        end
       end
       resources :games, :except => ["new", "edit"]
+      resources :profiles, :only => :show
     end
   end
 

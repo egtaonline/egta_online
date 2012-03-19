@@ -4,7 +4,7 @@ describe "HierarchicalSchedulers" do
 
   describe "GET /hierarchical_schedulers" do
     it "should show only hierarchical schedulers" do
-      s1 = Fabricate(:scheduler)
+      s1 = Fabricate(:generic_scheduler)
       s2 = Fabricate(:hierarchical_scheduler)
       visit hierarchical_schedulers_path
       page.should have_content("Hierarchical Schedulers")

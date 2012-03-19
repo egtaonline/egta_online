@@ -9,5 +9,5 @@
   = u.attribute :active
   %h3 Simulator Configuration
   = render :partial => "parameter", :collection => scheduler.parameter_hash.to_a
-= link_to "Edit Scheduler", edit_scheduler_path(scheduler), :class => 'btn btn-primary'
+= link_to "Edit Scheduler", edit_generic_scheduler_path(scheduler), :class => 'btn btn-primary'
 = link_to "Create Game to Match", url_for(controller: "games", action: "from_scheduler", scheduler_id: scheduler.id), :class => 'btn btn-primary'

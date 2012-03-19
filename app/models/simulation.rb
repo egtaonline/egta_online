@@ -8,7 +8,7 @@ class Simulation
 
   belongs_to :account
   belongs_to :profile, :inverse_of => :simulations
-  belongs_to :scheduler
+  belongs_to :scheduler, :inverse_of => :simulations
 
   delegate :name, :to => :profile, :prefix => true
   delegate :nodes, :to => :scheduler, :prefix => true

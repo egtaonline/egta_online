@@ -4,13 +4,10 @@
 class Account
   include Mongoid::Document
 
-  has_many :simulations
-
   field :username
   field :active, :type => Boolean, :default => false
   
-  # Unneccessary because Account is not high volume
-  # index :username, :unique => true
+  has_many :simulations
   
   # Allows us to get all active Accounts with Account.active
   scope :active, where(:active => true)

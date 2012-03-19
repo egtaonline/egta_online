@@ -145,7 +145,7 @@ class Profile
   end
 
   def as_json(options={})
-    if options[:root] == true
+    if options != nil && options[:root] == true
       {:classPath => "minimal-egat.datatypes.Profile", :object => "#{self.to_json(:root => false)}"}
     else
       role_hash = {}
