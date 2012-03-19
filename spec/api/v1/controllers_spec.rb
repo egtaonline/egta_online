@@ -33,7 +33,7 @@ describe "Controllers", :type => :api do
   end
   
   describe Game do
-    it_behaves_like "a json enabled controller on index"
+    # it_behaves_like "a json enabled controller on index"
     it_behaves_like "a json enabled controller on show"
   end
   

@@ -9,7 +9,7 @@ EgtaOnline::Application.routes.draw do
           post :add_profile
         end
       end
-      resources :games, :except => ["new", "edit"]
+      resources :games, :only => :show
       resources :profiles, :only => :show
     end
   end
