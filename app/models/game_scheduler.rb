@@ -1,9 +1,18 @@
 class GameScheduler < Scheduler
   include RoleManipulator
-
+  field :max_samples, :type => Integer
   embeds_many :roles, :as => :role_owner, :order => :name.asc
   field :size, :type => Integer
-  validates_presence_of :size
+  validates_presence_of :size, :max_samples
+  validates_numericality_of :max_samples
+
+  def required_samples(profile_id)
+    if (self.profiles.find(profile_id) rescue nil) == nil
+      0
+    else
+      max_samples
+    end
+  end
 
   def add_strategy(role, strategy_name)
     super

@@ -6,9 +6,12 @@ class SchedulerObserver < Mongoid::Observer
       scheduler.profiles = []
       pflag = true
     end
-    aflag = (scheduler.active_changed? and scheduler.active_was == false) || scheduler.max_samples_changed?
+    aflag = (scheduler.active_changed? and scheduler.active_was == false) 
+    if aflag == false && scheduler.is_a?(GameScheduler)
+      aflag = scheduler.max_samples_changed?
+    end
     yield
-    if pflag
+    if pflag && scheduler.is_a?(GameScheduler)
       Resque.enqueue(ProfileAssociater, scheduler.id)
     elsif aflag
       scheduler.profiles.each{|p| Resque.enqueue(ProfileScheduler, p.id)}

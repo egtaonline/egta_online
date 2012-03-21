@@ -44,7 +44,7 @@ describe "/api/v1/generic_schedulers", :type => :api do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token
         last_response.status.should eql(422)
-        errors = {"process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"],"max_samples"=>["can't be blank","is not a number"]}.to_json
+        errors = {"process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"]}.to_json
         last_response.body.should eql(errors)
       end
     end
@@ -95,18 +95,24 @@ describe "/api/v1/generic_schedulers", :type => :api do
    #   end
    # end
    # 
-   context "adding a new profile" do
-     let(:url) {"/api/v1/generic_schedulers/#{@scheduler.id}"}
+  context "adding a new profile" do
+    let(:url) {"/api/v1/generic_schedulers/#{@scheduler.id}"}
      
-     before do
-       Fabricate(:strategy, :name => "A", :number => 1)
-       Fabricate(:strategy, :name => "B", :number => 2)
-     end
-     it "should create a profile if the profile name is valid" do
-       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: A, A; Seller: B, B"
-       Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should == 1
-     end
-   end
+    before do
+      Fabricate(:strategy, :name => "A", :number => 1)
+      Fabricate(:strategy, :name => "B", :number => 2)
+    end
+    it "should create a profile if the profile name is valid" do
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: A, A; Seller: B, B"
+      Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should == 1
+    end
+    it "should only add the profile once, even if you invoke it multiple times" do
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: A, A; Seller: B, B"
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: A, A; Seller: B, B"
+      Profile.where(:proto_string => "Bidder: 1, 1; Seller: 2, 2").count.should eql(1)
+      Scheduler.last.profiles.count.should eql(1)
+    end
+  end
    
    context "adding a new profile to an invalid scheduler" do
      let(:url) {"/api/v1/generic_schedulers/234"}

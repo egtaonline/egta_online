@@ -8,7 +8,6 @@ class Scheduler
   field :process_memory, :type => Integer
   field :time_per_sample, :type => Integer
   field :samples_per_simulation, :type => Integer
-  field :max_samples, :type => Integer
   field :parameter_hash, :type => Hash, :default => {}
   field :nodes, :type => Integer, :default => 1
   field :simulator_fullname
@@ -22,9 +21,10 @@ class Scheduler
       where(:proto_string => Regexp.new("#{role}:( \d+,)* #{s.number}(,|;|\\z)"))
     end
   end
+  
   belongs_to :simulator
   validates_uniqueness_of :name
-  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :max_samples, :nodes
+  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes
   validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true
-  validates_numericality_of :samples_per_simulation, :max_samples, :only_integer=>true, :greater_than=>0
+  validates_numericality_of :samples_per_simulation, :only_integer=>true, :greater_than=>0
 end

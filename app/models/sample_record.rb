@@ -4,12 +4,4 @@ class SampleRecord
   field :payoffs, type: Hash
   field :features, type: Hash
   validates_presence_of :payoffs
-  
-  def as_json(options={})
-    if options != nil && options[:root] == true
-      {:classPath => "minimal-egat.datatypes.ProfileObservation", :object => "#{self.to_json(:root => false)}"}
-    else
-      {:payoffMap => payoffs, :featureMap => features}
-    end
-  end
 end

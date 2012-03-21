@@ -134,6 +134,16 @@ class Profile
       rescue
         "Non-existent strategy"
       end
+    elsif name_string =~ /^(\S+: (\d+ \S+, )*\d+ \S+; )*\S+: (\d+ \S+, )*\d+ \S+$/
+      begin
+        r = name_string.split("; ").sort.collect do |role|          
+          str = role.split(": ")[0]+": "
+          str += role.split(": ")[1].split(", ").collect{|s| s.split(" ")}.sort{|x,y| x[1]<=>y[1]}.collect{|p| Array.new(p[0].to_i,::Strategy.where(:name => p[1]).first.number).join(", ")}.join(", ")
+        end
+        r.join("; ")
+      rescue Exception => e
+        "Non-existent strategy"
+      end
     else
       ""
     end

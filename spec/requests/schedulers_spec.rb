@@ -56,7 +56,7 @@ describe "Schedulers" do
     context "PUT /#{described_class.to_s.tableize}/:id" do
       it "should update the relevant #{described_class.to_s.titleize}" do
         visit "/#{described_class.to_s.tableize}/#{scheduler.id}/edit"
-        fill_in "Max samples", :with => "100"
+        fill_in "Samples per simulation", :with => "100"
         click_button "Update #{described_class.to_s.tableize.singularize.humanize}"
         page.should have_content("Inspect #{described_class.to_s.titleize}")
         page.should have_content("100")

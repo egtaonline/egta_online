@@ -1,4 +1,4 @@
-class Api::V1::GenericSchedulersController < Api::V1::SchedulersController
+class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
   before_filter :find_scheduler, :only => [:add_profile, :update, :destroy]
   
   def create
@@ -25,11 +25,15 @@ class Api::V1::GenericSchedulersController < Api::V1::SchedulersController
   end
   
   def add_profile
-    profile = @scheduler.add_profile(params[:profile_name])
-    if profile.valid?
-      respond_with(profile, :location => profile_path(profile))
+    if params[:sample_count].to_i == 0
+      respond_with({:error => "the provided sample count was either not a number or 0"}, :status => 406, :location => nil)
     else
-      respond_with(profile)
+      profile = @scheduler.add_profile(params[:profile_name], params[:sample_count].to_i)
+      if profile.valid?
+        respond_with(profile, :location => profile_path(profile))
+      else
+        respond_with(profile)
+      end
     end
   end
   

@@ -12,6 +12,16 @@ EgtaOnline::Application.routes.draw do
       resources :games, :only => :show
       resources :profiles, :only => :show
     end
+    
+    namespace :v2 do
+      resources :generic_schedulers, :except => ["new", "edit"] do
+        member do
+          post :add_profile
+        end
+      end
+      resources :games, :only => :show
+      resources :profiles, :only => :show
+    end
   end
 
   resources :accounts

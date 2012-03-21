@@ -53,7 +53,6 @@ describe Game do
       end
       
       it "should match against profiles that are made of the constituent strategies" do
-        puts Profile.all.to_a.inspect
         game.roles.create(:name => "Bidder", :count => 1)
         game.roles.create(:name => "Seller", :count => 1)
         game.add_strategy("Bidder", "A")
