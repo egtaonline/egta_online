@@ -37,14 +37,6 @@ class Game
     roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
   end
-  
-  def as_json(options={})
-    if options != nil && options[:root] == true
-      {:classPath => "minimal-egat.datatypes.NormalFormGame", :object => "#{self.to_json(:root => false)}"}
-    else
-      {:roles => roles.collect{|r| r.as_json(:root => false)}, :features => features.collect{|s| s.as_json(:root => false)}, :profiles => profiles.where(:proto_string => strategy_regex, :sampled => true).collect{|s| s.as_json(:root => false)}}
-    end
-  end
 
   private
 

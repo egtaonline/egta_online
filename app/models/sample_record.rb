@@ -6,7 +6,7 @@ class SampleRecord
   validates_presence_of :payoffs
   
   def as_json(options={})
-    if options[:root] == true
+    if options != nil && options[:root] == true
       {:classPath => "minimal-egat.datatypes.ProfileObservation", :object => "#{self.to_json(:root => false)}"}
     else
       {:payoffMap => payoffs, :featureMap => features}

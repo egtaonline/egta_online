@@ -7,7 +7,8 @@ class Api::V1::BaseController < ActionController::Base
   end
   
   def show
-    respond_with(params[:controller].classify.demodulize.constantize.find(params[:id]))
+    @object = params[:controller].classify.demodulize.constantize.find(params[:id])
+    respond_with(@object)
   end
   
 end

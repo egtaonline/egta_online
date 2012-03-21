@@ -17,12 +17,4 @@ class Role
   def strategy_numbers
     strategies.only(:number).collect{|s| s.number}
   end
-  
-  def as_json(options={})
-    if options[:root] == true
-      {:classPath => "minimal-egat.datatypes.Role", :object => "#{self.to_json(:root => false)}"}
-    else
-      {:name => name, :numberOfPlayers => count, :actions => strategies.collect{|s| s.name}}
-    end
-  end
 end

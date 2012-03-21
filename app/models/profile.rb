@@ -143,18 +143,4 @@ class Profile
   def self.size_of_profile(name_string)
     name_string.count(",")+name_string.count(";")+1
   end
-
-  def as_json(options={})
-    if options != nil && options[:root] == true
-      {:classPath => "minimal-egat.datatypes.Profile", :object => "#{self.to_json(:root => false)}"}
-    else
-      role_hash = {}
-      role_instances.all.each do |r|
-        s_hash = {}
-        r.strategy_instances.each{|s| s_hash[s.name] = strategy_count(r.name, s.name)}
-        role_hash[r.name] = s_hash
-      end
-      {:roleInstances => role_hash, :profileObservations => sample_records.collect{|s| s.as_json(:root => false)}}
-    end
-  end
 end
