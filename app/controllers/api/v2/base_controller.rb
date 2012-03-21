@@ -1,9 +1,10 @@
 class Api::V2::BaseController < ActionController::Base
   respond_to :json
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :fullness
   
   def index
-    respond_with(params[:controller].classify.demodulize.constantize.all)
+    @collection = params[:controller].classify.demodulize.constantize.all
+    respond_with(@collection)
   end
   
   def show
@@ -11,4 +12,9 @@ class Api::V2::BaseController < ActionController::Base
     respond_with(@object)
   end
   
+  protected
+  
+  def fullness
+    @full = params[:full]
+  end
 end

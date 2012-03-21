@@ -19,7 +19,7 @@ EgtaOnline::Application.routes.draw do
           post :add_profile
         end
       end
-      resources :games, :only => :show
+      resources :games, :simulators, :only => [:show, :index]
       resources :profiles, :only => :show
     end
   end
