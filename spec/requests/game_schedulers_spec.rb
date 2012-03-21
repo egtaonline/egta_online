@@ -73,6 +73,12 @@ describe "GameSchedulers" do
     end
   end
 
+  describe HierarchicalDeviationScheduler do
+    it_behaves_like "a game scheduler on requests" do
+      let!(:game_scheduler){Fabricate(:hierarchical_deviation_scheduler)}
+    end
+  end
+  
   context "GET /game_schedulers" do
     it "should shows only game schedulers" do
       s1 = Fabricate(:generic_scheduler)

@@ -95,4 +95,10 @@ describe "Schedulers" do
       let!(:scheduler){Fabricate(:deviation_scheduler)}
     end
   end
+  
+  describe HierarchicalDeviationScheduler do
+    it_behaves_like "a scheduler on requests" do
+      let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
+    end
+  end
 end

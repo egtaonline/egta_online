@@ -35,7 +35,7 @@ EgtaOnline::Application.routes.draw do
       get :page_profiles
     end
   end
-  resources :deviation_schedulers do
+  resources :deviation_schedulers, :hierarchical_deviation_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role, :add_deviating_strategy, :remove_deviating_strategy
     end

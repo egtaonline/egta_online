@@ -1,0 +1,2 @@
+class HierarchicalDeviationSchedulersController < DeviationSchedulersController
+end
