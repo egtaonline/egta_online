@@ -63,7 +63,7 @@ namespace :deploy do
     #   "path_on_disk" => "path_to_symlink"
     # }
     commands += ["rm -rf #{current_path}/public/system && \
-     ln -s #{shared_path}/system #{current_path}/public/system"]
+     ln -s #{shared_path}/system #{current_path}/public/system && ln -s #{shared_path}/mongoid.yml #{current_path}/config/mongoid.yml"]
     # end
 
     # needed for some of the symlinks
