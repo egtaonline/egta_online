@@ -30,7 +30,7 @@ gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem "capistrano"
 gem "simple_form"
 gem "show_for", :git => "git://github.com/plataformatec/show_for.git" 
-gem "unicorn"
+gem "passenger"
 gem "resque-loner"
 gem 'mongoid_rails_migrations', '0.0.14'
 gem "compass", "~> 0.12.alpha.0"
