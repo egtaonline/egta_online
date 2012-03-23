@@ -11,7 +11,13 @@ class Simulator
   field :parameter_hash, :type => Hash, :default => {}
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
-  has_many :profiles, :dependent => :destroy
+  has_many :profiles, :dependent => :destroy do
+    def with_role_and_strategy(role, strategy)
+      s = Strategy.where(:name => strategy).first
+      return [] if s == nil
+      where(:proto_string => Regexp.new("#{role}:( \\d+,)* #{s.number}(,|;|\\z)"))
+    end
+  end
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
   validate :simulator_setup, :on => :create
@@ -55,7 +61,7 @@ class Simulator
 
   def remove_strategy(role, strategy)
     super
-    profiles.each {|profile| if profile.contains_strategy?(role, strategy); profile.destroy; end}
+    profiles.with_role_and_strategy(role, strategy).destroy_all
     schedulers do |scheduler|
       scheduler.remove_strategy(role, strategy)
     end
@@ -63,6 +69,7 @@ class Simulator
   
   def remove_role(role)
     super
+    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
     schedulers do |scheduler|
       scheduler.remove_role(role)
     end

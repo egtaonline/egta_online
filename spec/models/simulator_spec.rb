@@ -64,4 +64,19 @@ describe Simulator do
       end
     end
   end
+  
+  describe "#remove_role" do
+    context "simulator has a profile" do
+      let!(:simulator){Fabricate(:simulator_with_strategies)}
+      let!(:profile){Fabricate(:profile, :simulator => simulator, :proto_string => "All: #{simulator.roles.first.strategies.last.number}, #{simulator.roles.first.strategies.last.number}")}
+      before :each do
+        simulator.add_strategy("Alt", "AltStrat")
+        profile2 = Fabricate(:profile, :simulator => simulator, :proto_string => "Alt: #{simulator.roles.last.strategies.last.number}, #{simulator.roles.last.strategies.last.number}")
+      end
+      it "should destroy only profiles that contain the role" do
+        simulator.remove_role("All")
+        Profile.count.should eql(1)
+      end
+    end
+  end
 end

@@ -19,7 +19,12 @@ EgtaOnline::Application.routes.draw do
           post :add_profile
         end
       end
-      resources :games, :simulators, :only => [:show, :index]
+      resources :games, :only => [:show, :index]
+      resources :simulators, :only => [:show, :index] do
+        member do
+          post :add_strategy, :remove_strategy, :add_role, :remove_role
+        end
+      end
       resources :profiles, :only => :show
     end
   end
