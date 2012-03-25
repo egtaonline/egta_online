@@ -1,6 +1,6 @@
 class SimulationChecker
   include Resque::Plugins::UniqueJob
-  @queue = :nyx_actions
+  @queue = :nyx_queuing
 
   def self.perform
     puts "checking simulations"

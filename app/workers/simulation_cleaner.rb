@@ -1,5 +1,5 @@
 class SimulationCleaner
-  @queue = :nyx_actions
+  @queue = :profile_actions
 
   def self.perform
     Simulation.stale.destroy_all

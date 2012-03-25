@@ -8,13 +8,13 @@ queue_simulations:
 check_simulations:
   cron: "*/10 * * * *"
   class: SimulationChecker
-  queue: nyx_actions
+  queue: nyx_queuing
   args:
   description: "This job checks nyx for status updates on simulations, and gathers completed simulations."
 
 clean_simulations:
   cron: "0 23 * * *"
   class: SimulationCleaner
-  queue: nyx_actions
+  queue: profile_actions
   args:
   description: "This job removes stale simulations from the database and ensures simulations get requeued if they had a dirty exit earlier."
