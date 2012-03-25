@@ -80,7 +80,6 @@ GEM
       mongoid (~> 2.1)
     childprocess (0.2.2)
       ffi (~> 1.0.6)
-    chunky_png (1.2.5)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
       railties (~> 3.1.0)
@@ -90,10 +89,6 @@ GEM
     coffee-script-source (1.2.0)
     commonjs (0.2.0)
       therubyracer (~> 0.9.9)
-    compass (0.12.alpha.0)
-      chunky_png (~> 1.2)
-      fssm (>= 0.2.7)
-      sass (~> 3.1)
     cucumber (1.1.4)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.2)
@@ -121,7 +116,6 @@ GEM
     foreman (0.25.0)
       term-ansicolor (~> 1.0.5)
       thor (>= 0.13.6)
-    fssm (0.2.7)
     gherkin (2.7.6)
       json (>= 1.4.6)
     growl (1.0.3)
@@ -319,7 +313,6 @@ DEPENDENCIES
   capybara-webkit
   carrierwave-mongoid
   coffee-rails
-  compass (~> 0.12.alpha.0)
   cucumber-rails
   database_cleaner
   decent_exposure

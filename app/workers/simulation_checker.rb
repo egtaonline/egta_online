@@ -3,6 +3,7 @@ class SimulationChecker
   @queue = :nyx_actions
 
   def self.perform
+    puts "checking simulations"
     if Simulation.active.length > 0
       simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")

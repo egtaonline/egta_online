@@ -32,7 +32,6 @@ gem "show_for", :git => "git://github.com/plataformatec/show_for.git"
 gem "passenger"
 gem "resque-loner"
 gem 'mongoid_rails_migrations', '0.0.14'
-gem "compass", "~> 0.12.alpha.0"
 gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
