@@ -45,7 +45,7 @@ group :test do
   gem "rb-fsevent"
   gem "capybara-webkit"
   gem "growl"
-  gem "spork", '~> 0.9.0.rc'
+  gem "spork", '~> 1.0rc'
   gem "cucumber-rails"
   gem "capybara-screenshot"
   gem "database_cleaner"

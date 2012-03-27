@@ -41,7 +41,7 @@ class HierarchicalDeviationScheduler < DeviationScheduler
         end
       end
     end
-    profs
+    profs.uniq
   end
   
   def unassigned_player_count

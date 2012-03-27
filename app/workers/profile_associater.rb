@@ -8,6 +8,7 @@ class ProfileAssociater
   def self.perform(scheduler_id)
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
+      scheduler.profiles = []
       proto_strings = scheduler.ensure_profiles
       proto_strings.each do |proto_string|
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
