@@ -306,7 +306,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
-  bson_ext (~> 1.6)
+  bson_ext (~> 1.5)
   capistrano
   capybara
   capybara-screenshot

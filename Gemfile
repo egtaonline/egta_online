@@ -14,7 +14,7 @@ gem 'resque-scheduler'
 gem "haml"
 gem "haml-rails"
 gem "airbrake"
-gem "bson_ext", "~> 1.6"
+gem "bson_ext", "~>1.5"
 gem "mongoid"
 gem "state_machine"
 gem "devise"

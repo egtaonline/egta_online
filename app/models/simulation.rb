@@ -24,7 +24,7 @@ class Simulation
   field :profile_name
   field :number, :type=>Integer
   sequence :number
-  index :state, Mongo::ASCENDING
+  index [[:state, Mongo::ASCENDING]]
   scope :flux, where(:flux => true)
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')
