@@ -26,7 +26,6 @@ gem "net-scp", :require => ['net/scp']
 gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
-gem "capistrano"
 gem "simple_form"
 gem "show_for", :git => "git://github.com/plataformatec/show_for.git" 
 gem "passenger"
@@ -35,6 +34,11 @@ gem 'mongoid_rails_migrations', '0.0.14'
 gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
+
+group :development do
+  gem "capistrano"
+  gem 'rvm-capistrano'
+end
 
 group :test, :development do
   gem "rspec-rails"
