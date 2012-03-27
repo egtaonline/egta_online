@@ -1,9 +1,10 @@
-require 'rvm-capistrano'
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 
 require 'bundler/capistrano'
 require 'rvm/capistrano'
 
 set :rvm_ruby_string, 'ruby-1.9.3'
+set :rvm_type, :user
 set :application, "egtaonline"
 set :repository,  "git@github.com:egtaonline/egta_online.git"
 set :scm, :git
@@ -61,7 +62,7 @@ namespace :deploy do
     # set :weird_symlinks, {
     #   "path_on_disk" => "path_to_symlink"
     # }
-    commands += ["rm -rf #{current_path}/public/system && rm -rf #{current_path}/config/mongoid.yml &&\
+    commands += ["rm -rf #{current_path}/public/system && \
      ln -s #{shared_path}/system #{current_path}/public/system && ln -s #{shared_path}/mongoid.yml #{current_path}/config/mongoid.yml"]
     # end
 

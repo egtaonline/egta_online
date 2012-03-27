@@ -12,13 +12,11 @@ class Profile
   field :parameter_hash, type: Hash, default: {}
   field :name
   field :sample_count, type: Integer, default: 0
-  index :sample_count
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
   field :sampled, type: Boolean, default: false
-  index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]]), unique: true
-  index :sampled
+  index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]])
   after_create :make_roles, :find_games
   validate :proto_string_has_correct_format
   validates_presence_of :simulator, :proto_string, :parameter_hash

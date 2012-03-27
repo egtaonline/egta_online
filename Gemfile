@@ -34,11 +34,7 @@ gem 'mongoid_rails_migrations', '0.0.14'
 gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
-
-group :development do
-  gem "capistrano"
-  gem 'rvm-capistrano'
-end
+gem "capistrano"
 
 group :test, :development do
   gem "rspec-rails"
