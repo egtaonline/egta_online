@@ -12,6 +12,7 @@ class ProfileAssociater
       proto_strings.each do |proto_string|
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,
+                                                size: scheduler.size,
                                                 proto_string: proto_string)
         profile.try_scheduling
         scheduler.profiles << profile
