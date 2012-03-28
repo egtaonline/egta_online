@@ -139,4 +139,3 @@ end
 before 'deploy:symlink', 'deploy:precompile_assets'
 after 'deploy:precompile_assets', 'foreman:restart'
         require './config/boot'
-        require 'airbrake/capistrano'
