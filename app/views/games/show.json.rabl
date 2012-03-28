@@ -1,9 +1,9 @@
 object game
 child :roles do
-  attributes :name => :name, :count => :count, :strategy_names => :strategy_array
+  attributes :name, :count, :strategies
 end
 child @profiles => :profiles do
-  attributes :extended_name => :proto_string
+  attributes :extended_name => :name
   child :role_instances => :roles do
     attributes :name
     child :strategy_instances => :strategies do

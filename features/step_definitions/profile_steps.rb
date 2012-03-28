@@ -5,11 +5,10 @@ end
 Given /^that profile has (\d+) sample record$/ do |arg1|
   @profile = Profile.last
   payoffs = {}
-  @profile.proto_string.split("; ").each do |r|
+  @profile.name.split("; ").each do |r|
     rpayoffs = {}
-    r.split(": ")[1].split(", ").uniq.each do |s|
-      s = Strategy.where(:number => s).first.name
-      rpayoffs[s] = 1
+    r.split(": ")[1].split(", ").each do |s|
+      rpayoffs[s.split(" ")[1]] = 1
     end
     payoffs[r] = rpayoffs
   end

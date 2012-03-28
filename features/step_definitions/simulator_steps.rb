@@ -6,7 +6,7 @@ end
 Then /^that simulator should have a role named "([^"]*)" with the strategy array "([^"]*)"$/ do |arg1, arg2|
   r = Simulator.last.roles.where(name: arg1).first
   r.should_not == nil
-  r.strategy_names == eval(arg2)
+  r.strategies == eval(arg2)
 end
 
 Given /^that simulator has the role strategy hash "([^"]*)"$/ do |arg1|
@@ -25,17 +25,17 @@ end
 
 Given /^that role has (\d+) strategies$/ do |arg1|
   role = @simulator.roles.last
-  arg1.to_i.times {role.strategies << Fabricate(:strategy)}
+  arg1.to_i.times {|i| role.strategies << "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i]}
   role.save!
 end
 
 Given /^that role has the strategies "([^"]*)" and "([^"]*)"$/ do |arg1, arg2|
   role = @simulator.roles.last
-  role.strategies << Strategy.create(:name => arg1)
-  role.strategies << Strategy.create(:name => arg2)
+  role.strategies << arg1
+  role.strategies << arg2
   role.save!
 end
 
 Given /^the strategy "([^"]*)"$/ do |arg1|
-  @strategy = Fabricate(:strategy, :name => arg1)
+  @strategy = arg1
 end

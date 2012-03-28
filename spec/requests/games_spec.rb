@@ -96,7 +96,7 @@ describe "Games" do
       page.should have_content("Strat1")
       page.should_not have_content("Some errors were found")
       Game.last.roles.last.strategies.count.should eql(1)
-      Game.last.roles.last.strategies.last.name.should eql("Strat1")
+      Game.last.roles.last.strategies.last.should eql("Strat1")
     end
   end
   

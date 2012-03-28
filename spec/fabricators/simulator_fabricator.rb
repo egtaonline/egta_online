@@ -16,8 +16,8 @@ Fabricator(:simulator_with_strategies, :from => :simulator) do
     if sim.parameter_hash.is_a?(String)
       sim.update_attribute(:parameter_hash, eval(sim.parameter_hash))
     end
-    sim.roles.first.strategies << Fabricate(:strategy)
-    sim.roles.first.strategies << Fabricate(:strategy)
+    sim.roles.first.strategies << "A"
+    sim.roles.first.strategies << "B"
   end
 end
 

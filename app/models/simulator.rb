@@ -13,9 +13,7 @@ class Simulator
   validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy do
     def with_role_and_strategy(role, strategy)
-      s = Strategy.where(:name => strategy).first
-      return [] if s == nil
-      where(:proto_string => Regexp.new("#{role}:( \\d+,)* #{s.number}(,|;|\\z)"))
+      where(:name => Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
     end
   end
   has_many :schedulers, :dependent => :destroy
@@ -69,7 +67,7 @@ class Simulator
   
   def remove_role(role)
     super
-    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
+    profiles.where(:name => Regexp.new("#{role}: ")).destroy_all
     schedulers do |scheduler|
       scheduler.remove_role(role)
     end

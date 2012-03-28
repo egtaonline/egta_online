@@ -7,10 +7,8 @@ describe GameScheduler do
   
   shared_examples "a game scheduler" do
     describe "#required_samples" do
-      let!(:strategy){Fabricate(:strategy, :name => "A")}
-      let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 2)}
       let!(:profile){Fabricate(:profile, :simulator => game_scheduler1.simulator)}
-      let!(:profile2){Fabricate(:profile, :proto_string => "All: 2, 2", :simulator => game_scheduler1.simulator)}
+      let!(:profile2){Fabricate(:profile, :name => "All: 2 B", :simulator => game_scheduler1.simulator)}
       before do
         game_scheduler1.profiles << profile
       end
@@ -19,7 +17,6 @@ describe GameScheduler do
     end
     
     describe "#destroy" do
-      let!(:strategy){Fabricate(:strategy, :name => "A")}
       let!(:profile){Fabricate(:profile, :simulator => game_scheduler1.simulator)}
       it "should preserve profiles" do
         game_scheduler1.profiles << profile

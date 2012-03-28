@@ -2,13 +2,13 @@ xml.instruct! :xml, :version=>"1.0"
 xml.nfg(:name=>game.simulator.fullname, :description=>game.parameter_hash) do |nfg|
 
   nfg.players do |players|
-    for i in 1..@profiles.first.proto_string.split(": ")[1].split(", ").count do
+    for i in 1..@profiles.first.size do
       players.player(:id=>"player#{i}")
     end
   end
   nfg.actions do |actions|
     game.roles.first.strategies.each do |strategy|
-      actions.action(:id=>strategy.name)
+      actions.action(:id=>strategy)
     end
   end
   nfg.payoffs do |payoffs|

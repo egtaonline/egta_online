@@ -62,11 +62,11 @@ Scenario: no prior games, 2 prior profiles exist
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following profile:
-    | proto_string   | All: 1, 2 |
+    | name   | All: 1 A, 1 B |
     | parameter_hash | {a: "2"}  |
   And that profile has 1 sample record
   And that simulator has the following profile:
-    | proto_string   | All: 1, 1 |
+    | name  | All: 2 A |
     | parameter_hash | {a: "3"}  |
   When I am on the new game page
   And I fill in the following:

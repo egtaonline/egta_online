@@ -7,11 +7,10 @@ class GenericScheduler < Scheduler
   end
   
   def add_profile(profile_name, sample_count=self["max_samples"])
-    proto_string = Profile.convert_to_proto_string(profile_name)
     profile = Profile.find_or_create_by(simulator_id: self.simulator_id,
                                             parameter_hash: self.parameter_hash,
-                                            size: Profile.size_of_profile(proto_string),
-                                            proto_string: proto_string)
+                                            size: Profile.size_of_profile(profile_name),
+                                            name: profile_name)
     if profile.valid?
       self.profiles << profile
       sample_hash[profile.id.to_s] = sample_count

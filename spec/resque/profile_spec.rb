@@ -7,8 +7,7 @@ describe "#find_games" do
 
   it "should associate a profile to a game" do
     game = Fabricate(:game)
-    strategy = Fabricate(:strategy)
-    Profile.create!(simulator_id: game.simulator.id, parameter_hash: game.parameter_hash, size: game.size, proto_string: "All: 1, 1")
+    Profile.create!(simulator_id: game.simulator.id, parameter_hash: game.parameter_hash, size: game.size, name: "All: 2 A")
     GameAssociater.should have_queued(Profile.last.id)
     ResqueSpec.perform_all(:profile_actions)
     GameAssociater.should_not have_queued(Profile.last.id)

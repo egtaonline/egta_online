@@ -8,19 +8,23 @@ module RoleManipulator
   end
 
   def add_strategy(role, strategy_name)
+    puts "Strategy name is: #{strategy_name}"
     role_i = roles.find_or_create_by(name: role)
-    role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
-    role_i.save!
+    if strategy_name != nil && !role_i.strategies.include?(strategy_name) 
+      role_i.strategies << strategy_name
+      role_i.strategies.sort!
+      role_i.save!
+    end
   end
 
   def remove_strategy(role, strategy_name)
     role_i = roles.where(name: role).first
-    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
+    role_i.strategies.delete(strategy_name)
     role_i.save!
   end
 
   def unused_strategies(role)
-    simulator.roles.where(name: role.name).first.strategy_names-role.strategy_names
+    simulator.roles.where(name: role.name).first.strategies-role.strategies
   end
   
   def unassigned_player_count

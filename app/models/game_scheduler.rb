@@ -42,7 +42,7 @@ class GameScheduler < Scheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      combinations = role.strategy_numbers.repeated_combination(role.count).to_a
+      combinations = role.strategies.repeated_combination(role.count).to_a
       if first_ar == nil
         first_ar = combinations.collect{|c| [role.name].concat(c) }
       else
@@ -50,14 +50,21 @@ class GameScheduler < Scheduler
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
-      return first_ar.collect {|r| "#{r[0]}: #{r.drop(1).join(", ")}"}
+      return first_ar.collect {|r| format_role(r) }
     else
       profs = []
       first_ar.product(*all_other_ars).each do |prof|
         prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| "#{r[0]}: #{r.drop(1).join(", ")}"}.join("; ")
+        profs << prof.collect {|r| format_role(r) }.join("; ")
       end
     end
     profs
+  end
+  
+  protected
+  
+  def format_role(role)
+    strats = role.drop(1)
+    "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
   end
 end

@@ -10,7 +10,7 @@ Scenario: Profile already exists with the same configuration
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following profile:
-    | proto_string   | All: 1, 1 |
+    | name   | All: 2 A |
     | parameter_hash | {a: 2}    |
   And that profile has 1 sample record
   Then there should be 1 profiles

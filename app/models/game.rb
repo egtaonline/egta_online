@@ -33,7 +33,7 @@ class Game
   end
   
   def display_profiles
-    query_hash = {:proto_string => strategy_regex, :sampled => true}
+    query_hash = {:name => strategy_regex, :sample_count.gt => 0}
     roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
   end
@@ -41,6 +41,6 @@ class Game
   private
 
   def strategy_regex
-    Regexp.new("^"+roles.order_by(:name => :asc).collect{|r| "#{r.name}: (#{r.strategy_numbers.join('(, )?)*(')}(, )?)*"}.join("; ")+"$")
+    Regexp.new("^"+roles.order_by(:name => :asc).collect{|r| "#{r.name}: \\d+ (#{r.strategies.join('(, \\d+ )?)*(')}(, \\d+ )?)*"}.join("; ")+"$")
   end
 end

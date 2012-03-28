@@ -15,10 +15,8 @@ describe Game do
   describe "#display_profiles" do
     context "symmetric game" do
       let!(:game){Fabricate(:game)}
-      let!(:strategy){Fabricate(:strategy, :name => "A", :number => 2)}
-      let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 1)}
       let!(:profile){Fabricate(:profile, :simulator => game.simulator, :sampled => true)}
-      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :proto_string => "All: 2, 1", :sampled => true)}
+      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "All: 1 A, 1 B", :sampled => true)}
       
       before(:each) do
         game.roles.create(:name => "All", :count => 2)
@@ -41,11 +39,11 @@ describe Game do
     
     context "role-symmetric game" do
       let!(:game){Fabricate(:game)}
-      let!(:strategy){Fabricate(:strategy, :name => "A", :number => 2)}
-      let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 1)}
-      let!(:profile){Fabricate(:profile, :simulator => game.simulator, :proto_string => "Bidder: 2; Seller: 1", :sampled => true)}
-      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :proto_string => "Bidder: 2; Seller: 2", :sampled => true)}
-      
+      let!(:profile){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 B; Seller: 1 A")}
+      let!(:sample_record){Fabricate(:sample_record, :profile => profile, :payoff => {"Bidder" => {"B" => 1}, "Seller" => {"A" => 1}})}
+      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 B; Seller: 1 B")}
+      let!(:sample_record2){Fabricate(:sample_record, :profile => profile2, :payoff => {"Bidder" => {"B" => 1}, "Seller" => {"B" => 1}})}
+            
       before(:each) do
         game.profile_ids << profile.id
         game.profile_ids << profile2.id
@@ -76,11 +74,13 @@ describe Game do
         game.roles.create(:name => "Bidder", :count => 1)
         game.add_strategy("Bidder", "B")
         game.add_strategy("Seller", "B")
-        profile3 = Fabricate(:profile, :simulator => game.simulator, :proto_string => "Bidder: 1, 1; Seller: 1", :sampled => true)
+        profile3 = Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 2 B; Seller: 1 B")
+        Fabricate(:sample_record, :profile => profile3)
         game.profile_ids << profile3.id
         game.save
         game.display_profiles.count.should eql(0)
-        profile4 = Fabricate(:profile, :simulator => game.simulator, :proto_string => "Bidder: 1; Seller: 1, 1", :sampled => true)
+        profile4 = Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 B; Seller: 2 B")
+        Fabricate(:sample_record, :profile => profile4)
         game.profile_ids << profile4.id
         game.save
         game.display_profiles.count.should eql(1)
@@ -101,7 +101,6 @@ describe Game do
   
   describe "destroy" do
     let!(:game){Fabricate(:game)}
-    let!(:strategy){Fabricate(:strategy, :name => "A")}
     let!(:profile){Fabricate(:profile, :simulator => game.simulator)}
     it "should preserve profiles" do
       game.profile_ids << profile.id

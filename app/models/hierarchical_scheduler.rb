@@ -10,7 +10,7 @@ class HierarchicalScheduler < GameScheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      combinations = role.strategy_numbers.repeated_combination(role.count).to_a
+      combinations = role.strategies.repeated_combination(role.count).to_a
       if first_ar == nil
         first_ar = combinations.collect{|c| [role.name].concat(c) }
       else

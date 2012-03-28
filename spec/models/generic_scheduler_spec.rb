@@ -3,11 +3,9 @@ require 'spec_helper'
 describe GenericScheduler do
   describe "#required_samples" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:strategy){Fabricate(:strategy, :name => "A", :number => 1)}
-    let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 2)}
     let!(:profile){Fabricate(:profile, :simulator => scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, :proto_string => "All: 1, 2", :simulator => scheduler.simulator)}
-    let!(:profile2){Fabricate(:profile, :proto_string => "All: 2, 2", :simulator => scheduler.simulator)}
+    let!(:profile1){Fabricate(:profile, :name => "All: 1 A, 1 B", :simulator => scheduler.simulator)}
+    let!(:profile2){Fabricate(:profile, :name => "All: 2 B", :simulator => scheduler.simulator)}
     before do
       scheduler.add_profile(profile.name, 30)
       scheduler.add_profile(profile.name, 20)

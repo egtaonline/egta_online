@@ -6,8 +6,7 @@ describe "#testing new data_parser" do
     Account.create(username: "bcassell", active: true, skip: true)
   end
 
-  let!(:strategy){Fabricate(:strategy, :name => 'BayesianPricing:noRA:0')}
-  let!(:profile){Fabricate(:profile)}
+  let!(:profile){Fabricate(:profile, :name => "All: 2 BayesianPricing:noRA:0")}
   let!(:simulation){Simulation.create!(profile_id: profile.id, size: 5, state: "queued", number: 3, account_id: Account.last.id)}
   it "the new data parser should make sample_records" do
     DataParser.perform(3)
