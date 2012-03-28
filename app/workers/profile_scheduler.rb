@@ -6,10 +6,10 @@ class ProfileScheduler
     if profile != nil
       if profile.simulations.scheduled.count == 0
         sample_count = profile.simulations.active.scheduled.reduce(0) {|sum, sch| sum+sch.size} + profile.sample_count
-        max_schedulable = Scheduler.where(profile_ids: profile.id).active.collect {|s| s.required_samples(profile_id)}.push(0).max
-        if max_schedulable > sample_count
-          scheduler = Scheduler.active.where(profile_ids: profile.id, max_samples: max_schedulable).sample
-          num_samples = [scheduler.samples_per_simulation, max_schedulable-sample_count].min
+        max_schedulable = Scheduler.where(profile_ids: profile.id).active.collect {|s| [s.required_samples(profile_id), s]}.push(0).max{|x,y| x[0]<=>y[0]}
+        if max_schedulable[0] > sample_count
+          scheduler = max_schedulable[1]
+          num_samples = [scheduler.samples_per_simulation, max_schedulable[0]-sample_count].min
           simulation = profile.simulations.create!(size: num_samples, state: 'pending', account_id: Account.active.sample.id)
           scheduler.simulations << simulation
           simulation.save!
