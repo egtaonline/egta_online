@@ -8,7 +8,6 @@ module RoleManipulator
   end
 
   def add_strategy(role, strategy_name)
-    puts "Strategy name is: #{strategy_name}"
     role_i = roles.find_or_create_by(name: role)
     if strategy_name != nil && !role_i.strategies.include?(strategy_name) 
       role_i.strategies << strategy_name

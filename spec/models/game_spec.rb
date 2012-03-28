@@ -15,8 +15,10 @@ describe Game do
   describe "#display_profiles" do
     context "symmetric game" do
       let!(:game){Fabricate(:game)}
-      let!(:profile){Fabricate(:profile, :simulator => game.simulator, :sampled => true)}
-      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "All: 1 A, 1 B", :sampled => true)}
+      let!(:profile){Fabricate(:profile, :simulator => game.simulator)}
+      let!(:sample_record){Fabricate(:sample_record, :profile => profile)}
+      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "All: 1 A, 1 B")}
+      let!(:sample_record2){Fabricate(:sample_record, :profile => profile2)}
       
       before(:each) do
         game.roles.create(:name => "All", :count => 2)
@@ -26,12 +28,12 @@ describe Game do
       end
       
       it "should match against profiles that are made of the constituent strategies" do
-        game.add_strategy("All", "B")
+        game.add_strategy("All", "A")
         game.display_profiles.count.should_not eql(0)
       end
       
       it "should match only profiles that have strategies within the strategy set" do
-        game.add_strategy("All", "B")
+        game.add_strategy("All", "A")
         game.display_profiles.count.should eql(1)
         game.display_profiles.first.should eql(profile)
       end
@@ -39,10 +41,10 @@ describe Game do
     
     context "role-symmetric game" do
       let!(:game){Fabricate(:game)}
-      let!(:profile){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 B; Seller: 1 A")}
-      let!(:sample_record){Fabricate(:sample_record, :profile => profile, :payoff => {"Bidder" => {"B" => 1}, "Seller" => {"A" => 1}})}
-      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 B; Seller: 1 B")}
-      let!(:sample_record2){Fabricate(:sample_record, :profile => profile2, :payoff => {"Bidder" => {"B" => 1}, "Seller" => {"B" => 1}})}
+      let!(:profile){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 A; Seller: 1 B")}
+      let!(:sample_record){Fabricate(:sample_record, :profile => profile)}
+      let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 A; Seller: 1 A")}
+      let!(:sample_record2){Fabricate(:sample_record, :profile => profile2)}
             
       before(:each) do
         game.profile_ids << profile.id

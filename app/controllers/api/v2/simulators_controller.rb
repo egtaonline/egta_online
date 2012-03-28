@@ -12,7 +12,7 @@ class Api::V2::SimulatorsController < Api::V2::BaseController
   end
   
   def add_strategy
-    if @simulator.roles.where(:name => params[:role]).count == 0 || @simulator.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+    if @simulator.roles.where(:name => params[:role]).count == 0 || !@simulator.roles.where(:name => params[:role]).first.strategies.include?(params[:strategy])
       @simulator.add_strategy(params[:role], params[:strategy])
       respond_with(@simulator)
     else
@@ -32,7 +32,7 @@ class Api::V2::SimulatorsController < Api::V2::BaseController
   def remove_strategy
     if @simulator.roles.where(:name => params[:role]).count == 0
       respond_with({:error => "the role did not exist"}, :status => 404, :location => nil)
-    elsif @simulator.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+    elsif !@simulator.roles.where(:name => params[:role]).first.strategies.include?(params[:strategy])
       respond_with({:message => "the role did not exist"}, :status => 204, :location => nil)
     else
       @simulator.remove_strategy(params[:role], params[:strategy])

@@ -18,12 +18,12 @@ class HierarchicalScheduler < GameScheduler
       end
     end
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
-      return first_ar.collect {|r| "#{r[0]}: #{multiply(r.drop(1)).join(", ")}"}
+      return first_ar.collect {|r| format_role(r)}
     else
       profs = []
       first_ar.to_a.product(*all_other_ars).each do |prof|
         prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| "#{r[0]}: #{multiply(r.drop(1)).join(", ")}"}.join("; ")
+        profs << prof.collect {|r| format_role(r)}.join("; ")
       end
     end
     profs
@@ -45,4 +45,8 @@ class HierarchicalScheduler < GameScheduler
     errors.add(:agents_per_player, "does not divide size.") if size % agents_per_player != 0
   end
 
+  def format_role(role)
+    strats = multiply(role.drop(1))
+    "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
+  end
 end

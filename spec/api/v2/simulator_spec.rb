@@ -40,7 +40,7 @@ describe Simulator, :type => :api do
       post "#{url}/add_strategy.json", :auth_token => token, :role => "Bidder", :strategy => "Strat1"
       last_response.status.should eql(201)
       simulator.reload.roles.first.strategies.count.should eql(1)
-      simulator.roles.first.strategies.first.name.should eql("Strat1")
+      simulator.roles.first.strategies.first.should eql("Strat1")
     end
     
     it "should not add the strategy again if it already exists" do
@@ -48,7 +48,7 @@ describe Simulator, :type => :api do
       post "#{url}/add_strategy.json", :auth_token => token, :role => "Bidder", :strategy => "Strat1"
       last_response.status.should eql(304)
       simulator.reload.roles.first.strategies.count.should eql(1)
-      simulator.roles.first.strategies.first.name.should eql("Strat1")
+      simulator.roles.first.strategies.first.should eql("Strat1")
     end
     
     it "should notify you if role is missing" do
