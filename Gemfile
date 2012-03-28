@@ -38,7 +38,6 @@ gem "capistrano"
 
 group :test, :development do
   gem "rspec-rails"
-  gem 'rvm-capistrano'
 end
 
 group :test do

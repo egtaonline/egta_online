@@ -16,6 +16,23 @@ class Api::V2::GamesController < Api::V2::BaseController
     end
   end
   
+  def add_strategy
+    if @object.roles.where(:name => params[:role]).count == 0
+      if params[:count] == nil || params[:count] == "" || params[:count].to_i == 0
+        respond_with({:error => "you did not specify a count for this role"}, :status => 422, :location => nil)
+      else
+        @object.add_role(params[:role], params[:count].to_i)
+        @object.reload
+      end
+    end
+    if @object.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+      @object.add_strategy(params[:role], params[:strategy])
+      respond_with(@object)
+    else
+      respond_with(@object, :status => 304)
+    end
+  end
+  
   protected
   
   def validate_role_count

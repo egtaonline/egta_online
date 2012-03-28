@@ -136,7 +136,7 @@ describe "Strategy adding", :type => :api do
     it_behaves_like "a role manipulator"
     
     context "adding a new role" do
-      it "should notify you if role is missing" do
+      it "should notify you if count is missing" do
         post "/api/v2/games/#{role_manipulator.id}/add_role.json", :auth_token => token, :role => "Bidder"
         last_response.status.should eql(422)
         last_response.body.should eql({:error => "you did not specify a count for this role"}.to_json)
