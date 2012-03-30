@@ -26,26 +26,20 @@ class Profile
 
   after_create :generate_roles, :find_games
 
-  def role_hash
-    ret_hash = {}
-    name.split("; ").each do |atom|
-      ret_hash[atom.split(": ")[0]] = []
-      atom.split(": ")[1].split(", ").each do |s|
-        s.split(" ")[0].to_i.times{ ret_hash[atom.split(": ")[0]] << s.split(" ")[1] }
+  def as_map
+    profile_map = {}
+    role_instances.each do |role|
+      profile_map[role.name] = []
+      role.strategy_instances.each do |strategy|
+        strategy.count.times {|i| profile_map[role.name] << strategy.name}
       end
     end
-    ret_hash
+    profile_map
   end
 
   def strategy_count(role, strategy)
     role = role_instances.where(:name => role).first
     role == nil ? 0 : role.strategy_count(strategy)
-  end
-
-  def contains_strategy?(role, strategy)
-    role = role_instances.where(:name => role).first
-    return false if role == nil
-    role.strategy_count(strategy) > 0
   end
 
   def find_games
@@ -76,6 +70,7 @@ class Profile
   protected
   
   def generate_roles
+    self.size = 0
     name.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
       role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
@@ -85,5 +80,6 @@ class Profile
         self.size += strat.split(" ")[0].to_i
       end
     end
+    self.save
   end
 end

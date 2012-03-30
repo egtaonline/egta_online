@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Profile do
-  describe '#role_hash' do
-    let(:profile){Fabricate.build(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
+  describe '#as_map' do
+    let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
     it 'creates the map of roles and strategies' do
-      profile.role_hash.should eql({"Bidder" => ["Strat1", "Strat2"], "Seller" => ["Strat3", "Strat3"]})
+      profile.as_map.should eql({"Bidder" => ["Strat1", "Strat2"], "Seller" => ["Strat3", "Strat3"]})
     end
   end
   
