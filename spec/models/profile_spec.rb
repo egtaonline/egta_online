@@ -8,7 +8,7 @@ describe Profile do
     end
   end
   
-  describe 'create' do
+  describe 'generate_roles' do
     let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
     it 'makes the role instances necessary for the profile before saving' do
       profile.role_instances.count.should eql(2)
@@ -17,6 +17,7 @@ describe Profile do
       profile.role_instances.first.strategy_instances.last.name.should eql("Strat2")
       profile.role_instances.last.name.should eql("Seller")
       profile.role_instances.last.strategy_instances.last.name.should eql("Strat3")
+      profile.size.should eql(4)
     end
   end
   

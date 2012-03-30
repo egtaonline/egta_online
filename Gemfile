@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails'
+gem 'rails', '~> 3.2'
 
 # Asset template engines
 gem 'sass-rails'
@@ -14,7 +14,7 @@ gem 'resque-scheduler'
 gem "haml"
 gem "haml-rails"
 gem "airbrake"
-gem "bson_ext", "~>1.5"
+gem "bson_ext"
 gem "mongoid"
 gem "state_machine"
 gem "devise"

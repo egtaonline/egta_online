@@ -10,7 +10,7 @@ class Profile
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator
   
-  field :size, :type => Integer
+  field :size, :type => Integer, :default => 0
   field :parameter_hash, :type => Hash, :default => {}
   field :name
   field :sample_count, :type => Integer, :default => 0
@@ -20,21 +20,11 @@ class Profile
 
   index ([[:simulator_id,  Mongo::ASCENDING], [:parameter_hash, Mongo::ASCENDING], [:size, Mongo::ASCENDING], [:sample_count, Mongo::ASCENDING]])
 
-  after_validation(:on => :create) do
-    name.split("; ").each do |atom|
-      role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
-      role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
-      self["Role_#{role.name}_count"] = role_size
-      atom.split(": ")[1].split(", ").each do |strat|
-        role.strategy_instances.find_or_create_by(:name => strat.split(" ")[1], :count => strat.split(" ")[0].to_i)
-      end
-    end
-  end
-  
-  after_create :find_games
   validates_presence_of :simulator, :name, :parameter_hash
   validates_uniqueness_of :name, scope: [:simulator_id, :parameter_hash]
   delegate :fullname, :to => :simulator, :prefix => true
+
+  after_create :generate_roles, :find_games
 
   def role_hash
     ret_hash = {}
@@ -83,13 +73,17 @@ class Profile
     self.save!
   end
   
-  def self.size_of_profile(name)
-    sum = 0
-    name.split("; ").each do |r|
-      r.split(": ")[1].split(", ").each do |s|
-        sum += s.split(" ")[0].to_i
+  protected
+  
+  def generate_roles
+    name.split("; ").each do |atom|
+      role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
+      role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
+      self["Role_#{role.name}_count"] = role_size
+      atom.split(": ")[1].split(", ").each do |strat|
+        role.strategy_instances.find_or_create_by(:name => strat.split(" ")[1], :count => strat.split(" ")[0].to_i)
+        self.size += strat.split(" ")[0].to_i
       end
     end
-    sum
   end
 end
