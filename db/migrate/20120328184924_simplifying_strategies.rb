@@ -34,7 +34,7 @@ class SimplifyingStrategies < Mongoid::Migration
     end
     puts Profile.count
     Scheduler.all.each do |s|
-      if s.is_a?(GenericScheduler) == false
+      if s.is_a?(GameScheduler) == true
         s.roles.each do |r|
           r.strategies = []
           Strategy.where(:_id.in => r.strategy_ids).each do |strat|

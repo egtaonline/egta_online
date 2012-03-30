@@ -20,14 +20,26 @@ class Profile
 
   index ([[:simulator_id,  Mongo::ASCENDING], [:parameter_hash, Mongo::ASCENDING], [:size, Mongo::ASCENDING], [:sample_count, Mongo::ASCENDING]])
 
-  after_create :make_roles, :find_games
+  after_validation(:on => :create) do
+    name.split("; ").each do |atom|
+      role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
+      role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
+      self["Role_#{role.name}_count"] = role_size
+      atom.split(": ")[1].split(", ").each do |strat|
+        role.strategy_instances.find_or_create_by(:name => strat.split(" ")[1], :count => strat.split(" ")[0].to_i)
+      end
+    end
+  end
+  
+  after_create :find_games
   validates_presence_of :simulator, :name, :parameter_hash
   validates_uniqueness_of :name, scope: [:simulator_id, :parameter_hash]
   delegate :fullname, :to => :simulator, :prefix => true
 
-  def to_yaml
+  def role_hash
     ret_hash = {}
     name.split("; ").each do |atom|
+      ret_hash[atom.split(": ")[0]] = []
       atom.split(": ")[1].split(", ").each do |s|
         s.split(" ")[0].to_i.times{ ret_hash[atom.split(": ")[0]] << s.split(" ")[1] }
       end
@@ -35,35 +47,15 @@ class Profile
     ret_hash
   end
 
-  def make_roles
-    name.split("; ").each do |atom|
-      role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
-      role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
-      self["Role_#{role.name}_count"] = role_size
-      atom.split(": ")[1].split(", ").each do |strat|
-        role.strategy_instances.find_or_create_by(:name => strat)
-      end
-    end
-    self.save
-  end
-
   def strategy_count(role, strategy)
-    name.split("; ").each do |r|
-      if r.split(": ")[0] == role
-        r.split(": ")[1].split(", ").each do |strat|
-          return strat.split(" ")[0].to_i if strat.split(" ")[1] == strategy
-        end
-      end
-    end
-    return 0
+    role = role_instances.where(:name => role).first
+    role == nil ? 0 : role.strategy_count(strategy)
   end
 
   def contains_strategy?(role, strategy)
-    if role_instances.where(:name => role).first != nil
-      role_instances.where(:name => role).first.strategies.include?(strategy)
-    else
-      false
-    end
+    role = role_instances.where(:name => role).first
+    return false if role == nil
+    role.strategy_count(strategy) > 0
   end
 
   def find_games

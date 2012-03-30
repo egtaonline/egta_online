@@ -88,7 +88,7 @@ class SimulationQueuer
 
   def self.create_yaml(simulation)
     File.open( "#{Rails.root}/tmp/#{simulation.account_username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
-      YAML.dump(Profile.find(simulation.profile_id).to_yaml, out)
+      YAML.dump(Profile.find(simulation.profile_id).role_hash, out)
       YAML.dump(numeralize(simulation.scheduler), out)
     end
   end
