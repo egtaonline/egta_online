@@ -58,13 +58,13 @@ class GamesController < ApplicationController
       format.html
       # come back and speed up sample issue
       format.xml { @profiles = game.display_profiles }
-      format.json { @profiles = game.display_profiles }
+      format.json { @object = game; render "api/v2/games/show" }
     end
   end
   
   def show_with_samples
     respond_to do |format|
-      format.json { render :json => game, :root => params[:egat] == "true" }
+      format.json { @object = game; @full = 'true'; render "api/v2/games/show" }
     end
   end
   
