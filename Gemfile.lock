@@ -252,6 +252,8 @@ GEM
     rubyzip (0.9.4)
     rufus-scheduler (2.0.16)
       tzinfo (>= 0.3.23)
+    rvm-capistrano (1.0.2)
+      capistrano (>= 2.0.0)
     sass (3.1.10)
     sass-rails (3.1.4)
       actionpack (~> 3.1.0)
@@ -343,6 +345,7 @@ DEPENDENCIES
   resque-scheduler
   resque_spec
   rspec-rails
+  rvm-capistrano
   sass-rails
   show_for!
   simple_form
