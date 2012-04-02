@@ -3,24 +3,13 @@ EgtaOnline::Application.routes.draw do
   devise_for :users
 
   namespace :api do
-    namespace :v1 do
-      resources :generic_schedulers, :except => ["new", "edit"] do
-        member do
-          post :add_profile
-        end
-      end
-      resources :games, :only => :show
-      resources :profiles, :only => :show
-    end
-    
     namespace :v2 do
       resources :generic_schedulers, :except => ["new", "edit"] do
         member do
           post :add_profile
         end
       end
-      resources :games, :only => [:show, :index]
-      resources :simulators, :only => [:show, :index] do
+      resources :simulators, :games, :only => [:show, :index] do
         member do
           post :add_strategy, :remove_strategy, :add_role, :remove_role
         end

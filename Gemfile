@@ -36,6 +36,10 @@ gem 'high_voltage'
 gem 'rdiscount'
 gem "capistrano"
 
+group :development do
+  gem 'rvm-capistrano'
+end
+
 group :test, :development do
   gem "rspec-rails"
 end
