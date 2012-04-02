@@ -17,7 +17,7 @@ gem "airbrake"
 gem "bson_ext"
 gem "mongoid"
 gem "state_machine"
-gem "devise"
+gem "devise", '~> 1.5'
 gem "yettings"
 gem "foreman"
 gem "net-ssh", :require => ['net/ssh']
@@ -35,10 +35,6 @@ gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
 gem "capistrano"
-
-group :development do
-  gem 'rvm-capistrano'
-end
 
 group :test, :development do
   gem "rspec-rails"
