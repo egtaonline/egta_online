@@ -20,7 +20,5 @@ describe "#testing new data_parser" do
     role.strategy_instances.where(:name => "BayesianPricing:noRA:0").first.payoff_std[3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
     arr = [0.514654571782549, 0.51264473859671, 0.47771494416184, 0.484695863045296, 0.453008291906072]
     avg = (eval arr.join('+'))/5
-    profile.feature_avgs["average_dividend"].should == avg
-    profile.feature_stds["average_dividend"][3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
   end
 end
