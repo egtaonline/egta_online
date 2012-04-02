@@ -15,7 +15,6 @@ class Profile
   field :feature_avgs, type: Hash, default: {}
   field :feature_stds, type: Hash, default: {}
   field :feature_expected_values, type: Hash, default: {}
-  field :sampled, type: Boolean, default: false
   index ([[:simulator_id,  Mongo::DESCENDING], [:parameter_hash, Mongo::DESCENDING], [:proto_string, Mongo::DESCENDING]])
   after_create :make_roles, :find_games
   validate :proto_string_has_correct_format
@@ -118,7 +117,6 @@ class Profile
       strategy.payoff_std = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
       strategy.save!
     end
-    self.sampled = true
     self.save!
   end
 
