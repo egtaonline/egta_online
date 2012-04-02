@@ -60,18 +60,18 @@ class Simulator
   end
 
   def remove_strategy(role, strategy)
-    super
-    profiles.with_role_and_strategy(role, strategy).destroy_all
     schedulers do |scheduler|
       scheduler.remove_strategy(role, strategy)
     end
+    super
+    profiles.with_role_and_strategy(role, strategy).destroy_all
   end
   
   def remove_role(role)
-    super
-    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
     schedulers do |scheduler|
       scheduler.remove_role(role)
     end
+    super
+    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
   end
 end

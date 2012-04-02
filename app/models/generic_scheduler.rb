@@ -6,6 +6,16 @@ class GenericScheduler < Scheduler
     val == nil ? 0 : val
   end
   
+  def remove_role(role_name)
+    self.profiles -= self.profiles.where(:proto_string => Regexp.new("#{role_name}: "))
+    self.save
+  end
+
+  def remove_strategy(role, strategy_name)
+    self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
+    self.save
+  end
+  
   def add_profile(profile_name, sample_count=self["max_samples"])
     proto_string = Profile.convert_to_proto_string(profile_name)
     profile = Profile.find_or_create_by(simulator_id: self.simulator_id,
