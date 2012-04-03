@@ -3,6 +3,7 @@ Fabricator(:simulator) do
   version {Fabricate.sequence(:version, 1) {|i| "test#{i}"}}
   email { "test@test.com" }
   parameter_hash { {"Parm1"=>"2","Parm2"=>"3"} }
+  simulator_source File.new("#{Rails.root}/features/support/epp_sim.zip")
   after_create {|sim| if sim.parameter_hash.is_a?(String); sim.update_attribute(:parameter_hash, eval(sim.parameter_hash)); end }
 end
 
