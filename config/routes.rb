@@ -53,7 +53,7 @@ EgtaOnline::Application.routes.draw do
     end
   end
   
-  resources :games, :except => [:edit, :update] do
+  resources :games do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
       get :show_with_samples
@@ -65,7 +65,7 @@ EgtaOnline::Application.routes.draw do
     resources :features, :only => [:create, :destroy]
   end
 
-  resources :simulators, :except => [:edit, :update] do
+  resources :simulators do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end

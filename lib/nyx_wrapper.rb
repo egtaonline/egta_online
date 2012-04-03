@@ -12,6 +12,7 @@ class NyxWrapper
       file.syswrite("\n\#PBS -N mas-#{simulator.name.downcase.gsub(' ', '_')}\n")
       file.syswrite("\#PBS -o #{Yetting.deploy_path}/simulations/#{simulation.account_username}/#{simulation.number}/out\n")
       file.syswrite("\#PBS -e #{Yetting.deploy_path}/simulations/#{simulation.account_username}/#{simulation.number}/out\n")
+      file.syswrite("\#PBS -M #{simulator.email}\n")
       file.syswrite("mkdir /tmp/${PBS_JOBID}; cd /tmp/${PBS_JOBID}; cp -r #{root_path}/* .; cp -r #{Yetting.deploy_path}/simulations/#{simulation.account_username}/#{simulation.number} .\n")
       file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}")
       file.syswrite(" ${PBS_NODEFILE}") if simulation.scheduler_nodes > 1

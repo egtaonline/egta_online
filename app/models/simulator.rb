@@ -3,6 +3,7 @@ class Simulator
   include RoleManipulator
 
   mount_uploader :simulator_source, SimulatorUploader
+
   embeds_many :roles, :as => :role_owner
   has_many :profiles, :dependent => :destroy do
     def with_role_and_strategy(role, strategy)
@@ -11,7 +12,7 @@ class Simulator
   end
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
-  
+
   field :name
   field :description
   field :version

@@ -1,7 +1,5 @@
 = simple_form_for simulator do |f|
-  = f.input :name
-  = f.input :version
-  = f.input :email, :input_html => { :value => current_user.email }
+  = f.input :email
   = f.input :description, :as => :text
   = f.input :simulator_source, :as => :file
   = f.button :submit
