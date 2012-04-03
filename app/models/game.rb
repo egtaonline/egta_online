@@ -37,9 +37,9 @@ class Game
     roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
   end
-
+  
   private
-
+  
   def strategy_regex
     Regexp.new("^"+roles.order_by(:name => :asc).collect{|r| "#{r.name}: \\d+ (#{r.strategies.join('(, \\d+ )?)*(')}(, \\d+ )?)*"}.join("; ")+"$")
   end

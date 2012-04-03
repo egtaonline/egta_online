@@ -45,7 +45,7 @@ describe Game do
       let!(:sample_record){Fabricate(:sample_record, :profile => profile)}
       let!(:profile2){Fabricate(:profile, :simulator => game.simulator, :name => "Bidder: 1 A; Seller: 1 A")}
       let!(:sample_record2){Fabricate(:sample_record, :profile => profile2)}
-            
+      
       before(:each) do
         game.profile_ids << profile.id
         game.profile_ids << profile2.id
