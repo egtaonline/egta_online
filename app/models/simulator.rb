@@ -16,7 +16,9 @@ class Simulator
   field :description
   field :version
   field :parameter_hash, :type => Hash, :default => {}
+  field :email
   
+  validates :email, :email_format => {:message => 'does not match the expected format'}
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   validate :simulator_setup, :if => :simulator_source_changed?

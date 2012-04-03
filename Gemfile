@@ -35,6 +35,7 @@ gem 'rabl'
 gem 'high_voltage'
 gem 'rdiscount'
 gem "capistrano"
+gem 'validates_email_format_of'
 
 group :development do
   gem 'rvm-capistrano'
