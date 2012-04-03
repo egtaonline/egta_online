@@ -34,6 +34,7 @@ describe GenericScheduler do
     
       it { scheduler.profiles.count.should eql(1) }
       it { scheduler.profiles.last.name.should eql(profile1.name) }
+      it { scheduler.required_samples(profile.id).should eql(0)}
     end
     context "simulator" do
       before :each do
@@ -48,6 +49,7 @@ describe GenericScheduler do
     
       it { scheduler.profiles.count.should eql(1) }
       it { scheduler.profiles.last.name.should eql(profile1.name) }
+      it { scheduler.required_samples(profile.id).should eql(0)}
     end
   end
   
@@ -71,6 +73,7 @@ describe GenericScheduler do
     
       it { scheduler.profiles.count.should eql(2) }
       it { scheduler.profiles.last.name.should eql(profile2.name) }
+      it { scheduler.required_samples(profile.id).should eql(0)}
     end
     
     context "simulator" do
@@ -87,6 +90,7 @@ describe GenericScheduler do
     
       it { scheduler.profiles.count.should eql(2) }
       it { scheduler.profiles.last.name.should eql(profile2.name) }
+      it { scheduler.required_samples(profile.id).should eql(0)}
     end
   end
 end
