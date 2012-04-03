@@ -9,7 +9,6 @@ class Simulator
   field :email
   embeds_many :roles, :as => :role_owner
   field :parameter_hash, :type => Hash, :default => {}
-  validates :email, :email_format => {:message => 'does not match the expected format'}
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy do
@@ -22,7 +21,8 @@ class Simulator
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
   validate :simulator_setup, :if => :simulator_source_changed?
-
+  validates :email, :email_format => {:message => 'does not match the expected format'}
+  
   def simulator_setup
     system("rm -rf #{location}")
     begin
