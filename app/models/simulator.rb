@@ -6,7 +6,6 @@ class Simulator
   field :name
   field :description
   field :version
-  field :setup, :type => Boolean, :default => false
   field :email
   embeds_many :roles, :as => :role_owner
   field :parameter_hash, :type => Hash, :default => {}
