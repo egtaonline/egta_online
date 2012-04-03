@@ -10,6 +10,11 @@ class GamesController < ApplicationController
     respond_with(game)
   end
   
+  def update
+    game.save
+    respond_with(game)
+  end
+
   def destroy
     game.destroy
     respond_with(game)

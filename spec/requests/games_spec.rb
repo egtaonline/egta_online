@@ -31,6 +31,26 @@ describe "Games" do
     end
   end
     
+  context "GET /games/:id/edit" do
+    it "should show the edit page for the game" do
+      game = Fabricate(:game)
+      visit edit_game_path(game.id)
+      page.should have_content("Edit Game")
+      page.should have_content("Name")
+    end
+  end
+
+  context "PUT /games/:id" do
+    it "should update the relevant game" do
+      game = Fabricate(:game)
+      visit edit_game_path(game.id)
+      fill_in "Name", :with => "UpdatedName"
+      click_button "Update Game"
+      page.should have_content("Inspect Game")
+      page.should have_content("UpdatedName")
+    end
+  end
+
   describe "POST /games" do
     before(:each) do
       ResqueSpec.reset!

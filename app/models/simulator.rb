@@ -7,8 +7,10 @@ class Simulator
   field :description
   field :version
   field :setup, :type => Boolean, :default => false
+  field :email
   embeds_many :roles, :as => :role_owner
   field :parameter_hash, :type => Hash, :default => {}
+  validates :email, :email_format => {:message => 'does not match the expected format'}
   validates_presence_of :name, :version
   validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy do
@@ -20,33 +22,30 @@ class Simulator
   end
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
-  validate :simulator_setup, :on => :create
+  validate :simulator_setup, :if => :simulator_source_changed?
 
   def simulator_setup
-    if setup == false
-      system("rm -rf #{location}")
+    system("rm -rf #{location}")
+    begin
+      system("unzip -uqq #{simulator_source.path} -d #{location}")
+    rescue
+      errors.add(:simulator_source, "Upload could not be unzipped.")
+      return
+    end
+    if File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
+      errors.add(:simulator_source, "Upload was missing a simulation_spec.yaml configuration file.")
+      return
+    else
       begin
-        system("unzip -uqq #{simulator_source.path} -d #{location}")
-      rescue
-        errors.add(:simulator_source, "Upload could not be unzipped.")
-        return
-      end
-      if File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
-        errors.add(:simulator_source, "Upload was missing a simulation_spec.yaml configuration file.")
-        return
-      else
-        begin
-          parameters = Hash.new
-          File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
-            parameters = YAML.load(io)["web parameters"]
-            parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
-          end
-          self.parameter_hash = parameters
-          Resque.enqueue(SimulatorInitializer, self.id)
-          self.setup = true
-        rescue
-          errors.add(:simulator_source, "Upload had a malformed simulation_spec.yaml file.")
+        parameters = Hash.new
+        File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
+          parameters = YAML.load(io)["web parameters"]
+          parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
         end
+        self.parameter_hash = parameters
+        Resque.enqueue(SimulatorInitializer, self.id)
+      rescue
+        errors.add(:simulator_source, "Upload had a malformed simulation_spec.yaml file.")
       end
     end
   end

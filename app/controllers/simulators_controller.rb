@@ -9,6 +9,11 @@ class SimulatorsController < ApplicationController
     respond_with(simulator)
   end
 
+  def update
+    simulator.save
+    respond_with(simulator)
+  end
+
   def destroy
     simulator.destroy
     respond_with(simulator)

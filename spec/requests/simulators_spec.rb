@@ -51,6 +51,29 @@ describe "Simulators" do
     end
   end
   
+  context "GET /simulators/:id/edit" do
+    it "should show the edit page for the simulator" do
+      simulator = Fabricate(:simulator)
+      visit edit_simulator_path(simulator.id)
+      page.should have_content("Edit Simulator")
+      page.should have_content("Email")
+      page.should have_content("Description")
+      page.should have_content("Simulator source")
+    end
+  end
+
+  context "PUT /simulators/:id" do
+    it "should update the relevant simulator" do
+      simulator = Fabricate(:simulator)
+      visit edit_simulator_path(simulator.id)
+      attach_file "Simulator source", "#{Rails.root}/spec/support/epp_sim.zip"
+      click_button "Update Simulator"
+      page.should have_content("Inspect Simulator")
+      SimulatorInitializer.should have_queue_size_of(1)
+      page.should_not have_content("Some errors were found")
+    end
+  end
+  
   describe "DELETE /simulators/:id/" do
     it "destroys the relevant simulator" do
       simulator = Fabricate(:simulator)
