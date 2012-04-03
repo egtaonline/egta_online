@@ -60,7 +60,7 @@ class Simulator
   end
 
   def remove_strategy(role, strategy)
-    schedulers do |scheduler|
+    schedulers.each do |scheduler|
       scheduler.remove_strategy(role, strategy)
     end
     super
@@ -68,7 +68,7 @@ class Simulator
   end
   
   def remove_role(role)
-    schedulers do |scheduler|
+    schedulers.each do |scheduler|
       scheduler.remove_role(role)
     end
     super
