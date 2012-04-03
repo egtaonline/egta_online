@@ -7,7 +7,7 @@ class GenericScheduler < Scheduler
   end
   
   def remove_role(role_name)
-    self.profiles -= self.profiles.where(:proto_string => Regexp.new("#{role_name}: "))
+    self.profiles -= self.profiles.where(:name => Regexp.new("#{role_name}: "))
     self.save
   end
 

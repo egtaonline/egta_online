@@ -70,6 +70,6 @@ class Simulator
       scheduler.remove_role(role)
     end
     super
-    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
+    profiles.where(:name => Regexp.new("#{role}: ")).destroy_all
   end
 end
