@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "#testing new data_parser" do
   before do
     ResqueSpec.reset!
-    Account.create(username: "bcassell", active: true, skip: true)
+    Account.new(username: "bcassell", active: true).save(:validate => false)
   end
 
   let!(:profile){Fabricate(:profile, :name => "All: 2 BayesianPricing:noRA:0")}

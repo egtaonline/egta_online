@@ -7,6 +7,5 @@ class Role
   field :name
   field :count, type: Integer
 
-  validates_presence_of :name
-  validates_uniqueness_of :name
+  validates :name, :presence => true, :uniqueness => true, :format => { :with => /\A\w+\z/, :message => "Only letters, numbers, or underscores allowed." }
 end

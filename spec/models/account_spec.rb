@@ -11,11 +11,14 @@ describe Account do
     end
     
     context "account is missing group permissions" do
-      it "should add errors about lack of group permission" do
+      before do
         ssh = mock(Net::SSH)
         Net::SSH.stub(:start).and_yield(ssh)
         ssh.stub("exec!").with("echo #{KEY} >> ~/.ssh/authorized_keys").and_return("")
         ssh.stub("exec!").with("groups").and_return("")
+      end
+      
+      it "should add errors about lack of group permission" do
         @account = Fabricate.build(:account_with_failure)
         @account.should have(1).error_on(:username)
         @account.errors[:username].should include("\'fakename\' is not a member of wellman group.  Ask Mike to add you.")
@@ -25,7 +28,8 @@ describe Account do
   
   describe "saving" do
     it "should not save the provided password" do
-      Fabricate(:account, :username => "fake", :password => "fake")
+      account = Account.new(:username => "fake", :password => "fake")
+      account.save(:validate => false)
       Account.where(:username => "fake").first["password"].should eql(nil)
     end
   end
