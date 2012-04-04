@@ -17,27 +17,26 @@ class Account
   validate :login, :group_permission, :on => :create
 
   # Ensure that the password is not stored in the database, because public key login has been setup
-  after_validation(:on => :create) do
+  before_save(:on => :create) do
     self["password"] = nil
-    self["skip"] = true
   end
   
   # Ensure that the credentials provided are correct
   def login
-    if self["skip"] != true
-      begin
+    begin
+      if password != nil && password != ""
         Net::SSH.start(Yetting.host, username, password: password, timeout: 2) do |s|
           s.exec!("echo #{KEY} >> ~/.ssh/authorized_keys")
         end
-      rescue
-        errors.add(:username, "Cannot authenticate on nyx as \'#{self.username}\' with provided password.")
       end
+    rescue
+      errors.add(:username, "Cannot authenticate on nyx as \'#{self.username}\' with provided password.")
     end
   end
   
   # Ensure that the user has the wellman group permission on the cluster
   def group_permission
-    if errors[:username] == [] && self["skip"] != true
+    if errors[:username] == []
       begin
         groups = ""
         Net::SSH.start(Yetting.host, username) do |s|

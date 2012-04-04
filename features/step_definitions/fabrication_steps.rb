@@ -64,7 +64,8 @@ Given /^that ([^"]*) belongs to that ([^"]*)$/ do |parent, child|
 end
 
 Given /^one account that has passed group validation$/ do
-  @account = Account.create(username: "bcassell", active: true, skip: true)
+  @account = Account.new(username: "bcassell", active: true)
+  @account.save(:validate => false)
 end
 
 
