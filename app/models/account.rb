@@ -24,10 +24,8 @@ class Account
   # Ensure that the credentials provided are correct
   def login
     begin
-      if password != nil && password != ""
-        Net::SSH.start(Yetting.host, username, password: password, timeout: 2) do |s|
-          s.exec!("echo #{KEY} >> ~/.ssh/authorized_keys")
-        end
+      Net::SSH.start(Yetting.host, username, password: password, timeout: 2) do |s|
+        s.exec!("echo #{KEY} >> ~/.ssh/authorized_keys")
       end
     rescue
       errors.add(:username, "Cannot authenticate on nyx as \'#{self.username}\' with provided password.")

@@ -5,6 +5,14 @@ describe HierarchicalDeviationScheduler do
     ResqueSpec.reset!
   end
   
+  describe "#unassigned_player_count" do
+    let(:scheduler){ Fabricate(:hierarchical_deviation_scheduler, :size => 4, :agents_per_player => 2) }
+    before(:each) do
+      scheduler.add_role("Bidder", 1)
+    end
+    it {scheduler.unassigned_player_count.should eql(1)}
+  end
+  
   describe "#add_deviating_strategy" do
     context "symmetric" do
       let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
