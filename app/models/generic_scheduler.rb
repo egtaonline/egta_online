@@ -14,7 +14,7 @@ class GenericScheduler < Scheduler
   end
 
   def remove_strategy(role, strategy_name)
-    invalid_profiles = self.profiles.with_role_and_strategy(role, strategy_name)
+    invalid_profiles = self.profiles.with_role_and_strategy(role, strategy_name).to_a
     invalid_profiles.each {|p| self.sample_hash.delete(p.id.to_s)}
     self.profiles -= invalid_profiles
     self.save
