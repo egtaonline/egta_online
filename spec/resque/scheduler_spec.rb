@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "#testing updates" do
   before do
     ResqueSpec.reset!
-    Account.create(username: "bcassell", active: true, skip: true)
+    Account.new(username: "bcassell", active: true).save(:validate => false)
   end
 
   let!(:simulator){Fabricate(:simulator)}

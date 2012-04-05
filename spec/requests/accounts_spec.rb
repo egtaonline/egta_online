@@ -4,7 +4,7 @@ describe "Accounts" do
   
   describe "GET /accounts" do
     it "displays accounts" do
-      Fabricate(:account)
+      Fabricate.build(:account).save(:validate => false)
       visit accounts_path
       page.should have_content("bcassell")
       page.should have_content("Yes")
@@ -22,7 +22,8 @@ describe "Accounts" do
   
   describe "GET /accounts/:id" do
     it "displays the relevant account" do
-      account = Fabricate(:account)
+      account = Fabricate.build(:account)
+      account.save(:validate => false)
       visit account_path(account.id)
       page.should have_content("bcassell")
       page.should have_content("Yes")
@@ -31,7 +32,8 @@ describe "Accounts" do
   
   describe "GET /accounts/:id/edit" do
     it "shows the edit account page" do
-      account = Fabricate(:account)
+      account = Fabricate.build(:account)
+      account.save(:validate => false)
       visit edit_account_path(account.id)
       page.should have_content("Edit Account")
       page.should have_content("Username")
@@ -59,7 +61,8 @@ describe "Accounts" do
   
   describe "PUT /accounts/:id/" do
     it "updates the relevant account" do
-      account = Fabricate(:account)
+      account = Fabricate.build(:account)
+      account.save(:validate => false)
       visit edit_account_path(account.id)
       uncheck "Active"
       click_button "Update Account"

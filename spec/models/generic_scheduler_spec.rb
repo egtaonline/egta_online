@@ -3,11 +3,9 @@ require 'spec_helper'
 describe GenericScheduler do
   describe "#required_samples" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:strategy){Fabricate(:strategy, :name => "A", :number => 1)}
-    let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 2)}
     let!(:profile){Fabricate(:profile, :simulator => scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, :proto_string => "All: 1, 2", :simulator => scheduler.simulator)}
-    let!(:profile2){Fabricate(:profile, :proto_string => "All: 2, 2", :simulator => scheduler.simulator)}
+    let!(:profile1){Fabricate(:profile, :name => "All: 1 A, 1 B", :simulator => scheduler.simulator)}
+    let!(:profile2){Fabricate(:profile, :name => "All: 2 B", :simulator => scheduler.simulator)}
     before do
       scheduler.add_profile(profile.name, 30)
       scheduler.add_profile(profile.name, 20)
@@ -20,10 +18,8 @@ describe GenericScheduler do
   
   describe "#remove_role" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:strategy){Fabricate(:strategy, :name => "A", :number => 1)}
-    let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 2)}
     let!(:profile){Fabricate(:profile, :simulator => scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, :proto_string => "Bidder: 1; Seller: 2", :simulator => scheduler.simulator)}
+    let!(:profile1){Fabricate(:profile, :name => "Bidder: 1 A; Seller: 1 B", :simulator => scheduler.simulator)}
     
     context "local" do
       before :each do
@@ -37,7 +33,7 @@ describe GenericScheduler do
       end
     
       it { scheduler.profiles.count.should eql(1) }
-      it { scheduler.profiles.last.proto_string.should eql(profile1.proto_string) }
+      it { scheduler.profiles.last.name.should eql(profile1.name) }
       it { scheduler.required_samples(profile.id).should eql(0)}
     end
     context "simulator" do
@@ -52,18 +48,16 @@ describe GenericScheduler do
       end
     
       it { scheduler.profiles.count.should eql(1) }
-      it { scheduler.profiles.last.proto_string.should eql(profile1.proto_string) }
+      it { scheduler.profiles.last.name.should eql(profile1.name) }
       it { scheduler.required_samples(profile.id).should eql(0)}
     end
   end
   
   describe "#remove_strategy" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:strategy){Fabricate(:strategy, :name => "A", :number => 1)}
-    let!(:strategy2){Fabricate(:strategy, :name => "B", :number => 2)}
     let!(:profile){Fabricate(:profile, :simulator => scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, :proto_string => "Bidder: 1; Seller: 2", :simulator => scheduler.simulator)}
-    let!(:profile2){Fabricate(:profile, :proto_string => "All: 2, 2", :simulator => scheduler.simulator)}
+    let!(:profile1){Fabricate(:profile, :name => "Bidder: 1 A; Seller: 1 B", :simulator => scheduler.simulator)}
+    let!(:profile2){Fabricate(:profile, :name => "All: 2 B", :simulator => scheduler.simulator)}
     
     context "local" do
       before :each do
@@ -78,7 +72,7 @@ describe GenericScheduler do
       end
     
       it { scheduler.profiles.count.should eql(2) }
-      it { scheduler.profiles.last.proto_string.should eql(profile2.proto_string) }
+      it { scheduler.profiles.last.name.should eql(profile2.name) }
       it { scheduler.required_samples(profile.id).should eql(0)}
     end
     
@@ -95,7 +89,7 @@ describe GenericScheduler do
       end
     
       it { scheduler.profiles.count.should eql(2) }
-      it { scheduler.profiles.last.proto_string.should eql(profile2.proto_string) }
+      it { scheduler.profiles.last.name.should eql(profile2.name) }
       it { scheduler.required_samples(profile.id).should eql(0)}
     end
   end

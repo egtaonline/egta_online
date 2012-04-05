@@ -1,12 +1,12 @@
 class StrategyInstance
   include Mongoid::Document
   embedded_in :role_instance
+  
   field :name
-  validates_uniqueness_of :name
+  field :count, :type => Integer
   field :payoff, :type => Float, :default => nil
   field :payoff_std, :type => Array, :default => []
-
-  def count
-    role_instance.strategy_count(name)
-  end
+  
+  validates_uniqueness_of :name
+  validates_presence_of :name, :count
 end

@@ -3,20 +3,21 @@ class SampleRecordObserver < Mongoid::Observer
     profile = sample_record.profile
     profile.inc(:sample_count, 1)
     sample_record.payoffs.each do |key, value|
-      value.each do |subkey, subvalue|
-        profile.add_value(key, subkey, subvalue)
-      end
-    end
-    sample_record.features.each do |key, value|
-      if profile.feature_avgs[key] == nil
-        profile.feature_avgs[key] = value
-        profile.feature_stds[key] = [1, value, value**2, nil]
-      else
-        profile.feature_avgs[key] = (profile.feature_avgs[key]*(profile.sample_records.count-1)+value)/profile.sample_records.count
-        s0 = profile.feature_stds[key][0]+1
-        s1 = profile.feature_stds[key][1]+value
-        s2 = profile.feature_stds[key][2]+value**2
-        profile.feature_stds[key] = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
+      role = profile.role_instances.where(:name => key).first
+      role.strategy_instances.each do |strategy|
+        payoff_value = value[strategy.name]
+        if strategy.payoff == nil
+          strategy.payoff = payoff_value
+          strategy.payoff_std = [1, payoff_value, payoff_value**2, nil]
+          strategy.save!
+        else
+          strategy.payoff = (strategy.payoff*(profile.sample_count-1)+payoff_value)/profile.sample_count
+          s0 = strategy.payoff_std[0]+1
+          s1 = strategy.payoff_std[1]+payoff_value
+          s2 = strategy.payoff_std[2]+payoff_value**2
+          strategy.payoff_std = [s0, s1, s2, Math.sqrt((s0*s2-s1**2)/(s0*(s0-1)))]
+          strategy.save!
+        end
       end
     end
     profile.save!

@@ -1,37 +1,38 @@
 require 'spec_helper'
 
 describe Profile do
-  describe "#name" do
-    let!(:strategy1){Fabricate(:strategy, :name => "A")}
-    let!(:strategy2){Fabricate(:strategy, :name => "B")}
-    let!(:strategy3){Fabricate(:strategy, :name => "C")}
-    let!(:profile){Fabricate(:profile, :proto_string => "Buyer: 1, 1, 2, 3; Seller: 2, 2, 3, 3")}
-    it {profile.name.should == "Buyer: 2 A, 1 B, 1 C; Seller: 2 B, 2 C"}
-  end
-  
-  describe "convert_to_proto_string" do
-    before do
-      Fabricate(:strategy, :name => "A", :number => 1)
-      Fabricate(:strategy, :name => "B", :number => 2)
-    end
-    it "should convert to a valid proto_string" do
-      Profile.convert_to_proto_string("Bidder: A, A, B; Seller: A, B, B").should == "Bidder: 1, 1, 2; Seller: 1, 2, 2"
-      Profile.convert_to_proto_string("Bidder: asdfw; asdf").should == ""
+  describe '#as_map' do
+    let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
+    it 'creates the map of roles and strategies' do
+      profile.as_map.should eql({"Bidder" => ["Strat1", "Strat2"], "Seller" => ["Strat3", "Strat3"]})
     end
   end
   
-  describe "size_of_profile" do
-    it "should count the number of players with assignments in the profile" do
-      Profile.size_of_profile("Bidder: A, A, B; Seller: A, B, B").should == 6
-      Profile.size_of_profile("All: A, A").should == 2
+  describe 'generate_roles' do
+    let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
+    it 'makes the role instances necessary for the profile before saving' do
+      profile.role_instances.count.should eql(2)
+      profile.role_instances.first.name.should eql("Bidder")
+      profile.role_instances.first.strategy_instances.first.name.should eql("Strat1")
+      profile.role_instances.first.strategy_instances.last.name.should eql("Strat2")
+      profile.role_instances.last.name.should eql("Seller")
+      profile.role_instances.last.strategy_instances.last.name.should eql("Strat3")
+      profile.size.should eql(4)
     end
   end
   
-  context "Large profiles" do
-    let!(:strategy1){Fabricate(:strategy, :number => 120, :name => "A")}
-    let!(:profile){Fabricate(:profile, :size => 120, :proto_string => "All: 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120")}
-    it "should be findable by simulator_id" do
-      Profile.where(:simulator_id => profile.simulator_id, :parameter_hash => profile.parameter_hash).first.should eql(profile)
+  describe '#strategy_count' do
+    let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
+    context 'when the role and strategy exists' do
+      it { profile.strategy_count("Bidder", "Strat1").should eql(1) }
+      it { profile.strategy_count("Bidder", "Strat2").should eql(1) }
+      it { profile.strategy_count("Seller", "Strat3").should eql(2) }
+    end
+    
+    context 'when the role or strategy does not exist' do
+      it{ profile.strategy_count("Bidder", "Strat3").should eql(0) }
+      it{ profile.strategy_count("Bidder", "Strat4").should eql(0) }
+      it{ profile.strategy_count("All", "Strat1").should eql(0) }
     end
   end
 end

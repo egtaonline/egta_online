@@ -3,26 +3,27 @@ class Simulator
   include RoleManipulator
 
   mount_uploader :simulator_source, SimulatorUploader
-  field :name
-  field :description
-  field :version
-  field :email
+
   embeds_many :roles, :as => :role_owner
-  field :parameter_hash, :type => Hash, :default => {}
-  validates_presence_of :name, :version
-  validates_uniqueness_of :version, :scope => :name
   has_many :profiles, :dependent => :destroy do
     def with_role_and_strategy(role, strategy)
-      s = Strategy.where(:name => strategy).first
-      return [] if s == nil
-      where(:proto_string => Regexp.new("#{role}:( \\d+,)* #{s.number}(,|;|\\z)"))
+      where(:name => Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
     end
   end
   has_many :schedulers, :dependent => :destroy
   has_many :games, :dependent => :destroy
-  validate :simulator_setup, :if => :simulator_source_changed?
-  validates :email, :email_format => {:message => 'does not match the expected format'}
+
+  field :name
+  field :description
+  field :version
+  field :parameter_hash, :type => Hash, :default => {}
+  field :email
   
+  validates :email, :email_format => {:message => 'does not match the expected format'}
+  validates_presence_of :name, :version
+  validates_uniqueness_of :version, :scope => :name
+  validate :simulator_setup, :if => :simulator_source_changed?
+
   def simulator_setup
     system("rm -rf #{location}")
     begin
@@ -70,6 +71,6 @@ class Simulator
       scheduler.remove_role(role)
     end
     super
-    profiles.where(:proto_string => Regexp.new("#{role}: ")).destroy_all
+    profiles.where(:name => Regexp.new("#{role}: ")).destroy_all
   end
 end

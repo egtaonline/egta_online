@@ -25,7 +25,7 @@ class Api::V2::GamesController < Api::V2::BaseController
         @object.reload
       end
     end
-    if @object.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+    if @object.roles.where(:name => params[:role]).first.strategies.include?(params[:strategy]) == false
       @object.add_strategy(params[:role], params[:strategy])
       respond_with(@object)
     else

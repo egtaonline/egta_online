@@ -41,7 +41,7 @@ describe "Strategy adding", :type => :api do
         post "#{url}/add_strategy.json", :auth_token => token, :role => "Bidder", :strategy => "Strat1"
         last_response.status.should eql(201)
         role_manipulator.reload.roles.first.strategies.count.should eql(1)
-        role_manipulator.roles.first.strategies.first.name.should eql("Strat1")
+        role_manipulator.roles.first.strategies.first.should eql("Strat1")
       end
     
       it "should not add the strategy again if it already exists" do
@@ -49,7 +49,7 @@ describe "Strategy adding", :type => :api do
         post "#{url}/add_strategy.json", :auth_token => token, :role => "Bidder", :strategy => "Strat1"
         last_response.status.should eql(304)
         role_manipulator.reload.roles.first.strategies.count.should eql(1)
-        role_manipulator.roles.first.strategies.first.name.should eql("Strat1")
+        role_manipulator.roles.first.strategies.first.should eql("Strat1")
       end
     
       it "should notify you if role is missing" do

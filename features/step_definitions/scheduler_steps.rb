@@ -89,6 +89,6 @@ Then /^that game should match the game scheduler$/ do
   @game = Game.last
   @game_scheduler = Scheduler.last
   @game.parameter_hash.should == @game_scheduler.parameter_hash
-  Profile.where(:_id.in => @game.profile_ids).order_by(:proto_string).to_a.should == Profile.where(:_id.in => @game_scheduler.profile_ids).order_by(:proto_string).to_a
+  Profile.where(:_id.in => @game.profile_ids).order_by(:name).to_a.should == Profile.where(:_id.in => @game_scheduler.profile_ids).order_by(:name).to_a
   Profile.count.should == @game.profile_ids.size
 end

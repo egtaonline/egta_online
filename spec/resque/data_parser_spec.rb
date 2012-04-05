@@ -3,11 +3,10 @@ require 'spec_helper'
 describe "#testing new data_parser" do
   before do
     ResqueSpec.reset!
-    Account.create(username: "bcassell", active: true, skip: true)
+    Account.new(username: "bcassell", active: true).save(:validate => false)
   end
 
-  let!(:strategy){Fabricate(:strategy, :name => 'BayesianPricing:noRA:0')}
-  let!(:profile){Fabricate(:profile)}
+  let!(:profile){Fabricate(:profile, :name => "All: 2 BayesianPricing:noRA:0")}
   let!(:simulation){Simulation.create!(profile_id: profile.id, size: 5, state: "queued", number: 3, account_id: Account.last.id)}
   it "the new data parser should make sample_records" do
     DataParser.perform(3)
@@ -21,7 +20,5 @@ describe "#testing new data_parser" do
     role.strategy_instances.where(:name => "BayesianPricing:noRA:0").first.payoff_std[3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
     arr = [0.514654571782549, 0.51264473859671, 0.47771494416184, 0.484695863045296, 0.453008291906072]
     avg = (eval arr.join('+'))/5
-    profile.feature_avgs["average_dividend"].should == avg
-    profile.feature_stds["average_dividend"][3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
   end
 end

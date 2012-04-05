@@ -13,14 +13,15 @@ class DeviationScheduler < GameScheduler
   
   def add_deviating_strategy(role_name, strategy_name)
     role_i = deviating_roles.find_or_create_by(name: role_name)
-    role_i.strategies << ::Strategy.find_or_create_by(:name => strategy_name)
+    role_i.strategies << strategy_name
+    role_i.strategies.sort!
     role_i.save!
     Resque.enqueue(ProfileAssociater, self.id)
   end
   
   def remove_deviating_strategy(role, strategy_name)
     role_i = deviating_roles.where(name: role).first
-    role_i.strategies = role_i.strategies.where(:name.ne => strategy_name)
+    role_i.strategies.delete(strategy_name)
     role_i.save!
     self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
     self.save
@@ -28,7 +29,7 @@ class DeviationScheduler < GameScheduler
   
   def unused_strategies(role)
     deviating_role = deviating_roles.where(:name => role.name).first
-    simulator.roles.where(name: role.name).first.strategy_names-role.strategy_names-(deviating_role == nil ? [] : deviating_role.strategy_names)
+    simulator.roles.where(name: role.name).first.strategies-role.strategies-(deviating_role == nil ? [] : deviating_role.strategies)
   end
   
   def ensure_profiles
@@ -38,7 +39,7 @@ class DeviationScheduler < GameScheduler
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
-      combinations = role.strategy_numbers.repeated_combination(role.count)
+      combinations = role.strategies.repeated_combination(role.count)
       if first_ar == nil
         first_ar = combinations.collect{|c| [role.name].concat(c) }
       else
@@ -47,17 +48,17 @@ class DeviationScheduler < GameScheduler
     end
     deviations = {}
     deviating_roles.each do |role|
-      deviation = role.strategy_names.product(roles.where(:name => role.name).first.strategy_names.repeated_combination(role.count-1).to_a)
-      deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort.collect{|s| ::Strategy.where(:name => s).first.number}) }
+      deviation = role.strategies.product(roles.where(:name => role.name).first.strategies.repeated_combination(role.count-1).to_a)
+      deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
     end
     profs = []
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
       first_ar.concat(deviations[roles.first.name])
-      profs = first_ar.collect {|r| "#{r[0]}: #{r.drop(1).join(", ")}"}
+      profs = first_ar.collect {|r| format_role(r)}
     else
       first_ar.product(*all_other_ars).each do |prof|
         prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| "#{r[0]}: #{r.drop(1).join(", ")}"}.join("; ")
+        profs << prof.collect {|r| format_role(r)}.join("; ")
       end
       all_other_ars << first_ar
 
@@ -65,7 +66,7 @@ class DeviationScheduler < GameScheduler
         non_deviations = all_other_ars.select{|val| val[0][0] != key}
         value.product(*non_deviations).each do |prof|
           prof.sort!{|x, y| x[0] <=> y[0]}
-          profs << prof.collect {|r| "#{r[0]}: #{r.drop(1).join(", ")}"}.join("; ")
+          profs << prof.collect {|r| format_role(r)}.join("; ")
         end
       end
     end

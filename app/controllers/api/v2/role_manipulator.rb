@@ -9,7 +9,7 @@ module Api::V2::RoleManipulator
   end
   
   def add_strategy
-    if @object.roles.where(:name => params[:role]).count == 0 || @object.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+    if @object.roles.where(:name => params[:role]).count == 0 || @object.roles.where(:name => params[:role]).first.strategies.include?(params[:strategy]) == false
       @object.add_strategy(params[:role], params[:strategy])
       respond_with(@object)
     else
@@ -29,7 +29,7 @@ module Api::V2::RoleManipulator
   def remove_strategy
     if @object.roles.where(:name => params[:role]).count == 0
       respond_with({:error => "the role did not exist"}, :status => 404, :location => nil)
-    elsif @object.roles.where(:name => params[:role]).first.strategies.where(:name => params[:strategy]).count == 0
+    elsif @object.roles.where(:name => params[:role]).first.strategies.include?(params[:strategy]) == false
       respond_with({:message => "the role did not exist"}, :status => 204, :location => nil)
     else
       @object.remove_strategy(params[:role], params[:strategy])

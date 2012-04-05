@@ -37,7 +37,7 @@ describe "GameSchedulers" do
         page.should have_content("Strat1")
         page.should_not have_content("Some errors were found")
         described_class.last.roles.last.strategies.count.should eql(1)
-        described_class.last.roles.last.strategies.last.name.should eql("Strat1")
+        described_class.last.roles.last.strategies.last.should eql("Strat1")
       end
     end
 
