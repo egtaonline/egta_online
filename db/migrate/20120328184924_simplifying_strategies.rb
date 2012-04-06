@@ -15,6 +15,7 @@ class SimplifyingStrategies < Mongoid::Migration
         Strategy.where(:_id.in => r.strategy_ids).each do |strat|
           r.strategies << strat.name
         end
+        r.save
       end
       s.save
       s.reload
