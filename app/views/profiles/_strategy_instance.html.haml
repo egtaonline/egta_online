@@ -1,5 +1,5 @@
 %tr
   %td= role_instance.name
   %td= strategy_instance.name
-  %td= strategy_instance.payoff
-  %td= strategy_instance.payoff_std[3]
+  %td= profile.payoff(role_instance.name, strategy_instance.name)
+  %td= profile.payoff_std(role_instance.name, strategy_instance.name)

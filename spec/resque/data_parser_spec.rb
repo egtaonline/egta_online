@@ -14,11 +14,8 @@ describe "#testing new data_parser" do
     profile.sample_records.count.should == 5
     profile.sample_count.should == 5
     arr = [2992.73172891313, 2991.94137519601, 2957.24141614658, 2957.60372235637, 2931.17122038337]
-    avg = (eval arr.join('+'))/5
-    role = profile.role_instances.where(name: "All").first
-    role.strategy_instances.where(:name => "BayesianPricing:noRA:0").first.payoff.should == avg
-    role.strategy_instances.where(:name => "BayesianPricing:noRA:0").first.payoff_std[3].round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
-    arr = [0.514654571782549, 0.51264473859671, 0.47771494416184, 0.484695863045296, 0.453008291906072]
-    avg = (eval arr.join('+'))/5
+    avg = (arr.reduce(:+))/5
+    profile.payoff("All", "BayesianPricing:noRA:0") == avg
+    profile.payoff_std("All", "BayesianPricing:noRA:0").round(7).should == Math.sqrt(0.25*arr.collect{|i| (i-avg)**2}.reduce(:+)).round(7)
   end
 end
