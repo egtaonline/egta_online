@@ -53,7 +53,7 @@ class Profile
     self.size = 0
     name.split("; ").each do |atom|
       role = self.role_instances.find_or_create_by(name: atom.split(": ")[0])
-      role_size = atom.split(": ")[1].split(", ").reduce(:+){|sum, val| val.split(" ")[0].to_i}
+      role_size = atom.split(": ")[1].split(", ").reduce(0){|sum, val| sum+val.split(" ")[0].to_i}
       self["Role_#{role.name}_count"] = role_size
       atom.split(": ")[1].split(", ").each do |strat|
         role.strategy_instances.find_or_create_by(:name => strat.split(" ")[1], :count => strat.split(" ")[0].to_i)

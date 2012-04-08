@@ -17,6 +17,8 @@ describe Profile do
       profile.role_instances.first.strategy_instances.last.name.should eql("Strat2")
       profile.role_instances.last.name.should eql("Seller")
       profile.role_instances.last.strategy_instances.last.name.should eql("Strat3")
+      profile["Role_Bidder_count"].should eql(2)
+      profile["Role_Seller_count"].should eql(2)
       profile.size.should eql(4)
     end
   end
