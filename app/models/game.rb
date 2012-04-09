@@ -27,9 +27,9 @@ class Game
 
   def add_roles_from_scheduler(scheduler)
     multiplier = (scheduler["agents_per_player"] == nil ? 1 : scheduler["agents_per_player"])
-    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count*multiplier); r.strategies.each{|s| add_strategy(r.name, s.name)}}
+    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count*multiplier); r.strategies.each{|s| add_strategy(r.name, s)}}
     if scheduler.is_a? DeviationScheduler
-      scheduler.deviating_roles.each{|r| r.strategies.each{|s| add_strategy(r.name, s.name)}}
+      scheduler.deviating_roles.each{|r| r.strategies.each{|s| add_strategy(r.name, s)}}
     end
   end
   
