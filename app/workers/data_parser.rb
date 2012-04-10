@@ -8,11 +8,13 @@ class DataParser
     File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
     begin
       payoff_data.size.times do |i|
-        feature_hash_record = {}
-        feature_hash.keys.each do |key|
-          feature_hash_record[key] = feature_hash[key][i]
+        if fully_numeric?(payoff_data[i])
+          feature_hash_record = {}
+          feature_hash.keys.each do |key|
+            feature_hash_record[key] = feature_hash[key][i]
+          end
+          Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], features: feature_hash_record)
         end
-        Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], features: feature_hash_record)
       end
       Simulation.where(number: number).first.finish!
     rescue => e
@@ -32,5 +34,18 @@ class DataParser
       end
     end
     return feature_hash
+  end
+  
+  def self.fully_numeric?(hash)
+    hash.each do |key, value|
+      value.each do |subkey, subvalue|
+        return false if (numeric?(subvalue) == false || subvalue.to_s == "NaN")
+      end
+    end
+    true
+  end
+  
+  def self.numeric?(object)
+    true if Float(object) rescue false
   end
 end

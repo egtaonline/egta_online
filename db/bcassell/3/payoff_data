@@ -9,6 +9,9 @@ All:
   BayesianPricing:noRA:0: 2957.24141614658
 ---
 All:
+  BayesianPricing:noRA:0: .NaN
+---
+All:
   BayesianPricing:noRA:0: 2957.60372235637
 ---
 All:
