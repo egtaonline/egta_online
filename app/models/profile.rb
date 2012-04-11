@@ -17,6 +17,7 @@ class Profile
 
   index ([[:simulator_id,  Mongo::ASCENDING], [:parameter_hash, Mongo::ASCENDING], [:size, Mongo::ASCENDING], [:sample_count, Mongo::ASCENDING]])
 
+  validates_format_of :name, :with => /\A(\w+: (\d+ \S+, )*\d+ \S+; )*\w+: (\d+ \S+, )*\d+ \S+\z/
   validates_presence_of :simulator, :name, :parameter_hash
   validates_uniqueness_of :name, scope: [:simulator_id, :parameter_hash]
   delegate :fullname, :to => :simulator, :prefix => true

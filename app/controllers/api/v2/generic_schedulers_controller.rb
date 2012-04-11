@@ -2,7 +2,7 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
   before_filter :find_scheduler, :only => [:add_profile, :update, :destroy]
   
   def create
-    scheduler = GenericScheduler.create(params[:generic_scheduler])
+    scheduler = GenericScheduler.create(params[:scheduler])
     if scheduler.valid?
       respond_with(scheduler, :location => api_v2_generic_scheduler_path(scheduler))
     else
@@ -11,7 +11,7 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
   end
   
   def update
-    @scheduler.update_attributes(params[:generic_scheduler])
+    @scheduler.update_attributes(params[:scheduler])
     respond_with(@scheduler)
   end
   
