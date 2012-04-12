@@ -32,8 +32,11 @@ class Simulator
       errors.add(:simulator_source, "Upload could not be unzipped.")
       return
     end
-    if File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
-      errors.add(:simulator_source, "Upload was missing a simulation_spec.yaml configuration file.")
+    if File.exists?("#{location}/#{name}") == false
+      errors.add(:simulator_source, "did not produce a folder named #{name} when unzipped.")
+      return
+    elsif File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
+      errors.add(:simulator_source, "was missing a simulation_spec.yaml configuration file.")
       return
     else
       begin
@@ -45,7 +48,7 @@ class Simulator
         self.parameter_hash = parameters
         Resque.enqueue(SimulatorInitializer, self.id)
       rescue
-        errors.add(:simulator_source, "Upload had a malformed simulation_spec.yaml file.")
+        errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")
       end
     end
   end

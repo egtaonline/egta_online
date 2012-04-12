@@ -35,16 +35,22 @@ describe Simulator do
       SimulatorInitializer.should have_queued(simulator.id)
     end
     
+    it "should complain if the unzipped folder doesn't match the name" do
+      simulator = Fabricate.build(:simulator_realistic, :name => "fake", :version => "true", :simulator_source => File.new("#{Rails.root}/spec/support/epp_sim.zip"))
+      simulator.should have(1).error_on(:simulator_source)
+      simulator.errors[:simulator_source].should include("did not produce a folder named #{simulator.name} when unzipped.")
+    end
+    
     it "should inform the user of a missing simulation_spec.yaml" do
       simulator = Fabricate.build(:simulator_realistic, :name => "fake", :simulator_source => File.new("#{Rails.root}/spec/support/fake.zip"))
       simulator.should have(1).error_on(:simulator_source)
-      simulator.errors[:simulator_source].should include("Upload was missing a simulation_spec.yaml configuration file.")
+      simulator.errors[:simulator_source].should include("was missing a simulation_spec.yaml configuration file.")
     end 
     
     it "should inform the user of a malformed simulation_spec.yaml" do
       simulator = Fabricate.build(:simulator_realistic, :name => "fake2", :simulator_source => File.new("#{Rails.root}/spec/support/fake2.zip"))
       simulator.should have(1).error_on(:simulator_source)
-      simulator.errors[:simulator_source].should include("Upload had a malformed simulation_spec.yaml file.")
+      simulator.errors[:simulator_source].should include("had a malformed simulation_spec.yaml file.")
     end
   end
   
