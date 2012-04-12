@@ -5,22 +5,29 @@ class DataParser
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account_username}")
     feature_hash = create_feature_hash(number, location)
     payoff_data = Array.new
-    File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
     begin
-      payoff_data.size.times do |i|
-        if fully_numeric?(payoff_data[i])
-          feature_hash_record = {}
-          feature_hash.keys.each do |key|
-            feature_hash_record[key] = feature_hash[key][i]
-          end
-          Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], features: feature_hash_record)
-        end
-      end
-      Simulation.where(number: number).first.finish!
+      File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
     rescue => e
       Simulation.where(number: number).first.update_attribute(:error_message, "Payoff data was malformed")
       Simulation.where(number: number).first.failure!
+      return
     end
+    payoff_data.size.times do |i|
+      if fully_numeric?(payoff_data[i])
+        feature_hash_record = {}
+        feature_hash.keys.each do |key|
+          feature_hash_record[key] = feature_hash[key][i]
+        end
+        begin
+          Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], features: feature_hash_record)
+        rescue => e
+          Simulation.where(number: number).first.update_attribute(:error_message, "Problem with sample record number #{i}")
+          Simulation.where(number: number).first.failure!
+          return
+        end
+      end
+    end
+    Simulation.where(number: number).first.finish!
   end
 
   def self.create_feature_hash(number, location)
