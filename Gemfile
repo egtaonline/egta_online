@@ -46,6 +46,8 @@ gem 'validates_email_format_of'
 
 group :development do
   gem 'rvm-capistrano'
+  gem 'thin'
+  gem 'quiet_assets'
 end
 
 group :test, :development do
