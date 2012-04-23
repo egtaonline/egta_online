@@ -17,11 +17,11 @@ describe "Features" do
   describe "DELETE /games/:game_id/features/:id" do
     it "destroys the relevant feature, leaving the others" do
       game = Fabricate(:game)
-      feature1 = Fabricate(:feature, :game => game)
-      feature2 = Fabricate(:feature, :game => game)
+      feature1 = Fabricate(:feature, :cv_manager => game.cv_manager)
+      feature2 = Fabricate(:feature, :cv_manager => game.cv_manager)
       visit game_path(game.id)
       click_on "Remove Feature"
-      Game.last.features.count.should eql(1)
+      Game.last.cv_manager.features.count.should eql(1)
       page.should have_content("Inspect Game")
     end
   end

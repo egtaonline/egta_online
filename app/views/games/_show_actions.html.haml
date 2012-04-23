@@ -6,7 +6,7 @@
       %th Name
       %th Expected Value
   %tbody
-    =render :partial => "feature", :collection => game.features
+    =render :partial => "feature", :collection => game.cv_manager.features
     %tr
       =form_tag game_features_path(game), :method=>:post do
         %td= text_field_tag "name", nil, size: 30, placeholder: "Name"

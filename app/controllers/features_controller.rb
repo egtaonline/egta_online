@@ -4,12 +4,12 @@ class FeaturesController < ApplicationController
   expose(:game) { Game.find(params[:game_id]) }
 
   def create
-    game.features.create(params)
+    game.cv_manager.features.create(params)
     respond_with(game)
   end
   
   def destroy
-    game.features.find(params[:id]).destroy
+    game.cv_manager.remove_feature(params[:id])
     respond_with(game)
   end
 end

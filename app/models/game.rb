@@ -7,7 +7,7 @@ class Game
   field :size, type: Integer
   field :simulator_fullname
   embeds_many :roles, :as => :role_owner
-  embeds_many :features
+  embeds_one :cv_manager
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true
@@ -15,7 +15,7 @@ class Game
   validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :find_profiles
-  before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
+  before_save(:on => :create){self.cv_manager = CvManager.new; self.simulator_fullname = self.simulator.fullname}
 
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
