@@ -36,4 +36,12 @@ class GenericScheduler < Scheduler
     end
     profile
   end
+  
+  def remove_profile(profile_id)
+    self.profiles = self.profiles.where(:_id.ne => profile_id)
+    hash = {}
+    self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}
+    self.sample_hash = hash
+    self.save
+  end
 end

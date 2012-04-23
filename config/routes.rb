@@ -6,7 +6,7 @@ EgtaOnline::Application.routes.draw do
     namespace :v2 do
       resources :generic_schedulers, :except => ["new", "edit"] do
         member do
-          post :add_profile
+          post :add_profile, :remove_profile
         end
       end
       resources :simulators, :games, :only => [:show, :index] do

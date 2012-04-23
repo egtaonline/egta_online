@@ -1,5 +1,6 @@
 class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
-  before_filter :find_scheduler, :only => [:add_profile, :update, :destroy]
+  before_filter :find_scheduler, :only => [:add_profile, :remove_profile, :update, :destroy]
+  before_filter :find_profile, :only => :remove_profile
   
   def create
     scheduler = GenericScheduler.create(params[:scheduler])
@@ -37,6 +38,11 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
     end
   end
   
+  def remove_profile
+    @scheduler.remove_profile(@profile.id)
+    respond_with(@scheduler)
+  end
+  
   private
   
   def find_scheduler
@@ -44,6 +50,14 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
       @scheduler = GenericScheduler.find(params[:id])
     rescue
       respond_with({:error => "the scheduler you were looking for could not be found"}, :status => 404, :location => nil)
+    end
+  end
+  
+  def find_profile
+    begin
+      @profile = Profile.find(params[:profile_id])
+    rescue
+      respond_with({:error => "the profile you were looking for could not be found"}, :status => 404, :location => nil)
     end
   end
 end
