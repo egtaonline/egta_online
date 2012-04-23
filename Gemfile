@@ -44,6 +44,11 @@ gem 'high_voltage'
 gem "capistrano"
 gem 'validates_email_format_of'
 
+# Math
+gem 'gsl', :github => 'romanbsd/rb-gsl'
+gem 'statsample'
+gem 'statsample-optimization'
+
 group :development do
   gem 'rvm-capistrano'
   gem 'thin'

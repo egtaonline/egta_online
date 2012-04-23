@@ -5,6 +5,8 @@ Spork.prefork do
 
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require "rails/mongoid"
+  Spork.trap_class_method(Rails::Mongoid, :load_models)
   require 'capybara/rspec'
   require 'fabrication'
   Capybara.default_selector = :css
