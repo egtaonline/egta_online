@@ -94,6 +94,14 @@ describe "/api/v2/generic_schedulers", :type => :api do
       Profile.where(:name => "Bidder: 2 A; Seller: 2 B").count.should eql(1)
       Scheduler.last.profiles.count.should eql(1)
     end
+    it "should only add the profile once, even if you invoke it multiple times with rearrangements to the name" do
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 A, 1 B; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 B, 1 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 B, 1 A", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 A, 1 B", :sample_count => 10
+      Profile.where(:name => "Bidder: 1 A, 1 B; Seller: 2 B").count.should eql(1)
+      Scheduler.last.profiles.count.should eql(1)
+    end
   end
    
    context "adding a new profile to an invalid scheduler" do
