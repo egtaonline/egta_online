@@ -4,10 +4,7 @@ attributes :id, :sample_count
 child :role_instances => :roles do |r|
   attribute :name
   child :strategy_instances => :strategies do |s|
-    attributes :name, :count, :payoff
-    node :payoff_std do |s|
-      s.payoff_std[3]
-    end
+    attributes :name, :count, :payoff, :payoff_sd
   end
 end
 if @full == "true"

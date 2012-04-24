@@ -10,6 +10,6 @@
     =render :partial => "feature", :collection => game.cv_manager.features
     %tr
       =form_tag game_features_path(game), :method=>:post do
-        %td= text_field_tag "name", nil, size: 30, placeholder: "Name"
-        %td= text_field_tag "expected_value", nil, size: 30, placeholder: "Expected Value"
+        %td= text_field_tag "feature[name]", nil, size: 30, placeholder: "Name"
+        %td= text_field_tag "feature[expected_value]", nil, size: 30, placeholder: "Expected Value"
         %td= submit_tag "Add Feature", :class => 'btn btn-mini btn-primary'

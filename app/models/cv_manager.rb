@@ -29,13 +29,14 @@ class CvManager
         end
       end
     end
-    feature_hash.each{|key, value| feature_hash[key] = feature_hash[key].to_scale}
-    ds = feature_hash.to_dataset
-    ds['payoff'] = payoffs.to_scale
-    lr = Statsample::Regression.multiple(ds, 'payoff')
-    puts lr.inspect
-    self.features.each do |feature|
-      feature.update_attribute(:adjustment_coefficient, lr.coeffs[feature.name])
+    if payoffs != []
+      feature_hash.each{|key, value| feature_hash[key] = feature_hash[key].to_scale}
+      ds = feature_hash.to_dataset
+      ds['payoff'] = payoffs.to_scale
+      lr = Statsample::Regression.multiple(ds, 'payoff')
+      self.features.each do |feature|
+        feature.update_attribute(:adjustment_coefficient, lr.coeffs[feature.name])
+      end
     end
   end
 end

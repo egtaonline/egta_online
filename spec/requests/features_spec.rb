@@ -6,8 +6,8 @@ describe "Features" do
     it "creates a feature on the game" do
       game = Fabricate(:game)
       visit game_path(game.id)
-      fill_in "name", :with => "feature1"
-      fill_in "expected_value", :with => "0.5"
+      fill_in "feature_name", :with => "feature1"
+      fill_in "feature_expected_value", :with => "0.5"
       click_button "Add Feature"
       page.should have_content("feature1")
       page.should have_content("0.5")
