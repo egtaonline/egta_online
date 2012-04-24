@@ -19,7 +19,7 @@ class SimulationQueuer
       end
     end
     if simulations != nil && simulations != []
-      schedule(Simulation.any_in(_id: simulations.collect{|s| s.id}))
+      schedule(Simulation.pending.any_in(_id: simulations.collect{|s| s.id}))
       cleanup
     end
   end
