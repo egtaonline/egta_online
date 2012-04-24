@@ -7,7 +7,7 @@ class Game
   field :size, type: Integer
   field :simulator_fullname
   embeds_many :roles, :as => :role_owner
-  embeds_one :cv_manager, :as => :adjustable
+  embeds_one :cv_manager
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator, :index => true

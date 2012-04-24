@@ -4,7 +4,7 @@ class FeaturesController < ApplicationController
   expose(:game) { Game.find(params[:game_id]) }
 
   def create
-    game.cv_manager.features.create(params)
+    game.cv_manager.features.create(params[:feature])
     respond_with(game)
   end
   

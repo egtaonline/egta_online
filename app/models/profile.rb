@@ -53,8 +53,6 @@ class Profile
     Resque.enqueue(ProfileScheduler, id)
   end
   
-  protected
-  
   def generate_roles
     self.size = 0
     name.split("; ").each do |atom|
