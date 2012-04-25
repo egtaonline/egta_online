@@ -76,9 +76,13 @@ class SimulationQueuer
                 end
                 channel.wait
               end
-            rescue
-              s.error_message = "failed in the submission step"
-              s.failure!
+            rescue Exception => e
+              if s.state != 'failed'
+                s.error_message = "failed in the submission step: #{e.message}"
+                s.failure!
+              else
+                puts e.message
+              end
             end
           end
         end
