@@ -69,8 +69,12 @@ class SimulationQueuer
                       s.job_id = job_return
                       s.save!
                     else
-                      s.error_message = "submission failed: #{job_return}"
-                      s.failure!
+                      if state != 'failed'
+                        s.error_message = "submission failed: #{job_return}"
+                        s.failure!
+                      else
+                        puts e.message
+                      end
                     end
                   end
                 end
