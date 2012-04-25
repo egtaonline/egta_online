@@ -4,6 +4,13 @@ class CvManager
   embedded_in :game
   embeds_many :features
   
+  def add_feature(feature_params)
+    f = self.features.create(feature_params)
+    if f.persisted?
+      self.calculate_coefficients
+    end
+  end
+  
   def remove_feature(feature_id)
     self.features.where(:_id => feature_id).destroy_all
     self.calculate_coefficients if self.features.count > 0
@@ -16,14 +23,12 @@ class CvManager
       profile.sample_records.collect do |sample_record|
         flag = true
         self.features.each do |feature|
-          if sample_record.features[feature.name] != nil
-            feature_hash[feature.name] << sample_record.features[feature.name]
-          else
-            flag = false
-            break
-          end
+          flag = false if sample_record.features[feature.name] == nil
         end
         if flag
+          self.features.each do |feature|
+            feature_hash[feature.name] << sample_record.features[feature.name]
+          end
           payoff_array = sample_record.payoffs.values.collect{|r| r.values}.flatten
           payoffs << payoff_array.reduce(:+)/payoff_array.size
         end

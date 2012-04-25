@@ -39,6 +39,11 @@ class Game
     profiles.where(query_hash)
   end
   
+  def calculate_cv_coefficients
+    #Resque.enqueue(CvCoefficientCalculator, id)
+    cv_manager.calculate_coefficients
+  end
+  
   private
   
   def strategy_regex

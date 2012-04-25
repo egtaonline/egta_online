@@ -58,18 +58,17 @@ class GamesController < ApplicationController
     end
   end
 
+  def calculate_cv_coefficients
+    game.calculate_cv_coefficients
+    respond_with(game)
+  end
+
   def show
     respond_to do |format|
       format.html
       # come back and speed up sample issue
       format.xml { @profiles = game.display_profiles }
-      format.json { @object = game; render "api/v2/games/show" }
-    end
-  end
-  
-  def show_with_samples
-    respond_to do |format|
-      format.json { @object = game; @full = 'true'; render "api/v2/games/show" }
+      format.json { @object = game; @full = params[:full]; @adjusted = params[:adjusted]; render "api/v2/games/show" }
     end
   end
   

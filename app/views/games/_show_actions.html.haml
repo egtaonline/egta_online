@@ -13,3 +13,5 @@
         %td= text_field_tag "feature[name]", nil, size: 30, placeholder: "Name"
         %td= text_field_tag "feature[expected_value]", nil, size: 30, placeholder: "Expected Value"
         %td= submit_tag "Add Feature", :class => 'btn btn-mini btn-primary'
+= link_to "(Re-)Calculate CV Coefficients", url_for(:action => "calculate_cv_coefficients"), :method=>:post, :class => 'btn btn-primary'
+= link_to "Download CV-Adjusted JSON", url_for(:action => "show", :format => "json", :adjusted => "true"), :class => 'btn btn-primary'

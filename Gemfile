@@ -45,7 +45,6 @@ gem "capistrano"
 gem 'validates_email_format_of'
 
 # Math
-gem 'gsl', :github => 'romanbsd/rb-gsl'
 gem 'statsample'
 gem 'statsample-optimization'
 
@@ -56,6 +55,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'gsl', :github => 'romanbsd/rb-gsl'
   gem "rspec-rails"
 end
 
