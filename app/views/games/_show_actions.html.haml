@@ -1,5 +1,5 @@
 #roles= render :partial => "roles/roles_table", :locals => {:role_owner => game}
-%h3 Features
+%h3 Control Variables
 %table.table
   %thead
     %tr
@@ -15,3 +15,4 @@
         %td= submit_tag "Add Feature", :class => 'btn btn-mini btn-primary'
 = link_to "(Re-)Calculate CV Coefficients", url_for(:action => "calculate_cv_coefficients"), :method=>:post, :class => 'btn btn-primary'
 = link_to "Download CV-Adjusted JSON", url_for(:action => "show", :format => "json", :adjusted => "true"), :class => 'btn btn-primary'
+= link_to "Download CV-Adjusted JSON with Samples", url_for(:action => "show", :format => "json", :adjusted => "true", :full => "true"), :class => 'btn btn-primary'
