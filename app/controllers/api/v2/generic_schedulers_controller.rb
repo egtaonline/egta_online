@@ -26,10 +26,12 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
   end
   
   def add_profile
+    puts "Adding profile"
     if params[:sample_count].to_i == 0
       respond_with({:error => "the provided sample count was either not a number or 0"}, :status => 406, :location => nil)
     else
       profile = @scheduler.add_profile(params[:profile_name], params[:sample_count].to_i)
+      puts profile.errors.inspect
       if profile.valid?
         respond_with(profile, :location => profile_path(profile))
       else

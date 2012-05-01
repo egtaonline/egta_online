@@ -60,7 +60,7 @@ class SimulationQueuer
                     s.error_message = "submission failed: #{data}"
                     s.failure!
                   else
-                  job_return = data
+                    job_return = data
                     puts "[#{ch[:host]} : #{stream}] #{data}"
                     job_return.strip! if job_return != nil
                     job_return = job_return.split(".").first
