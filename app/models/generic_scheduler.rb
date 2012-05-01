@@ -25,6 +25,7 @@ class GenericScheduler < Scheduler
   end
   
   def add_profile(profile_name, sample_count=self["max_samples"])
+    profile_name = Profile.order_name(profile_name)
     profile = Profile.find_or_create_by(simulator_id: self.simulator_id,
                                             parameter_hash: self.parameter_hash,
                                             name: profile_name)

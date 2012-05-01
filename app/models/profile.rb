@@ -22,11 +22,15 @@ class Profile
   validates_uniqueness_of :name, scope: [:simulator_id, :parameter_hash]
   delegate :fullname, :to => :simulator, :prefix => true
 
-  before_validation :order_name, :on => :create
+  before_validation :order_own_name, :on => :create
   after_create :generate_roles, :find_games
 
-  def order_name
-    self.name = self.name.split("; ").collect{|r| r.split(": ")[0]+": "+r.split(": ")[1].split(", ").sort{|x, y| x.split(" ")[1] <=> y.split(" ")[1]}.join(", ")}.sort.join("; ")
+  def order_own_name
+    self.name = Profile.order_name(self.name)
+  end
+
+  def self.order_name(to_be_ordered)
+    to_be_ordered.split("; ").collect{|r| r.split(": ")[0]+": "+r.split(": ")[1].split(", ").sort{|x, y| x.split(" ")[1] <=> y.split(" ")[1]}.join(", ")}.sort.join("; ")
   end
 
   def as_map
