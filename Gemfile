@@ -74,3 +74,5 @@ group :test do
   gem "guard-spork"
   gem "resque_spec"
 end
+
+gem 'debugger'
