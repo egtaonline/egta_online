@@ -19,7 +19,8 @@ if @adjusted == "true"
       end
     end
     child :display_profiles => :profiles do |p|
-      attributes :id, :sample_count
+      attributes :id
+      node(:sample_count){|m| m.sample_count-10}
       child :role_instances => :roles do |r|
         attribute :name
         child :strategy_instances => :strategies do |s|
@@ -31,7 +32,8 @@ if @adjusted == "true"
     end
   else
     child :display_profiles => :profiles do |p|
-      attributes :id, :sample_count
+      attributes :id
+      node(:sample_count){|m| m.sample_count-10}
       child :role_instances => :roles do |r|
         attribute :name
         child :strategy_instances => :strategies do |s|
@@ -40,7 +42,7 @@ if @adjusted == "true"
           node(:payoff_sd){|m| @payoffs.sd }
         end
       end
-      child :sample_records do |s|
+      child :adjusted_sample_records => :sample_records do |s|
         node(:payoffs){|m| m.adjusted_payoffs(@object.cv_manager)}
         attribute :features
       end

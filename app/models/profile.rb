@@ -44,6 +44,10 @@ class Profile
     profile_map
   end
 
+  def adjusted_sample_records
+    self.sample_records.skip(10)
+  end
+  
   def strategy_count(role, strategy)
     role = role_instances.where(:name => role).first
     role == nil ? 0 : role.strategy_count(strategy)
