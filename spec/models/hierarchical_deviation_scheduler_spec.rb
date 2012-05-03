@@ -73,9 +73,9 @@ describe HierarchicalDeviationScheduler do
       scheduler.add_deviating_strategy("Seller", "B")
       scheduler.add_deviating_strategy("Seller", "C")
       ResqueSpec.perform_all(:profile_actions)
-      Profile.count.should eql(11)
-      scheduler.reload
       scheduler.remove_deviating_strategy("Seller", "C")
+      ResqueSpec.perform_all(:profile_actions)
+      scheduler.reload
       scheduler.profiles.count.should eql(8)
       Profile.count.should eql(11)
     end

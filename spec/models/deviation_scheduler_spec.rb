@@ -98,6 +98,8 @@ describe "DeviationSchedulers" do
         Profile.count.should eql(11)
         scheduler3.reload
         scheduler3.remove_deviating_strategy("Seller", "C")
+        ResqueSpec.perform_all(:profile_actions)
+        scheduler3.reload
         scheduler3.profiles.count.should eql(8)
         Profile.count.should eql(11)
       end

@@ -23,8 +23,8 @@ class DeviationScheduler < GameScheduler
     role_i = deviating_roles.where(name: role).first
     role_i.strategies.delete(strategy_name)
     role_i.save!
-    self.profiles -= self.profiles.with_role_and_strategy(role, strategy_name)
     self.save
+    Resque.enqueue(ProfileAssociater, self.id)
   end
   
   def unused_strategies(role)
