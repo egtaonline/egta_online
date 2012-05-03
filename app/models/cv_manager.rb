@@ -6,21 +6,19 @@ class CvManager
   
   def add_feature(feature_params)
     f = self.features.create(feature_params)
-    if f.persisted?
-      self.calculate_coefficients
-    end
+    self.save
   end
   
   def remove_feature(feature_id)
     self.features.where(:_id => feature_id).destroy_all
-    self.calculate_coefficients if self.features.count > 0
+    self.save
   end
   
   def calculate_coefficients
     payoffs = []
     feature_hash = Hash.new {|hash, key| hash[key] = []}
     self.game.display_profiles.each do |profile|
-      profile.sample_records.collect do |sample_record|
+      profile.sample_records.limit(10).collect do |sample_record|
         flag = true
         self.features.each do |feature|
           flag = false if sample_record.features[feature.name] == nil

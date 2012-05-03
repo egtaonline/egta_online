@@ -17,7 +17,7 @@ class StrategyInstance
   end
   
   def adjusted_payoffs(cv_manager)
-    role_instance.profile.sample_records.collect do |s|
+    role_instance.profile.sample_records.skip(10).collect do |s|
       s.payoffs[role_instance.name][self.name]-(cv_manager.features.collect{|feature| s.features[feature.name] == nil ? 0 : feature.adjustment_coefficient*(s.features[feature.name]-feature.expected_value)}.reduce(:+))
     end.to_scale
   end

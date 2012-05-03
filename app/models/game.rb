@@ -40,8 +40,7 @@ class Game
   end
   
   def calculate_cv_coefficients
-    #Resque.enqueue(CvCoefficientCalculator, id)
-    cv_manager.calculate_coefficients
+    Resque.enqueue(CvCoefficientCalculator, id)
   end
   
   private
