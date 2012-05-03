@@ -78,6 +78,8 @@ describe GameScheduler do
         game_scheduler = described_class.where(:size => 3).first
         game_scheduler.profiles.size.should eql(6)
         game_scheduler.remove_strategy("Seller", "A")
+        ResqueSpec.perform_all(:profile_actions)
+        game_scheduler.reload
         game_scheduler.profiles.size.should eql(3)
         Profile.count.should eql(6)
       end

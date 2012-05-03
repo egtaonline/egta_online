@@ -9,6 +9,8 @@ class ProfileAssociater
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
       names = scheduler.ensure_profiles
+      scheduler.profiles -= scheduler.profiles.where(:name.nin => names)
+      names -= scheduler.profiles.collect{|profile| profile.name}
       names.each do |name|
         profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
                                                 parameter_hash: scheduler.parameter_hash,

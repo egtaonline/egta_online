@@ -69,6 +69,6 @@ class Simulation
   end
 
   def requeue
-    Resque.enqueue(ProfileScheduler, profile.id)
+    self.profile.try_scheduling
   end
 end

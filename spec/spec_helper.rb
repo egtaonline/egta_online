@@ -9,6 +9,7 @@ Spork.prefork do
   Spork.trap_class_method(Rails::Mongoid, :load_models)
   require 'capybara/rspec'
   require 'fabrication'
+  require 'resque_spec/scheduler'
   Capybara.default_selector = :css
   Capybara.javascript_driver = :webkit
   

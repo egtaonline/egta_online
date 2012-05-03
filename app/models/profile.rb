@@ -54,7 +54,7 @@ class Profile
   end
 
   def try_scheduling
-    Resque.enqueue(ProfileScheduler, id)
+    Resque.enqueue_in(5.minutes, ProfileScheduler, id)
   end
   
   def generate_roles

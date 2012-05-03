@@ -57,6 +57,7 @@ end
 group :test, :development do
   gem 'gsl', :github => 'romanbsd/rb-gsl'
   gem "rspec-rails"
+  gem 'debugger'
 end
 
 group :test do

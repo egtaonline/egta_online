@@ -85,6 +85,10 @@ Given /^there is a simulator with corresponding game scheduler$/ do
   end
 end
 
+Then /^I should have (\d+) profile to be scheduled$/ do |arg1|
+  ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)
+end
+
 Then /^that game should match the game scheduler$/ do
   @game = Game.last
   @game_scheduler = Scheduler.last

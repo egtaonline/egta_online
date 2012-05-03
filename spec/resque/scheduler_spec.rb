@@ -22,7 +22,8 @@ describe "#testing updates" do
     scheduler.update_attribute(:parameter_hash, {a: 3})
     ProfileAssociater.should have_queued(scheduler.id)
     ResqueSpec.perform_all(:profile_actions)
-    Simulation.count.should == 2
+    ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)
+    Simulation.count.should == 1
     Profile.count.should == 2
     Scheduler.last.profile_ids.count.should == 1
   end
