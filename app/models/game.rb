@@ -14,11 +14,16 @@ class Game
   index :parameter_hash
   validates_presence_of :simulator, :name, :size
   has_and_belongs_to_many :profiles, :inverse_of => nil
-  after_create :find_profiles
-  before_save(:on => :create){self.cv_manager = CvManager.new; self.simulator_fullname = self.simulator.fullname}
+  after_create :add_cv_manager, :find_profiles
+  before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
 
   def find_profiles
     Resque.enqueue(ProfileGatherer, id)
+  end
+
+  def add_cv_manager
+    self.cv_manager = CvManager.new
+    self.save
   end
 
   def self.new_game_from_scheduler(scheduler)
