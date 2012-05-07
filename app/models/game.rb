@@ -10,9 +10,9 @@ class Game
   embeds_one :cv_manager
   field :parameter_hash, type: Hash, default: {}
 
-  belongs_to :simulator, :index => true
-  index :parameter_hash
-  validates_presence_of :simulator, :name, :size
+  belongs_to :simulator
+  index [[:simulator_id,  Mongo::ASCENDING], [:parameter_hash, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
+  validates_presence_of :simulator, :name, :size, :parameter_hash
   has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :add_cv_manager, :find_profiles
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
