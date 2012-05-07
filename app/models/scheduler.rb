@@ -16,7 +16,7 @@ class Scheduler
   
   has_and_belongs_to_many :profiles, :inverse_of => nil do
     def with_role_and_strategy(role, strategy)
-      where(:name => Regexp.new("#{role}:( \\d+ \w+,)* \\d+ #{strategy}(,|;|\\z)"))
+      where(:name => Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
     end
   end
   
