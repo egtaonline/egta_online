@@ -46,7 +46,7 @@ class VariableEstimator
       observations = []
       profile.sample_records.skip(10).each do |sample_record|
         before << sample_record.features[@target_variable]
-        adjusted = sample_record.features[@target_variable]-(@control_variables.collect{|name, value| sample_record.features[name] == nil ? 0 : value["coef"]*(sample_record.features[name]-value["expected_value"])}.reduce(:+))
+        adjusted = sample_record.features[@target_variable]-(@control_variables.collect{|name, value| sample_record.features[name] == nil ? 0 : value["coeff"]*(sample_record.features[name]-value["expected_value"])}.reduce(:+))
         observations << adjusted
         after << adjusted
       end
