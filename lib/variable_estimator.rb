@@ -56,11 +56,20 @@ class VariableEstimator
   end
   
   #equilibrium = {role: {strategy: prob}}
-  def estimate_value(equilibrium)
-    @observation_hash.collect{|roles, observations| roles.collect{|r| r.strategy_instances.collect{|s| equilibrium[r.name][s.name]**(s.count) }.reduce(:*) }.reduce(:*)*(observations.to_scale.mean)}.reduce(:+)
+  def estimate_value(equilibrium, agents_per_player)
+    @observation_hash.delete_if{|k,v| k.detect{|r| r.strategy_instances.detect{|s| s.count % agents_per_player != 0}}}
+    @observation_hash.collect do |roles, observations|
+      role_facts = {}
+      roles.each {|r| role_facts[r.name] = fact(r.strategy_instances.collect{|s| s.count/agents_per_player }.reduce(:+)) }
+      roles.collect{|r| role_facts[r.name]*r.strategy_instances.collect{|s| (1.0/fact(s.count/agents_per_player))*equilibrium[r.name][s.name]**(s.count/agents_per_player) }.reduce(:*) }.reduce(:*)*(observations.to_scale.mean)
+    end.reduce(:+)
   end
   
   private
+  
+  def fact(n)
+    (1..n).reduce(:*)
+  end
   
   def get_profiles(role_strategy_hash)
     query_hash = {:name => strategy_regex(role_strategy_hash), :sample_count.gt => 0}
