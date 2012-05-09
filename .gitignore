@@ -4,7 +4,6 @@ log/*.log
 tmp/
 .sass-cache/
 public/uploads/*
-config/mongoid.yml
 simulator_uploads/*
 coverage/
 bin/
