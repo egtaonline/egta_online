@@ -45,9 +45,9 @@ class SimulationQueuer
         rescue
           puts "failed account: #{account.username}"
         end
-        scp.close
         puts "submission"
         Net::SSH.start(Yetting.host, account.username) do |ssh|
+          puts "started"
           simulations.where(account_id: account.id).each do |s|
             begin
               simulator = s.scheduler.simulator
