@@ -44,6 +44,12 @@ class Game
     profiles.where(query_hash)
   end
   
+  def cv_display_profiles
+    query_hash = {:name => strategy_regex, :sample_count.gt => 10}
+    roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
+    profiles.where(query_hash)
+  end
+  
   def calculate_cv_coefficients
     Resque.enqueue(CvCoefficientCalculator, id)
   end
