@@ -9,7 +9,7 @@ class SimulationQueuer
       begin
         create_folder(s)
         create_yaml(s)
-        if (Simulation.active.flux.count+1) <= FLUX_LIMIT
+        if (Simulation.active.flux.count+1) <= FLUX_LIMIT || Simulation.active.where(:flux => false).count > Simulation.active.flux.count
           s.update_attribute(:flux, true)
         end
         NyxWrapper.create_wrapper(s)
