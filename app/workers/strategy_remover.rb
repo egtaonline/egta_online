@@ -1,10 +1,10 @@
 class StrategyRemover
   @queue = :profile_actions
-
-  def self.perform(scheduler_id, role, strategy)
+  def self.perform(scheduler_id)
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
-      scheduler.profiles -= scheduler.profiles.with_role_and_strategy(role, strategy)
+      names = scheduler.ensure_profiles
+      scheduler.profiles -= scheduler.profiles.where(:name.nin => names)
       scheduler.save
     end
   end

@@ -31,7 +31,7 @@ class GameScheduler < Scheduler
       role_i.strategies.delete(strategy_name)
       role_i.save!
       self.save
-      Resque.enqueue(StrategyRemover, self.id, role, strategy_name)
+      Resque.enqueue(StrategyRemover, self.id)
     end
   end
 
