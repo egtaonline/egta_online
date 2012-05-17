@@ -5,22 +5,34 @@ class VariableEstimator
   #control_variables = {name: {expected_value: value}}
   def initialize(game, target_variable, control_variables, role_strategy_hash)
     @game, @target_variable, @control_variables = game, target_variable, control_variables
+    @sd = 1.0/0.0
     @profiles = get_profiles(role_strategy_hash)
-    calculate_coefficients
-    apply_coefficients
+    1.upto(@control_variables.keys.size) do |i|
+      @control_variables.keys.combination(i) do |combination|
+        puts "testing #{combination}"
+        calculate_coefficients(combination)
+        observation_hash = apply_coefficients(combination)
+        sd = get_sd(observation_hash)
+        if sd < @sd
+          puts "better"
+          @sd = sd
+          @observation_hash = observation_hash
+        end
+      end
+    end
   end
   
-  def calculate_coefficients
+  def calculate_coefficients(combination)
     observations = []
     feature_hash = Hash.new {|hash, key| hash[key] = []}
     @profiles.each do |profile|
       profile.sample_records.limit(10).collect do |sample_record|
         flag = true
-        @control_variables.keys.each do |name|
+        combination.each do |name|
           flag = false if sample_record.features[name] == nil
         end
         if flag
-          @control_variables.keys.each do |name|
+          combination.each do |name|
             feature_hash[name] << sample_record.features[name]
           end
           observations << sample_record.features[@target_variable]
@@ -32,27 +44,28 @@ class VariableEstimator
       ds = feature_hash.to_dataset
       ds['target'] = observations.to_scale
       lr = Statsample::Regression.multiple(ds, 'target')
-      @control_variables.keys.each do |key|
+      combination.each do |key|
         @control_variables[key]["coeff"] = lr.coeffs[key]
       end
     end
   end
   
-  def apply_coefficients
-    @observation_hash = {}
+  def apply_coefficients(combination)
+    observation_hash = {}
     before = []
     after = []
     @profiles.each do |profile|
       observations = []
-      profile.sample_records.skip(10).each do |sample_record|
-        before << sample_record.features[@target_variable]
-        adjusted = sample_record.features[@target_variable]-(@control_variables.collect{|name, value| sample_record.features[name] == nil ? 0 : value["coeff"]*(sample_record.features[name]-value["expected_value"])}.reduce(:+))
-        observations << adjusted
-        after << adjusted
+      profile.sample_records.each do |sample_record|
+        observations << sample_record.features[@target_variable]-(combination.collect{|key| sample_record.features[key] == nil ? 0 : @control_variables[key]["coeff"]*(sample_record.features[key]-@control_variables[key]["expected_value"])}.reduce(:+))
       end
-      @observation_hash[profile.role_instances] = observations
+      observation_hash[profile.role_instances] = observations
     end
-    puts "before: #{before.to_scale.sd}\nafter: #{after.to_scale.sd}"
+    observation_hash
+  end
+  
+  def get_sd(observation_hash)
+    observation_hash.values.flatten.to_scale.sd
   end
   
   #equilibrium = {role: {strategy: prob}}
