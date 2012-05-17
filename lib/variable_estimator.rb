@@ -57,7 +57,11 @@ class VariableEstimator
     @profiles.each do |profile|
       observations = []
       profile.sample_records.each do |sample_record|
-        observations << sample_record.features[@target_variable]-(combination.collect{|key| sample_record.features[key] == nil ? 0 : @control_variables[key]["coeff"]*(sample_record.features[key]-@control_variables[key]["expected_value"])}.reduce(:+))
+        mu = sample_record.features[@target_variable]
+        puts "Nil mu" if mu == nil
+        adjustments = combination.collect{|key| sample_record.features[key] == nil ? 0 : @control_variables[key]["coeff"]*(sample_record.features[key]-@control_variables[key]["expected_value"])}
+        adjustments = adjustments.reduce(:+)
+        observations << mu - adjustments
       end
       observation_hash[profile.role_instances] = observations
     end
