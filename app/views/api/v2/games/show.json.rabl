@@ -18,7 +18,7 @@ if @adjusted == "true"
         attributes :name, :expected_value, :adjustment_coefficient
       end
     end
-    child :cv_display_profiles => :profiles do |p|
+    child :display_profiles => :profiles do |p|
       attributes :id
       node(:sample_count){|m| m.sample_count-10}
       child :role_instances => :roles do |r|
@@ -31,7 +31,7 @@ if @adjusted == "true"
       end
     end
   else
-    child :cv_display_profiles => :profiles do |p|
+    child :display_profiles => :profiles do |p|
       attributes :id
       node(:sample_count){|m| m.sample_count-10}
       child :role_instances => :roles do |r|
