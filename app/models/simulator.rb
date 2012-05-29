@@ -34,6 +34,12 @@ class Simulator
       errors.add(:simulator_source, "Upload could not be unzipped.")
       return
     end
+    dirs = Dir.entries(location) - [".", "..", "__MACOSX"]
+    if dirs.size != 1 || !File.directory?("#{location}/#{dirs[0]}")
+      errors.add(:simulator_source, "did not unzip to a single folder")
+    elsif !File.exists?("#{location}/#{dirs[0]}/script/batch")
+      errors.add(:simulator_source, "did not find script/batch within #{location}/#{dirs[0]}")
+    end
     Find.find(location) do |path|
       if File.basename(path) == "simulation_spec.yaml"
         begin

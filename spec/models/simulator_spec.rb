@@ -30,10 +30,11 @@ describe Simulator do
       end
     end
     
-    it "should inform the user of a malformed simulation_spec.yaml" do
+    it "should inform the user of a malformed simulation_spec.yaml and a missing script/batch file" do
       simulator = Fabricate.build(:simulator_realistic, :name => "fake2", :simulator_source => File.new("#{Rails.root}/spec/support/fake2.zip"))
-      simulator.should have(1).error_on(:simulator_source)
+      simulator.should have(2).errors_on(:simulator_source)
       simulator.errors[:simulator_source].should include("had a malformed simulation_spec.yaml file.")
+      simulator.errors[:simulator_source].should include("did not find script/batch within #{simulator.location}/#{simulator.name}")
     end
   end
   

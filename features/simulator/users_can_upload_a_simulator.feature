@@ -1,6 +1,5 @@
 Feature: Users can upload a simulator
 
-@wip
 Scenario: User uploads a new simulator
   Given I am signed in
   When I upload a new simulator
