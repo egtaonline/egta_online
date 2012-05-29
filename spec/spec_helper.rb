@@ -19,6 +19,10 @@ Spork.prefork do
       Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
     end
     
+    config.before(:all) do
+      Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+    end
+    
     config.before(:each, :type => :request) do
       ResqueSpec.reset!
       user = Fabricate(:user)

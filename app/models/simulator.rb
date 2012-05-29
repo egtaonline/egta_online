@@ -47,6 +47,7 @@ class Simulator
         rescue
           errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")
         end
+        return
       end
     end
   end
