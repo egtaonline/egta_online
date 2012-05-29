@@ -16,4 +16,4 @@
 = link_to "(Re-)Calculate CV Coefficients", url_for(:action => "calculate_cv_coefficients"), :method=>:post, :class => 'btn btn-primary'
 = link_to "Download CV-Adjusted JSON", url_for(:action => "show", :format => "json", :adjusted => "true"), :class => 'btn btn-primary'
 = link_to "Download CV-Adjusted JSON with Samples", url_for(:action => "show", :format => "json", :adjusted => "true", :full => "true"), :class => 'btn btn-primary'
-= link_to "Analyze JSON in EGAT", "http://egat.eecs.umich.edu/create-process.jsp?objecturl=http://d-108-249.eecs.umich.edu/games/#{game.id}.json?auth_token=#{current_user.authentication_token}",:class => 'btn btn-primary'
+= link_to "Analyze JSON in EGAT", "http://egat.eecs.umich.edu/create-process.jsp?objecturl=http://d-108-249.eecs.umich.edu/api/v2/games/#{game.id}.json?auth_token=#{current_user.authentication_token}",:class => 'btn btn-primary'
