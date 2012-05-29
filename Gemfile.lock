@@ -390,7 +390,6 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   guard-spork
-  haml
   haml-rails
   high_voltage
   jquery-rails

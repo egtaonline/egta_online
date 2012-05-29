@@ -7,7 +7,6 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'twitter-bootstrap-rails'
-gem "haml"
 gem "haml-rails"
 gem 'rdiscount'
 gem 'rabl'
