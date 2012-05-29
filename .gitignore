@@ -11,3 +11,4 @@ public/assets/
 uploads/
 *.DS_Store
 .DS_Store*
+config/mongoid.yml
