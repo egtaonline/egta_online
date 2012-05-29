@@ -19,24 +19,6 @@ describe "Simulators" do
     end
   end
   
-  describe "POST /simulators" do
-    before(:each) do
-      ResqueSpec.reset!
-    end
-    
-    it "creates a simulator" do
-      visit new_simulator_path
-      fill_in "Name", :with => "epp_sim"
-      fill_in "Version", :with => "testing"
-      attach_file "Simulator source", "#{Rails.root}/features/support/epp_sim.zip"
-      click_button "Create Simulator"
-      page.should have_content("epp_sim")
-      page.should have_content("testing")
-      SimulatorInitializer.should have_queue_size_of(1)
-      page.should_not have_content("Some errors were found")
-    end
-  end
-  
   describe "POST /simulators/:id/remove_role" do
     it "removes the relevant role" do
       simulator = Fabricate(:simulator)
@@ -123,16 +105,6 @@ describe "Simulators" do
       page.should_not have_content("Some errors were found")
       Simulator.last.roles.count.should eql(1)
       Simulator.last.roles.last.strategies.count.should eql(0)
-    end
-  end
-  
-  describe "GET /simulators/new" do
-    it "should render the new simulator form" do
-      visit new_simulator_path
-      page.should have_content("New Simulator")
-      page.should have_content("Name")
-      page.should have_content("Version")
-      page.should have_content("Simulator source")
     end
   end
 end

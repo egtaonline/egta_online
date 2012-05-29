@@ -1,4 +1,6 @@
 class Simulator
+  require 'find'
+  
   include Mongoid::Document
   include RoleManipulator
 
@@ -20,35 +22,38 @@ class Simulator
   field :email
   
   validates :email, :email_format => {:message => 'does not match the expected format'}
-  validates_presence_of :name, :version
-  validates_uniqueness_of :version, :scope => :name
+  validates :name, :presence => true, :format => {:with => /\A\w+\z/, :message => 'can contain only letters, numbers, and underscores'}
+  validates :version, :presence => true, :uniqueness => { :scope => :name }
+  before_validation(:if => :simulator_source_changed?){ FileUtils.rm_rf location }
   validate :simulator_setup, :if => :simulator_source_changed?
 
   def simulator_setup
-    system("rm -rf #{location}")
     begin
       system("unzip -uqq #{simulator_source.path} -d #{location}")
     rescue
       errors.add(:simulator_source, "Upload could not be unzipped.")
       return
     end
-    if File.exists?("#{location}/#{name}") == false
-      errors.add(:simulator_source, "did not produce a folder named #{name} when unzipped.")
-      return
-    elsif File.exists?(location+"/"+name+"/simulation_spec.yaml") == false
-      errors.add(:simulator_source, "was missing a simulation_spec.yaml configuration file.")
-      return
-    else
-      begin
-        parameters = Hash.new
-        File.open(location+"/"+name+"/simulation_spec.yaml") do |io|
-          parameters = YAML.load(io)["web parameters"]
-          parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
+    dirs = Dir.entries(location) - [".", "..", "__MACOSX"]
+    if dirs.size != 1 || !File.directory?("#{location}/#{dirs[0]}")
+      errors.add(:simulator_source, "did not unzip to a single folder")
+    elsif !File.exists?("#{location}/#{dirs[0]}/script/batch")
+      errors.add(:simulator_source, "did not find script/batch within #{location}/#{dirs[0]}")
+    end
+    Find.find(location) do |path|
+      if File.basename(path) == "simulation_spec.yaml"
+        begin
+          parameters = Hash.new
+          File.open(path) do |io|
+            parameters = YAML.load(io)["web parameters"]
+            parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
+          end
+          self.parameter_hash = parameters
+          Resque.enqueue(SimulatorInitializer, self.id)
+        rescue
+          errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")
         end
-        self.parameter_hash = parameters
-        Resque.enqueue(SimulatorInitializer, self.id)
-      rescue
-        errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")
+        return
       end
     end
   end

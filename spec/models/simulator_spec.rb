@@ -3,12 +3,7 @@ require 'spec_helper'
 describe Simulator do
   describe "#location" do
     let(:simulator){Fabricate(:simulator)}
-    it {simulator.location.should eql("#{Rails.root}/simulator_uploads/#{simulator.name}-#{simulator.version}")}
-  end
-  
-  describe "#fullname" do
-    let(:simulator){Fabricate(:simulator)}
-    it {simulator.fullname.should eql("#{simulator.name}-#{simulator.version}")}
+    it { simulator.location.should eql("#{Rails.root}/simulator_uploads/#{simulator.name}-#{simulator.version}") }
   end
     
   describe "setup and validation" do
@@ -19,38 +14,27 @@ describe Simulator do
     it "should replace any existing copy" do
       # Setup fake simulator
       system("mkdir -p #{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/fakery")
-      File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/fakery").should eql(true)
-      simulator = Fabricate(:simulator_realistic)
+      simulator = Fabricate(:simulator_realistic) 
       File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/fakery").should eql(false)
       File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/simulation_spec.yaml").should eql(true)
     end
     
-    it "should load the simulation_spec.yaml" do
-      simulator = Fabricate(:simulator_realistic)
-      simulator.parameter_hash["number of agents"].should eql("120")
+    context "the simulator is valid" do
+      let(:simulator){ Fabricate(:simulator_realistic) }
+      it "should load the simulation_spec.yaml" do
+        simulator.parameter_hash["number of agents"].should eql("120")
+      end
+    
+      it "should schedule a job to setup the simulator on nyx" do
+        SimulatorInitializer.should have_queued(simulator.id)
+      end
     end
     
-    it "should schedule a job to setup the simulator on nyx" do
-      simulator = Fabricate(:simulator_realistic)
-      SimulatorInitializer.should have_queued(simulator.id)
-    end
-    
-    it "should complain if the unzipped folder doesn't match the name" do
-      simulator = Fabricate.build(:simulator_realistic, :name => "fake", :version => "true", :simulator_source => File.new("#{Rails.root}/spec/support/epp_sim.zip"))
-      simulator.should have(1).error_on(:simulator_source)
-      simulator.errors[:simulator_source].should include("did not produce a folder named #{simulator.name} when unzipped.")
-    end
-    
-    it "should inform the user of a missing simulation_spec.yaml" do
-      simulator = Fabricate.build(:simulator_realistic, :name => "fake", :simulator_source => File.new("#{Rails.root}/spec/support/fake.zip"))
-      simulator.should have(1).error_on(:simulator_source)
-      simulator.errors[:simulator_source].should include("was missing a simulation_spec.yaml configuration file.")
-    end 
-    
-    it "should inform the user of a malformed simulation_spec.yaml" do
+    it "should inform the user of a malformed simulation_spec.yaml and a missing script/batch file" do
       simulator = Fabricate.build(:simulator_realistic, :name => "fake2", :simulator_source => File.new("#{Rails.root}/spec/support/fake2.zip"))
-      simulator.should have(1).error_on(:simulator_source)
+      simulator.should have(2).errors_on(:simulator_source)
       simulator.errors[:simulator_source].should include("had a malformed simulation_spec.yaml file.")
+      simulator.errors[:simulator_source].should include("did not find script/batch within #{simulator.location}/#{simulator.name}")
     end
   end
   
