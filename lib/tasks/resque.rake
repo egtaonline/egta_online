@@ -19,7 +19,7 @@ namespace :resque do
     # schedule changes and applies them on the fly.
     # Note: This feature is only available in >=2.0.0.
     #Resque::Scheduler.dynamic = true
-
+    ENV['RAILS_ENV'] = Rails.env
     # The schedule doesn't need to be stored in a YAML, it just needs to
     # be a hash.  YAML is usually the easiest.
     Resque.schedule = YAML.load_file("#{Rails.root}/config/resque_schedule.yml")
