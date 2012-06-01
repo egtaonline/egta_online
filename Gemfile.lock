@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/defunkt/resque.git
-  revision: 81ec2228e54886f395a57bab18e38b7ff9b124af
+  revision: 2e67d04b72dfbfda8ce62aa47fb678097cc27206
   specs:
     resque (1.20.0)
       multi_json (~> 1.0)
@@ -193,7 +193,7 @@ GEM
       bundler (>= 1.0.0)
       rails (>= 3.0.0)
       railties (>= 3.0.0)
-    multi_json (1.2.0)
+    multi_json (1.3.6)
     narray (0.6.0.1)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -224,7 +224,7 @@ GEM
     rabl (0.6.8)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
-    rack (1.4.1)
+    rack (1.4.0)
     rack-cache (1.2)
       rack (>= 0.4)
     rack-protection (1.2.0)
@@ -265,9 +265,9 @@ GEM
       text-table (~> 1.2)
     resque-loner (1.2.0)
       resque (~> 1.0)
-    resque-scheduler (1.9.9)
+    resque-scheduler (2.0.0)
       redis (>= 2.0.1)
-      resque (>= 1.8.0)
+      resque (>= 1.20.0)
       rufus-scheduler
     resque_spec (0.9.3)
       resque (>= 1.19.0)
@@ -350,7 +350,7 @@ GEM
       actionpack (>= 3.1)
       less-rails (~> 2.2.0)
       railties (>= 3.1)
-    tzinfo (0.3.32)
+    tzinfo (0.3.33)
     uglifier (1.2.4)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)

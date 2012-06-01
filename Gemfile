@@ -16,7 +16,7 @@ gem 'rabl'
 gem 'jquery-rails'
 
 # Background Processing
-gem 'resque', :require => 'resque/server', :git => 'git://github.com/defunkt/resque.git'
+gem 'resque', :require => 'resque/server'
 gem 'resque-scheduler', :require => 'resque_scheduler'
 gem "resque-loner"
 
