@@ -1,13 +1,12 @@
+require 'resque_scheduler'
+require 'resque_scheduler/server'
+
 rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
 
 resque_config = YAML.load_file(rails_root + '/config/resque.yml')
 ENV['RAILS_ENV'] = Rails.env
 rails_env = ENV['RAILS_ENV'] || 'production'
 Resque.redis = resque_config[rails_env]
-
-require 'resque_scheduler'
-require 'resque_scheduler/server'
-
 Resque.schedule = YAML.load_file("#{Rails.root}/config/resque_schedule.yml")
 
 unless defined?(RESQUE_LOGGER)
