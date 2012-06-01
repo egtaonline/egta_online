@@ -1,5 +1,6 @@
 class Api::V2::GamesController < Api::V2::BaseController
   skip_before_filter :fullness, :only => :index
+  before_filter :adjustment, :only => :show
   before_filter :find_object, :only => [:show, :add_role, :add_strategy, :remove_role, :remove_strategy]
   before_filter :validate_role, :only => [:add_role, :add_strategy, :remove_role, :remove_strategy]
   before_filter :validate_strategy, :only => [:add_strategy, :remove_strategy]
@@ -34,6 +35,10 @@ class Api::V2::GamesController < Api::V2::BaseController
   end
   
   protected
+  
+  def adjustment
+    @adjusted = params[:adjusted]
+  end
   
   def validate_role_count
     if params[:count] == nil || params[:count] == "" || params[:count].to_i == 0
