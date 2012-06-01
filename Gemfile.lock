@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/defunkt/resque.git
+  revision: 81ec2228e54886f395a57bab18e38b7ff9b124af
+  specs:
+    resque (1.20.0)
+      multi_json (~> 1.0)
+      redis-namespace (~> 1.0.2)
+      sinatra (>= 0.9.2)
+      vegas (~> 0.1.2)
+
+GIT
   remote: git://github.com/plataformatec/show_for.git
   revision: 4f200bbb8869db75bae6abf52c9f59456d549e6f
   specs:
@@ -253,11 +263,6 @@ GEM
       prawn (~> 0.8.4)
       prawn-svg (~> 0.9.1)
       text-table (~> 1.2)
-    resque (1.20.0)
-      multi_json (~> 1.0)
-      redis-namespace (~> 1.0.2)
-      sinatra (>= 0.9.2)
-      vegas (~> 0.1.2)
     resque-loner (1.2.0)
       resque (~> 1.0)
     resque-scheduler (1.9.9)
@@ -382,6 +387,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   guard-spork
+  haml
   haml-rails
   high_voltage
   jquery-rails
@@ -396,7 +402,7 @@ DEPENDENCIES
   rails (~> 3.2)
   rb-fsevent
   rdiscount
-  resque
+  resque!
   resque-loner
   resque-scheduler
   resque_spec

@@ -48,7 +48,7 @@ namespace :deploy do
   end
 
   desc "Make all the symlinks"
-  task :create_symlink, :roles => :app, :except => { :no_release => true } do
+  task :symlink, :roles => :app, :except => { :no_release => true } do
     set :normal_symlinks, %w(
       simulator_uploads
     )
