@@ -3,6 +3,7 @@ class SimulationQueuer
   @queue = :nyx_queuing
 
   def self.perform
+    puts "hello"
     simulations = Simulation.pending.order_by([[:created_at, :asc]]).limit(30).to_a
     cleanup
     simulations.each do |s|
