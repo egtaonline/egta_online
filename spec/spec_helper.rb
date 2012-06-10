@@ -15,6 +15,8 @@ Spork.prefork do
   
   RSpec.configure do |config|
 
+
+    config.include Mongoid::Matchers
     config.before(:each) do
       Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
     end

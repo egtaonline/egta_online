@@ -7,7 +7,6 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'twitter-bootstrap-rails'
-gem "haml"
 gem "haml-rails"
 gem 'rdiscount'
 gem 'rabl'
@@ -25,8 +24,8 @@ gem "resque-loner"
 gem "airbrake"
 
 # Database
-gem "bson_ext"
-gem "mongoid"
+gem 'bson_ext'
+gem 'mongoid'
 
 gem "state_machine"
 gem "devise", '~> 1.5'
@@ -75,4 +74,5 @@ group :test do
   gem "guard-cucumber"
   gem "guard-spork"
   gem "resque_spec"
+  gem "mongoid-rspec"
 end

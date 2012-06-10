@@ -6,7 +6,7 @@ class Profile
   
   embeds_many :role_instances
   embeds_many :sample_records
-    
+  embeds_many :symmetry_groups
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator
   
