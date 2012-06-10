@@ -7,14 +7,18 @@ class SimulationChecker
       simulation_ids = Simulation.active.collect{|s| s.id}
       output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
       state_info = parse_nyx_output(output)
-      Account.all.each do |account|
+      Account.active.each do |account|
         if Simulation.where(:_id.in => simulation_ids, :account_id => account.id).count != 0
           puts account.username
           location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
           numbers = Simulation.where(:_id.in => simulation_ids, :account_id => account.id).collect{|s| location+"#{s.number}"}
           numbers = numbers.join(" ")
-          puts system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
-          Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each {|s| update_simulation_status(s, state_info[s.job_id])}
+          begin
+            puts system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
+            Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each {|s| update_simulation_status(s, state_info[s.job_id])}
+          rescue
+            puts "rsync failed for #{account.username}"
+          end
         end
       end
     end
