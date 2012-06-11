@@ -3,7 +3,7 @@ class Simulator
   
   include Mongoid::Document
   include RoleManipulator
-
+  has_one :configuration, as: :configurable
   mount_uploader :simulator_source, SimulatorUploader
 
   embeds_many :roles, :as => :role_owner

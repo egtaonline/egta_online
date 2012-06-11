@@ -8,6 +8,7 @@ class Game
   field :simulator_fullname
   embeds_many :roles, :as => :role_owner
   embeds_one :cv_manager
+  has_one :configuration, as: :configurable
   field :parameter_hash, type: Hash, default: {}
 
   belongs_to :simulator

@@ -2,6 +2,7 @@ require "sequence"
 require "nyx_wrapper"
 require "submission"
 require "data_parser"
+require 'hash_sorting'
 
 FLUX_LIMIT = 120
 WELLMAN = 141825

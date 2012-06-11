@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Game do
+  
+  it { should have_one :configuration }
+  
   describe "after_create" do
     before(:each) do
       ResqueSpec.reset!

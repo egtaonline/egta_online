@@ -11,7 +11,7 @@ class Scheduler
   field :parameter_hash, :type => Hash, :default => {}
   field :nodes, :type => Integer, :default => 1
   field :simulator_fullname
-  
+  has_one :configuration, as: :configurable
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
   
   has_and_belongs_to_many :profiles, :inverse_of => nil do

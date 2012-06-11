@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Simulator do
+  it { should have_one :configuration }
+  
   describe "#location" do
     let(:simulator){Fabricate(:simulator)}
     it { simulator.location.should eql("#{Rails.root}/simulator_uploads/#{simulator.name}-#{simulator.version}") }
