@@ -6,32 +6,19 @@ Feature: Game creation uses ajax
 Background:
   Given I am signed in
 
-@javascript
-Scenario: Selecting a simulator changes the search parameters
-  Given the following simulators:
-    | name  | version | parameter_hash |
-    | testA | alpha   | {a: 2, b: 1}   |
-    | testB | beta    | {a: 3, c: 4}   |
-  When I am on the new game page
-  Then the "A" field should contain "2"
-  And the "B" field should contain "1"
-  When I select "testB-beta" from "Simulator"
-  Then the "C" field should contain "4"
-  Then the "A" field should contain "3"
-
 Scenario: Creating a game finds existing profiles
   Given the following simulator:
-    | parameter_hash | {a: "2"} |
+    | configuration | {a: "2"} |
     | name           | test     |
     | version        | test     |
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following profile:
     | name   | All: 2 A |
-    | parameter_hash | {a: "2"}  |
+    | configuration | {a: "2"}  |
   And that profile has 1 sample record
   Given that simulator has the following profiles:
-    | name          | parameter_hash |
+    | name          | configuration |
     | All: 1 A, 1 B | {a: "2"}       |
     | All: 2 B      | {a: "2"}       |
   When I am on the new game page

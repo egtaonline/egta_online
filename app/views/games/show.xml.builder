@@ -1,5 +1,5 @@
 xml.instruct! :xml, :version=>"1.0"
-xml.nfg(:name=>game.simulator.fullname, :description=>game.parameter_hash) do |nfg|
+xml.nfg(:name=>game.simulator.fullname, :description=>game.configuration) do |nfg|
 
   nfg.players do |players|
     for i in 1..@profiles.first.size do

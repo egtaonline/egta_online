@@ -134,10 +134,10 @@ describe "Games" do
     end
   end
   
-  describe "POST /games/update_parameters", :js => true do
+  describe "POST /games/update_configuration", :js => true do
     it "should update parameter info" do
-      sim1 = Fabricate(:simulator, :parameter_hash => {"Parm1"=>"2","Parm2"=>"3"})
-      sim2 = Fabricate(:simulator, :parameter_hash => {"Parm2"=>"7","Parm3"=>"6"})
+      sim1 = Fabricate(:simulator, :configuration => {"Parm1"=>"2","Parm2"=>"3"})
+      sim2 = Fabricate(:simulator, :configuration => {"Parm2"=>"7","Parm3"=>"6"})
       visit new_game_path
       page.should have_content("Parm1")
       page.should have_content("Parm2")

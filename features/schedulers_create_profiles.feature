@@ -6,16 +6,16 @@ Feature: Schedulers create profiles
 Scenario: Profile already exists with the same configuration
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following profile:
     | name   | All: 2 A |
-    | parameter_hash | {a: 2}    |
+    | configuration | {a: 2}    |
   And that profile has 1 sample record
   Then there should be 1 profiles
   And that simulator has the following game scheduler:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And I am on the last game scheduler's page
   When I select "All" from "role"
   And I fill in "role_count" with "2"
@@ -29,7 +29,7 @@ Scenario: Profile already exists with the same configuration
 Scenario: Asymmetric profile generation
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And I am on the last simulator's page
   When I fill in "role" with "Player1"
   And I press "Add Role"
@@ -46,7 +46,7 @@ Scenario: Asymmetric profile generation
   And I press "Player2"
   Then I should see "B"
   And that simulator has the following game scheduler:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And I am on the last game scheduler's page
   When I select "Player1" from "role"
   And I fill in "role_count" with "1"
@@ -67,7 +67,7 @@ Scenario: Asymmetric profile generation
 Scenario: Hierarchical scheduler
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And I am on the last simulator's page
   When I fill in "role" with "Buyer"
   And I press "Add Role"
@@ -82,7 +82,7 @@ Scenario: Hierarchical scheduler
   And I fill in "Seller_strategy" with "B"
   And I press "Seller"
   And that simulator has the following hierarchical scheduler:
-    | parameter_hash    | {a: 2} |
+    | configuration    | {a: 2} |
     | size              | 40     |
     | agents_per_player | 10     |
   And I am on the last hierarchical scheduler's page

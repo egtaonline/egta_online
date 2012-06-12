@@ -1,19 +1,13 @@
 class SchedulerObserver < Mongoid::Observer
   def around_update(scheduler)
-    pflag = false
-    aflag = false
-    if (scheduler.parameter_hash_changed? && scheduler.parameter_hash != nil) || (scheduler["size"] != nil && scheduler.size_changed?)
-      scheduler.profiles = []
-      pflag = true
-    end
-    aflag = (scheduler.active_changed? and scheduler.active_was == false) 
-    if aflag == false && scheduler.is_a?(GameScheduler)
-      aflag = scheduler.max_samples_changed?
-    end
+    reset_flag = scheduler.configuration_changed? || scheduler.size_changed?
+    scheduler.profiles = [] if reset_flag
+    schedule_flag = scheduler.active_changed? && !scheduler.active_was 
+    schedule_flag ||= scheduler.is_a?(GameScheduler) && scheduler.max_samples_changed?
     yield
-    if pflag && scheduler.is_a?(GameScheduler)
+    if reset_flag && scheduler.is_a?(GameScheduler)
       Resque.enqueue(ProfileAssociater, scheduler.id)
-    elsif aflag
+    elsif schedule_flag
       scheduler.profiles.each{|p| Resque.enqueue(ProfileScheduler, p.id)}
     end
   end

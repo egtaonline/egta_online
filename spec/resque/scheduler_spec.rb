@@ -7,7 +7,7 @@ describe "#testing updates" do
   end
 
   let!(:simulator){Fabricate(:simulator)}
-  let!(:scheduler){Fabricate(:game_scheduler, simulator: simulator, active: false, parameter_hash: simulator.parameter_hash)}
+  let!(:scheduler){Fabricate(:game_scheduler, simulator: simulator, active: false, configuration: simulator.configuration)}
   it "should try to schedule profile on activation" do
     simulator.roles.create!(name: "All")
     Account.create(username: "bcassell", active: true)
@@ -19,7 +19,7 @@ describe "#testing updates" do
     ProfileScheduler.should have_queued(Profile.last.id)
     ResqueSpec.perform_all(:profile_actions)
     Simulation.count.should == 1
-    scheduler.update_attribute(:parameter_hash, {a: 3})
+    scheduler.update_attribute(:configuration, {a: 3})
     ProfileAssociater.should have_queued(scheduler.id)
     ResqueSpec.perform_all(:profile_actions)
     ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)

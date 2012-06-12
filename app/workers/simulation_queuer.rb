@@ -111,7 +111,7 @@ class SimulationQueuer
 
   def self.numeralize(scheduler)
     p = Hash.new
-    scheduler.parameter_hash.each_pair do |x, y|
+    scheduler.configuration.each_pair do |x, y|
       if is_a_number?(y)
         p[x] = y.to_f
       else

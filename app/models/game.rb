@@ -8,12 +8,11 @@ class Game
   field :simulator_fullname
   embeds_many :roles, :as => :role_owner
   embeds_one :cv_manager
-  has_one :configuration, as: :configurable
-  field :parameter_hash, type: Hash, default: {}
+  field :configuration, type: Hash, default: {}
 
   belongs_to :simulator
-  index [[:simulator_id,  Mongo::ASCENDING], [:parameter_hash, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
-  validates_presence_of :simulator, :name, :size, :parameter_hash
+  index [[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
+  validates_presence_of :simulator, :name, :size, :configuration
   has_and_belongs_to_many :profiles, :inverse_of => nil
   after_create :add_cv_manager, :find_profiles
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
@@ -28,7 +27,7 @@ class Game
   end
 
   def self.new_game_from_scheduler(scheduler)
-    game = Game.create!(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, parameter_hash: scheduler.parameter_hash)
+    game = Game.create!(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, configuration: scheduler.configuration)
   end
 
   def add_roles_from_scheduler(scheduler)

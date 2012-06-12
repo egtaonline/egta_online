@@ -35,10 +35,10 @@ class SchedulersController < ApplicationController
   def page_profiles
   end
 
-  def update_parameters
+  def update_configuration
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|
-      format.js {render "simulator_selector/update_parameters"}
+      format.js {render "simulator_selector/update_configuration"}
     end
   end
   

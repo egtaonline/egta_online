@@ -9,7 +9,7 @@ Background:
 @javascript
 Scenario: AJAX parameter switching works
   Given the following simulators:
-    | name  | version | parameter_hash |
+    | name  | version | configuration |
     | testA | alpha   | {a: 2, b: 1}   |
     | testB | beta    | {a: 3, c: 4}   |
   When I am on the new game scheduler page
@@ -22,7 +22,7 @@ Scenario: AJAX parameter switching works
 @javascript
 Scenario: Editing parameters results in a scheduler with the appropriate parameter hash
   Given the following simulators:
-    | name  | version | parameter_hash |
+    | name  | version | configuration |
     | testA | alpha   | {a: 2, b: 1}   |
     | testB | beta    | {a: 54321, c: 4}   |
   When I am on the new game scheduler page

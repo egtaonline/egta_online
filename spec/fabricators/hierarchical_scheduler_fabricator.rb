@@ -7,6 +7,15 @@ Fabricator(:hierarchical_scheduler) do
   max_samples 2
   agents_per_player 2
   time_per_sample 40
-  parameter_hash { |s| s.simulator.parameter_hash }
-  after_create {|sgs| if sgs.parameter_hash.is_a?(String); sgs.update_attribute(:parameter_hash, eval(sgs.parameter_hash)); end }
+  configuration { |s| s.simulator.configuration }
+  after_create {|sgs| if sgs.configuration.is_a?(String); sgs.update_attribute(:configuration, eval(sgs.configuration)); end }
+end
+
+Fabricator(:hierarchical_scheduler_with_profiles, from: :hierarchical_scheduler) do
+  roles(:count => 1) { |scheduler, i| Fabricate(:role, :role_owner => scheduler, :name => "All", :count => scheduler.size/scheduler.agents_per_player) }
+  after_create do |scheduler| 
+    scheduler.roles.first.strategies << "A"
+    scheduler.roles.first.strategies << "B"
+    ProfileAssociater.perform scheduler.id
+  end
 end

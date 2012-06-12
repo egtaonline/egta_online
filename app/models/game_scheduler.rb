@@ -2,8 +2,7 @@ class GameScheduler < Scheduler
   include RoleManipulator
   field :max_samples, :type => Integer
   embeds_many :roles, :as => :role_owner, :order => :name.asc
-  field :size, :type => Integer
-  validates_presence_of :size, :max_samples
+  validates_presence_of :max_samples
   validates_numericality_of :max_samples
 
   def required_samples(profile_id)

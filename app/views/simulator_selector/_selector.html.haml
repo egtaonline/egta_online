@@ -6,4 +6,4 @@
     - simulators = Simulator.all.to_a
     .controls
       = collection_select :selector, :simulator_id, simulators, :id, :fullname
-  #param= render :partial => "simulator_selector/parameters", :object => simulators.first.parameter_hash
+  #param= render :partial => "simulator_selector/configuration", :object => simulators.first.configuration

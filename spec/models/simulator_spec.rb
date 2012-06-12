@@ -24,7 +24,7 @@ describe Simulator do
     context "the simulator is valid" do
       let(:simulator){ Fabricate(:simulator_realistic) }
       it "should load the simulation_spec.yaml" do
-        simulator.parameter_hash["number of agents"].should eql("120")
+        simulator.configuration["number of agents"].should eql("120")
       end
     
       it "should schedule a job to setup the simulator on nyx" do

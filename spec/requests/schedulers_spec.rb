@@ -3,9 +3,9 @@ require 'spec_helper'
 describe "Schedulers" do
 
   shared_examples "a scheduler on requests" do
-    context "POST /#{described_class.to_s.tableize}/update_parameters", :js => true do
+    context "POST /#{described_class.to_s.tableize}/update_configuration", :js => true do
       it "should update parameter info" do
-        sim2 = Fabricate(:simulator, :parameter_hash => {"Parm2"=>"7","Parm3"=>"6"})
+        sim2 = Fabricate(:simulator, :configuration => {"Parm2"=>"7","Parm3"=>"6"})
         visit "/#{described_class.to_s.tableize}/new"
         page.should have_content("Parm1")
         page.should have_content("Parm2")

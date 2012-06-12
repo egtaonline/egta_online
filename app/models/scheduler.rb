@@ -8,10 +8,12 @@ class Scheduler
   field :process_memory, :type => Integer
   field :time_per_sample, :type => Integer
   field :samples_per_simulation, :type => Integer
-  field :parameter_hash, :type => Hash, :default => {}
   field :nodes, :type => Integer, :default => 1
   field :simulator_fullname
-  has_one :configuration, as: :configurable
+  field :configuration, type: Hash, default: {}
+  field :size, type: Integer
+  accepts_nested_attributes_for :configuration
+  
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
   
   has_and_belongs_to_many :profiles, :inverse_of => nil do
@@ -22,7 +24,7 @@ class Scheduler
   
   belongs_to :simulator
   validates_uniqueness_of :name
-  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes
+  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :size
   validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true
-  validates_numericality_of :samples_per_simulation, :only_integer=>true, :greater_than=>0
+  validates_numericality_of :samples_per_simulation, :size, only_integer: true, greater_than: 0
 end

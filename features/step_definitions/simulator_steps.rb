@@ -61,3 +61,24 @@ end
 Then /^the simulator should be eventually be set up on the server$/ do
   SimulatorInitializer.should have_queued(Simulator.last.id)
 end
+
+Given /^a fleshed out simulator$/ do
+  @simulator = Fabricate(:simulator_with_strategies)
+end
+
+Given /^there are two simulators with different default configuration$/ do
+  @simulator = Fabricate(:simulator_with_strategies, configuration: { "Parm1" => '2', "Parm2" => '3' })
+  @simulator2 = Fabricate(:simulator_with_strategies, configuration: { "Parm2" => '4', "Parm3" => '2' })
+end
+
+Then /^I should see the default configuration of the first simulator$/ do
+  @simulator.configuration.each { |key,value| find_field(key).value.should eql(value) }
+end
+
+When /^I select the second simulator$/ do
+  select @simulator2.fullname, from: 'Simulator'
+end
+
+Then /^I should see the default configuration of the last simulator$/ do
+  @simulator2.configuration.each { |key,value| find_field(key).value.should eql(value) }
+end

@@ -16,7 +16,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
                                                             :active => true, :process_memory => 1000,
                                                             :time_per_sample => 120, :samples_per_simulation => 30,
-                                                            :max_samples => 30, :parameter_hash => simulator.parameter_hash,
+                                                            :max_samples => 30, :configuration => simulator.configuration,
                                                             :nodes => 1}
         scheduler = GenericScheduler.last
         scheduler.simulator.should == simulator
@@ -33,7 +33,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
                                                           :active => true,
                                                           :time_per_sample => 120, :samples_per_simulation => 30,
-                                                          :max_samples => 30, :parameter_hash => simulator.parameter_hash,
+                                                          :max_samples => 30, :configuration => simulator.configuration,
                                                           :nodes => 1}
         last_response.status.should eql(422)
         errors = {"errors" => {"process_memory" => ["can't be blank","is not a number"]}}.to_json

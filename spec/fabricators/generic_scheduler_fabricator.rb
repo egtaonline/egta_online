@@ -3,6 +3,13 @@ Fabricator(:generic_scheduler) do
   process_memory 1000
   time_per_sample 60
   samples_per_simulation 10
+  size 2
   simulator!
-  parameter_hash {|g| g.simulator.parameter_hash}
+  configuration {|g| g.simulator.configuration}
+end
+
+Fabricator(:generic_scheduler_with_profiles, from: :generic_scheduler) do
+  after_create do |scheduler| 
+    scheduler.add_profile("All: 2 A", 5)
+  end
 end

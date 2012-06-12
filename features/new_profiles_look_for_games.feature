@@ -6,15 +6,15 @@ Feature: New profiles look for games
 Scenario: 1 game exists, no prior profiles
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following game scheduler:
 		| size					 | 2      |
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And that simulator has the following game:
     | size           | 2      |
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And I am on the last game's page
 	When I select "All" from "role"
 	And I fill in "role_count" with "2"
@@ -35,14 +35,14 @@ Scenario: 1 game exists, no prior profiles
 Scenario: 2 games exist, no prior profiles, no matches
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following game scheduler:
-    | parameter_hash | {a: 2} |
+    | configuration | {a: 2} |
     | size           | 2      |
   And that simulator has the following games:
-    | size | parameter_hash |
+    | size | configuration |
     | 2    | {a: 2}         |
     | 2    | {a: 3}         |
   When I am on the last game scheduler's page
@@ -58,16 +58,16 @@ Scenario: 2 games exist, no prior profiles, no matches
 Scenario: no prior games, 2 prior profiles exist
   Given I am signed in
   Given the following simulator:
-    | parameter_hash | {a: "2"} |
+    | configuration | {a: "2"} |
   And that simulator has 1 role
   And that role has the strategies "A" and "B"
   And that simulator has the following profile:
     | name   | All: 1 A, 1 B |
-    | parameter_hash | {a: "2"}  |
+    | configuration | {a: "2"}  |
   And that profile has 1 sample record
   And that simulator has the following profile:
     | name  | All: 2 A |
-    | parameter_hash | {a: "3"}  |
+    | configuration | {a: "3"}  |
   When I am on the new game page
   And I fill in the following:
     | Name      | test |

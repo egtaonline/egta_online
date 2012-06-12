@@ -8,18 +8,21 @@ class ProfileAssociater
   def self.perform(scheduler_id)
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
-      names = scheduler.ensure_profiles
-      scheduler.profiles -= scheduler.profiles.where(:name.nin => names)
-      names -= scheduler.profiles.collect{|profile| profile.name}
-      names.each do |name|
-        profile = Profile.find_or_create_by(simulator_id: scheduler.simulator_id,
-                                                parameter_hash: scheduler.parameter_hash,
-                                                size: scheduler.size,
-                                                name: name)
-        profile.try_scheduling
-        scheduler.profiles << profile
+      assignments = new_assignments(scheduler)
+      profile_ids = []
+      assignments.each do |assignment|
+        profile = scheduler.simulator.profiles.find_or_create_by(configuration: scheduler.configuration, assignment: assignment)
+        profile_ids << profile.id if profile.valid?
       end
-      scheduler.save
+      scheduler.add_to_set(:profile_ids, profile_ids)
+      profile_ids.each { |pid| Resque.enqueue_in(5.minutes, ProfileScheduler, pid) }
     end
+  end
+  
+  def self.new_assignments(scheduler)
+    assignments = scheduler.ensure_profiles
+    scheduler.profiles -= scheduler.profiles.where(:assignment.nin => assignments)
+    scheduler.save
+    assignments -= scheduler.profiles.collect{ |profile| profile.assignment }
   end
 end

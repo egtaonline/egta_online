@@ -4,7 +4,7 @@
   = u.attribute :size
   = u.attribute :simulator_fullname, :label => "Simulator"
   %h3 Simulator Configuration
-  = render :partial => "parameter", :collection => game.parameter_hash.to_a
+  = render :partial => "parameter", :collection => game.configuration.to_a
 = link_to "Edit Game", edit_game_path(game.id), :class => 'btn btn-primary'
 - if game.roles.size == 1 && game.roles.first.name == "All"
   = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml"), :class => 'btn btn-primary'

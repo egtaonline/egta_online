@@ -3,7 +3,6 @@ class Simulator
   
   include Mongoid::Document
   include RoleManipulator
-  has_one :configuration, as: :configurable
   mount_uploader :simulator_source, SimulatorUploader
 
   embeds_many :roles, :as => :role_owner
@@ -18,7 +17,7 @@ class Simulator
   field :name
   field :description
   field :version
-  field :parameter_hash, :type => Hash, :default => {}
+  field :configuration, :type => Hash, :default => {}
   field :email
   
   validates :email, :email_format => {:message => 'does not match the expected format'}
@@ -48,7 +47,7 @@ class Simulator
             parameters = YAML.load(io)["web parameters"]
             parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
           end
-          self.parameter_hash = parameters
+          self.configuration = parameters
           Resque.enqueue(SimulatorInitializer, self.id)
         rescue
           errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")

@@ -4,4 +4,4 @@
   = u.attribute :simulator_fullname, :label => "Simulator"
   = u.attribute :sample_count
   %h3 Simulator Configuration
-  = render :partial => "schedulers/parameter", :collection => profile.parameter_hash.to_a
+  = render :partial => "schedulers/parameter", :collection => profile.configuration.to_a

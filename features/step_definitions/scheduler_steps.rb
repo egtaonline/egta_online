@@ -72,19 +72,6 @@ Then /^the last scheduler should have (\d+) profiles$/ do |arg1|
   Scheduler.last.profile_ids.size.should == 0
 end
 
-Given /^there is a simulator with corresponding game scheduler$/ do
-  with_resque do
-    @simulator = Fabricate(:simulator)
-    @simulator.add_role("All")
-    @simulator.add_strategy("All", "A")
-    @simulator.add_strategy("All", "B")
-    @game_scheduler = Fabricate(:game_scheduler, :simulator_id => @simulator.id)
-    @game_scheduler.add_role("All", @game_scheduler.size)
-    @game_scheduler.add_strategy("All", "A")
-    @game_scheduler.add_strategy("All", "B")
-  end
-end
-
 Then /^I should have (\d+) profile to be scheduled$/ do |arg1|
   ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)
 end
@@ -92,7 +79,26 @@ end
 Then /^that game should match the game scheduler$/ do
   @game = Game.last
   @game_scheduler = Scheduler.last
-  @game.parameter_hash.should == @game_scheduler.parameter_hash
+  @game.configuration.should == @game_scheduler.configuration
   Profile.where(:_id.in => @game.profile_ids).order_by(:name).to_a.should == Profile.where(:_id.in => @game_scheduler.profile_ids).order_by(:name).to_a
   Profile.count.should == @game.profile_ids.size
+end
+
+Given /^a fleshed out simulator with a non\-empty game scheduler exists$/ do
+  step 'a fleshed out simulator'
+  @scheduler = Fabricate(:game_scheduler_with_profiles, simulator: @simulator)
+  @scheduler.reload.profile_ids.count.should == 3
+  Profile.count.should eql(3)
+end
+
+When /^I edit a parameter of that scheduler$/ do
+  visit "/game_schedulers/#{@scheduler.id}/edit"
+  fill_in "Parm1", with: 3
+  with_resque do
+    click_button "Edit GameScheduler"
+  end
+end
+
+Then /^new profiles should be created$/ do
+  Profile.count.should eql(6)
 end

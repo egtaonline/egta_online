@@ -101,7 +101,7 @@ describe Game do
         g = Game.new_game_from_scheduler(game_scheduler)
         g.size.should eql(game_scheduler.size)
         g.simulator.should eql(game_scheduler.simulator)
-        g.parameter_hash.should eql(game_scheduler.parameter_hash)
+        g.configuration.should eql(game_scheduler.configuration)
       end
     end
   end
@@ -116,7 +116,7 @@ describe Game do
         g.add_roles_from_scheduler(scheduler)
         g.size.should eql(scheduler.size)
         g.simulator.should eql(scheduler.simulator)
-        g.parameter_hash.should eql(scheduler.parameter_hash)
+        g.configuration.should eql(scheduler.configuration)
         g.roles.count.should eql(1)
         g.roles.first.name.should eql(scheduler.roles.first.name)
         g.roles.first.count.should eql(scheduler.roles.first.count*scheduler.agents_per_player)
@@ -132,7 +132,7 @@ describe Game do
         g.add_roles_from_scheduler(scheduler)
         g.size.should eql(scheduler.size)
         g.simulator.should eql(scheduler.simulator)
-        g.parameter_hash.should eql(scheduler.parameter_hash)
+        g.configuration.should eql(scheduler.configuration)
         g.roles.count.should eql(1)
         g.roles.first.name.should eql(scheduler.roles.first.name)
         g.roles.first.count.should eql(scheduler.roles.first.count)

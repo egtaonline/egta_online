@@ -11,5 +11,5 @@
     = label :selector, :simulator_id, :class =>"control-label"
     .controls
       = collection_select :selector, :simulator_id, [scheduler.simulator], :id, :fullname
-  = render :partial => "simulator_selector/parameters", :object => scheduler.parameter_hash
-  = f.button :submit
+  = render :partial => "simulator_selector/parameters", :locals => { configuration: scheduler.configuration }
+  = f.button :submit, "Edit #{scheduler.class.to_s}"

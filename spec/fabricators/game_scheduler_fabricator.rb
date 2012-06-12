@@ -6,6 +6,14 @@ Fabricator(:game_scheduler) do
   samples_per_simulation 1
   max_samples 2
   time_per_sample 40
-  parameter_hash {|g| g.simulator.parameter_hash}
-  after_create {|sgs| if sgs.parameter_hash.is_a?(String); sgs.update_attribute(:parameter_hash, eval(sgs.parameter_hash)); end }
+  configuration {|g| g.simulator.configuration }
+end
+
+Fabricator(:game_scheduler_with_profiles, from: :game_scheduler) do
+  after_create do |scheduler|
+    scheduler.add_role("All", scheduler.size)
+    scheduler.add_strategy("All", "A")
+    scheduler.add_strategy("All", "B")
+    ProfileAssociater.perform scheduler.id
+  end
 end

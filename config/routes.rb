@@ -23,7 +23,7 @@ EgtaOnline::Application.routes.draw do
   resources :simulations, :only => [:index, :show]
   resources :schedulers do
     collection do
-      post :update_parameters
+      post :update_configuration
     end
     member do
       get :page_profiles
@@ -34,13 +34,13 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy, :add_role, :remove_role, :add_deviating_strategy, :remove_deviating_strategy
     end
     collection do
-      post :update_parameters
+      post :update_configuration
     end
   end
   
   resources :generic_schedulers do
     collection do
-      post :update_parameters
+      post :update_configuration
     end
   end
   
@@ -49,7 +49,7 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end
     collection do
-      post :update_parameters
+      post :update_configuration
     end
   end
   
@@ -58,7 +58,7 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy, :add_role, :remove_role, :calculate_cv_coefficients
     end
     collection do
-      post :update_parameters
+      post :update_configuration
       get :from_scheduler
     end
     resources :features, :only => [:create, :destroy]
