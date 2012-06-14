@@ -1,12 +1,19 @@
 require 'spec_helper'
 
 describe Account do
+  
+  it { should validate_presence_of :username }
+  
   describe "validations" do
     context "account that can't login" do
-      let!(:account){ Fabricate.build(:account_with_failure) }
+      before do
+        Net::SSH.stub(:start){ Net::SSH::Proxy::UnauthorizedError }
+        @account = Fabricate.build(:account)
+      end
+      
       it "should add an error to username" do
-        account.should have(1).error_on(:username)
-        account.errors[:username].should include("Cannot authenticate on nyx as \'fakename\' with provided password.")
+        @account.should have(1).error_on(:username)
+        @account.errors[:username].should include("Cannot authenticate on nyx as \'#{@account.username}\' with provided password.")
       end
     end
     
