@@ -15,11 +15,9 @@ if @adjusted == "true"
       attributes :id
       node(:sample_count){|m| m.sample_count-10}
       child :role_instances => :roles do |r|
-        attribute :name
-        child :strategy_instances => :strategies do |s|
-          attributes :name, :count
-          node(:payoff){|m| @payoffs = m.adjusted_payoffs(@object.cv_manager); @payoffs.mean }
-          node(:payoff_sd){|m| @payoffs.sd }
+        attribute :assignment
+        child :symmetry_groups do |s|
+          attributes :role, :strategy, :count, :payoff, :payoff_sd
         end
       end
     end

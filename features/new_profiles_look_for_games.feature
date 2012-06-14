@@ -54,24 +54,3 @@ Scenario: 2 games exist, no prior profiles, no matches
   Then there should be 1 profiles
   And the last game should have 0 profiles
   And the first game should have 1 profiles
-
-Scenario: no prior games, 2 prior profiles exist
-  Given I am signed in
-  Given the following simulator:
-    | configuration | {a: "2"} |
-  And that simulator has 1 role
-  And that role has the strategies "A" and "B"
-  And that simulator has the following profile:
-    | name   | All: 1 A, 1 B |
-    | configuration | {a: "2"}  |
-  And that profile has 1 sample record
-  And that simulator has the following profile:
-    | name  | All: 2 A |
-    | configuration | {a: "3"}  |
-  When I am on the new game page
-  And I fill in the following:
-    | Name      | test |
-    | Game size | 2    |
-  And I press "Create Game"
-  Then I should be on the last game's page
-  Then the last game should have 1 profiles

@@ -84,21 +84,65 @@ Then /^that game should match the game scheduler$/ do
   Profile.count.should == @game.profile_ids.size
 end
 
-Given /^a fleshed out simulator with a non\-empty game scheduler exists$/ do
+Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   step 'a fleshed out simulator'
-  @scheduler = Fabricate(:game_scheduler_with_profiles, simulator: @simulator)
-  @scheduler.reload.profile_ids.count.should == 3
-  Profile.count.should eql(3)
+  @scheduler_class = scheduler
+  @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
+  @scheduler.reload
+  @profile_count = Profile.count
+  @profile_count.should_not eql(0)
 end
 
 When /^I edit a parameter of that scheduler$/ do
-  visit "/game_schedulers/#{@scheduler.id}/edit"
-  fill_in "Parm1", with: 3
+  visit "/#{@scheduler_class}s/#{@scheduler.id}/edit"
+  fill_in "Parm1", with: 12345
   with_resque do
-    click_button "Edit GameScheduler"
+    click_button "Edit #{@scheduler.class.to_s}"
   end
 end
 
 Then /^new profiles should be created$/ do
-  Profile.count.should eql(6)
+  Profile.count.should eql(@profile_count*2)
+end
+
+Then /^I should see the new parameter value$/ do
+  page.should have_content("12345")
+end
+
+Given /^a fleshed out simulator with an empty (\w+) of size (\d+)$/ do |scheduler, size|
+  step 'a fleshed out simulator'
+  @scheduler_class = scheduler
+  size = 4 if scheduler == 'hierarchical_scheduler'
+  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
+end
+
+When /^I add the role (.*) with size (.*) and the strategies (.*)$/ do |role, size, strategies|
+  if role =~ /^\S+$/
+    strategies.split(", ").each{ |strategy| @simulator.add_strategy(role, strategy) }
+    visit "/#{@scheduler_class}s/#{@scheduler.id}"
+    with_resque do
+      select role, from: "role"
+      fill_in "role_count", with: size
+      click_button "Add Role"
+      strategies.split(", ").each do |strategy|
+        select strategy, from: "#{role}_strategy"
+        click_button "Add Strategy"
+      end
+    end
+  end
+end
+
+Then /^I should see the profiles (.*)$/ do |profiles|
+  eval(profiles).each do |profile|
+    page.should have_content(profile)
+  end
+  Profile.count.should eql(eval(profiles).size)
+end
+
+Given /^the simulator has a profile that matches the scheduler with the assignment (.*)$/ do |assignment|
+  @simulator.profiles.create(assignment: assignment, configuration: @scheduler.configuration)
+end
+
+Given /^the simulator has a profile that does not match the scheduler with assignment (.*)$/ do |assignment|
+  @simulator.profiles.create(assignment: assignment, configuration: { gibberish: "Fake" })
 end

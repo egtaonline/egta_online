@@ -12,10 +12,10 @@ Fabricator(:hierarchical_scheduler) do
 end
 
 Fabricator(:hierarchical_scheduler_with_profiles, from: :hierarchical_scheduler) do
-  roles(:count => 1) { |scheduler, i| Fabricate(:role, :role_owner => scheduler, :name => "All", :count => scheduler.size/scheduler.agents_per_player) }
   after_create do |scheduler| 
-    scheduler.roles.first.strategies << "A"
-    scheduler.roles.first.strategies << "B"
+    scheduler.add_role("All", scheduler.size/scheduler.agents_per_player)
+    scheduler.add_strategy("All", "A")
+    scheduler.add_strategy("All", "B")
     ProfileAssociater.perform scheduler.id
   end
 end

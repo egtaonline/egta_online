@@ -1,11 +1,8 @@
 object @object
 
 attributes :id, :sample_count
-child :role_instances => :roles do |r|
-  attribute :name
-  child :strategy_instances => :strategies do |s|
-    attributes :name, :count, :payoff, :payoff_sd
-  end
+child :symmetry_groups do |r|
+  attributes :role, :strategy, :count, :payoff, :payoff_sd
 end
 if @full == "true"
   child :sample_records do |s|

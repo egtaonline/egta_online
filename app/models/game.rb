@@ -39,8 +39,8 @@ class Game
   end
   
   def display_profiles
-    query_hash = {:name => strategy_regex, :sample_count.gt => 0}
-    roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
+    query_hash = { :assignment => strategy_regex, :sample_count.gt => 0 }
+    roles.each {|r| query_hash["role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
   end
   
