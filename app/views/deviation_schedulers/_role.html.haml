@@ -3,11 +3,10 @@
   %td= role.count
   %td
     %table
-      - other_role = role_owner.roles.where(:name => role.name).first
       =render :partial => "strategy", :collection => role.strategies, :locals => {role: role}
-      -if (role_owner.available_strategies(other_role)) != []
+      -if (role_owner.available_strategies(role.name)) != []
         =form_tag url_for(:action=>:add_deviating_strategy, :id => role_owner.id, :role => role.name), :method=>:post do
           %tr
-            %td= select_tag "#{role.name}_strategy", options_for_select(role_owner.available_strategies(other_role))
+            %td= select_tag "#{role.name}_strategy", options_for_select(role_owner.available_strategies(role.name))
             %td= submit_tag "Add Strategy", {:id => role.name, :class => 'btn btn-mini btn-info'}
   %td.take_up_space= link_to 'Remove Role', "", :method => :post, :class => 'btn btn-danger'

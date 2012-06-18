@@ -69,7 +69,6 @@ group :test do
   gem "spork", '~> 1.0rc'
   gem "cucumber-rails"
   gem "capybara-screenshot"
-  gem "database_cleaner"
   gem "fabrication"
   gem "guard-rspec"
   gem "guard-cucumber"

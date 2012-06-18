@@ -49,20 +49,6 @@ describe "DeviationSchedulers" do
       it { StrategyRemover.should have_queued(scheduler.id) }
     end
     
-    describe '#strategies_for' do
-      before(:each) do
-        scheduler.add_role('A', 1)
-        scheduler.add_role('B', 2)
-        scheduler.add_strategy('A', 'D')
-        scheduler.add_strategy('A', 'C')
-        scheduler.add_strategy('B', 'E')
-        scheduler.add_deviating_strategy('B', 'F')
-      end
-      
-      it { scheduler.strategies_for('A').should eql(['C', 'D']) }
-      it { scheduler.strategies_for('B').should eql(['E']) }
-    end
-    
     describe '#deviating_strategies_for' do
       before(:each) do
         scheduler.add_role('A', 1)
@@ -102,14 +88,6 @@ describe "DeviationSchedulers" do
     describe '#profile_space' do
       let(:scheduler){ Fabricate(:deviation_scheduler) }
       
-      context 'an invalid role partition' do
-        before(:each) do
-          scheduler.add_role('Buyer', 1)
-        end
-        
-        it { scheduler.profile_space.should eql([]) }
-      end
-      
       context 'a role is missing strategies' do
         before(:each) do
           scheduler.add_role('Buyer', 1)
@@ -119,34 +97,6 @@ describe "DeviationSchedulers" do
         end
         
         it { scheduler.profile_space.should eql([]) }
-      end
-      
-      context 'empty deviating strategy sets' do
-        context 'symmetry' do
-          before(:each) do
-            scheduler.add_role('All', 2)
-            scheduler.add_strategy('All', 'A')
-            scheduler.add_strategy('All', 'B')
-          end
-        
-          it { scheduler.profile_space.sort.should eql(['All: 2 A', 'All: 1 A, 1 B', 'All: 2 B'].sort) }
-        end
-        
-        context 'asymmetry' do
-          before(:each) do
-            scheduler.update_attribute(:size, 3)
-            scheduler.add_role('B', 2)
-            scheduler.add_strategy('B', 'A')
-            scheduler.add_strategy('B', 'B')
-            scheduler.add_role('S', 1)
-            scheduler.add_strategy('S', 'A')
-            scheduler.add_strategy('S', 'B')
-          end
-        
-          it { scheduler.profile_space.sort.should eql(['B: 2 A; S: 1 A', 'B: 2 A; S: 1 B',
-                                                        'B: 1 A, 1 B; S: 1 A', 'B: 1 A, 1 B; S: 1 B',
-                                                        'B: 2 B; S: 1 A', 'B: 2 B; S: 1 B'].sort) }
-        end
       end
       
       context 'non-empty deviating strategy sets' do

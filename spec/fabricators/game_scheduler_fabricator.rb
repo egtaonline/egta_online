@@ -4,7 +4,7 @@ Fabricator(:game_scheduler) do
   size 2
   process_memory 1000
   samples_per_simulation 1
-  max_samples 2
+  default_samples 2
   time_per_sample 40
   configuration {|g| g.simulator.configuration }
 end

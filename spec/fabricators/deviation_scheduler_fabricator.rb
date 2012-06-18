@@ -4,10 +4,9 @@ Fabricator(:deviation_scheduler) do
   size 2
   process_memory 1000
   samples_per_simulation 1
-  max_samples 2
+  default_samples 2
   time_per_sample 40
-  configuration {|g| g.simulator.configuration}
-  after_create {|sgs| if sgs.configuration.is_a?(String); sgs.update_attribute(:configuration, eval(sgs.configuration)); end }
+  configuration {|g| g.simulator.configuration }
 end
 
 Fabricator(:deviation_scheduler_with_profiles, from: :deviation_scheduler) do

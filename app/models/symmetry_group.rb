@@ -8,7 +8,7 @@ class SymmetryGroup
   field :role
   field :strategy
   
-  validates :count, presence: true, numericality: { greater_than: 0 }
+  validates :count, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :role, presence: true
   validates :strategy, presence: true, uniqueness: { scope: :role }
 end

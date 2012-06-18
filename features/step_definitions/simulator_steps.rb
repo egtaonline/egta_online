@@ -67,8 +67,8 @@ Given /^a fleshed out simulator$/ do
 end
 
 Given /^there are two simulators with different default configuration$/ do
-  @simulator = Fabricate(:simulator_with_strategies, configuration: { "Parm1" => '2', "Parm2" => '3' })
-  @simulator2 = Fabricate(:simulator_with_strategies, configuration: { "Parm2" => '4', "Parm3" => '2' })
+  @simulator = Fabricate(:simulator_with_strategies, configuration: { 'Parm1' => '2', 'Parm2' => '3' })
+  @simulator2 = Fabricate(:simulator_with_strategies, configuration: { 'Parm2' => '4', 'Parm3' => '2' })
 end
 
 Then /^I should see the default configuration of the first simulator$/ do

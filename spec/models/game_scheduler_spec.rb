@@ -1,102 +1,81 @@
 require 'spec_helper'
 
 describe GameScheduler do
-  before do
-    ResqueSpec.reset!
-  end
+  it { should embed_many(:roles) }
+  it { should validate_presence_of(:default_samples) }
+  it { should validate_numericality_of(:default_samples).to_allow(only_integer: true, greater_than: 0) }
   
-  shared_examples "a game scheduler" do
-    describe "#required_samples" do
-      let!(:profile){Fabricate(:profile, :simulator => game_scheduler1.simulator)}
-      let!(:profile2){Fabricate(:profile, :name => "All: 2 B", :simulator => game_scheduler1.simulator)}
+  shared_examples 'a game scheduler' do
+    describe '#required_samples' do
+      let!(:profile){ Fabricate(:profile, :simulator => scheduler.simulator) }
+      let!(:profile2){ Fabricate(:profile, :assignment => 'All: 2 B', :simulator => scheduler.simulator) }
+      
       before do
-        game_scheduler1.profiles << profile
+        scheduler.profiles << profile
       end
-      it {game_scheduler1.required_samples(profile.id).should eql(game_scheduler1.max_samples)}
-      it {game_scheduler1.required_samples(profile2.id).should eql(0)}
+      
+      it {scheduler.required_samples(profile.id).should eql(scheduler.default_samples)}
+      it {scheduler.required_samples(profile2.id).should eql(0)}
     end
     
-    describe "#destroy" do
-      let!(:profile){Fabricate(:profile, :simulator => game_scheduler1.simulator)}
-      it "should preserve profiles" do
-        game_scheduler1.profiles << profile
-        game_scheduler1.save!
-        described_class.where(:size => 2).first.destroy
-        Profile.count.should == 1
+    describe '#profile_space' do
+      context 'an invalid role partition' do
+        before(:each) do
+          scheduler.add_role('Buyer', 1)
+        end
+        
+        it { scheduler.profile_space.should eql([]) }
       end
-    end
-
-    describe "#add_strategy" do
-      context "symmetric" do
-        before :each do
-          game_scheduler1.add_role("All", 2)
-          game_scheduler1.add_strategy("All", "A")
-          ResqueSpec.perform_all(:profile_actions)
+      
+      context 'symmetry' do
+        before(:each) do
+          scheduler.add_role('All', 2)
+          scheduler.add_strategy('All', 'A')
+          scheduler.add_strategy('All', 'B')
         end
-
-        it "should create profiles" do
-          game_scheduler = described_class.where(:size => 2).first
-          game_scheduler.profiles.size.should eql(1)
-          game_scheduler.profiles.first.name.should eql("All: 2 A")
-        end
-
-        it "should create the subgame when more than one profile is added" do
-          game_scheduler1.add_strategy("All", "B")
-          ResqueSpec.perform_all(:profile_actions)
-          game_scheduler = described_class.where(:size => 2).first
-          game_scheduler.profiles.size.should eql(3)
-          game_scheduler.profiles.collect{|p| p.name}.should eql(["All: 2 A", "All: 1 A, 1 B", "All: 2 B"])
-        end
+      
+        it { scheduler.profile_space.sort.should eql(['All: 2 A', 'All: 1 A, 1 B', 'All: 2 B'].sort) }
       end
-
-      context "asymmetric" do
-        it "should create the subgame when more than one profile is added" do
-          game_scheduler2.add_role("Seller", 1)
-          game_scheduler2.add_role("Bidder", 2)
-          game_scheduler2.add_strategy("Bidder", "A")
-          game_scheduler2.add_strategy("Seller", "C")
-          ResqueSpec.perform_all(:profile_actions)
-          game_scheduler2.add_strategy("Seller", "A")
-          game_scheduler2.add_strategy("Bidder", "B")
-          ResqueSpec.perform_all(:profile_actions)
-          game_scheduler = described_class.where(:size => 3).first
-          game_scheduler.profiles.size.should eql(6)
-          game_scheduler.profiles.collect{|p| p.name}.sort.should eql(["Bidder: 2 A; Seller: 1 A", "Bidder: 2 A; Seller: 1 C", "Bidder: 1 A, 1 B; Seller: 1 A", "Bidder: 1 A, 1 B; Seller: 1 C", "Bidder: 2 B; Seller: 1 A", "Bidder: 2 B; Seller: 1 C"].sort)
+      
+      context 'role-symmetry' do
+        before(:each) do
+          scheduler.update_attribute(:size, 3)
+          scheduler.add_role('B', 2)
+          scheduler.add_strategy('B', 'A')
+          scheduler.add_strategy('B', 'B')
+          scheduler.add_role('S', 1)
+          scheduler.add_strategy('S', 'A')
+          scheduler.add_strategy('S', 'B')
         end
-      end
-    end
-
-    describe "#remove_strategy" do
-      it "should preserve profiles while removing the correct ones from the scheduler" do
-        game_scheduler2.add_role("Seller", 1)
-        game_scheduler2.add_role("Bidder", 2)
-        game_scheduler2.add_strategy("Bidder", "A")
-        game_scheduler2.add_strategy("Seller", "C")
-        game_scheduler2.add_strategy("Seller", "A")
-        game_scheduler2.add_strategy("Bidder", "B")
-        ResqueSpec.perform_all(:profile_actions)
-        game_scheduler = described_class.where(:size => 3).first
-        game_scheduler.profiles.size.should eql(6)
-        game_scheduler.remove_strategy("Seller", "A")
-        ResqueSpec.perform_all(:profile_actions)
-        game_scheduler.reload
-        game_scheduler.profiles.size.should eql(3)
-        Profile.count.should eql(6)
+      
+        it { scheduler.profile_space.sort.should eql(['B: 2 A; S: 1 A', 'B: 2 A; S: 1 B',
+                                                      'B: 1 A, 1 B; S: 1 A', 'B: 1 A, 1 B; S: 1 B',
+                                                      'B: 2 B; S: 1 A', 'B: 2 B; S: 1 B'].sort) }
       end
     end
   end
   
   describe GameScheduler do
     it_behaves_like "a game scheduler" do
-      let!(:game_scheduler1){Fabricate(:game_scheduler)}
-      let!(:game_scheduler2){Fabricate(:game_scheduler, :size => 3)}
+      let(:scheduler){ Fabricate(:game_scheduler) }
     end
   end
   
   describe DeviationScheduler do
     it_behaves_like "a game scheduler" do
-      let!(:game_scheduler1){Fabricate(:deviation_scheduler)}
-      let!(:game_scheduler2){Fabricate(:deviation_scheduler, :size => 3)}
+      let(:scheduler){ Fabricate(:deviation_scheduler) }
+    end
+  end
+  
+  describe HierarchicalScheduler do
+    it_behaves_like "a game scheduler" do
+      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2, agents_per_player: 1) }
+    end
+  end
+  
+  describe HierarchicalDeviationScheduler do
+    it_behaves_like "a game scheduler" do
+      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2, agents_per_player: 1) }
     end
   end
 end

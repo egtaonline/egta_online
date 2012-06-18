@@ -2,7 +2,7 @@ class Simulator
   require 'find'
   
   include Mongoid::Document
-  include RoleManipulator
+  include RoleManipulator::Base
   mount_uploader :simulator_source, SimulatorUploader
 
   embeds_many :roles, :as => :role_owner
@@ -65,19 +65,19 @@ class Simulator
     name+"-"+version
   end
 
-  def remove_strategy(role, strategy)
+  def remove_strategy(role_name, strategy_name)
     schedulers.each do |scheduler|
-      scheduler.remove_strategy(role, strategy)
+      scheduler.remove_strategy(role_name, strategy_name)
     end
     super
-    profiles.with_role_and_strategy(role, strategy).destroy_all
+    profiles.with_role_and_strategy(role_name, strategy_name).destroy_all
   end
   
-  def remove_role(role)
+  def remove_role(role_name)
     schedulers.each do |scheduler|
-      scheduler.remove_role(role)
+      scheduler.remove_role(role_name)
     end
     super
-    profiles.where(:name => Regexp.new("#{role}: ")).destroy_all
+    profiles.where(:name => Regexp.new("#{role_name}: ")).destroy_all
   end
 end

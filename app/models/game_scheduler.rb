@@ -1,61 +1,22 @@
 class GameScheduler < Scheduler
-  include RoleManipulator
-  field :max_samples, :type => Integer
-  embeds_many :roles, :as => :role_owner, :order => :name.asc
-  validates_presence_of :max_samples
-  validates_numericality_of :max_samples
+  include RoleManipulator::Scheduler
+  
+  field :default_samples, type: Integer
+  embeds_many :roles, as: :role_owner, order: :name.asc
+  validates :default_samples, presence: true, numericality: { integer_only: true, greater_than: 0 }
 
   def required_samples(profile_id)
-    if (self.profiles.find(profile_id) rescue nil) == nil
-      0
-    else
-      max_samples
-    end
+    (self.profiles.find(profile_id) rescue nil) == nil ? 0 : default_samples
   end
-
-  def add_strategy(role, strategy_name)
-    super
-    Resque.enqueue(ProfileAssociater, self.id)
-  end
-
-  def remove_role(role_name)
-    super
-    self.profiles = []
-    self.save
-  end
-
-  def remove_strategy(role, strategy_name)
-    role_i = roles.where(name: role).first
-    if role_i != nil
-      role_i.strategies.delete(strategy_name)
-      role_i.save!
-      self.save
-      Resque.enqueue(StrategyRemover, self.id)
-    end
-  end
-
+  
   def profile_space
-    if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategies.count}.min < 1
-      return []
-    end
-    first_ar = nil
-    all_other_ars = []
-    roles.each do |role|
-      combinations = role.strategies.repeated_combination(role.count).to_a
-      if first_ar == nil
-        first_ar = combinations.collect{|c| [role.name].concat(c) }
-      else
-        all_other_ars << combinations.collect{|c| [role.name].concat(c) }
-      end
-    end
-    if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
-      return first_ar.collect {|r| format_role(r) }
-    else
-      profs = []
-      first_ar.product(*all_other_ars).each do |prof|
-        prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| format_role(r) }.join("; ")
-      end
+    return [] if invalid_role_partition?
+    first_rc, all_other_rcs = subgame_combinations
+    return first_rc.collect { |r| format_role(r) } if single_role?
+    profs = []
+    first_rc.product(*all_other_rcs).each do |prof|
+      prof.sort!{|x, y| x[0] <=> y[0]}
+      profs << prof.collect {|r| format_role(r) }.join("; ")
     end
     profs
   end
@@ -65,5 +26,18 @@ class GameScheduler < Scheduler
   def format_role(role)
     strats = role.drop(1)
     "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
+  end
+  
+  def invalid_role_partition?
+    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
+  end
+  
+  def single_role?
+    (roles.size == 1) | (roles.map{ |r| r.strategies.count }.reduce(:+) == roles.first.strategies.count)
+  end
+  
+  def subgame_combinations
+    rcs = roles.collect{ |role| role.strategies.repeated_combination(role.count).collect{|c| [role.name].concat(c) } }
+    return rcs[0], rcs.drop(1)
   end
 end

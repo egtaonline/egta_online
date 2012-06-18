@@ -13,16 +13,11 @@ Spork.prefork do
   Capybara.default_selector = :css
   Capybara.javascript_driver = :webkit
   Capybara.default_wait_time = 5
-  require 'database_cleaner'
-  require 'database_cleaner/cucumber'
-  DatabaseCleaner.orm = "mongoid"
-  DatabaseCleaner.strategy = :truncation
   require 'cucumber/rspec/doubles'
+  ActionController::Base.allow_rescue = false
   World(ResqueSpec::Helpers)
 end
 
 Spork.each_run do
-  ActionController::Base.allow_rescue = false
   ResqueSpec.reset!
-  DatabaseCleaner.clean
 end

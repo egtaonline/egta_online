@@ -56,7 +56,7 @@ describe SchedulerObserver do
         if scheduler_class != GenericScheduler
           context "when max sample changes" do
             before(:each) do
-              scheduler.update_attribute(:max_samples, 50)
+              scheduler.update_attribute(:default_samples, 50)
             end
           end
         end

@@ -114,6 +114,7 @@ Given /^a fleshed out simulator with an empty (\w+) of size (\d+)$/ do |schedule
   @scheduler_class = scheduler
   size = 4 if scheduler == 'hierarchical_scheduler'
   @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
+  @scheduler.configuration.should_not eql(nil)
 end
 
 When /^I add the role (.*) with size (.*) and the strategies (.*)$/ do |role, size, strategies|

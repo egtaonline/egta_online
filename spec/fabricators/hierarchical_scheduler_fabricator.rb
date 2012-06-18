@@ -4,7 +4,7 @@ Fabricator(:hierarchical_scheduler) do
   size 4
   process_memory 1000
   samples_per_simulation 1
-  max_samples 2
+  default_samples 2
   agents_per_player 2
   time_per_sample 40
   configuration { |s| s.simulator.configuration }
