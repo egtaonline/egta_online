@@ -34,7 +34,7 @@ class GameScheduler < Scheduler
     end
   end
 
-  def ensure_profiles
+  def profile_space
     if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategies.count}.min < 1
       return []
     end

@@ -19,23 +19,29 @@ class DeviationScheduler < GameScheduler
     Resque.enqueue(ProfileAssociater, self.id)
   end
   
-  def remove_deviating_strategy(role, strategy_name)
-    role_i = deviating_roles.where(name: role).first
+  def remove_deviating_strategy(role_name, strategy_name)
+    role_i = deviating_roles.where(name: role_name).first
     role_i.strategies.delete(strategy_name)
-    role_i.save!
     self.save
     Resque.enqueue(StrategyRemover, self.id)
   end
   
-  def unused_strategies(role)
-    deviating_role = deviating_roles.where(:name => role.name).first
-    simulator.roles.where(name: role.name).first.strategies-role.strategies-(deviating_role == nil ? [] : deviating_role.strategies)
+  def available_strategies(role_name)
+    simulator.strategies_for(role_name)-strategies_for(role_name)-deviating_strategies_for(role_name)
   end
   
-  def ensure_profiles
-    if roles.reduce(0){|sum, r| sum + r.count} != size || roles.collect{|r| r.strategies.count}.min < 1
-      return []
-    end
+  def strategies_for(role_name)
+    role = roles.where(name: role_name).first
+    role == nil ? [] : role.strategies
+  end
+  
+  def deviating_strategies_for(role_name)
+    role = deviating_roles.where(name: role_name).first
+    role == nil ? [] : role.strategies
+  end
+  
+  def profile_space
+    return [] if invalid_role_partition
     first_ar = nil
     all_other_ars = []
     roles.each do |role|
@@ -71,5 +77,11 @@ class DeviationScheduler < GameScheduler
       end
     end
     profs
+  end
+  
+  protected
+  
+  def invalid_role_partition
+    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
   end
 end

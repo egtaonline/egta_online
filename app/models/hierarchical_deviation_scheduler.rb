@@ -5,7 +5,7 @@ class HierarchicalDeviationScheduler < DeviationScheduler
   validates_presence_of :agents_per_player
   validate :divisibility
   
-  def ensure_profiles
+  def profile_space
     if roles.reduce(0){|sum, r| sum + r.count}*agents_per_player != size || roles.collect{|r| r.strategies.count}.min < 1
       return []
     end

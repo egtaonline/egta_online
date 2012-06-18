@@ -1,5 +1,7 @@
 EgtaOnline::Application.routes.draw do
 
+  resources :deviation_schedulers
+
   devise_for :users
 
   namespace :api do

@@ -28,7 +28,7 @@ class Account
         s.exec!("echo #{KEY} >> ~/.ssh/authorized_keys")
       end
     rescue
-      errors.add(:username, "Cannot authenticate on nyx as \'#{self.username}\' with provided password.")
+      errors.add(:username, "Cannot authenticate on nyx as \'#{username}\' with provided password.")
     end
   end
   
@@ -40,7 +40,7 @@ class Account
         Net::SSH.start(Yetting.host, username) do |s|
           groups = s.exec!("groups")
         end
-        errors.add(:username, "\'#{self.username}\' is not a member of wellman group.  Ask Mike to add you.") if groups.split(" ").include?("wellman") == false
+        errors.add(:username, "\'#{username}\' is not a member of wellman group.  Ask Mike to add you.") if groups.split(" ").include?("wellman") == false
       rescue
         errors.add(:username, "Could not connect to nyx, try again later.")
       end

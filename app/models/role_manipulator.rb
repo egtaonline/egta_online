@@ -22,7 +22,7 @@ module RoleManipulator
     role_i.save!
   end
 
-  def unused_strategies(role)
+  def available_strategies(role)
     simulator.roles.where(name: role.name).first.strategies-role.strategies
   end
   

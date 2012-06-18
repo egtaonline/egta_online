@@ -5,5 +5,5 @@
   =render :partial => "strategy/strategy", :collection => role.strategies, :locals => {role: role}
   =form_tag url_for(:action=>:add_strategy, :id => game.id, :role => role.name), :method=>:post do
     %tr
-      %td= select_tag "#{role}_strategy", options_for_select(game.unused_strategies(role))
+      %td= select_tag "#{role}_strategy", options_for_select(game.available_strategies(role))
       %td= submit_tag "Add Strategy"

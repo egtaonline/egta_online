@@ -20,7 +20,7 @@ class ProfileAssociater
   end
   
   def self.new_assignments(scheduler)
-    assignments = scheduler.ensure_profiles
+    assignments = scheduler.profile_space
     scheduler.profiles -= scheduler.profiles.where(:assignment.nin => assignments)
     scheduler.save
     assignments -= scheduler.profiles.collect{ |profile| profile.assignment }
