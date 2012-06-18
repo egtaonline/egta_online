@@ -1,9 +1,15 @@
 class GenericScheduler < Scheduler
+  include RoleManipulator::RolePartition
+  
   field :sample_hash, :type => Hash, :default => {}
   
   def required_samples(profile_id)
     val = sample_hash[profile_id.to_s]
     val == nil ? 0 : val
+  end
+  
+  def add_role(role_name, count)
+      roles.find_or_create_by(name: role_name, count: count)
   end
   
   def remove_role(role_name)
@@ -43,5 +49,16 @@ class GenericScheduler < Scheduler
     self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}
     self.sample_hash = hash
     self.save
+  end
+  
+  protected
+  
+  def add_strategies_to_game(game)
+    roles.each do |role|
+      game.add_role(role.name, role.count)
+      profiles.collect{ |profile| profile.strategies_for(role.name) }.flatten.uniq.each do |strategy|
+        game.add_strategy(role.name, strategy)
+      end
+    end
   end
 end

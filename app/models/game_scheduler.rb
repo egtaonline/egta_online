@@ -1,9 +1,7 @@
 class GameScheduler < Scheduler
   include RoleManipulator::Scheduler
-  
-  field :default_samples, type: Integer
-  embeds_many :roles, as: :role_owner, order: :name.asc
-  validates :default_samples, presence: true, numericality: { integer_only: true, greater_than: 0 }
+
+  validates_numericality_of :default_samples, greater_than: 0
 
   def required_samples(profile_id)
     (self.profiles.find(profile_id) rescue nil) == nil ? 0 : default_samples
@@ -39,5 +37,12 @@ class GameScheduler < Scheduler
   def subgame_combinations
     rcs = roles.collect{ |role| role.strategies.repeated_combination(role.count).collect{|c| [role.name].concat(c) } }
     return rcs[0], rcs.drop(1)
+  end
+
+  def add_strategies_to_game(game)
+    roles.each do |r|
+      game.roles.create!(name: r.name, count: r.count)
+      r.strategies.each{ |s| game.add_strategy(r.name, s) }
+    end
   end
 end

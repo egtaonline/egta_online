@@ -7,37 +7,16 @@ class Game
   field :name
   field :size, type: Integer
   field :simulator_fullname
-  embeds_many :roles, :as => :role_owner
-  embeds_one :cv_manager
   field :configuration, type: Hash, default: {}
-
+  
+  embeds_many :roles, as: :role_owner
+  embeds_one :cv_manager
   belongs_to :simulator
-  index [[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
-  validates_presence_of :simulator, :name, :size, :configuration
   has_and_belongs_to_many :profiles, :inverse_of => nil
-  after_create :add_cv_manager, :find_profiles
-  before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
-
-  def find_profiles
-    Resque.enqueue(ProfileGatherer, id)
-  end
-
-  def add_cv_manager
-    self.cv_manager = CvManager.new
-    self.save
-  end
-
-  def self.new_game_from_scheduler(scheduler)
-    game = Game.create!(name: scheduler.name, size: scheduler.size, simulator_id: scheduler.simulator_id, configuration: scheduler.configuration)
-  end
-
-  def add_roles_from_scheduler(scheduler)
-    multiplier = (scheduler["agents_per_player"] == nil ? 1 : scheduler["agents_per_player"])
-    scheduler.roles.each {|r| roles.create!(name: r.name, count: r.count*multiplier); r.strategies.each{|s| add_strategy(r.name, s)}}
-    if scheduler.is_a? DeviationScheduler
-      scheduler.deviating_roles.each{|r| r.strategies.each{|s| add_strategy(r.name, s)}}
-    end
-  end
+  
+  index [[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
+  validates_presence_of :simulator, :name, :size, :configuration, :simulator_fullname
+  validates_numericality_of :size, only_integer: true, greater_than: 1
   
   def display_profiles
     query_hash = { :assignment => strategy_regex, :sample_count.gt => 0 }
@@ -60,4 +39,5 @@ class Game
   def strategy_regex
     Regexp.new("^"+roles.order_by(:name => :asc).collect{|r| "#{r.name}: \\d+ (#{r.strategies.join('(, \\d+ )?)*(')}(, \\d+ )?)*"}.join("; ")+"$")
   end
+  
 end

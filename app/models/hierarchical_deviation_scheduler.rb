@@ -45,4 +45,11 @@ class HierarchicalDeviationScheduler < DeviationScheduler
     end
     profs.uniq
   end
+  
+  protected
+  
+  def add_strategies_to_game(game)
+    super
+    deviating_roles.each{ |r| r.strategies.each{ |s| add_strategy(r.name, s) } }
+  end
 end

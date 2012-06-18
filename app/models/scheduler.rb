@@ -12,6 +12,10 @@ class Scheduler
   field :simulator_fullname
   field :configuration, type: Hash, default: {}
   field :size, type: Integer
+  field :default_samples, type: Integer
+  embeds_many :roles, as: :role_owner, order: :name.asc
+  validates_numericality_of :default_samples, integer_only: true
+  
   accepts_nested_attributes_for :configuration
   
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
@@ -27,4 +31,10 @@ class Scheduler
   validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :size
   validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true
   validates_numericality_of :samples_per_simulation, :size, only_integer: true, greater_than: 0
+  
+  def create_game_to_match
+    game = Game.create!(name: name, size: size, simulator_id: simulator_id, configuration: configuration)
+    add_strategies_to_game(game)
+    game
+  end
 end

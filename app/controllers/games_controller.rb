@@ -48,14 +48,8 @@ class GamesController < ApplicationController
   end
 
   def from_scheduler
-    scheduler = Scheduler.find(params[:scheduler_id])
-    @game = Game.new_game_from_scheduler(scheduler)
-    if @game.save!
-      @game.add_roles_from_scheduler(scheduler)
-      redirect_to game_url(@game)
-    else
-      render "new"
-    end
+    @game = Game.new_game_from_scheduler(params[:scheduler_id])
+    respond_with(@game)
   end
 
   def calculate_cv_coefficients

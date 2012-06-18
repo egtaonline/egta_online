@@ -7,7 +7,7 @@ Scenario: Matching profiles already exist
   And a game that matches those profiles
   When I visit that game's page
   And add the strategies of those profiles to the game
-  And request a representation of the game
+  And I request a representation of the game
   Then I should those profiles
 
 

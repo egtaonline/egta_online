@@ -29,6 +29,7 @@ EgtaOnline::Application.routes.draw do
     end
     member do
       get :page_profiles
+      post :create_game_to_match
     end
   end
   resources :deviation_schedulers, :hierarchical_deviation_schedulers do
@@ -61,7 +62,6 @@ EgtaOnline::Application.routes.draw do
     end
     collection do
       post :update_configuration
-      get :from_scheduler
     end
     resources :features, :only => [:create, :destroy]
   end

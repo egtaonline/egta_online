@@ -61,7 +61,7 @@ When /^add the strategies of those profiles to the game$/ do
   end
 end
 
-When /^request a representation of the game$/ do
+When /^I request a representation of the game$/ do
   click_link "Download JSON"
 end
 

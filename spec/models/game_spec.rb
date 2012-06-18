@@ -2,7 +2,12 @@ require 'spec_helper'
 
 describe Game do
   
+  it { should validate_presence_of :name }
   it { should validate_presence_of :configuration }
+  it { should validate_presence_of :size }
+  it { should validate_presence_of :simulator_fullname }
+  it { should validate_numericality_of(:size).to_allow(only_integer: true, greater_than: 1) }
+  it { should embed_one(:cv_manager) }
   
   describe "after_create" do
     before(:each) do
@@ -81,18 +86,7 @@ describe Game do
   #     end
   #   end
   end
-  # 
-  # describe "new_game_from_scheduler" do
-  #   context "game schedulers" do
-  #     let!(:game_scheduler){Fabricate(:game_scheduler)}
-  #     it "should create a game that matches the scheduler" do
-  #       g = Game.new_game_from_scheduler(game_scheduler)
-  #       g.size.should eql(game_scheduler.size)
-  #       g.simulator.should eql(game_scheduler.simulator)
-  #       g.configuration.should eql(game_scheduler.configuration)
-  #     end
-  #   end
-  # end
+
   # 
   # describe "#add_roles_from_scheduler" do
   #   context 'hierarchical schedulers' do

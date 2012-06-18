@@ -147,3 +147,26 @@ end
 Given /^the simulator has a profile that does not match the scheduler with assignment (.*)$/ do |assignment|
   @simulator.profiles.create(assignment: assignment, configuration: { gibberish: "Fake" })
 end
+
+Given /^its profiles have been sampled$/ do
+  @scheduler.profiles.each { |p| p.update_attribute(:sample_count, 1) }
+end
+
+When /^I visit that scheduler's page$/ do
+  visit "/#{@scheduler_class}s/#{@scheduler.id}"
+end
+
+Then /^I should see a game that matches that scheduler$/ do
+  current_path.should eql(game_path(Game.last))
+  page.should have_content(@scheduler.name)
+  page.should have_content(@scheduler.simulator_fullname)
+  @scheduler.configuration.each { |key,value| page.should have_content(key); page.should have_content(value) }
+end
+
+Then /^I should all the profiles of the scheduler that have been sampled$/ do
+  @scheduler.profiles.each do |profile|
+    profile.symmetry_groups do |sgroup|
+      page.should have_content("\"role\":\"#{sgroup.role}\",\"strategy\":\"#{sgroup.strategy}\",\"count\":#{sgroup.count}")
+    end
+  end
+end

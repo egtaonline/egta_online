@@ -19,4 +19,11 @@ module HierarchicalReduction
     strats = multiply(role.drop(1))
     "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
   end
+  
+  def add_strategies_to_game(game)
+    roles.each do |r|
+      game.roles.create!(name: r.name, count: r.count*agents_per_player)
+      r.strategies.each{ |s| game.add_strategy(r.name, s) }
+    end
+  end
 end

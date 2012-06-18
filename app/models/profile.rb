@@ -61,6 +61,11 @@ class Profile
   #   role == nil ? 0 : role.strategy_count(strategy)
   # end
   # 
+  
+  def strategies_for(role_name)
+    symmetry_groups.where(role: role_name).collect{ |s| s.strategy }.uniq
+  end
+  
   def find_games
     Resque.enqueue(GameAssociater, id)
   end

@@ -35,6 +35,10 @@ class SchedulersController < ApplicationController
   def page_profiles
   end
 
+  def create_game_to_match
+    respond_with(scheduler.create_game_to_match)
+  end
+
   def update_configuration
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|
