@@ -18,5 +18,13 @@
 				"ra_coeff": 1.9
 			}
 		}
-	]
+	],
+	"features": {
+		"featureA": 34,
+		"featureB": [37, 38],
+		"featureC": {
+			"subfeature1": 40,
+			"subfeature2": 42
+		}
+	}
 }

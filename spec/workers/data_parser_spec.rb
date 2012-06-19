@@ -22,6 +22,8 @@ describe DataParser do
         it{ @symmetry_group.players.first.features.should eql(@json['players'][0]['features']) }
         it{ profile.sample_count.should eql(1) }
         it{ simulation.files.should eql(['observation1.json']) }
+        it{ profile.feature_observations.count.should eql(3) }
+        it{ ['featureA', 'featureB', 'featureC'].each{ |feature| profile.feature_observations.where(observation_id: 1, name: feature).first.observation.should eql(@json['features'][feature]) } }
       end
     end
   end

@@ -8,4 +8,6 @@ class FeatureObservation
   field :observation_id
   
   validates_presence_of :name, :observation, :observation_id
+  
+  before_validation(on: :create){ self.observation_id = self.profile.sample_count + 1 }
 end

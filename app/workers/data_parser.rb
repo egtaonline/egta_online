@@ -38,6 +38,9 @@ class DataParser
       from_json['players'].each do |player|
         profile.symmetry_groups.where(role: player['role'], strategy: player['strategy']).first.players.create(payoff: player['payoff'], features: player['features'])
       end
+      from_json['features'].each do |key, value|
+        profile.feature_observations.create(name: key, observation: value)
+      end
       profile.inc(:sample_count, 1)
       simulation.push(:files, file)
     end
