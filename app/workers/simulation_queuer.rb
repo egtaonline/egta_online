@@ -39,13 +39,18 @@ class SimulationQueuer
     Account.active.each do |account|
       if simulations.where(account_id: account.id).count > 0
         begin
-          scp = Net::SCP.start(Yetting.host, account.username)
-          scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
-            puts "#{name}: #{sent}/#{total}"
+          Net::SCP.start(Yetting.host, account.username) do |scp|
+            scp.upload!("tmp/#{account.username}", "#{Yetting.deploy_path}/simulations", recursive: true) do |ch, name, sent, total|
+              puts "#{name}: #{sent}/#{total}"
+            end
           end
-        rescue
+        rescue Net::SSH::AuthenticationFailed
           puts "failed account: #{account.username}"
           simulations.where(account_id: account.id).update_all(:state => 'failed', :error_message => 'account could not connect to nyx from EGTAOnline.  Speak to Ben to resolve.')
+          next
+        else
+          puts "failed transfer: #{account.username}"
+          simulations.where(account_id: account.id).update_all(:state => 'failed', :error_message => 'account could not complete the transfer to nyx.  Speak to Ben to resolve.')
           next
         end
         puts "submission"
