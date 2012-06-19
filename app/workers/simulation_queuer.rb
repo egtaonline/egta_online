@@ -48,7 +48,7 @@ class SimulationQueuer
           puts "failed account: #{account.username}"
           simulations.where(account_id: account.id).update_all(:state => 'failed', :error_message => 'account could not connect to nyx from EGTAOnline.  Speak to Ben to resolve.')
           next
-        else
+        rescue Exception => e
           puts "failed transfer: #{account.username}"
           simulations.where(account_id: account.id).update_all(:state => 'failed', :error_message => 'account could not complete the transfer to nyx.  Speak to Ben to resolve.')
           next
