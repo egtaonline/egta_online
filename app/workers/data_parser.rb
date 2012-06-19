@@ -30,6 +30,21 @@ class DataParser
     Simulation.where(number: number).first.finish!
   end
 
+  def self.parse_file(file_name, simulation)
+    file = file_name.split('/').last
+    if !simulation.files.include?(file)
+      profile = simulation.profile
+      from_json = Oj.load_file(file_name)
+      from_json['players'].each do |player|
+        profile.symmetry_groups.where(role: player['role'], strategy: player['strategy']).first.players.create(payoff: player['payoff'], features: player['features'])
+      end
+      profile.inc(:sample_count, 1)
+      simulation.push(:files, file)
+    end
+  end
+
+  protected
+
   def self.create_feature_hash(number, location)
     feature_hash = {}
     (Dir.entries(location+"/#{number}/features")-[".", ".."]).each do |x|

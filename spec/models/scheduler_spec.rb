@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe Scheduler do
   
-  it { should have_one :configuration }
-  
   shared_examples "a scheduler" do
     context "creation" do
       it "should set simulator_fullname field" do

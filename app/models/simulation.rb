@@ -21,8 +21,9 @@ class Simulation
   field :created_at
   field :flux, :type => Boolean, :default => false
   field :account_username
-  field :profile_name
+  field :profile_assignment
   field :number, :type=>Integer
+  field :files, type: Array, default: []
   sequence :number
   index [[:state, Mongo::ASCENDING]]
   scope :flux, where(:flux => true)
@@ -39,7 +40,7 @@ class Simulation
   validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
 
-  before_save(:on => :create){self.account_username = self.account.username; self.profile_name = self.profile.name}
+  before_save(:on => :create){self.account_username = self.account.username; self.profile_assignment = self.profile.assignment}
 
   state_machine :state, :initial => :pending do
     state :pending

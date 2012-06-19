@@ -6,7 +6,7 @@ describe Simulation do
   end
   
   context "a simulation has failed" do
-    let!(:simulation){Fabricate(:simulation)}
+    let!(:simulation){ Fabricate(:simulation) }
     
     before(:each) do
       simulation.failure!

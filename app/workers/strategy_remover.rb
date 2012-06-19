@@ -4,7 +4,7 @@ class StrategyRemover
     scheduler = Scheduler.find(scheduler_id) rescue nil
     if scheduler != nil
       names = scheduler.profile_space
-      scheduler.profiles -= scheduler.profiles.where(:name.nin => names)
+      scheduler.profiles -= scheduler.profiles.where(:assignment.nin => names)
       scheduler.save
     end
   end

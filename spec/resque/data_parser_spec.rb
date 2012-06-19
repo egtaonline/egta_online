@@ -3,11 +3,11 @@ require 'spec_helper'
 describe "#testing new data_parser" do
   before do
     ResqueSpec.reset!
-    Account.new(username: "bcassell", active: true).save(:validate => false)
+    Account.new(username: "bcassell", active: true).save(validate: false)
   end
 
-  let!(:profile){Fabricate(:profile, :name => "All: 2 BayesianPricing:noRA:0")}
-  let!(:simulation){Simulation.create!(profile_id: profile.id, size: 5, state: "queued", number: 3, account_id: Account.last.id)}
+  let!(:profile){ Fabricate(:profile, assignment: 'All: 2 BayesianPricing:noRA:0') }
+  let!(:simulation){ Simulation.create!(profile_id: profile.id, size: 5, state: 'queued', number: 3, account_id: Account.last.id) }
   it "the new data parser should make sample_records" do
     DataParser.perform(3)
     profile = Profile.last

@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe GameScheduler do
-  it { should embed_many(:roles) }
-  it { should validate_presence_of(:default_samples) }
-  it { should validate_numericality_of(:default_samples).to_allow(only_integer: true, greater_than: 0) }
+  it { should validate_numericality_of(:default_samples).to_allow(only_integer: true) }
   
   shared_examples 'a game scheduler' do
     describe '#required_samples' do

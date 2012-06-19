@@ -1,0 +1,22 @@
+{
+	"players": [
+		{
+			"role": "All",
+			"strategy": "BayesianPricing_noRA_0",
+			"payoff": 2992.73,
+			"features": {
+				"gamma": 0.001,
+				"ra_coeff": 2.0
+			}
+		},
+		{
+			"role": "All",
+			"strategy": "BayesianPricing_noRA_0",
+			"payoff": 2929.34,
+			"features": {
+				"gamma": 0.0015,
+				"ra_coeff": 1.9
+			}
+		}
+	]
+}

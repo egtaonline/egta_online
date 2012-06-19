@@ -8,10 +8,10 @@ class Profile
 
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator
-  
+
   field :size
   field :assignment, type: Hash
-  field :sample_count, default: 0
+  field :sample_count, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
   
   attr_accessible :assignment, :configuration

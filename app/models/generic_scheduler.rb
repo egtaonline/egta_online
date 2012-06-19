@@ -9,11 +9,12 @@ class GenericScheduler < Scheduler
   end
   
   def add_role(role_name, count)
-      roles.find_or_create_by(name: role_name, count: count)
+    roles.find_or_create_by(name: role_name, count: count)
   end
   
   def remove_role(role_name)
-    invalid_profiles = self.profiles.where(:name => Regexp.new("#{role_name}: ")).to_a
+    roles.where(name: role_name).destroy_all
+    invalid_profiles = self.profiles.where(assignment: Regexp.new("#{role_name}: ")).to_a
     self.profiles -= invalid_profiles
     hash = {}
     self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}

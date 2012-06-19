@@ -8,7 +8,7 @@ class Simulator
   embeds_many :roles, :as => :role_owner
   has_many :profiles, :dependent => :destroy do
     def with_role_and_strategy(role, strategy)
-      where(:name => Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
+      where(assignment: Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
     end
   end
   has_many :schedulers, :dependent => :destroy
@@ -78,6 +78,6 @@ class Simulator
       scheduler.remove_role(role_name)
     end
     super
-    profiles.where(:name => Regexp.new("#{role_name}: ")).destroy_all
+    profiles.where(assignment: Regexp.new("#{role_name}: ")).destroy_all
   end
 end

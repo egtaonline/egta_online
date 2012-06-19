@@ -44,6 +44,7 @@ gem 'high_voltage'
 gem "capistrano"
 gem 'validates_email_format_of'
 gem 'draper'
+gem 'oj'
 
 # Math
 gem 'statsample'

@@ -28,7 +28,7 @@ describe HierarchicalDeviationScheduler do
         scheduler.add_strategy("All", "B")
         ResqueSpec.perform_all(:profile_actions)
         Profile.count.should eql(2)
-        scheduler.reload.profiles.collect{|p| p.name}.should eql(["All: 120 B", "All: 60 A, 60 B"])
+        scheduler.reload.profiles.collect{|p| p.assignment}.should eql(["All: 120 B", "All: 60 A, 60 B"])
       end
     end
     
@@ -56,7 +56,7 @@ describe HierarchicalDeviationScheduler do
                "Bidder: 80 A; Seller: 40 C",
                "Bidder: 40 A, 40 B; Seller: 40 C",
                "Bidder: 80 B; Seller: 40 C"]
-        scheduler.reload.profiles.collect{|p| p.name}.should eql(ret)
+        scheduler.reload.profiles.collect{|p| p.assignment}.should eql(ret)
       end
     end
   end
