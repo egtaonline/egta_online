@@ -3,7 +3,7 @@
 		{
 			"role": "Buyer",
 			"strategy": "BidValue",
-			"payoff": 2992.73,
+			"payoff": nan,
 			"features": {
 				"featureA": 0.001,
 				"featureB": [2.0, 2.1]

@@ -34,32 +34,36 @@ class DataParser
     file = file_name.split('/').last
     if !simulation.files.include?(file)
       profile = simulation.profile
-      from_json = Oj.load_file(file_name)
-      from_json['players'].each do |player|
-        profile.symmetry_groups.where(role: player['role'], strategy: player['strategy']).first.players.create(payoff: player['payoff'], features: player['features'])
-      end
-      from_json['features'].each do |key, value|
-        profile.feature_observations.create(name: key, observation: value)
-      end
-      profile.inc(:sample_count, 1)
-      simulation.push(:files, file)
-    end
-  end
-
-  protected
-
-  def self.create_feature_hash(number, location)
-    feature_hash = {}
-    (Dir.entries(location+"/#{number}/features")-[".", ".."]).each do |x|
-      File.open(location+"/#{number}/features/#{x}") do |f|
-        YAML.load_documents(f) do |doc|
-          feature_hash[x] = [] if feature_hash[x] == nil
-          feature_hash[x] << doc
+      from_json = json_observation(file_name, profile.assignment)
+      if from_json
+        from_json['players'].each do |player|
+          profile.symmetry_groups.where(role: player['role'], strategy: player['strategy']).first.players.create(payoff: player['payoff'], features: player['features'])
         end
+        from_json['features'].each do |key, value|
+          profile.feature_observations.create(name: key, observation: value)
+        end
+        profile.inc(:sample_count, 1)
+        simulation.push(:files, file)
       end
     end
-    return feature_hash
   end
+
+  def self.json_observation(file_name, assignment)
+    begin
+      json = Oj.load_file(file_name)
+      roles = Hash.new { |hash, key| hash[key] = [] }
+      json['players'].each do |player|
+        return false if (!numeric?(player['payoff']) || player['payoff'].to_s == 'NaN' || player['payoff'].to_s == 'Inf')
+        roles[player['role']] << player['strategy']
+      end
+      json_assigment = roles.keys.sort.collect{ |role| "#{role}: "+roles[role].sort.uniq.collect{ |strat| "#{roles[role].count(strat)} #{strat}" }.join(", ") }.join("; ")
+      json_assigment == assignment ? json : false
+    rescue Exception => e
+      false
+    end
+  end
+  
+  protected
   
   def self.fully_numeric?(hash)
     hash.each do |key, value|
