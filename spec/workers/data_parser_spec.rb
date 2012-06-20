@@ -73,11 +73,32 @@ describe DataParser do
       let(:simulation){ Fabricate(:simulation, profile: profile, number: 4) }
       
       before(:each) do
-        DataParser.parse_file("#{Rails.root}/db/4/nan_observation1.json", simulation)
+        DataParser.parse_file("#{Rails.root}/db/4/nan_observation.json", simulation)
       end
       
       it { profile.reload.sample_count.should eql(0) }
       it { simulation.reload.files.should == [] }
+    end
+    
+    context 'String numeric payoffs get converted to floats' do
+      let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+      let(:simulation){ Fabricate(:simulation, profile: profile, number: 4) }
+      
+      before(:each) do
+        DataParser.parse_file("#{Rails.root}/db/4/string_observation.json", simulation)
+      end
+      
+      before(:each) do
+        @json = Oj.load_file("#{Rails.root}/db/4/string_observation.json")
+        DataParser.parse_file("#{Rails.root}/db/4/string_observation.json", simulation)
+        profile.reload
+        simulation.reload
+        @buyer_group = profile.symmetry_groups.where(role: 'Buyer').first
+      end
+      
+      it{ @buyer_group.players.first.payoff.should eql(@json['players'][0]['payoff'].to_f) }
+      it{ profile.sample_count.should eql(1) }
+      it{ simulation.files.should eql(['string_observation.json']) }
     end
   end
 end
