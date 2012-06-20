@@ -17,7 +17,9 @@ class NyxWrapper
       file.syswrite("/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}")
       file.syswrite(" ${PBS_NODEFILE}") if simulation.scheduler_nodes > 1
       file.syswrite("\nchmod -R ug+rwx /tmp/${PBS_JOBID}/#{simulation.number}\n")
-      file.syswrite("cp -r /tmp/${PBS_JOBID}/#{simulation.number} #{Yetting.deploy_path}/simulations/#{simulation.account_username}; /bin/rm -rf /tmp/${PBS_JOBID}")
+      file.syswrite("cp /tmp/${PBS_JOBID}/#{simulation.number}/payoff_data #{Yetting.deploy_path}/simulations/#{simulation.account_username}\n")
+      file.syswrite("cp /tmp/${PBS_JOBID}/#{simulation.number}/out #{Yetting.deploy_path}/simulations/#{simulation.account_username}\n")
+      file.syswrite("cp -r /tmp/${PBS_JOBID}/#{simulation.number}/features #{Yetting.deploy_path}/simulations/#{simulation.account_username}; /bin/rm -rf /tmp/${PBS_JOBID}")
     end
   end
 end
