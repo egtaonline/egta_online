@@ -17,7 +17,7 @@ class Simulation
   field :size, :type => Integer
   field :state
   field :job_id
-  field :error_message
+  field :error_message, default: ''
   field :created_at
   field :flux, :type => Boolean, :default => false
   field :account_username

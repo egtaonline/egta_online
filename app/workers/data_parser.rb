@@ -3,31 +3,11 @@ class DataParser
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/db/#{Simulation.where(number: number).first.account_username}")
-    feature_hash = create_feature_hash(number, location)
-    payoff_data = Array.new
-    begin
-      File.open(location+"/#{number}/payoff_data") {|io| YAML.load_documents(io) {|yf| payoff_data << yf }}
-    rescue => e
-      Simulation.where(number: number).first.update_attribute(:error_message, "Payoff data was malformed")
-      Simulation.where(number: number).first.failure!
-      return
+    simulation = Simulation.where(number: number).first
+    if simulation != nil
+      Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }.each{ |file| DataParser.parse_file("#{location}/#{file}", simulation) }
+      simulation.files == [] ? simulation.failure! : simulation.finish!
     end
-    payoff_data.size.times do |i|
-      if fully_numeric?(payoff_data[i])
-        feature_hash_record = {}
-        feature_hash.keys.each do |key|
-          feature_hash_record[key] = feature_hash[key][i]
-        end
-        begin
-          Simulation.where(:number => number).first.profile.sample_records.create!(payoffs: payoff_data[i], features: feature_hash_record)
-        rescue => e
-          Simulation.where(number: number).first.update_attribute(:error_message, "Problem with sample record number #{i}")
-          Simulation.where(number: number).first.failure!
-          return
-        end
-      end
-    end
-    Simulation.where(number: number).first.finish!
   end
 
   def self.parse_file(file_name, simulation)
@@ -44,6 +24,9 @@ class DataParser
         end
         profile.inc(:sample_count, 1)
         simulation.push(:files, file)
+      else
+        simulation.error_message += "#{file_name} was malformed or didn't match the expected profile assignment.\n"
+        simulation.save
       end
     end
   end

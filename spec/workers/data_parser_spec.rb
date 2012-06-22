@@ -47,37 +47,43 @@ describe DataParser do
     context 'mismatched profiles do not get processed' do
       let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 2 Shade1') }
       let(:simulation){ Fabricate(:simulation, profile: profile, number: 3) }
+      let(:file_name){ "#{Rails.root}/db/3/observation1.json" }
       
       before(:each) do
-        DataParser.parse_file("#{Rails.root}/db/3/observation1.json", simulation)
+        DataParser.parse_file(file_name, simulation)
       end
       
       it { profile.reload.sample_count.should eql(0) }
       it { simulation.reload.files.should == [] }
+      it { simulation.reload.error_message.should eql("#{file_name} was malformed or didn't match the expected profile assignment.\n")}
     end
     
     context 'non-numeric payoffs cause processing to stop' do
       let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
       let(:simulation){ Fabricate(:simulation, profile: profile, number: 4) }
+      let(:file_name){ "#{Rails.root}/db/4/broken_payoff_observation1.json" }
       
       before(:each) do
-        DataParser.parse_file("#{Rails.root}/db/4/broken_payoff_observation1.json", simulation)
+        DataParser.parse_file(file_name, simulation)
       end
       
       it { profile.reload.sample_count.should eql(0) }
       it { simulation.reload.files.should == [] }
+      it { simulation.reload.error_message.should eql("#{file_name} was malformed or didn't match the expected profile assignment.\n")}
     end
     
     context 'NaN payoffs cause processing to stop' do
       let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
       let(:simulation){ Fabricate(:simulation, profile: profile, number: 4) }
+      let(:file_name){ "#{Rails.root}/db/4/nan_observation.json" }
       
       before(:each) do
-        DataParser.parse_file("#{Rails.root}/db/4/nan_observation.json", simulation)
+        DataParser.parse_file(file_name, simulation)
       end
       
       it { profile.reload.sample_count.should eql(0) }
       it { simulation.reload.files.should == [] }
+      it { simulation.reload.error_message.should eql("#{file_name} was malformed or didn't match the expected profile assignment.\n")}
     end
     
     context 'String numeric payoffs get converted to floats' do
@@ -99,6 +105,45 @@ describe DataParser do
       it{ @buyer_group.players.first.payoff.should eql(@json['players'][0]['payoff'].to_f) }
       it{ profile.sample_count.should eql(1) }
       it{ simulation.files.should eql(['string_observation.json']) }
+    end
+  end
+  
+  describe 'perform' do
+    context 'multiple valid observations' do
+      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 3, size: 2) }
+      
+      before(:each) do
+        DataParser.perform(3, "#{Rails.root}/db/3")
+      end
+      
+      it{ simulation.reload.state.should eql('complete') }
+      it{ simulation.reload.files.should eql(['observation1.json','observation2.json']) }
+      it{ profile.reload.sample_count.should eql(2) }
+    end
+    
+    context 'some failures' do
+      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 4, size: 3) }
+      
+      before(:each) do
+        DataParser.perform(4, "#{Rails.root}/db/4")
+      end
+      it { simulation.reload.state.should eql('complete') }
+      it { simulation.reload.files.should eql(['string_observation.json']) }
+      it { profile.reload.sample_count.should eql(1) }
+    end
+    
+    context 'all failures' do
+      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 5, size: 3) }
+      
+      before(:each) do
+        DataParser.perform(5, "#{Rails.root}/db/5")
+      end
+      it { simulation.reload.state.should eql('failed') }
+      it { simulation.reload.files.should eql([]) }
+      it { profile.reload.sample_count.should eql(0) }
     end
   end
 end
