@@ -11,4 +11,14 @@ class SymmetryGroup
   validates :count, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :role, presence: true
   validates :strategy, presence: true, uniqueness: { scope: :role }
+  
+  def payoff
+    @payoffs ||= players.map{ |player| player.payoff }.to_scale
+    @payoffs.mean
+  end
+  
+  def payoff_sd
+    @payoffs ||= players.map{ |player| player.payoff }.to_scale
+    @payoffs.sd
+  end
 end
