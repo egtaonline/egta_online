@@ -10,5 +10,5 @@ class Player
   validates :payoff, presence: true, numericality: true
   validates :observation_id, presence: true, numericality: { only_integer: true }
   
-  before_validation(on: :create){ self.observation_id = self.symmetry_group.profile.sample_count + 1 }
+  before_validation(on: :create){ self.observation_id ||= self.symmetry_group.profile.sample_count + 1 }
 end
