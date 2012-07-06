@@ -15,5 +15,6 @@ Fabricator(:deviation_scheduler_with_profiles, from: :deviation_scheduler) do
     scheduler.add_strategy("All", "A")
     scheduler.add_deviating_strategy("All", "B")
     ProfileAssociater.perform scheduler.id
+    scheduler.reload
   end
 end

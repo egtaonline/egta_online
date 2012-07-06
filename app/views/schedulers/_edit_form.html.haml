@@ -1,0 +1,4 @@
+= simple_form_for scheduler, :html => {:class => 'form-inline' } do |f|
+  = f.input :name
+  = f.input :size, :label => "Game size"
+  = render 'update_requirements', form: f

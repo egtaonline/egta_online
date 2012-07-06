@@ -36,6 +36,7 @@ describe Profile do
     end
     it { ProfileScheduler.should have_scheduled(profile.id).in(5 * 60) }
   end
+  
   # 
   # describe '#strategy_count' do
   #   let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}

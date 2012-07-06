@@ -6,7 +6,7 @@ describe "Profiles" do
     it "should show that profile" do
       profile = Fabricate(:profile)
       visit profile_path(profile.id)
-      page.should have_content(profile.name)
+      page.should have_content(profile.assignment)
     end
   end
 end

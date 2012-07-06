@@ -10,7 +10,7 @@ describe SchedulerObserver do
   end
   
   shared_examples "schedules profiles" do
-    it { scheduler.profiles.each{ |p| ProfileScheduler.should have_queued(p.id) } }
+    it { scheduler.profile_ids.each{ |p| ProfileScheduler.should have_scheduled(p) } }
   end
   
   [GameScheduler, HierarchicalScheduler, DeviationScheduler, HierarchicalDeviationScheduler, GenericScheduler].each do |scheduler_class|
@@ -45,20 +45,21 @@ describe SchedulerObserver do
         end
       end
       
-      it_behaves_like "schedules profiles" do
-        context "when scheduler becomes active" do
-          let(:scheduler){ Fabricate("#{scheduler.to_s.underscore}_with_profiles".to_sym, active: false) }
-          before(:each) do
-            scheduler.update_attribute(:active, true)
-          end
+      context "when scheduler becomes active" do
+        before(:each) do
+          scheduler.update_attribute(:active, true)
         end
         
-        if scheduler_class != GenericScheduler
-          context "when max sample changes" do
-            before(:each) do
-              scheduler.update_attribute(:default_samples, 50)
-            end
+        it_behaves_like "schedules profiles"
+      end
+        
+      if scheduler_class != GenericScheduler
+        context "when max sample changes" do
+          before(:each) do
+            scheduler.update_attribute(:default_samples, 50)
           end
+          
+          it_behaves_like "schedules profiles"
         end
       end
     end

@@ -85,7 +85,7 @@ Then /^that game should match the game scheduler$/ do
 end
 
 Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
-  step 'a fleshed out simulator'
+  step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
   @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
   @scheduler.reload
@@ -97,7 +97,7 @@ When /^I edit a parameter of that scheduler$/ do
   visit "/#{@scheduler_class}s/#{@scheduler.id}/edit"
   fill_in "Parm1", with: 12345
   with_resque do
-    click_button "Edit #{@scheduler.class.to_s}"
+    click_button "Update #{@scheduler.class}"
   end
 end
 
@@ -109,15 +109,15 @@ Then /^I should see the new parameter value$/ do
   page.should have_content("12345")
 end
 
-Given /^a fleshed out simulator with an empty (\w+) of size (\d+)$/ do |scheduler, size|
-  step 'a fleshed out simulator'
+Given /^a fleshed out simulator with an empty (\w+) of size (\d+) exists$/ do |scheduler, size|
+  step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
   size = 4 if scheduler == 'hierarchical_scheduler'
   @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
   @scheduler.configuration.should_not eql(nil)
 end
 
-When /^I add the role (.*) with size (.*) and the strategies (.*)$/ do |role, size, strategies|
+When /^I add the role (.*) with size (.*) and the strategies (.*) to the scheduler$/ do |role, size, strategies|
   if role =~ /^\S+$/
     strategies.split(", ").each{ |strategy| @simulator.add_strategy(role, strategy) }
     visit "/#{@scheduler_class}s/#{@scheduler.id}"
@@ -168,5 +168,80 @@ Then /^I should all the profiles of the scheduler that have been sampled$/ do
     profile.symmetry_groups do |sgroup|
       page.should have_content("\"role\":\"#{sgroup.role}\",\"strategy\":\"#{sgroup.strategy}\",\"count\":#{sgroup.count}")
     end
+  end
+end
+
+When /^I configure a new (hierarchical_scheduler|hierarchical_deviation_scheduler) at creation$/ do |klass|
+  visit "/#{klass}s/new"
+  @config = {'Name' => 'Test1',
+             'Full game size' => '2',
+             'Agents per player' => '1',
+             'Default samples' => '30',
+             'Samples per simulation' => '15',
+             'Process memory' => '1000',
+             'Time per sample' => '40'}
+  @config.each { |key, value| fill_in key, :with => value }
+  click_button "Create #{klass.classify}"
+end
+
+When /^I edit the configuration of the (hierarchical_scheduler|hierarchical_deviation_scheduler)$/ do |klass|
+  visit "/#{klass}s/#{@scheduler.id}/edit"
+  @config = {'Name' => 'Test2',
+             'Full game size' => '32',
+             'Agents per player' => '16',
+             'Default samples' => '20',
+             'Samples per simulation' => '11',
+             'Process memory' => '1040',
+             'Time per sample' => '41'}
+  @config.each { |key, value| fill_in key, :with => value }
+  click_button "Update #{klass.classify}"
+end
+
+When /^I configure a new (game_scheduler|deviation_scheduler|generic_scheduler) at creation$/ do |klass|
+  visit "/#{klass}s/new"
+  @config = {'Name' => 'Test1',
+             'Game size' => '2',
+             'Default samples' => '30',
+             'Samples per simulation' => '15',
+             'Process memory' => '1000',
+             'Time per sample' => '40'}
+  @config.each { |key, value| fill_in key, :with => value }
+  click_button "Create #{klass.classify}"
+end
+
+When /^I edit the configuration of the (game_scheduler|deviation_scheduler|generic_scheduler)$/ do |klass|
+  visit "/#{klass}s/#{@scheduler.id}/edit"
+  @config = {'Name' => 'Test5',
+             'Game size' => '7',
+             'Default samples' => '3',
+             'Samples per simulation' => '1',
+             'Process memory' => '3000',
+             'Time per sample' => '20'}
+  @config.each { |key, value| fill_in key, :with => value }
+  click_button "Update #{klass.classify}"
+end
+
+Then /^I should see the configured values on that scheduler$/ do
+  @config.each { |key,value| page.should have_content(key); page.should have_content(value) }
+end
+
+Given /^a (\w+)_scheduler exists$/ do |klass|
+  @scheduler = Fabricate("#{klass}_scheduler".to_sym)
+end
+
+When /^I remove the strategy (\w+) on role (\w+) from the scheduler$/ do |strategy, role|
+  visit "/#{@scheduler_class}s/#{@scheduler.id}"
+  with_resque do
+    click_link "remove-#{role}-#{strategy}"
+  end
+end
+
+Then /^the scheduler should have (\d+) profiles$/ do |count|
+  @scheduler.reload.profile_ids.count.should eql(count.to_i)
+end
+
+When /^I remove the role (\w+) from the scheduler$/ do |role|
+  with_resque do
+    click_link "remove-#{role}"
   end
 end

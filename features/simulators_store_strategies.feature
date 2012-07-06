@@ -7,7 +7,7 @@ Background:
   Given I am signed in
 
 Scenario: Simulator has no strategies
-  Given 1 simulator
+  Given a simulator exists
   And I am on the last simulator's page
   When I fill in "role" with "Player1"
   And I press "Add Role"

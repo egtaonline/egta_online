@@ -9,10 +9,6 @@ Then /^that simulator should have a role named "([^"]*)" with the strategy array
   r.strategies == eval(arg2)
 end
 
-Given /^that simulator has the role strategy hash "([^"]*)"$/ do |arg1|
-  Simulator.last.update_attribute(:role_strategy_hash, eval(arg1))
-end
-
 Given /^that simulator has (\d+) role$/ do |arg1|
   arg1.to_i.times {@simulator.roles << Fabricate.build(:role)}
   @simulator.save!
@@ -62,11 +58,11 @@ Then /^the simulator should be eventually be set up on the server$/ do
   SimulatorInitializer.should have_queued(Simulator.last.id)
 end
 
-Given /^a fleshed out simulator$/ do
+Given /^a fleshed out simulator exists$/ do
   @simulator = Fabricate(:simulator_with_strategies)
 end
 
-Given /^there are two simulators with different default configuration$/ do
+Given /^two simulators with different default configuration exist$/ do
   @simulator = Fabricate(:simulator_with_strategies, configuration: { 'Parm1' => '2', 'Parm2' => '3' })
   @simulator2 = Fabricate(:simulator_with_strategies, configuration: { 'Parm2' => '4', 'Parm3' => '2' })
 end
@@ -83,7 +79,11 @@ Then /^I should see the default configuration of the last simulator$/ do
   @simulator2.configuration.each { |key,value| find_field(key).value.should eql(value) }
 end
 
-Given /^a fleshed out simulator with sampled profiles$/ do
+Given /^a fleshed out simulator with sampled profiles exists$/ do
   @simulator = Fabricate(:simulator_with_profiles)
   @simulator.profiles.each{|p| p.update_attribute(:sample_count, 1) }
+end
+
+Given /^a simulator exists$/ do
+  @simulator = Fabricate(:simulator)
 end

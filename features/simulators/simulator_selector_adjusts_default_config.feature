@@ -3,7 +3,7 @@ Feature: Simulator selector adjusts the shown default configuration
 @javascript
 Scenario Outline: Multiple available simulators on creation
   Given I am signed in
-  And there are two simulators with different default configuration
+  And two simulators with different default configuration exist
   When I am on the new <class> page
   Then I should see the default configuration of the first simulator
   When I select the second simulator

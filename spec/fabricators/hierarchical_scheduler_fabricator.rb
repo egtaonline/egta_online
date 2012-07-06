@@ -17,5 +17,6 @@ Fabricator(:hierarchical_scheduler_with_profiles, from: :hierarchical_scheduler)
     scheduler.add_strategy("All", "A")
     scheduler.add_strategy("All", "B")
     ProfileAssociater.perform scheduler.id
+    scheduler.reload
   end
 end

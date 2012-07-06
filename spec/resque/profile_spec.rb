@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 describe "#find_games" do
+  let!(:game){ Fabricate(:game) }
+  let!(:profile){ Fabricate(:profile, simulator: game.simulator, configuration: game.configuration, assignment: 'All: 2 A') }
+  
   before do
-    ResqueSpec.reset!
+    ResqueSpec.perform_all(:profile_actions)
+    game.reload
+    profile.reload
   end
 
-  it "should associate a profile to a game" do
-    game = Fabricate(:game)
-    Profile.create!(simulator_id: game.simulator.id, configuration: game.configuration, name: "All: 2 A")
-    GameAssociater.should have_queued(Profile.last.id)
-    ResqueSpec.perform_all(:profile_actions)
-    GameAssociater.should_not have_queued(Profile.last.id)
-    Game.last.profile_ids.count.should == 1
-    Game.last.profile_ids.first.should == Profile.last.id
-  end
+  it { game.profile_ids.count.should eql(1) }
+  it { game.profile_ids.first.should eql(profile.id) }
 end

@@ -9,4 +9,4 @@
           %tr
             %td= select_tag "#{role.name}_strategy", options_for_select(role_owner.available_strategies(role.name))
             %td= submit_tag "Add Strategy", {:id => role.name, :class => 'btn btn-mini btn-info'}
-  %td= link_to 'Remove Role', url_for(:action => :remove_role, :role => role.name), :method => :post, :class => 'btn btn-danger'
+  %td= link_to 'Remove Role', url_for(:action => :remove_role, :role => role.name), :method => :post, :id => "remove-#{role.name}", :class => 'btn btn-danger'

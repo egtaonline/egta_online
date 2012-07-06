@@ -13,12 +13,16 @@ class SymmetryGroup
   validates :strategy, presence: true, uniqueness: { scope: :role }
   
   def payoff
-    @payoffs ||= players.map{ |player| player.payoff }.to_scale
-    @payoffs.mean
+    if players.count > 0
+      @payoffs ||= players.map{ |player| player.payoff }.to_scale
+      @payoffs.mean
+    end
   end
   
   def payoff_sd
-    @payoffs ||= players.map{ |player| player.payoff }.to_scale
-    @payoffs.sd
+    if players.count > 0
+      @payoffs ||= players.map{ |player| player.payoff }.to_scale
+      @payoffs.sd 
+    end
   end
 end

@@ -3,20 +3,6 @@ require 'spec_helper'
 describe "Schedulers" do
 
   shared_examples "a scheduler on requests" do
-    context "POST /#{described_class.to_s.tableize}/update_configuration", :js => true do
-      it "should update parameter info" do
-        sim2 = Fabricate(:simulator, :configuration => {"Parm2"=>"7","Parm3"=>"6"})
-        visit "/#{described_class.to_s.tableize}/new"
-        page.should have_content("Parm1")
-        page.should have_content("Parm2")
-        page.should_not have_content("Parm3")
-        select sim2.fullname, :from => :simulator_id
-        page.should_not have_content("Parm1")
-        page.should have_content("Parm2")
-        page.should have_content("Parm3")
-      end
-    end
-    
     context "GET /#{described_class.to_s.tableize}" do
       it "should show all #{described_class.to_s.tableize}" do
         s1 = Fabricate(described_class.to_s.tableize.singularize.to_sym)
@@ -57,7 +43,7 @@ describe "Schedulers" do
       it "should update the relevant #{described_class.to_s.titleize}" do
         visit "/#{described_class.to_s.tableize}/#{scheduler.id}/edit"
         fill_in "Samples per simulation", :with => "100"
-        click_button "Update #{described_class.to_s.tableize.singularize.humanize}"
+        click_button "Update #{described_class}"
         page.should have_content("Inspect #{described_class.to_s.titleize}")
         page.should have_content("100")
       end

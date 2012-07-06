@@ -37,7 +37,7 @@ Then /^that game should have (\d+) profiles$/ do |arg1|
   Game.last.profiles.count.should == arg1.to_i
 end
 
-Given /^a game that matches those profiles$/ do
+Given /^a game that matches those profiles exists$/ do
   @profiles = @simulator.profiles
   with_resque do
     @game = Fabricate(:game, simulator: @simulator, size: @profiles.first.size)
@@ -65,10 +65,18 @@ When /^I request a representation of the game$/ do
   click_link "Download JSON"
 end
 
-Then /^I should those profiles$/ do
+Then /^I should have those profiles$/ do
   @profiles.each do |profile|
     profile.symmetry_groups do |sgroup|
       page.should have_content("\"role\":\"#{sgroup.role}\",\"strategy\":\"#{sgroup.strategy}\",\"count\":#{sgroup.count}")
     end
   end
+end
+
+Given /^that simulator has a game that matches the scheduler$/ do
+  @game = Fabricate(:game, simulator: @simulator, configuration: @scheduler.configuration, size: @scheduler.size)
+end
+
+Given /^that simulator has a game that does not match the scheduler$/ do
+  @game = Fabricate(:game, simulator: @simulator, configuration: @scheduler.configuration.merge({ other_key: 'other_value' }), size: @scheduler.size)
 end
