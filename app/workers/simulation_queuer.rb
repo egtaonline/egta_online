@@ -3,13 +3,12 @@ class SimulationQueuer
   @queue = :nyx_queuing
 
   def self.perform
-    puts "hello"
-    simulations = Simulation.pending.order_by([[:created_at, :asc]]).limit(30).to_a
+    simulations = Simulation.pending.order_by([[:created_at, :asc]]).limit(QUEUE_LIMIT).to_a
     cleanup
     simulations.each do |s|
       begin
         create_folder(s)
-        create_yaml(s)
+        SpecGenerator.generate("#{Rails.root}/tmp/#{simulation.account_username}/#{simulation.number}/simulation_spec.yaml", Profile.find(simulation.profile_id))
         if (Simulation.active.flux.count+1) <= FLUX_LIMIT || Simulation.active.where(:flux => false).count > Simulation.active.flux.count
           s.update_attribute(:flux, true)
         end
@@ -100,28 +99,5 @@ class SimulationQueuer
         end
       end
     end
-  end
-
-  def self.create_yaml(simulation)
-    File.open( "#{Rails.root}/tmp/#{simulation.account_username}/#{simulation.number}/simulation_spec.yaml", 'w' ) do |out|
-      YAML.dump(Profile.find(simulation.profile_id).as_map, out)
-      YAML.dump(numeralize(simulation.scheduler), out)
-    end
-  end
-
-  def self.numeralize(scheduler)
-    p = Hash.new
-    scheduler.configuration.each_pair do |x, y|
-      if is_a_number?(y)
-        p[x] = y.to_f
-      else
-        p[x] = y
-      end
-    end
-    p
-  end
-
-  def self.is_a_number?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 end

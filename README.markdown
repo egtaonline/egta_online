@@ -1,6 +1,88 @@
 EGTA Online: A Ruby on Rails Web App for Managing Game Simulation
 =================================================================
 
+Upgrade Notes:
+* Moving all file I/O to json
+  - Simulation Input
+    + simulation\_spec.yaml is now simulation\_spec.json
+    + example simulation\_spec.json:
+    ```
+      {
+          "assignment":{
+              "Bidder":[
+                  "Shade1",
+                  "Shade1",
+                  "Shade2"
+              ],
+              "Seller":[
+                  "FirstPrice",
+                  "FirstPrice",
+                  "FirstPrice",
+                  "SecondPrice"
+              ]
+          },
+          "configuration":{
+              "key1":"value"
+              "key2":"other value"
+          }}
+    ```
+    + No longer 'numeralizing' by default.  All keys and values in simulation\_spec.json will be strings.
+  - Simulation Output
+    + Observations are now the unit of output.  The 'payoff_data' file and 'features' folder are not supported anymore.  Observations are json files that include the word 'observation' and carry the json extension.  In other words 'some\_observation.json' and 'observation1.json' are both acceptable naming conventions.  An observation includes all the payoff and feature data from a single observation of the simulator.
+    + Observations now record each player separately and aggregate over symmetry inside EGTAOnline.  This provides greater flexibility for statistical procedures.
+    + Observations now support arbitrary data for feature observations, though built-in tools currently only work with numerics.
+    + example observation.json:
+    ```
+      {
+      	"players": [
+      		{
+      			"role": "Buyer",
+      			"strategy": "BidValue",
+      			"payoff": 2992.73,
+      			"features": {
+      				"featureA": 0.001,
+      				"featureB": [2.0, 2.1]
+      			}
+      		},
+      		{
+      			"role": "Seller",
+      			"strategy": "Shade2",
+      			"payoff": 2924.44,
+      			"features": {
+      				"featureA": 0.003,
+      				"featureB": [1.4, 1.7]
+      			}
+      		},
+      		{
+      			"role": "Buyer",
+      			"strategy": "BidValue",
+      			"payoff": 2990.53,
+      			"features": {
+      				"featureA": 0.002,
+      				"featureB": [2.0, 2.1]
+      			}
+      		},
+      		{
+      			"role": "Seller",
+      			"strategy": "Shade1",
+      			"payoff": 2929.34,
+      			"features": {
+      				"featureA": 0.003,
+      				"featureB": [1.3, 1.7]
+      			}
+      		}
+      	],
+      	"features": {
+      		"featureA": 34,
+      		"featureB": [37, 38],
+      		"featureC": {
+      			"subfeature1": 40,
+      			"subfeature2": 42
+      		}
+      	}
+      }
+    ```
+
 Innovations/Special Features
 
 * Enables simple, distributed scheduling of game simulations onto nyx clusters

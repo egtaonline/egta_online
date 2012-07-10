@@ -31,8 +31,8 @@ gem "state_machine"
 gem "devise", '~> 1.5'
 gem "yettings"
 gem "foreman"
-gem "net-ssh", :require => ['net/ssh']
-gem "net-scp", :require => ['net/scp']
+gem "net-ssh", github: 'egtaonline/net-ssh', :require => 'net/ssh'
+gem "net-scp", :require => 'net/scp'
 gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'

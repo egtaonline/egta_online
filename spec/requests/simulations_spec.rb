@@ -8,7 +8,7 @@ describe "Simulations" do
     it "displays simulations" do
       visit simulations_path
       page.should have_content("Simulations")
-      page.should have_content(simulation.profile.name)
+      page.should have_content(simulation.profile.assignment)
       page.should have_content(simulation.number)
       page.should have_content(simulation.state)
     end
@@ -18,7 +18,7 @@ describe "Simulations" do
     it "displays the relevant simulator" do
       visit simulation_path(simulation.id)
       page.should have_content("Inspect Simulation")
-      page.should have_content(simulation.profile.name)
+      page.should have_content(simulation.profile.assignment)
       page.should have_content(simulation.number)
       page.should have_content(simulation.state)
       page.should have_content(simulation.scheduler.simulator.fullname)

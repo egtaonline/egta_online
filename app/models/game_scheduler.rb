@@ -1,7 +1,8 @@
 class GameScheduler < Scheduler
   include RoleManipulator::Scheduler
 
-  validates_numericality_of :default_samples, greater_than: 0
+  validates_numericality_of :default_samples, :size, greater_than: 0
+  validates_presence_of :size
 
   def required_samples(profile_id)
     (self.profiles.find(profile_id) rescue nil) == nil ? 0 : default_samples

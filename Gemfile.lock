@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/egtaonline/net-ssh.git
+  revision: 5b3a3cc28ee1212adcd8ffea145e3a6244b2a16f
+  specs:
+    net-ssh (2.5.2)
+
+GIT
   remote: git://github.com/plataformatec/show_for.git
   revision: 4f200bbb8869db75bae6abf52c9f59456d549e6f
   specs:
@@ -194,7 +200,6 @@ GEM
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.3.0)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
     nokogiri (1.5.2)
@@ -396,7 +401,7 @@ DEPENDENCIES
   mongoid-rspec
   mongoid_rails_migrations (= 0.0.14)
   net-scp
-  net-ssh
+  net-ssh!
   oj
   passenger
   quiet_assets

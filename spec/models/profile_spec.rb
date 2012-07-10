@@ -38,21 +38,6 @@ describe Profile do
   end
   
   # 
-  # describe '#strategy_count' do
-  #   let(:profile){Fabricate(:profile, :name => "Bidder: 1 Strat1, 1 Strat2; Seller: 2 Strat3")}
-  #   context 'when the role and strategy exists' do
-  #     it { profile.strategy_count("Bidder", "Strat1").should eql(1) }
-  #     it { profile.strategy_count("Bidder", "Strat2").should eql(1) }
-  #     it { profile.strategy_count("Seller", "Strat3").should eql(2) }
-  #   end
-  #   
-  #   context 'when the role or strategy does not exist' do
-  #     it{ profile.strategy_count("Bidder", "Strat3").should eql(0) }
-  #     it{ profile.strategy_count("Bidder", "Strat4").should eql(0) }
-  #     it{ profile.strategy_count("All", "Strat1").should eql(0) }
-  #   end
-  # end
-  # 
   # describe "sample record observations work" do
   #   let!(:profile){Fabricate(:profile, :name => "All: 2 A")}
   #   let!(:sample_record){Fabricate(:sample_record, :profile => profile, :payoffs => {"All"=>{"A"=>2}})}

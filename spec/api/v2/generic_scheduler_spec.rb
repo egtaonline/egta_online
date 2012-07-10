@@ -16,7 +16,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
                                                             :active => true, :process_memory => 1000,
                                                             :time_per_sample => 120, :samples_per_simulation => 30,
-                                                            :default_samples => 30, :configuration => simulator.configuration,
+                                                            :max_samples => 30, :parameter_hash => simulator.configuration,
                                                             :nodes => 1}
         scheduler = GenericScheduler.last
         scheduler.simulator.should == simulator
@@ -33,7 +33,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
                                                           :active => true,
                                                           :time_per_sample => 120, :samples_per_simulation => 30,
-                                                          :default_samples => 30, :configuration => simulator.configuration,
+                                                          :max_samples => 30, :parameter_hash => simulator.configuration,
                                                           :nodes => 1}
         last_response.status.should eql(422)
         errors = {"errors" => {"process_memory" => ["can't be blank","is not a number"]}}.to_json
@@ -44,7 +44,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token
         last_response.status.should eql(422)
-        errors = {"errors" => {"process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"]}}.to_json
+        errors = {"errors" => {"default_samples" => ["is not a number"], "process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"]}}.to_json
         last_response.body.should eql(errors)
       end
     end
@@ -86,12 +86,12 @@ describe "/api/v2/generic_schedulers", :type => :api do
      
     it "should create a profile if the profile name is valid" do
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
-      Profile.where(:name => "Bidder: 2 A; Seller: 2 B").count.should == 1
+      Profile.where(:assignment => "Bidder: 2 A; Seller: 2 B").count.should == 1
     end
     it "should only add the profile once, even if you invoke it multiple times" do
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
-      Profile.where(:name => "Bidder: 2 A; Seller: 2 B").count.should eql(1)
+      Profile.where(:assignment => "Bidder: 2 A; Seller: 2 B").count.should eql(1)
       Scheduler.last.profiles.count.should eql(1)
     end
     it "should only add the profile once, even if you invoke it multiple times with rearrangements to the name" do
@@ -99,7 +99,7 @@ describe "/api/v2/generic_schedulers", :type => :api do
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 B, 1 A; Seller: 2 B", :sample_count => 10
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 B, 1 A", :sample_count => 10
       post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 A, 1 B", :sample_count => 10
-      Profile.where(:name => "Bidder: 1 A, 1 B; Seller: 2 B").count.should eql(1)
+      Profile.where(:assignment => "Bidder: 1 A, 1 B; Seller: 2 B").count.should eql(1)
       Scheduler.last.profiles.count.should eql(1)
     end
   end

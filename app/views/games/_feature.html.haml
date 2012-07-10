@@ -2,4 +2,4 @@
   %td= feature.name
   %td= feature.expected_value
   %td= (feature.adjustment_coefficient == nil ? 'nil' : feature.adjustment_coefficient)
-  %td= link_to 'Remove Feature', game_feature_path(feature.cv_manager.game, feature), :confirm => 'Are you sure?', :method => :delete, :class => 'btn btn-mini btn-danger'
+  %td= link_to 'Remove Feature', game_feature_path(feature.cv_manager.game, feature), :data => { :confirm => 'Are you sure?' }, :method => :delete, :class => 'btn btn-mini btn-danger'

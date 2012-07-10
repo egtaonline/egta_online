@@ -3,6 +3,13 @@ class Api::V2::GenericSchedulersController < Api::V2::SchedulersController
   before_filter :find_profile, :only => :remove_profile
   
   def create
+    # Hack to make old api compatible with new model defs
+    if params[:scheduler]
+      configuration = params[:scheduler][:parameter_hash]
+      params[:scheduler].delete(:parameter_hash)
+      params[:scheduler][:configuration] = configuration
+      params[:scheduler][:default_samples] ||= 0
+    end
     scheduler = GenericScheduler.create(params[:scheduler])
     if scheduler.valid?
       respond_with(scheduler, :location => api_v2_generic_scheduler_path(scheduler))
