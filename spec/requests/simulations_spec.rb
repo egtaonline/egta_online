@@ -22,7 +22,6 @@ describe "Simulations" do
       page.should have_content(simulation.number)
       page.should have_content(simulation.state)
       page.should have_content(simulation.scheduler.simulator.fullname)
-      page.should have_content(simulation.account_username)
     end
   end
 end

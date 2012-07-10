@@ -1,3 +1,4 @@
+## TODO: TOTAL REWRITE
 class SimulatorInitializer
   @queue = :nyx_actions
 

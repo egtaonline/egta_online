@@ -82,6 +82,12 @@ Upgrade Notes:
       	}
       }
     ```
+* Dealing with 2 factor authentication
+  - Since CAC is forcing 2 factor authentication, any admin must acquire the following:
+    + An account on CAC
+    + Membership in the wellman group
+    + An MToken
+  - Account pooling is now disabled since it would require making everyone re-authenticate on any server restart or broken connection.
 
 Innovations/Special Features
 

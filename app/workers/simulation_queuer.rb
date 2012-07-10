@@ -1,3 +1,5 @@
+## TODO: TOTAL Rewrite
+
 class SimulationQueuer
 #  include Resque::Plugins::UniqueJob
   @queue = :nyx_queuing

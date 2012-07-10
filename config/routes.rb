@@ -20,7 +20,6 @@ EgtaOnline::Application.routes.draw do
     end
   end
 
-  resources :accounts
   resources :profiles, :only => :show
   resources :simulations, :only => [:index, :show]
   resources :schedulers do

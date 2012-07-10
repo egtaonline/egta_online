@@ -10,7 +10,7 @@ class ProfileScheduler
         if max_schedulable[0] > sample_count
           scheduler = max_schedulable[1]
           num_samples = [scheduler.samples_per_simulation, max_schedulable[0]-sample_count].min
-          simulation = profile.simulations.create!(size: num_samples, state: 'pending', account_id: Account.active.sample.id)
+          simulation = profile.simulations.create!(size: num_samples, state: 'pending')
           scheduler.simulations << simulation
           simulation.save!
         end

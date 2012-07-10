@@ -6,7 +6,6 @@ class Simulation
   include Mongoid::Timestamps
   include Mongoid::Sequence
 
-  belongs_to :account
   belongs_to :profile, :inverse_of => :simulations
   belongs_to :scheduler, :inverse_of => :simulations
   delegate :nodes, :to => :scheduler, :prefix => true
@@ -18,7 +17,6 @@ class Simulation
   field :error_message, default: ''
   field :created_at
   field :flux, :type => Boolean, :default => false
-  field :account_username
   field :profile_assignment
   field :number, :type=>Integer
   field :files, type: Array, default: []
@@ -38,7 +36,7 @@ class Simulation
   validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
 
-  before_save(:on => :create){self.account_username = self.account.username; self.profile_assignment = self.profile.assignment}
+  before_save(:on => :create){ self.profile_assignment = self.profile.assignment }
 
   state_machine :state, :initial => :pending do
     state :pending

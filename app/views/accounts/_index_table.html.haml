@@ -1,8 +1,0 @@
-%table.table.table-striped
-  %thead
-    %tr
-      %th= sortable("username", "Name")
-      %th= sortable("active", "Active?")
-  %tbody
-    =render accounts
-=paginate accounts, :remote => true

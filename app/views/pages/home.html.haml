@@ -4,9 +4,6 @@
 %h2 Getting Started
 %ol
   %li
-    %h3 Set up a scheduling account
-    %p If you are affiliated with the University of Michigan, you should sign up for an account at the #{link_to "Center for Advanced Computing", "http://cac.engin.umich.edu"}.  After you have an account, you should contact Michael Wellman to get added to our group on the cluster.  Once the group permissions on your account are fixed, you should #{link_to "register your account", new_account_path}.  Registering your account improves the throughput of EGTAOnline for all users.
-  %li
     %h3 Ready your simulator
     %p To utilize EGTAOnline, you'll need to prepare your simulator for interacting with the test bed through file I/O.  Click #{link_to "here", page_path("instructions")} to learn how to integrate your simulator into our system.  Once your simulator is ready, its time to #{link_to "upload it.", new_simulator_path}.  Your simulator is not truly complete until you add your roles and strategies to your simulator's record.  You can edit these at any time, but keep in mind that a.) you can only add roles and strategies to schedulers and games if you add them to your simulator first, and b.) if you delete a strategy from a simulator, you are saying that all of the data that is tied to that strategy is now invalid, and will be deleted.  To learn more about roles and strategies, click #{link_to "here", page_path("roles")}.
   %li
