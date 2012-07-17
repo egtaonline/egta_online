@@ -7,6 +7,10 @@ require 'rubygems'
 require 'spork'
 
 Spork.prefork do
+  unless ENV['DRB']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
   require 'fabrication'
   require 'cucumber/rails'
   require 'resque_spec/scheduler'
@@ -19,5 +23,9 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  if ENV['DRB']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
   ResqueSpec.reset!
 end

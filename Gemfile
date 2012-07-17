@@ -63,6 +63,7 @@ group :test, :development do
 end
 
 group :test do
+  gem 'simplecov', :require => false
   gem "capybara"
   gem "rb-fsevent"
   gem "capybara-webkit"

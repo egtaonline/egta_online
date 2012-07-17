@@ -6,7 +6,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"
 require 'sprockets/railtie'
-# require "rails/test_unit/railtie"
+# require "rails/test_unit/railtie
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,7 +19,7 @@ module EgtaOnline
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    # config.autoload_paths += %W(#{config.root}/lib/util)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -37,6 +37,7 @@ module EgtaOnline
     config.encoding = "utf-8"
     config.mongoid.preload_models = false
     config.mongoid.observers = :game_observer, :player_observer, :profile_observer, :sample_record_observer, :scheduler_observer
+    config.logger = Logger.new("#{Rails.root}/log/#{Rails.env}.log", 8, 1024)
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     config.generators do |g|

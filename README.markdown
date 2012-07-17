@@ -88,6 +88,10 @@ Upgrade Notes:
     + Membership in the wellman group
     + An MToken
   - Account pooling is now disabled since it would require making everyone re-authenticate on any server restart or broken connection.
+  - It is essential that ~/.ssh/config includes the line
+  `ServerAliveInterval 60`
+* Nomenclature changes
+  - Jobs are now prefixed with 'egta-' instead of 'mas-'
 
 Innovations/Special Features
 

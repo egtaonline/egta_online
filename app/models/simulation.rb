@@ -16,13 +16,12 @@ class Simulation
   field :job_id
   field :error_message, default: ''
   field :created_at
-  field :flux, :type => Boolean, :default => false
   field :profile_assignment
   field :number, :type=>Integer
   field :files, type: Array, default: []
   sequence :number
   index [[:state, Mongo::ASCENDING]]
-  scope :flux, where(:flux => true)
+
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')
   scope :running, where(:state=>'running')
@@ -32,6 +31,7 @@ class Simulation
   scope :active, where(:state.in=>['queued','running'])
   scope :finished, where(:state.in=>['complete', 'failed'])
   scope :scheduled, where(:state.in=>['pending','queued','running'])
+  scope :queueable, pending.order_by([[:created_at, :asc]]).limit(Backend.configuration.queue_quantity)
   validates_presence_of :state, :on => :create, :message => "can't be blank"
   validates_presence_of :profile
   validates_numericality_of :size, :only_integer=>true, :greater_than=>0
@@ -62,7 +62,18 @@ class Simulation
     event :finish do
       transition [:pending, :queued, :running, :failed] => :complete
     end
+  end
 
+  def queue_as(jid)
+    self.job_id = jid
+    self.state = 'queued'
+    self.save
+  end
+
+  def fail(message)
+    self.error_message = message
+    self.state = 'failed'
+    self.save
   end
 
   def requeue

@@ -5,7 +5,7 @@ tmp/
 .sass-cache/
 public/uploads/*
 simulator_uploads/*
-coverage/
+coverage
 bin/
 public/assets/
 uploads/

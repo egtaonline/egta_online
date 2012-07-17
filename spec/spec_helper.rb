@@ -1,6 +1,11 @@
 require 'spork'
 
 Spork.prefork do
+  unless ENV['DRB']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
+  
   ENV["RAILS_ENV"] ||= 'test'
 
   require File.expand_path("../../config/environment", __FILE__)
@@ -44,6 +49,14 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  if ENV['DRB']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
+  
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
-  Dir[Rails.root.join("app/workers/*.rb")].each {|f| require f}
+  Dir[Rails.root.join("app/workers/*")].each {|f| require f}
+  Dir["#{Rails.root}/lib/util/*", "#{Rails.root}/lib/backend/*.rb", "#{Rails.root}/lib/backend/flux/*.rb"].each do |file|
+    load file
+  end
 end

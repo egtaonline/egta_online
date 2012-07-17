@@ -1,32 +1,25 @@
-### TODO: total rewrite
-
 class SimulationChecker
 #  include Resque::Plugins::UniqueJob
   @queue = :nyx_queuing
 
   def self.perform
     if Simulation.active.length > 0
-      simulation_ids = Simulation.active.collect{|s| s.id}
-      output = Net::SSH.start(Yetting.host, Account.all.sample.username).exec!("qstat -a | grep mas-")
-      state_info = parse_nyx_output(output)
-      Account.active.each do |account|
-        if Simulation.where(:_id.in => simulation_ids, :account_id => account.id).count != 0
-          puts account.username
-          location = ":/home/wellmangroup/many-agent-simulations/simulations/#{account.username}/"
-          numbers = Simulation.where(:_id.in => simulation_ids, :account_id => account.id).collect{|s| location+"#{s.number}"}
-          numbers = numbers.join(" ")
-          begin
-            puts system("sudo rsync -re ssh --chmod=ugo+rwx #{account.username}@nyx-login.engin.umich.edu#{numbers} #{Rails.root}/db/#{account.username}")
-            Simulation.where(:_id.in => simulation_ids, :account_id => account.id).each {|s| update_simulation_status(s, state_info[s.job_id])}
-          rescue
-            puts "rsync failed for #{account.username}"
-          end
+      simulations = Simulation.active.to_a
+      output = LOGIN_CONNECTION.exec!("qstat -a | grep mas-")
+      state_info = parse_qstat_output(output)
+      location = "#{Yetting.deploy_path}/simulations/"
+      simulations.each do |simulation|
+        begin
+          TRANSFER_CONNECTION.download!("#{location}#{simulation.number}", "#{Rails.root}/db/", recursive: true)
+          update_simulation_status(simulation, state_info[simulation.job_id])
+        rescue
+          puts "scp failed for #{simulation.number}"
         end
       end
     end
   end
 
-  def self.update_simulation_status(simulation, status, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
+  def self.update_simulation_status(simulation, status, folder_name="#{Rails.root}/db/#{simulation.number}")
     case status
     when "R"
       simulation.start!
@@ -34,19 +27,19 @@ class SimulationChecker
       if File.exists?(folder_name+"/out")
         check_for_errors(simulation, folder_name)
       else
-        simulation.error_message = "Files were not found on nyx."
+        simulation.error_message = "Files were not found on remote server."
         simulation.failure!
       end
     end
   end
 
-  def self.parse_nyx_output(output)
+  def self.parse_qstat_output(output)
     parsed_output = {}
     output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]} if output != nil
     parsed_output
   end
 
-  def self.check_for_errors(simulation, folder_name="#{Rails.root}/db/#{simulation.account_username}/#{simulation.number}")
+  def self.check_for_errors(simulation, folder_name="#{Rails.root}/db/#{simulation.number}")
     error_message = errors_from_folder(folder_name)
     if error_message == ""
       Resque.enqueue(DataParser, simulation.number)
