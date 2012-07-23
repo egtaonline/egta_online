@@ -11,6 +11,7 @@ gem "haml"
 gem "haml-rails"
 gem 'rdiscount'
 gem 'rabl'
+gem 'oj'
 
 # JS framework
 gem 'jquery-rails'
