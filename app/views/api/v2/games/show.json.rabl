@@ -4,13 +4,6 @@ attributes :id, :name, :simulator_fullname, :parameter_hash
 child :roles do |r|
   attributes :name, :count, :strategies
 end
-if @full == "true"
-  child :cv_manager do |cv|
-    child :features => :features do |f|
-      attributes :name, :expected_value, :adjustment_coefficient
-    end
-  end
-end
 if @adjusted == "true"
   if @full != "true"
     child :cv_manager do |cv|

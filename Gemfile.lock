@@ -211,7 +211,7 @@ GEM
       prawn (>= 0.8.4)
     quiet_assets (1.0.0)
       rails (~> 3.1)
-    rabl (0.6.8)
+    rabl (0.7.0)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
     rack (1.4.1)
