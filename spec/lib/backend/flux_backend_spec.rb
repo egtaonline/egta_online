@@ -13,29 +13,48 @@ describe FluxBackend do
     end
   end
   
-  #signals trouble
-  describe '#schedule' do
-    let(:simulation){ double('simulation') }
-    
+  context 'setup connections' do
+    let(:submission_service){ double('submission_service') }
+    let(:transfer_service){ double('transfer_service') }
+    let(:simulator_prep_service){ double('simulator_prep_service') }
+  
     before do
       subject.stub(gets: 'bcassell')
-      transfer_service = double('transfer')
-      transfer_service.should_receive(:upload!).with(simulation).and_return(true)
-      submission_service = double('submission_service')
-      submission_service.should_receive(:submit).with(simulation)
       transfer_connection = double('transfer_connection')
       submission_connection = double('submit_connection')
-      Net::SSH.should_receive(:start).with('flux-login.engin.umich.edu', 'bcassell').and_return(submission_connection)
-      Net::SCP.should_receive(:start).with('flux-xfer.engin.umich.edu', 'bcassell').and_return(transfer_connection)
+      Net::SSH.stub(:start).with('flux-login.engin.umich.edu', 'bcassell').and_return(submission_connection)
+      Net::SCP.stub(:start).with('flux-xfer.engin.umich.edu', 'bcassell').and_return(transfer_connection)
       SubmissionService.stub(:new).with(submission_connection).and_return(submission_service)
+      SimulatorPrepService.stub(:new).with(submission_connection).and_return(simulator_prep_service)
       TransferService.stub(:new).with(transfer_connection).and_return(transfer_service)
       subject.setup_connections
     end
+
+    describe '#schedule' do
+      let(:simulation){ double('simulation') }
     
-    it { subject.schedule(simulation) }
+      before do
+        submission_service.should_receive(:submit).with(simulation)
+        transfer_service.should_receive(:upload_simulation!).with(simulation).and_return(true)
+      end
+    
+      it { subject.schedule(simulation) }
+    end
+  
+    describe '#prepare_simulator' do
+      let(:simulator){ double('simulator') }
+    
+      before 'cleans up the space and uploads the simulator' do
+        simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
+        transfer_service.should_receive(:upload_simulator!).with(simulator)
+        simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
+      end
+      
+      it { subject.prepare_simulator(simulator) }
+    end
   end
   
-  describe '#prepare_simulations' do
+  describe '#prepare_simulation' do
     let(:simulation){ double(flux: false) }
     
     before do

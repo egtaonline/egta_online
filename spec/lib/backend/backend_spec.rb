@@ -45,6 +45,15 @@ describe Backend do
       end
     end
     
+    describe 'prepare_simulator' do
+      let(:simulator){ double('simulator') }
+      
+      it 'passes the message along to the backend implementation' do
+        Backend.configuration.backend_implementation.should_receive(:prepare_simulator).with(simulator)
+        Backend.prepare_simulator(simulator)
+      end
+    end
+    
     describe 'schedule' do
       it 'passes the message along to the backend implementation' do
         Backend.configuration.backend_implementation.should_receive(:schedule).with(simulation)

@@ -14,6 +14,10 @@ module Backend
     self.configuration ||= Configuration.new
   end
   
+  def self.prepare_simulator(simulator)
+    self.configuration.backend_implementation.prepare_simulator(simulator) 
+  end
+  
   def self.prepare_simulation(simulation)
     self.configuration.backend_implementation.prepare_simulation(simulation)
   end

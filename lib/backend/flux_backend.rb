@@ -6,7 +6,9 @@ class FluxBackend
   def setup_connections
     puts 'Uniqname: '
     uniqname = gets
-    @submission_service = SubmissionService.new(Net::SSH.start('flux-login.engin.umich.edu', uniqname))
+    login = Net::SSH.start('flux-login.engin.umich.edu', uniqname)
+    @submission_service = SubmissionService.new(login)
+    @simulator_prep_service = SimulatorPrepService.new(login)
     @transfer_service = TransferService.new(Net::SCP.start('flux-xfer.engin.umich.edu', uniqname))
   end
   
@@ -19,9 +21,15 @@ class FluxBackend
   end
   
   def schedule(simulation, src_dir="#{Rails.root}/tmp/simulations")
-    if @transfer_service.upload!(simulation)
+    if @transfer_service.upload_simulation!(simulation)
       @submission_service.submit(simulation)
     end
+  end
+  
+  def prepare_simulator(simulator)
+    @simulator_prep_service.cleanup_simulator(simulator)
+    @transfer_service.upload_simulator!(simulator)
+    @simulator_prep_service.prepare_simulator(simulator)
   end
   
   private

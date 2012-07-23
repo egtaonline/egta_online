@@ -30,6 +30,7 @@ class Simulation
   scope :stale, where(:state.in=>['queued', 'complete', 'failed']).and(:updated_at.lt => (Time.current-300000))
   scope :active, where(:state.in=>['queued','running'])
   scope :finished, where(:state.in=>['complete', 'failed'])
+  scope :recently_finished, where(:state.in=>['complete', 'failed'], :updated_at.gt => (Time.current-86400))
   scope :scheduled, where(:state.in=>['pending','queued','running'])
   scope :queueable, pending.order_by([[:created_at, :asc]]).limit(Backend.configuration.queue_quantity)
   validates_presence_of :state, :on => :create, :message => "can't be blank"
