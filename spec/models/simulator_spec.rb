@@ -13,7 +13,7 @@ describe Simulator do
       system("mkdir -p #{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/fakery")
       simulator = Fabricate(:simulator_realistic) 
       File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/fakery").should eql(false)
-      File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/simulation_spec.json").should eql(true)
+      File.exists?("#{Rails.root}/simulator_uploads/epp_sim-test/epp_sim/defaults.json").should eql(true)
     end
     
     context "the simulator is valid" do
@@ -26,10 +26,10 @@ describe Simulator do
       it { simulator.configuration["number of agents"].should eql(120) }
     end
     
-    it "should inform the user of a malformed simulation_spec.yaml and a missing script/batch file" do
+    it "should inform the user of a malformed defaults.json and a missing script/batch file" do
       simulator = Fabricate.build(:simulator_realistic, :name => "fake2", :simulator_source => File.new("#{Rails.root}/spec/support/fake2.zip"))
       simulator.should have(2).errors_on(:simulator_source)
-      simulator.errors[:simulator_source].should include("had a malformed simulation_spec.json file.")
+      simulator.errors[:simulator_source].should include("had a malformed defaults.json file.")
       simulator.errors[:simulator_source].should include("did not find script/batch within #{simulator.location}/#{simulator.name}")
     end
   end
