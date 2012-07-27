@@ -8,10 +8,9 @@ class SimulationQueuer
     Simulation.queueable.each do |simulation|
       begin
         prep_service.prepare_simulation(simulation)
-        Backend.schedule(simulation)
+        Backend.schedule_simulation(simulation)
       rescue
-        simulation.error_message = "failed to create files for remote server"
-        simulation.failure!
+        simulation.fail "failed to create files for remote server"
       end
     end
   end

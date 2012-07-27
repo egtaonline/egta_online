@@ -40,17 +40,12 @@ class Simulator
       errors.add(:simulator_source, "did not find script/batch within #{location}/#{dirs[0]}")
     end
     Find.find(location) do |path|
-      if File.basename(path) == "simulation_spec.yaml"
+      if File.basename(path) == "defaults.json"
         begin
-          parameters = Hash.new
-          File.open(path) do |io|
-            parameters = YAML.load(io)["web parameters"]
-            parameters.each_pair {|key, entry| parameters[key] = "#{entry}"}
-          end
-          self.configuration = parameters
+          self.configuration = Oj.load_file(path)['configuration']
           Resque.enqueue(SimulatorInitializer, self.id)
-        rescue
-          errors.add(:simulator_source, "had a malformed simulation_spec.yaml file.")
+        rescue SyntaxError => se
+          errors.add(:simulator_source, "had a malformed defaults.json file.")
         end
         return
       end

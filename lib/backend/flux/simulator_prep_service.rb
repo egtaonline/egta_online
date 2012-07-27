@@ -8,9 +8,6 @@ class SimulatorPrepService
   end
   
   def prepare_simulator(simulator)
-    @login_connection.exec! "cd #{Yetting.deploy_path} &&
-                             unzip -uqq #{simulator.name}.zip -d #{simulator.fullname} &&
-                             chmod -R ug+rwx #{simulator.fullname} &&
-                             mv #{simulator.fullname}/#{Dir.entries(simulator.fullname)[0]} #{simulator.fullname}/#{simulator.name}"
+    @login_connection.exec! "cd #{Yetting.deploy_path} && unzip -uqq #{simulator.name}.zip -d #{simulator.fullname} && chmod -R ug+rwx #{simulator.fullname} && mv #{simulator.fullname}/#{Dir.entries(simulator.fullname)[0]} #{simulator.fullname}/#{simulator.name}"
   end
 end

@@ -10,7 +10,7 @@ module RoleManipulator
 
     def add_strategy(role_name, strategy_name)
       role = roles.find_or_create_by(name: role_name)
-      if strategy_name =~ /\A\w+\z/ && !role.strategies.include?(strategy_name) 
+      if strategy_name =~ /\A[\w:.-]+\z/ && !role.strategies.include?(strategy_name) 
         role.strategies << strategy_name
         role.strategies.sort!
         role.save!

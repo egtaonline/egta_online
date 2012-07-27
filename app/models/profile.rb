@@ -20,16 +20,11 @@ class Profile
   # index ([[:simulator_id,  Mongo::ASCENDING], [:configuration_id, Mongo::ASCENDING], [:size, Mongo::ASCENDING], [:sample_count, Mongo::ASCENDING]])
 
   validates_presence_of :simulator
-  validates_format_of :assignment, with: /\A(\w+:( \d+ \w+,)* \d+ \w+; )*\w+:( \d+ \w+,)* \d+ \w+\z/
+  validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
   validates_uniqueness_of :assignment, scope: [:simulator_id, :configuration]
   delegate :fullname, :to => :simulator, :prefix => true
 
   after_create :find_games
-
-  # 
-  # def adjusted_sample_records
-  #   self.sample_records.skip(10)
-  # end
   
   def strategies_for(role_name)
     symmetry_groups.where(role: role_name).collect{ |s| s.strategy }.uniq
@@ -43,4 +38,11 @@ class Profile
     Resque.enqueue_in(5.minutes, ProfileScheduler, id)
   end
 
+  def create_player(role, strategy, payoff, features)
+    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff, features: features)
+  end
+  
+  def scheduled?
+    simulations.active.count > 0
+  end
 end

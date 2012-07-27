@@ -112,8 +112,11 @@ end
 Given /^a fleshed out simulator with an empty (\w+) of size (\d+) exists$/ do |scheduler, size|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
-  size = 4 if scheduler == 'hierarchical_scheduler'
-  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
+  if scheduler == 'hierarchical_scheduler' || scheduler == 'hierarchical_deviation_scheduler'
+    @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: 4, agents_per_player: 2)
+  else
+    @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
+  end
   @scheduler.configuration.should_not eql(nil)
 end
 
@@ -130,6 +133,14 @@ When /^I add the role (.*) with size (.*) and the strategies (.*) to the schedul
         click_button "Add Strategy"
       end
     end
+  end
+end
+
+When /^I add the deviating strategy (\w+) to the role (\w+) on the scheduler$/ do |strategy, role|
+  visit "/#{@scheduler_class}s/#{@scheduler.id}"
+  with_resque do
+    select strategy, from: "dev_#{role}_strategy"
+    click_button "dev_#{role}"
   end
 end
 
@@ -233,6 +244,13 @@ When /^I remove the strategy (\w+) on role (\w+) from the scheduler$/ do |strate
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
   with_resque do
     click_link "remove-#{role}-#{strategy}"
+  end
+end
+
+When /^I remove the deviation strategy (\w+) on role (\w+) from the scheduler$/ do |strategy, role|
+  visit "/#{@scheduler_class}s/#{@scheduler.id}"
+  with_resque do
+    click_link "remove-dev-#{role}-#{strategy}"
   end
 end
 

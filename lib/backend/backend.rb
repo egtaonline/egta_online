@@ -15,15 +15,19 @@ module Backend
   end
   
   def self.prepare_simulator(simulator)
-    self.configuration.backend_implementation.prepare_simulator(simulator) 
+    backend_implementation.prepare_simulator(simulator) 
   end
   
   def self.prepare_simulation(simulation)
-    self.configuration.backend_implementation.prepare_simulation(simulation)
+    backend_implementation.prepare_simulation(simulation)
   end
 
-  def self.schedule(simulation)
-    self.configuration.backend_implementation.schedule(simulation)
+  def self.schedule_simulation(simulation)
+    backend_implementation.schedule_simulation(simulation)
+  end
+
+  def self.check_simulation(simulation)
+    backend_implementation.check_simulation(simulation)    
   end
 
   class Configuration
@@ -34,5 +38,11 @@ module Backend
       @queue_periodicity = 5.minutes
       @queue_quantity = 30
     end
+  end
+  
+  private
+  
+  def self.backend_implementation
+    self.configuration.backend_implementation
   end
 end

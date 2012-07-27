@@ -59,6 +59,7 @@ end
 group :test, :development do
   gem 'gsl', :github => 'romanbsd/rb-gsl'
   gem "rspec-rails"
+  gem 'spork', '~> 1.0rc'
   gem 'debugger'
 end
 
@@ -68,13 +69,13 @@ group :test do
   gem "rb-fsevent"
   gem "capybara-webkit"
   gem "growl"
-  gem "spork", '~> 1.0rc'
   gem "cucumber-rails"
   gem "capybara-screenshot"
   gem "fabrication"
   gem "guard-rspec"
   gem "guard-cucumber"
   gem "guard-spork"
+  
   gem "resque_spec"
   gem "mongoid-rspec"
 end

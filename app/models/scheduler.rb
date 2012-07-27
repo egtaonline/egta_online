@@ -16,6 +16,8 @@ class Scheduler
   embeds_many :roles, as: :role_owner, order: :name.asc
   validates_numericality_of :default_samples, integer_only: true
   
+  scope :scheduling_profile, ->(profile_id) { active.where(profile_ids: profile_id) }
+  
   accepts_nested_attributes_for :configuration
   
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
@@ -36,5 +38,10 @@ class Scheduler
     game = Game.create!(name: name, size: size, simulator_id: simulator_id, configuration: configuration)
     add_strategies_to_game(game)
     game
+  end
+  
+  def schedule_profile(profile)
+    samples_to_schedule = [samples_per_simulation, required_samples(profile.id)-profile.sample_count].min
+    scheduler.simulations.create!(size: num_samples, state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
   end
 end

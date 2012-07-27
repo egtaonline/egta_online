@@ -48,7 +48,7 @@ describe "Simulators" do
     it "should update the relevant simulator" do
       simulator = Fabricate(:simulator)
       visit edit_simulator_path(simulator.id)
-      attach_file "Simulator source", "#{Rails.root}/spec/support/epp_sim.zip"
+      attach_file "Simulator source", "#{Rails.root}/features/support/epp_sim.zip"
       click_button "Update Simulator"
       page.should have_content("Inspect Simulator")
       SimulatorInitializer.should have_queue_size_of(1)
