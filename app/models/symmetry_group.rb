@@ -14,14 +14,14 @@ class SymmetryGroup
   
   def payoff
     if players.count > 0
-      @payoffs ||= players.map{ |player| player.payoff }.to_scale
+      @payoffs = players.map{ |player| player.payoff }.to_scale
       @payoffs.mean
     end
   end
   
   def payoff_sd
     if players.count > 0
-      @payoffs ||= players.map{ |player| player.payoff }.to_scale
+      @payoffs = players.map{ |player| player.payoff }.to_scale
       @payoffs.sd 
     end
   end

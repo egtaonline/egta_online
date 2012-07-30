@@ -5,6 +5,7 @@ Scenario Outline: Multiple available simulators on creation
   Given I am signed in
   And two simulators with different default configuration exist
   When I am on the new <class> page
+  And I select the first simulator
   Then I should see the default configuration of the first simulator
   When I select the second simulator
   Then I should see the default configuration of the last simulator

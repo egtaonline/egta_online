@@ -16,7 +16,6 @@ Spork.prefork do
   require 'resque_spec/scheduler'
   Capybara.default_selector = :css
   Capybara.javascript_driver = :webkit
-  Capybara.default_wait_time = 5
   require 'cucumber/rspec/doubles'
   ActionController::Base.allow_rescue = false
   World(ResqueSpec::Helpers)

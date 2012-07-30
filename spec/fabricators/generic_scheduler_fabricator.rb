@@ -9,6 +9,14 @@ Fabricator(:generic_scheduler) do
   configuration {|g| g.simulator.configuration}
 end
 
+Fabricator(:generic_scheduler_with_roles, from: :generic_scheduler) do
+  size 4
+  after_create do |scheduler|
+    scheduler.add_role("Bidder", 2)
+    scheduler.add_role("Seller", 2)
+  end
+end
+
 Fabricator(:generic_scheduler_with_profiles, from: :generic_scheduler) do
   after_create do |scheduler| 
     scheduler.add_role('All', 2)

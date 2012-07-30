@@ -32,14 +32,22 @@ class GenericScheduler < Scheduler
   end
   
   def add_profile(assignment, sample_count=self["default_samples"])
-    assigment = assignment.assignment_sort
+    assignment = assignment.assignment_sort
     profile = simulator.profiles.find_or_create_by(configuration: self.configuration,
                                                    assignment: assignment)
     if profile.valid?
-      self.profiles << profile
-      sample_hash[profile.id.to_s] = sample_count
-      self.save!
-      profile.try_scheduling
+      flag = profile.size == self.size
+      roles.each do |r|
+        flag &&= profile.symmetry_groups.where(role: r.name).collect{ |s| s.count }.reduce(:+) == r.count
+      end
+      if flag
+        self.profiles << profile
+        sample_hash[profile.id.to_s] = sample_count
+        self.save!
+        profile.try_scheduling
+      else
+        profile.errors.add(assignment: "cannot be scheduled by this scheduler due to mismatch on role partition.")
+      end
     end
     profile
   end

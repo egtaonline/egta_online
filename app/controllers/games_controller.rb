@@ -62,7 +62,7 @@ class GamesController < ApplicationController
       format.html
       # come back and speed up sample issue
       format.xml { @profiles = game.display_profiles }
-      format.json { @object = game; @full = params[:full]; @adjusted = params[:adjusted]; render "api/v2/games/show" }
+      format.json { @object = game; @full = params[:full]; @adjusted = params[:adjusted]; render "api/v3/games/show" }
     end
   end
   

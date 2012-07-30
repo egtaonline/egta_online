@@ -32,6 +32,16 @@ class SchedulersController < ApplicationController
     respond_with(scheduler)
   end
 
+  def add_role
+    scheduler.add_role(params[:role], params[:role_count])
+    respond_with(scheduler)
+  end
+
+  def remove_role
+    scheduler.remove_role(params[:role])
+    respond_with(scheduler)
+  end
+
   def page_profiles
   end
 

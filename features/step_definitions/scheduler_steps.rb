@@ -174,7 +174,7 @@ Then /^I should see a game that matches that scheduler$/ do
   @scheduler.configuration.each { |key,value| page.should have_content(key); page.should have_content(value) }
 end
 
-Then /^I should all the profiles of the scheduler that have been sampled$/ do
+Then /^I should see all the profiles of the scheduler that have been sampled$/ do
   @scheduler.profiles.each do |profile|
     profile.symmetry_groups do |sgroup|
       page.should have_content("\"role\":\"#{sgroup.role}\",\"strategy\":\"#{sgroup.strategy}\",\"count\":#{sgroup.count}")
