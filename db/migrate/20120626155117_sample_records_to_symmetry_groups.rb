@@ -1,12 +1,10 @@
 class SampleRecordsToSymmetryGroups < Mongoid::Migration
   def self.up
     Simulator.where(:_id => '4f60d65a4a98060bec000002').destroy_all
-    current_page = 0
-    item_count = Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).count
-    puts item_count
-    while item_count > 0
-      p item_count
-      Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).skip(current_page * 200).limit(200).each do |profile|
+    profiles = Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).limit(100).to_a
+    while profiles != []
+      puts Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).count
+      profiles.each do |profile|
         count = 0
         profile.symmetry_groups.each do |symmetry_group|
           symmetry_group.players.destroy_all
@@ -27,8 +25,7 @@ class SampleRecordsToSymmetryGroups < Mongoid::Migration
         end
         profile.unset("sample_records") unless flag
       end
-      item_count-=200
-      current_page+=1
+      profiles = Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).limit(100).to_a
     end
   end
 
