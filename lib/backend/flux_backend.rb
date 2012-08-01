@@ -5,11 +5,12 @@ class FluxBackend
   
   def setup_connections
     puts 'Uniqname: '
-    uniqname = gets
+    uniqname = gets.split("\n")[0]
+    puts uniqname.inspect
+    transfer = Net::SCP.start('flux-xfer.engin.umich.edu', uniqname)
     login = Net::SSH.start('flux-login.engin.umich.edu', uniqname)
     @submission_service = SubmissionService.new(login)
     @simulator_prep_service = SimulatorPrepService.new(login)
-    transfer = Net::SCP.start('flux-xfer.engin.umich.edu', uniqname)
     @upload_service = UploadService.new(transfer)
     @download_service = DownloadService.new(transfer, 'tmp/data')
     @simulation_status_resolver = SimulationStatusResolver.new(@download_service)
