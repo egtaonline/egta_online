@@ -9,7 +9,7 @@ class ObservationProcessor
           profile.create_player(player['role'], player['strategy'], player['payoff'], player['features'])
         end
         from_json['features'].each do |key, value|
-          profile.feature_observations.create(name: key, observation: value)
+          profile.features_observations.create(name: key, observation: value)
         end
         profile.inc(:sample_count, 1)
         simulation.push(:files, file)

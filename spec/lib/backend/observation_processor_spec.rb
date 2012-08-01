@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ObservationProcessor do
   describe 'process_file' do
     let(:features){ double('features') }
-    let(:profile){ double(assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2', feature_observations: features) }
+    let(:profile){ double(assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2', features_observations: features) }
     
     context 'valid file' do
       let(:simulation){ double(profile: profile, number: 3, files: []) }

@@ -14,7 +14,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
       it "successful JSON" do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
-                                                            :active => true, :process_memory => 1000,
+                                                            :active => true, :process_memory => 1000, :size => 4,
                                                             :time_per_sample => 120, :samples_per_simulation => 30,
                                                             :default_samples => 30, :configuration => simulator.configuration,
                                                             :nodes => 1}
@@ -31,7 +31,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
       it "unsuccessful JSON" do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token, :scheduler => {:simulator_id => simulator.id, :name => "test",
-                                                          :active => true,
+                                                          :active => true, :size => 4,
                                                           :time_per_sample => 120, :samples_per_simulation => 30,
                                                           :default_samples => 30, :configuration => simulator.configuration,
                                                           :nodes => 1}
@@ -44,7 +44,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token
         last_response.status.should eql(422)
-        errors = {"errors" => {"default_samples" => ["is not a number"], "process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"], "configuration" => ["can't be blank"]}}.to_json
+        errors = {"errors" => {"default_samples" => ["is not a number"], "process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"], "configuration" => ["can't be blank"], "size" => ["can't be blank"]}}.to_json
         last_response.body.should eql(errors)
       end
     end

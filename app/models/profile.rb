@@ -4,7 +4,7 @@ class Profile
   include Mongoid::Document
   
   embeds_many :symmetry_groups
-  embeds_many :feature_observations
+  embeds_many :features_observations
 
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator

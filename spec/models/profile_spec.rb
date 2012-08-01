@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Profile do
   it { should embed_many :symmetry_groups }
-  it { should embed_many :feature_observations }
+  it { should embed_many :features_observations }
   it { should have_field :configuration }
   
   describe "uniqueness validation" do
