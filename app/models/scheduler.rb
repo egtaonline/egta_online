@@ -30,7 +30,7 @@ class Scheduler
   
   belongs_to :simulator
   validates_uniqueness_of :name
-  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :configuration
+  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :configuration, :size
   validates_numericality_of :process_memory, :time_per_sample, :nodes, :only_integer => true
   validates_numericality_of :samples_per_simulation, only_integer: true, greater_than: 0
   

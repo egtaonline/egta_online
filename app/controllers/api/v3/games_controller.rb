@@ -1,5 +1,4 @@
 class Api::V3::GamesController < Api::V3::BaseController
-  skip_before_filter :fullness, :only => :index
   before_filter :adjustment, :only => :show
   before_filter :find_object, :only => [:show, :add_role, :add_strategy, :remove_role, :remove_strategy]
   before_filter :validate_role, :only => [:add_role, :add_strategy, :remove_role, :remove_strategy]

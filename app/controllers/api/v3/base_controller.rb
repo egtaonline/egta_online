@@ -1,7 +1,7 @@
 class Api::V3::BaseController < ActionController::Base
   respond_to :json
-  before_filter :authenticate_user!, :fullness
-  before_filter :find_object, :only => :show
+  before_filter :authenticate_user!
+  before_filter :granularity, :find_object, :only => :show
   
   def index
     @collection = params[:controller].classify.demodulize.constantize.all
@@ -9,13 +9,17 @@ class Api::V3::BaseController < ActionController::Base
   end
   
   def show
+    puts "CALLED"
     respond_with(@object)
   end
   
   protected
   
-  def fullness
-    @full = params[:full]
+  def granularity
+    @granularity = params[:granularity]
+    if @granularity != "observation" && @granularity != "full"
+      @granularity = "summary"
+    end
   end
   
   def find_object

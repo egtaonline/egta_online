@@ -34,7 +34,7 @@ module RoleManipulator
   module RolePartition
     def unassigned_player_count
       rcount = roles.map{ |r| r.count }.reduce(:+)
-      rcount == nil ? size : size-rcount
+      rcount == nil ? (size ? size : 0) : size-rcount
     end
     
     def available_strategies(role_name)

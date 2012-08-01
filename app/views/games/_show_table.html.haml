@@ -9,4 +9,5 @@
 - if game.roles.size == 1 && game.roles.first.name == "All"
   = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml"), :class => 'btn btn-primary'
 = link_to "Download JSON", url_for(:action => "show", :format => "json"), :class => 'btn btn-primary'
-= link_to "Download JSON with samples", url_for(:action => "show", :format => "json", :full => 'true'), :class => 'btn btn-primary'
+= link_to "Download JSON with Aggregated Observations", url_for(:action => "show", :format => "json", :granularity => 'observation'), :class => 'btn btn-primary'
+= link_to "Download JSON with Unaggregated Observations", url_for(:action => "show", :format => "json", :granularity => 'full'), :class => 'btn btn-primary'

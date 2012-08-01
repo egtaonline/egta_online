@@ -92,6 +92,26 @@ Upgrade Notes:
   `ServerAliveInterval 60`
 * Nomenclature changes
   - Jobs are now prefixed with 'egta-' instead of 'mas-'
+  - Instead of RoleInstances and StrategyInstances, with payoff data stored in SampleRecords, Profiles now have SymmetryGroups which feature Player records.  A SymmetryGroup of a Profile is identified by a unique role-strategy pair, specifies the number of players in one observation of the SymmetryGroup, and has a collection of Players.  A Player is an observation of a member of a SymmetryGroup and includes an observation\_id, payoff, and features.
+  - The field parameter\_hash has been changed throughout to configuration, since a.) this matches the nomenclature from the EGTAOnline paper and b.) hash is a language-specific word that carries other definitions.  In Ruby it refers to the datatype that is called a 'dict' in Python, and a 'map' in Java and other languages.
+  - What was previously known as a Profile's name is now known as its assignment.  This is to reinforce the idea that assignments are not unique identifiers.  A Profile is 'named' by its simulator, configuration, and assignment.
+* Changes in the scheduling API
+  - Any reference to 'parameter\_hash' should be replaced with 'configuration'
+  - Any reference to 'profile\_name' should be replaced with 'assignment'
+  - GenericSchedulers now require 'Game size' (aka size).  No scheduling can be conducted with a GenericScheduler until you edit them to specify a size.
+  - GenericSchedulers now require a role partition in order to schedule, and may only schedule profiles that match their role partition.
+  - As a result of the proceeding 2 points, Games can be now be constructed with 1 click (and soon 1 api call) to match a GenericScheduler.
+* Changes to Games
+  - Control variates will be temporarily unavailable.  It is being pulled out to be moved to an analysis workflow style approach.
+  - There are now 3 JSON formats of games: summary, observation, and full
+    + Summary is similar to the existing JSON standard, but reconfigured to more closely match internal profile implementation.
+    + Observation is a new format that aggregates over symmetry but keeps observations separate.
+    + Full is an extension of the old full format, featuring no aggregation, but including player records, and also reordered a little to match the internal profile implementation.
+    + If you wish to see examples of these formats, just send me an email.
+  - Instead of passing full=true with your request to download the game via API, provide granularity=full (or granularity=observation).
+  - Unless there is significant outcry against this, I'm going to stop supporting EGAT XML, since we've mostly moved on to using JSON and python for analysis.
+* Final Notes
+  - Instructions on the web page are now significantly out of date, so _do not rely on them_.  For now, this page is the primary repository of knowledge about how things work, and you should email me if anything is unclear.  Once everything is basically working I'll update the instruction pages.
 
 Innovations/Special Features
 

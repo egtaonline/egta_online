@@ -12,6 +12,15 @@ class SymmetryGroup
   validates :role, presence: true
   validates :strategy, presence: true, uniqueness: { scope: :role }
   
+  def payoff_for(observation_id)
+    payoffs_in_observation = players.where(observation_id: observation_id).collect{ |player| player.payoff }
+    if payoffs_in_observation.count > 0
+      payoffs_in_observation.to_scale.mean
+    else
+      "FAIL"
+    end
+  end
+  
   def payoff
     if players.count > 0
       @payoffs = players.map{ |player| player.payoff }.to_scale
