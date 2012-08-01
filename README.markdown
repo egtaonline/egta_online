@@ -84,6 +84,7 @@ Upgrade Notes:
       	    }
         }
         ```
+        + Please do not try to format output manually.  Build the appropriate structure of arrays and maps and tell your JSON parser to dump that to a file.
     - Simulator defaults should be provided by a file called defaults.json in your zipped simulator
         + Example defaults.json:
     
