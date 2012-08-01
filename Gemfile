@@ -25,7 +25,7 @@ gem "airbrake"
 
 # Database
 gem 'bson_ext'
-gem 'mongoid'
+gem 'mongoid', '~> 2.4'
 
 gem "state_machine"
 gem "devise", '~> 1.5'
