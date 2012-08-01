@@ -31,7 +31,7 @@ Upgrade Notes:
     - Simulation Output
         + Observations are now the unit of output.  The 'payoff_data' file and 'features' folder are not supported anymore.  Observations are json files that include the word 'observation' and carry the json extension.  In other words 'some\_observation.json' and 'observation1.json' are both acceptable naming conventions.  An observation includes all the payoff and feature data from a single sample of the simulator.
         + Observations now record each player separately and aggregate over symmetry inside EGTAOnline.  This provides greater flexibility for statistical procedures.
-        + Observations now support arbitrary data for feature observations, though built-in tools currently only work with numerics.
+        + Observations now support arbitrary data for feature observations.
         + example observation.json:
     
         ```
