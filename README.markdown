@@ -6,7 +6,7 @@ Upgrade Notes:
   - Simulation Input
     + simulation\_spec.yaml is now simulation\_spec.json
     + example simulation\_spec.json:
-    ```json
+    ```ruby
       {
           "assignment":{
               "Bidder":[
