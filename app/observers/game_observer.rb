@@ -4,7 +4,6 @@ class GameObserver < Mongoid::Observer
   end
   
   def before_validation(game)
-    game.cv_manager ||= CvManager.new
     game.simulator_fullname = game.simulator.fullname
   end
 end

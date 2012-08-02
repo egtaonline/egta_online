@@ -7,7 +7,6 @@ describe Game do
   it { should validate_presence_of :size }
   it { should validate_presence_of :simulator_fullname }
   it { should validate_numericality_of(:size).to_allow(only_integer: true, greater_than: 1) }
-  it { should embed_one(:cv_manager) }
   
   describe "after_create" do
     before(:each) do

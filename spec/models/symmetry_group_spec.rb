@@ -14,4 +14,13 @@ describe SymmetryGroup do
   
   its(:payoff) { should eql(symmetry_group.players.map{ |player| player.payoff }.reduce(:+)/symmetry_group.players.count) }
   its(:payoff_sd) { should eql(symmetry_group.players.map{ |player| player.payoff }.to_scale.sd) }
+  
+  describe "payoff_for" do
+    before do
+      symmetry_group.players.create(payoff: 234, observation_id: 2, features: {})
+      symmetry_group.players.create(payoff: 244, observation_id: 2, features: {})
+    end
+    
+    it { symmetry_group.payoff_for(2).should eql(239.0) }
+  end
 end

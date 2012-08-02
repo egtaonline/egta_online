@@ -19,7 +19,7 @@ class SampleRecordsToSymmetryGroups < Mongoid::Migration
         end
         flag = false
         profile.symmetry_groups.each do |symmetry_group|
-          flag ||= (symmetry_group.payoff.round(4) != (profile["sample_records"].map{ |s| s["payoffs"][symmetry_group.role][symmetry_group.strategy] }.to_scale.mean).round(4))
+          flag ||= (symmetry_group.payoff.round(5) != (profile["sample_records"].map{ |s| s["payoffs"][symmetry_group.role][symmetry_group.strategy] }.to_scale.mean).round(5))
           if flag
             puts "players #{symmetry_group.players.collect{|player| player.payoff}}"
             puts "sample_records #{profile["sample_records"].collect{ |s| s["payoffs"][symmetry_group.role][symmetry_group.strategy] }}"

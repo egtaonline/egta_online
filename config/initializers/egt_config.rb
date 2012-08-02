@@ -1,7 +1,6 @@
 require "util/sequence"
 require 'util/assignment_sorting'
 require 'util/object_numerism'
-require 'util/variable_estimator'
 require 'backend/spec_generator'
 require 'backend/simulation_prep_service'
 require 'backend/observation_processor'

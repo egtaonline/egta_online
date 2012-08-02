@@ -10,7 +10,6 @@ class Game
   field :configuration, type: Hash, default: {}
   
   embeds_many :roles, as: :role_owner
-  embeds_one :cv_manager
   belongs_to :simulator
   has_and_belongs_to_many :profiles, :inverse_of => nil
   
@@ -22,16 +21,6 @@ class Game
     query_hash = { :assignment => strategy_regex, :sample_count.gt => 0 }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
-  end
-  
-  # def cv_display_profiles
-  #   query_hash = {:name => strategy_regex, :sample_count.gt => 10}
-  #   roles.each {|r| query_hash["Role_#{r.name}_count"] = r.count}
-  #   profiles.where(query_hash)
-  # end
-  
-  def calculate_cv_coefficients
-    Resque.enqueue(CvCoefficientCalculator, id)
   end
   
   private
