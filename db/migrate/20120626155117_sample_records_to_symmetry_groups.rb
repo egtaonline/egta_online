@@ -11,9 +11,7 @@ class SampleRecordsToSymmetryGroups < Mongoid::Migration
         profile.symmetry_groups.each do |symmetry_group|
           symmetry_group.players.destroy_all
         end
-        p "destroyed old objects #{Time.now}"
         profile["sample_records"].each do |sample_record|
-          p "sample record #{Time.now}"
           count += 1
           profile.features_observations.create(features: sample_record["features"], observation_id: count)
           profile.symmetry_groups.each do |symmetry_group|
