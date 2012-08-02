@@ -6,15 +6,19 @@ class SampleRecordsToSymmetryGroups < Mongoid::Migration
       puts Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).count
       profiles.each do |profile|
         count = 0
+        p "starting #{Time.now}"
         profile.features_observations.destroy_all
         profile.symmetry_groups.each do |symmetry_group|
           symmetry_group.players.destroy_all
         end
+        p "destroyed old objects #{Time.now}"
         profile["sample_records"].each do |sample_record|
+          p "sample record #{Time.now}"
           count += 1
           profile.features_observations.create(features: sample_record["features"], observation_id: count)
           profile.symmetry_groups.each do |symmetry_group|
-            symmetry_group.count.times{ |i| symmetry_group.players.create(payoff: sample_record["payoffs"][symmetry_group.role][symmetry_group.strategy], observation_id: count) }
+            payoff = sample_record["payoffs"][symmetry_group.role][symmetry_group.strategy]
+            symmetry_group.count.times{ |i| symmetry_group.players.create(payoff: payoff, observation_id: count) }
           end
         end
         flag = false
