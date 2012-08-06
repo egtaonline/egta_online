@@ -1,5 +1,4 @@
 require 'bundler/capistrano'
-require 'rvm/capistrano'
 
 load "config/recipes/base"
 load "config/recipes/nginx"
@@ -33,7 +32,7 @@ namespace :deploy do
 
   desc "Update the deployed code."
   task :update_code, :except => { :no_release => true } do
-    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle"
+    run "cd #{current_path}; git fetch origin; git reset --hard #{branch}; bundle --without development test"
   end
 
   namespace :rollback do
@@ -115,10 +114,23 @@ namespace :foreman do
   desc "Export the Procfile to upstart scripts"
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
-    run "cd /home/deployment/current && rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
+    run "cd /home/deployment/current && #{sudo} bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
   end
 end
 
-before 'deploy:symlink', 'deploy:precompile_assets'
-after 'deploy:precompile_assets', 'foreman:restart'
+namespace :deploy do
+  namespace :assets do
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      from = source.next_revision(current_revision)
+      if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+        run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      else
+        logger.info "Skipping asset pre-compilation because there were no asset changes"
+      end
+    end
+  end
+end
+
+before 'deploy:symlink', 'deploy:assets:precompile'
+after 'deploy:assets:precompile', 'foreman:restart'
 after "deploy", "deploy:cleanup"
