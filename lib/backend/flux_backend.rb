@@ -4,6 +4,9 @@ class FluxBackend
   attr_accessor :flux_active_limit
   
   def setup_connections
+    until ARGV.empty? do
+      puts "From arguments: #{ARGV.shift}"
+    end
     puts 'Uniqname: '
     uniqname = gets.split("\n")[0]
     puts uniqname.inspect
