@@ -38,7 +38,6 @@ gem "decent_exposure"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem "simple_form"
 gem "show_for", :git => "git://github.com/plataformatec/show_for.git" 
-gem "passenger"
 gem 'mongoid_rails_migrations', '0.0.14'
 gem 'high_voltage'
 gem "capistrano"
@@ -49,6 +48,10 @@ gem 'oj'
 # Math
 gem 'statsample'
 gem 'statsample-optimization'
+
+group :production do
+  gem 'unicorn'
+end
 
 group :development do
   gem 'rvm-capistrano'

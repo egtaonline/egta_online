@@ -45,4 +45,17 @@ class Profile
   def scheduled?
     simulations.active.count > 0
   end
+  
+  def features
+    fhash = Hash.new{ |hash,key| hash[key] = [] }
+    feature_observations.each do |f|
+      f.features.each do |key, value|
+        fhash[key] << value
+      end
+    end
+    fhash.each do |key, value|
+      fhash[key] = fhash[key].to_scale.mean
+    end
+    fhash
+  end
 end

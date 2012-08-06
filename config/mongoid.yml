@@ -2,6 +2,7 @@ development:
   host: localhost
   database: egt_web_interface_production
   logger: false
+  pool_size: 5
 
 test:
   host: localhost

@@ -1,20 +1,22 @@
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
-
 require 'bundler/capistrano'
 require 'rvm/capistrano'
 
-set :rvm_ruby_string, 'ruby-1.9.3'
-set :application, "egtaonline"
-set :repository,  "git@github.com:egtaonline/egta_online.git"
-set :scm, :git
-set :branch, "origin/master"
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
-set :user, "deployment"
+load "config/recipes/base"
+load "config/recipes/nginx"
+load "config/recipes/unicorn"
+load "config/recipes/nodejs"
+load "config/recipes/rbenv"
 
+server "d-108-249.eecs.umich.edu", :web, :app, :db, primary: true
+
+set :user, "deployment"
+set :application, "egtaonline"
 set :deploy_to, "/home/deployment"
-role :web, "d-108-249.eecs.umich.edu"                          # Your HTTP server, Apache/etc
-role :app, "d-108-249.eecs.umich.edu"                          # This may be the same as your `Web` server
-role :db,  "d-108-249.eecs.umich.edu", :primary => true # This is where Rails migrations will run
+
+set :scm, :git
+set :repository,  "git@github.com:egtaonline/egta_online.git"
+set :branch, "origin/master"
+
 default_run_options[:pty] = true
 namespace :deploy do
   desc "Deploy app"
@@ -76,27 +78,6 @@ namespace :deploy do
     CMD
   end
 
-  desc "Kick Passenger"
-  task :start do
-    run "touch #{current_path}/tmp/restart.txt"
-  end
-
-  desc "Kick Passenger"
-  task :restart do
-    stop
-    start
-  end
-
-  desc "Kick Passenger"
-  task :stop do
-  end
-
-  desc "precompile the assets"
-  task :precompile_assets, :roles => :web, :except => { :no_release => true } do
-#    run "cd #{current_path}; rm -rf public/assets/*"
-#    run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
-  end
-
   desc "Disable requests to the app, show maintenance page"
   web.task :disable, :roles => :web do
     run "cp #{current_path}/public/maintenance.html  #{shared_path}/system/maintenance.html"
@@ -140,4 +121,4 @@ end
 
 before 'deploy:symlink', 'deploy:precompile_assets'
 after 'deploy:precompile_assets', 'foreman:restart'
-        require './config/boot'
+after "deploy", "deploy:cleanup"
