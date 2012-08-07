@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe FluxBackend do
-  describe '#setup_connections' do
-    before do
-      subject.stub(gets: 'bcassell')
-    end
-    
-    it 'makes the required connections for operation with flux' do
-      Net::SSH.should_receive(:start).with('flux-login.engin.umich.edu', 'bcassell')
-      Net::SCP.should_receive(:start).with('flux-xfer.engin.umich.edu', 'bcassell')
-      subject.setup_connections
-    end
-  end
   
   context 'setup connections' do
     let(:submission_service){ double('submission_service') }
@@ -22,15 +11,12 @@ describe FluxBackend do
     let(:status_resolver){ double('status_resolver') }
   
     before do
-      subject.stub(gets: 'bcassell')
-      upload_connection = double('upload_connection')
       submission_connection = double('submit_connection')
-      Net::SSH.stub(:start).with('flux-login.engin.umich.edu', 'bcassell').and_return(submission_connection)
-      Net::SCP.stub(:start).with('flux-xfer.engin.umich.edu', 'bcassell').and_return(upload_connection)
+      SSHProxyClient.stub(:new).with(30000).and_return(submission_connection)
       SubmissionService.stub(:new).with(submission_connection).and_return(submission_service)
       SimulatorPrepService.stub(:new).with(submission_connection).and_return(simulator_prep_service)
-      UploadService.stub(:new).with(upload_connection).and_return(upload_service)
-      DownloadService.stub(:new).with(upload_connection, 'tmp/data').and_return(download_service)
+      UploadService.stub(:new).with(30000).and_return(upload_service)
+      DownloadService.stub(:new).with(30000, 'tmp/data').and_return(download_service)
       SimulationStatusService.stub(:new).with(submission_connection).and_return(simulation_status_service)
       SimulationStatusResolver.stub(:new).with(download_service).and_return(status_resolver)
       subject.setup_connections

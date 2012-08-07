@@ -48,7 +48,7 @@ class Profile
   
   def features
     fhash = Hash.new{ |hash,key| hash[key] = [] }
-    feature_observations.each do |f|
+    features_observations.each do |f|
       f.features.each do |key, value|
         fhash[key] << value
       end

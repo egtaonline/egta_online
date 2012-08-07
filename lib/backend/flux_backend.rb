@@ -4,15 +4,11 @@ class FluxBackend
   attr_accessor :flux_active_limit
   
   def setup_connections
-    puts 'Uniqname: '
-    uniqname = gets.split("\n")[0]
-    puts uniqname.inspect
-    transfer = Net::SCP.start('flux-xfer.engin.umich.edu', uniqname)
-    login = Net::SSH.start('flux-login.engin.umich.edu', uniqname)
+    login = SSHProxyClient.new(30000)
     @submission_service = SubmissionService.new(login)
     @simulator_prep_service = SimulatorPrepService.new(login)
-    @upload_service = UploadService.new(transfer)
-    @download_service = DownloadService.new(transfer, 'tmp/data')
+    @upload_service = UploadService.new(30000)
+    @download_service = DownloadService.new(30000, 'tmp/data')
     @simulation_status_resolver = SimulationStatusResolver.new(@download_service)
     @status_service = SimulationStatusService.new(login)
   end

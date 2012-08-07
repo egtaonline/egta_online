@@ -1,15 +1,17 @@
 require 'spec_helper'
 
 describe DownloadService do
-  let(:download_connection){ double("connection") }
-  let(:download_service){ DownloadService.new(download_connection, 'tmp/data') }
+  let(:download_service){ DownloadService.new(30000, 'tmp/data') }
   
   describe '#download_simulation!' do
     let(:simulation){ double(number: 3) }
     
     context 'success' do
       before do
-        download_connection.should_receive(:download!).with("#{Yetting.deploy_path}/simulations/3", "tmp/data", recursive: true).and_yield("a", "b", "c", "d")
+        socket = double(gets: "true")
+        TCPSocket.stub(:new).with('localhost', 30000).and_return(socket)
+        socket.should_receive(:puts).with(Oj.dump({ type: 'scp', cmd: 'download', src: "#{Yetting.deploy_path}/simulations/3", destination: "tmp/data" }))
+        socket.should_receive(:close)
       end
       
       it{ download_service.download_simulation!(simulation).should eql("tmp/data/3") }
@@ -17,8 +19,11 @@ describe DownloadService do
     
     context 'failure' do
       before do
-        download_connection.should_receive(:download!).with("#{Yetting.deploy_path}/simulations/3", "tmp/data", recursive: true).and_raise(Exception)
-        simulation.should_receive(:fail).with('could not complete the transfer from remote host.  Speak to Ben to resolve.')
+        socket = double(gets: "gibberish")
+        TCPSocket.stub(:new).with('localhost', 30000).and_return(socket)
+        socket.should_receive(:puts).with(Oj.dump({ type: 'scp', cmd: 'download', src: "#{Yetting.deploy_path}/simulations/3", destination: "tmp/data" }))
+        simulation.should_receive(:fail).with("could not complete the transfer from remote host: gibberish.  Speak to Ben to resolve.")
+        socket.should_receive(:close)
       end
       
       it{ download_service.download_simulation!(simulation).should eql(nil) }
