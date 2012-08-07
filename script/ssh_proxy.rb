@@ -77,7 +77,7 @@ class SSHProxy
     loop do
       request, client = @request_queue.pop
       request_hash = Oj.load(request)
-      result = (request_hash['type'] == 'ssh' ? run_command(request_hash['cmd']) : (request_hash['cmd'] == 'upload' ? upload!(request_hash) : download!(request_hash) ) )
+      result = (request_hash['type'] == 'ssh' ? run_command!(request_hash['cmd']) : (request_hash['cmd'] == 'upload' ? upload!(request_hash) : download!(request_hash) ) )
       client.puts result
  
       client.close # this handles one request per client -- could keep the
