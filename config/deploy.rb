@@ -14,7 +14,7 @@ set :deploy_to, "/home/deployment"
 
 set :scm, :git
 set :repository,  "git@github.com:egtaonline/egta_online.git"
-set :branch, "origin/master"
+set :branch, "origin/unicorn"
 set :migrate_target,  :current
 set :ssh_options,     { :forward_agent => true }
 set :rails_env,       "production"
