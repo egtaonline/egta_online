@@ -160,4 +160,4 @@ namespace :foreman do
   end
 end
 
-after 'deploy:symlink', 'foreman:restart'
+after 'deploy:finalize_update', 'foreman:restart'
