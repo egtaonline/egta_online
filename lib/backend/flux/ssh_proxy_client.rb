@@ -6,7 +6,7 @@ class SSHProxyClient
   def exec!(cmd)
     sock = TCPSocket.new 'localhost', @port
     sock.puts Oj.dump({ type: 'ssh', cmd: cmd })
-    response = sock.gets
+    puts response = sock.gets
     sock.close
     response
   end
