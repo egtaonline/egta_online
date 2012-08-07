@@ -5,7 +5,7 @@ load "config/recipes/nginx"
 load "config/recipes/unicorn"
 load "config/recipes/nodejs"
 load "config/recipes/rbenv"
-
+load 'deploy/assets'
 server "d-108-249.eecs.umich.edu", :web, :app, :db, primary: true
 
 set :user, "deployment"
@@ -157,19 +157,6 @@ namespace :foreman do
   task :export, :roles => :app do
     # 5 resque workers, 1 resque scheduler
     run "cd /home/deployment/current && #{sudo} bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
-  end
-end
-
-namespace :deploy do
-  namespace :assets do
-    task :precompile, :roles => :web, :except => { :no_release => true } do
-      from = source.next_revision(current_revision)
-      if capture("cd #{current_path} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
-        run %Q{cd #{current_path} && #{rake} #{asset_env} assets:precompile}
-      else
-        logger.info "Skipping asset pre-compilation because there were no asset changes"
-      end
-    end
   end
 end
 

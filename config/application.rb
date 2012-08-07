@@ -37,7 +37,6 @@ module EgtaOnline
     config.encoding = "utf-8"
     config.mongoid.preload_models = false
     config.mongoid.observers = :game_observer, :player_observer, :profile_observer, :scheduler_observer
-    config.logger = Logger.new("#{Rails.root}/log/#{Rails.env}.log", 8, 1024)
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     config.generators do |g|
