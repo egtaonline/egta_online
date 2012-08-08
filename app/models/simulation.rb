@@ -75,6 +75,7 @@ class Simulation
     self.error_message = message
     self.state = 'failed'
     self.save
+    requeue
   end
 
   def requeue
