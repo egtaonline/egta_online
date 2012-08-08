@@ -21,6 +21,6 @@ class SimulationStatusResolver
   private
   
   def check_for_errors(location)
-    File.exists?(location+'/out') ? File.open(location+"/out").read(Yetting.error_store) : 'Files were not found on remote server.'
+    File.exists?(location+'/error') ? File.open(location+"/error").read(Yetting.error_store) : 'Files were not found on remote server.'
   end
 end

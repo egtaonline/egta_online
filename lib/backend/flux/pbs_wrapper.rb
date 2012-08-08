@@ -19,7 +19,7 @@ class PbsWrapper
 #PBS -l nodes=#{simulation.scheduler_nodes},pmem=#{scheduler.process_memory}mb,walltime=#{pbs_wall_time},qos=#{queue}
 #PBS -N egta-#{simulator.name.downcase.gsub(' ', '_')}
 #PBS -o #{sim_path}/#{simulation.number}/out
-#PBS -e #{sim_path}/#{simulation.number}/out
+#PBS -e #{sim_path}/#{simulation.number}/error
 #PBS -M #{simulator.email}
 
 mkdir /tmp/${PBS_JOBID}
