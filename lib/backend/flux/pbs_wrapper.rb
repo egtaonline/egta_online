@@ -25,7 +25,8 @@ class PbsWrapper
 mkdir /tmp/${PBS_JOBID}
 cp -r #{root_path}/* /tmp/${PBS_JOBID}
 cp -r #{sim_path}/#{simulation.number} /tmp/${PBS_JOBID}
-/tmp/${PBS_JOBID}/script/batch /tmp/${PBS_JOBID}/#{simulation.number} #{simulation.size}#{extra_args}
+cd /tmp/${PBS_JOBID}
+script/batch #{simulation.number} #{simulation.size}#{extra_args}
 cp -r /tmp/${PBS_JOBID}/#{simulation.number} #{sim_path}
 chmod -R ug+rw #{sim_path}/#{simulation.number}
 rm -rf /tmp/${PBS_JOBID}
