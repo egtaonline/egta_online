@@ -1,6 +1,6 @@
 class SimulationStatusResolver
-  def initialize(download_service)
-    @download_service = download_service
+  def initialize(flux_proxy, destination="#{Rails.root}/tmp/data")
+    @flux_proxy, @destination = flux_proxy, destination
   end
   
   def act_on_status(status, simulation)
@@ -8,10 +8,12 @@ class SimulationStatusResolver
     when "R"
       simulation.start!
     when "C", "", nil
-      location = @download_service.download_simulation!(simulation)
-      if location
-        error_message = check_for_errors(location)
+      begin
+        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation.number}", @destination)
+        error_message = check_for_errors("#{@destination}/#{simulation.number}")
         error_message ? simulation.fail(error_message) : Resque.enqueue(DataParser, simulation.number)
+      rescue
+        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve."
       end
     end
   end

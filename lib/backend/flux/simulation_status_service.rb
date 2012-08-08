@@ -3,7 +3,6 @@ class SimulationStatusService
     @status_connection = status_connection
   end
   
-  #fix this when qstat is up
   def get_status(simulation)
     output = @status_connection.exec!("qstat -a | grep #{simulation.job_id} | grep egta-")
     if output != "" && output != nil

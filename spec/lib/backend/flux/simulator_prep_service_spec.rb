@@ -15,8 +15,7 @@ describe SimulatorPrepService do
   
   describe '#prepare_simulator' do
     before do
-      Dir.should_receive(:entries).with("fake_name-ver1").and_return(["fake_name"])
-      login_connection.should_receive(:exec!).with("cd #{Yetting.deploy_path} && unzip -uqq fake_name.zip -d fake_name-ver1 && chmod -R ug+rwx fake_name-ver1 && mv fake_name-ver1/fake_name fake_name-ver1/fake_name")
+      login_connection.should_receive(:exec!).with("cd #{Yetting.deploy_path} && unzip -uqq fake_name.zip -d fake_name-ver1 && chmod -R ug+rwx fake_name-ver1")
     end
     
     it { simulator_prep_service.prepare_simulator(simulator) }

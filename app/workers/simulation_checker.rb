@@ -4,7 +4,7 @@ class SimulationChecker
 
   def self.perform
     Simulation.active.each do |simulation|
-      Backend.check_simulation(simulation)
+      Backend.update_simulation(simulation)
     end
   end
 end

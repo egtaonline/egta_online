@@ -1,16 +1,16 @@
+require 'drb/drb'
+
 Dir["#{Rails.root}/lib/backend/flux/*"].each {|file| require file }
 
 class FluxBackend
   attr_accessor :flux_active_limit
   
   def setup_connections
-    login = SSHProxyClient.new(30000)
-    @submission_service = SubmissionService.new(login)
-    @simulator_prep_service = SimulatorPrepService.new(login)
-    @upload_service = UploadService.new(30000)
-    @download_service = DownloadService.new(30000, 'tmp/data')
-    @simulation_status_resolver = SimulationStatusResolver.new(@download_service)
-    @status_service = SimulationStatusService.new(login)
+    @flux_proxy = DRbObject.new('druby://localhost:30000')
+    @submission_service = SubmissionService.new(@flux_proxy)
+    @simulator_prep_service = SimulatorPrepService.new(@flux_proxy)
+    @simulation_status_resolver = SimulationStatusResolver.new(@flux_proxy)
+    @status_service = SimulationStatusService.new(@flux_proxy)
   end
   
   def update_simulation(simulation)
@@ -27,14 +27,25 @@ class FluxBackend
   end
   
   def schedule_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
-    if @upload_service.upload_simulation!(simulation)
-      @submission_service.submit(simulation)
+    begin
+      response = @flux_proxy.upload!("#{src_dir}/#{simulation.number}", "#{Yetting.deploy_path}/simulations")
+      if response == "" || response == nil || response == "\n" || response == "true"
+        @submission_service.submit(simulation)
+      else
+        simulation.fail "could not complete the transfer to remote host.  Speak to Ben to resolve."
+      end
+    rescue
+      simulation.fail "could not complete the transfer to remote host.  Speak to Ben to resolve."
     end
   end
   
   def prepare_simulator(simulator)
     @simulator_prep_service.cleanup_simulator(simulator)
-    @upload_service.upload_simulator!(simulator)
+    begin
+      @flux_proxy.upload!(simulator.simulator_source.path, "#{Yetting.deploy_path}/#{simulator.name}.zip")
+    rescue
+      puts 'failed to upload simulator'
+    end
     @simulator_prep_service.prepare_simulator(simulator)
   end
   

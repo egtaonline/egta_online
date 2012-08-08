@@ -4,41 +4,37 @@ describe FluxBackend do
   
   context 'setup connections' do
     let(:submission_service){ double('submission_service') }
-    let(:upload_service){ double('upload_service') }
-    let(:download_service){ double('download_service') }
+    let(:flux_proxy){ double('submit_connection') }
     let(:simulator_prep_service){ double('simulator_prep_service') }
     let(:simulation_status_service){ double('simulation_status_service') }
     let(:status_resolver){ double('status_resolver') }
   
     before do
-      submission_connection = double('submit_connection')
-      SSHProxyClient.stub(:new).with(30000).and_return(submission_connection)
-      SubmissionService.stub(:new).with(submission_connection).and_return(submission_service)
-      SimulatorPrepService.stub(:new).with(submission_connection).and_return(simulator_prep_service)
-      UploadService.stub(:new).with(30000).and_return(upload_service)
-      DownloadService.stub(:new).with(30000, 'tmp/data').and_return(download_service)
-      SimulationStatusService.stub(:new).with(submission_connection).and_return(simulation_status_service)
-      SimulationStatusResolver.stub(:new).with(download_service).and_return(status_resolver)
+      DRbObject.stub(:new).with('druby://localhost:30000').and_return(flux_proxy)
+      SubmissionService.stub(:new).with(flux_proxy).and_return(submission_service)
+      SimulatorPrepService.stub(:new).with(flux_proxy).and_return(simulator_prep_service)
+      SimulationStatusService.stub(:new).with(flux_proxy).and_return(simulation_status_service)
+      SimulationStatusResolver.stub(:new).with(flux_proxy).and_return(status_resolver)
       subject.setup_connections
     end
 
     describe '#schedule_simulation' do
-      let(:simulation){ double('simulation') }
+      let(:simulation){ double(number: 3) }
     
       before do
         submission_service.should_receive(:submit).with(simulation)
-        upload_service.should_receive(:upload_simulation!).with(simulation).and_return(true)
+        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.number}", "#{Yetting.deploy_path}/simulations").and_return("")
       end
-    
+
       it { subject.schedule_simulation(simulation) }
     end
   
     describe '#prepare_simulator' do
-      let(:simulator){ double('simulator') }
+      let(:simulator){ double(name: 'sim', simulator_source: double(path: 'path/to/simulator')) }
     
       before 'cleans up the space and uploads the simulator' do
         simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
-        upload_service.should_receive(:upload_simulator!).with(simulator)
+        flux_proxy.should_receive(:upload!).with('path/to/simulator', "#{Yetting.deploy_path}/sim.zip").and_return("")
         simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
       end
       

@@ -12,8 +12,8 @@ describe SimulationChecker do
     end
     
     it 'asks the backend to check each simulation' do
-      Backend.should_receive(:check_simulation).with(simulation1)
-      Backend.should_receive(:check_simulation).with(simulation2)
+      Backend.should_receive(:update_simulation).with(simulation1)
+      Backend.should_receive(:update_simulation).with(simulation2)
       SimulationChecker.perform
     end
   end

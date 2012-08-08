@@ -26,8 +26,8 @@ module Backend
     backend_implementation.schedule_simulation(simulation)
   end
 
-  def self.check_simulation(simulation)
-    backend_implementation.check_simulation(simulation)    
+  def self.update_simulation(simulation)
+    backend_implementation.update_simulation(simulation)    
   end
 
   class Configuration

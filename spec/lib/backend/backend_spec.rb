@@ -38,7 +38,7 @@ describe Backend do
     
     let(:simulation){ double('simulation') }
     
-    [:prepare_simulation, :check_simulation, :schedule_simulation].each do |method|
+    [:prepare_simulation, :update_simulation, :schedule_simulation].each do |method|
       describe method do
         it 'passes the message along to the backend implementation' do
           Backend.configuration.backend_implementation.should_receive(method).with(simulation)

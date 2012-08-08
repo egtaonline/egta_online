@@ -3,8 +3,8 @@ require 'spec_helper'
 describe SimulationStatusResolver do
   describe '#act_on_status' do
     let(:simulation){ double(number: 3) }
-    let(:download_service){ double('download_service') }
-    let(:status_resolver){ SimulationStatusResolver.new(download_service) }
+    let(:flux_proxy){ double('flux_proxy') }
+    let(:status_resolver){ SimulationStatusResolver.new(flux_proxy) }
 
     context 'simulation is running' do
       before do
@@ -20,9 +20,9 @@ describe SimulationStatusResolver do
     
     context 'simulation completed successfully' do
       before do
-        download_service.should_receive(:download_simulation!).with(simulation).and_return('tmp/data/3')
-        File.should_receive(:exists?).with('tmp/data/3/out').and_return(true)
-        File.should_receive(:open).with('tmp/data/3/out').and_return(double(read: nil))
+        flux_proxy.should_receive(:download!).with("#{Yetting.deploy_path}/simulations/#{simulation.number}", "#{Rails.root}/tmp/data").and_return('')
+        File.should_receive(:exists?).with("#{Rails.root}/tmp/data/3/out").and_return(true)
+        File.should_receive(:open).with("#{Rails.root}/tmp/data/3/out").and_return(double(read: nil))
         Resque.should_receive(:enqueue).with(DataParser, 3)
       end
       
@@ -33,9 +33,9 @@ describe SimulationStatusResolver do
     
     context 'simulation did not complete successfully' do
       before do
-        download_service.stub(:download_simulation!).with(simulation).and_return('tmp/data/3')
-        File.stub(:exists?).with('tmp/data/3/out').and_return(true)
-        File.should_receive(:open).with('tmp/data/3/out').and_return(double(read: 'I has error'))
+        flux_proxy.stub(:download!).with("#{Yetting.deploy_path}/simulations/#{simulation.number}", "#{Rails.root}/tmp/data").and_return('')
+        File.stub(:exists?).with("#{Rails.root}/tmp/data/3/out").and_return(true)
+        File.should_receive(:open).with("#{Rails.root}/tmp/data/3/out").and_return(double(read: 'I has error'))
         simulation.should_receive(:fail).with('I has error')
       end
       
