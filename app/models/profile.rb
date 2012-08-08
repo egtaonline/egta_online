@@ -39,7 +39,7 @@ class Profile
   end
 
   def create_player(role, strategy, payoff, features)
-    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff, features: features)
+    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff.to_f, features: features)
   end
   
   def scheduled?
