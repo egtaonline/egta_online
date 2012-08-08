@@ -46,7 +46,7 @@ class FluxBackend
     rescue
       puts 'failed to upload simulator'
     end
-    while(@flux_proxy.exec!([ -f "filename" ] && echo "exists" || echo "not exists") == "not exists")
+    while @flux_proxy.exec!([ -f "filename" ] && echo "exists" || echo "not exists") == "not exists" do
       puts 'missing'
       sleep 1
     end
