@@ -5,6 +5,7 @@ class ObservationProcessor
       profile = simulation.profile
       from_json = ObservationValidator.validate(file_name, profile.assignment)
       if from_json
+        player['features'].each { |key, value| player['features'][key] = value.to_f }
         from_json['players'].each do |player|
           profile.create_player(player['role'], player['strategy'], player['payoff'], player['features'])
         end
