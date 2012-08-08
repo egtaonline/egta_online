@@ -6,7 +6,7 @@ class FluxBackend
   attr_accessor :flux_active_limit
   
   def setup_connections
-    @flux_proxy = DRbObject.new('druby://localhost:30000')
+    @flux_proxy = DRbObject.new_with_uri('druby://localhost:30000')
     @submission_service = SubmissionService.new(@flux_proxy)
     @simulator_prep_service = SimulatorPrepService.new(@flux_proxy)
     @simulation_status_resolver = SimulationStatusResolver.new(@flux_proxy)

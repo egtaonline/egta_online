@@ -10,7 +10,7 @@ describe FluxBackend do
     let(:status_resolver){ double('status_resolver') }
   
     before do
-      DRbObject.stub(:new).with('druby://localhost:30000').and_return(flux_proxy)
+      DRbObject.stub(:new_with_uri).with('druby://localhost:30000').and_return(flux_proxy)
       SubmissionService.stub(:new).with(flux_proxy).and_return(submission_service)
       SimulatorPrepService.stub(:new).with(flux_proxy).and_return(simulator_prep_service)
       SimulationStatusService.stub(:new).with(flux_proxy).and_return(simulation_status_service)
