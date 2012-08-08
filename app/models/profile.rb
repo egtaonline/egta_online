@@ -38,8 +38,8 @@ class Profile
     Resque.enqueue_in(5.minutes, ProfileScheduler, id)
   end
 
-  def create_player(role, strategy, payoff, features)
-    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff.to_f, features: features)
+  def create_player(role, strategy, payoff, pfeatures)
+    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff.to_f, features: pfeatures)
   end
   
   def scheduled?
