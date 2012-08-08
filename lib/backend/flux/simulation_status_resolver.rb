@@ -9,7 +9,7 @@ class SimulationStatusResolver
       simulation.start!
     when "C", "", nil
       begin
-        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation.number}", @destination)
+        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation.number}", @destination, recursive: true)
         error_message = check_for_errors("#{@destination}/#{simulation.number}")
         error_message ? simulation.fail(error_message) : Resque.enqueue(DataParser, simulation.number)
       rescue

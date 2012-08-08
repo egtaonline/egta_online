@@ -23,7 +23,7 @@ describe FluxBackend do
     
       before do
         submission_service.should_receive(:submit).with(simulation)
-        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.number}", "#{Yetting.deploy_path}/simulations").and_return("")
+        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.number}", "#{Yetting.deploy_path}/simulations", recursive: true).and_return("")
       end
 
       it { subject.schedule_simulation(simulation) }
@@ -34,7 +34,7 @@ describe FluxBackend do
     
       before 'cleans up the space and uploads the simulator' do
         simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
-        flux_proxy.should_receive(:upload!).with('path/to/simulator', "#{Yetting.deploy_path}/sim.zip").and_return("")
+        flux_proxy.should_receive(:upload!).with('path/to/simulator', "#{Yetting.deploy_path}/sim.zip", recursive: true).and_return("")
         simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
       end
       
