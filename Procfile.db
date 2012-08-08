@@ -1,3 +1,3 @@
-mongo: rm /data/db/mongod.lock; mongod run --repair; mongod
-redis: redis-server
+mongo: sudo rm /data/db/mongod.lock; sudo mongod run --repair; mongod
+redis: sudo redis-server
 mongoose: python /home/deployment/sleepy.mongoose/httpd.py
