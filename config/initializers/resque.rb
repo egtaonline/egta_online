@@ -9,12 +9,6 @@ rails_env = ENV['RAILS_ENV'] || 'production'
 Resque.redis = resque_config[rails_env]
 Resque.schedule = YAML.load_file("#{Rails.root}/config/resque_schedule.yml")
 
-unless defined?(RESQUE_LOGGER)
-  f = File.open("#{Rails.root}/log/resque.log", 'w')
-  f.sync = true
-  RESQUE_LOGGER = ActiveSupport::BufferedLogger.new f
-end
-
 require 'resque/failure/multiple'
 require 'resque/failure/airbrake'
 require 'resque/failure/redis'

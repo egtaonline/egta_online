@@ -72,19 +72,20 @@ namespace :deploy do
   end
 
   task :finalize_update, :except => { :no_release => true } do
-    run "#{sudo} chmod -R g+w #{latest_release}" if fetch(:group_writable, true)
+    run "chmod -R ugo+w #{latest_release}" if fetch(:group_writable, true)
 
     # mkdir -p is making sure that the directories are there for some SCM's that don't
     # save empty folders
     run <<-CMD
-      #{sudo} rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids #{latest_release}/simulator_uploads &&
-      #{sudo} mkdir -p #{latest_release}/public &&
-      #{sudo} mkdir -p #{latest_release}/tmp &&
-      #{sudo} ln -s #{shared_path}/log #{latest_release}/log &&
-      #{sudo} ln -s #{shared_path}/system #{latest_release}/public/system &&
-      #{sudo} ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
-      #{sudo} ln -s #{shared_path}/simulator_uploads #{latest_release}/simulator_uploads &&
-      #{sudo} ln -sf #{shared_path}/mongoid.yml #{latest_release}/config/mongoid.yml
+      rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids #{latest_release}/simulator_uploads &&
+      mkdir -p #{latest_release}/log
+      touch #{latest_release}/log/production.log && chmod 0666 #{latest_release}/log/production.log &&
+      mkdir -p #{latest_release}/public &&
+      mkdir -p #{latest_release}/tmp &&
+      ln -s #{shared_path}/system #{latest_release}/public/system &&
+      ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
+      ln -s #{shared_path}/simulator_uploads #{latest_release}/simulator_uploads &&
+      ln -sf #{shared_path}/mongoid.yml #{latest_release}/config/mongoid.yml
     CMD
 
     if fetch(:normalize_asset_timestamps, true)
