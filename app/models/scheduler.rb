@@ -42,6 +42,6 @@ class Scheduler
   
   def schedule_profile(profile)
     samples_to_schedule = [samples_per_simulation, required_samples(profile.id)-profile.sample_count].min
-    scheduler.simulations.create!(size: num_samples, state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
+    self.simulations.create!(size: num_samples, state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
   end
 end
