@@ -1,12 +1,12 @@
 queue_simulations:
-  cron: "*/5 * * * *"
+  cron: "*/2 * * * *"
   class: SimulationQueuer
   queue: nyx_queuing
   args:
   description: "This job queues simulations on nyx"
 
 check_simulations:
-  cron: "*/10 * * * *"
+  cron: "*/5 * * * *"
   class: SimulationChecker
   queue: nyx_queuing
   args:
