@@ -22,15 +22,5 @@ describe SimulationQueuer do
       
       it { SimulationQueuer.perform }
     end
-    
-    context 'failure' do
-      before do     
-        prep_service.should_receive(:prepare_simulation).with(simulation2).and_raise("Exception")
-        simulation2.should_receive(:fail).with("failed to create files for remote server")
-        Backend.should_not_receive(:schedule_simulation).with(simulation2)
-      end
-      
-      it { SimulationQueuer.perform }
-    end
   end
 end

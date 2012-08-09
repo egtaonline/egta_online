@@ -6,12 +6,11 @@ class ObservationProcessor
       from_json = ObservationValidator.validate(file_name, profile.assignment)
       if from_json
         from_json['players'].each do |player|
-          player['features'].each { |key, value| player['features'][key] = value.to_f }
+          player['features'].each { |key, value| player['features'][key] = value.to_f if value.is_a? BigDecimal }
           profile.create_player(player['role'], player['strategy'], player['payoff'], player['features'])
         end
-        from_json['features'].each do |key, value|
-          profile.features_observations.create(name: key, observation: value)
-        end
+        from_json['features'].each { |key, value| from_json['features'][key] = value.to_f if value.is_a? BigDecimal}
+        profile.features_observations.create(features: from_json['features'])
         profile.inc(:sample_count, 1)
         simulation.push(:files, file)
       else

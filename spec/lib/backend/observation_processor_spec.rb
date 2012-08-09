@@ -11,7 +11,7 @@ describe ObservationProcessor do
       
       before do
         json['players'].each{ |player| profile.should_receive(:create_player).with(player['role'], player['strategy'], player['payoff'], player['features']) }
-        json['features'].each{ |key, value| features.should_receive(:create).with(name: key, observation: value) }
+        features.should_receive(:create).with(features: json['features'])
         profile.should_receive(:inc).with(:sample_count, 1)
         simulation.should_receive(:push).with(:files, "observation1.json")
       end

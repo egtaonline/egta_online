@@ -35,6 +35,7 @@ describe FluxBackend do
       before 'cleans up the space and uploads the simulator' do
         simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
         flux_proxy.should_receive(:upload!).with('path/to/simulator', "#{Yetting.deploy_path}/sim.zip", recursive: true).and_return("")
+        flux_proxy.should_receive(:exec!).with("[ -f \"filename\" ] && echo \"exists\" || echo \"not exists\"")
         simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
       end
       

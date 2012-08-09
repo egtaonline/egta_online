@@ -38,12 +38,19 @@ describe Backend do
     
     let(:simulation){ double('simulation') }
     
-    [:prepare_simulation, :update_simulation, :schedule_simulation].each do |method|
+    [:update_simulation, :schedule_simulation].each do |method|
       describe method do
         it 'passes the message along to the backend implementation' do
           Backend.configuration.backend_implementation.should_receive(method).with(simulation)
           Backend.send method, simulation
         end
+      end
+    end
+    
+    describe 'prepare_simulation' do
+      it 'passes the message along to the backend implementation' do
+        Backend.configuration.backend_implementation.should_receive(:prepare_simulation).with(simulation, "/Users/bcassell/Projects/egta_online/tmp/simulations")
+        Backend.prepare_simulation simulation
       end
     end
     
