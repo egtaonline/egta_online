@@ -40,7 +40,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
     elsif @scheduler.unassigned_player_count > 0
       respond_with({:error => "the selected scheduler has an incomplete role partition, #{@scheduler.unassigned_player_count} player(s) have not yet been assigned"}, :status => 406, :location => nil)  
     else
-      profile = @scheduler.add_profile(params[:profile_name], params[:sample_count].to_i)
+      profile = @scheduler.add_profile(params[:assignment], params[:sample_count].to_i)
       logger.warn "Inspecting profile:"
       logger.warn profile.inspect
       if profile.valid?
