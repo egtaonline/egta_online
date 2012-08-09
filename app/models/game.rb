@@ -18,7 +18,7 @@ class Game
   validates_numericality_of :size, only_integer: true, greater_than: 1
   
   def display_profiles
-    query_hash = { :assignment => strategy_regex, :sample_count.gt => 0 }
+    query_hash = { :sample_count.gt => 0, :assignment => strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count}
     profiles.where(query_hash)
   end

@@ -17,7 +17,8 @@ class Profile
   attr_accessible :assignment, :configuration
   
   # TODO: find the right indexes
-  # index ([[:simulator_id,  Mongo::ASCENDING], [:configuration_id, Mongo::ASCENDING], [:size, Mongo::ASCENDING], [:sample_count, Mongo::ASCENDING]])
+  index ([[:simulator_id,  Mongo::ASCENDING], [:configuration_id, Mongo::ASCENDING], [:size, Mongo::ASCENDING]])
+  index :sample_count, Mongo::ASCENDING
 
   validates_presence_of :simulator
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
