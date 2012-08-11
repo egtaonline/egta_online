@@ -13,7 +13,7 @@ class Game
   belongs_to :simulator
   has_and_belongs_to_many :profiles, :inverse_of => nil
   
-  index [[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
+  index({ simulator_id: 1, configuration: 1, size: 1 })
   validates_presence_of :simulator, :name, :size, :configuration, :simulator_fullname
   validates_numericality_of :size, only_integer: true, greater_than: 0
   

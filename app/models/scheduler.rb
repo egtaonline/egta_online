@@ -18,8 +18,6 @@ class Scheduler
   
   scope :scheduling_profile, ->(profile_id) { active.where(profile_ids: profile_id) }
   
-  accepts_nested_attributes_for :configuration
-  
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
   
   has_and_belongs_to_many :profiles, :inverse_of => nil do
