@@ -20,7 +20,7 @@ class Simulation
   field :number, :type=>Integer
   field :files, type: Array, default: []
   sequence :number
-  index [[:state, Mongo::ASCENDING]]
+  index({ state: 1 })
 
   scope :pending, where(:state=>'pending')
   scope :queued, where(:state=>'queued')

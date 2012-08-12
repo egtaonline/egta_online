@@ -27,7 +27,7 @@ gem "airbrake"
 gem 'mongoid'
 
 gem "state_machine"
-gem "devise", '~> 1.5'
+gem "devise"
 gem "yettings"
 gem "foreman"
 gem "net-ssh", :require => 'net/ssh'
@@ -39,13 +39,7 @@ gem "simple_form"
 gem "show_for", :git => "git://github.com/plataformatec/show_for.git"
 gem 'high_voltage'
 gem "capistrano"
-gem 'validates_email_format_of'
 gem 'draper'
-gem 'oj'
-
-# Math
-gem 'statsample'
-gem 'statsample-optimization'
 
 group :production do
   gem 'unicorn'
@@ -58,7 +52,6 @@ group :development do
 end
 
 group :test, :development do
-  gem 'gsl', :github => 'romanbsd/rb-gsl'
   gem "rspec-rails"
   gem 'spork', '~> 1.0rc'
   gem 'debugger'

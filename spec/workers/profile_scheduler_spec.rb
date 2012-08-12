@@ -3,7 +3,7 @@ require 'spec_helper'
 # Needs to be renamed
 describe ProfileScheduler do
   describe 'perform' do
-    let(:profile_id){ BSON::ObjectId.from_time(Time.now) }
+    let(:profile_id){ Moped::BSON::ObjectId.from_time(Time.now) }
     
     context 'flawless victory' do
       let(:profile){ double(id: profile_id, sample_count: 20, scheduled?: false) }

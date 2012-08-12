@@ -20,7 +20,7 @@ class Simulator
   field :configuration, :type => Hash, :default => {}
   field :email
   
-  validates :email, :email_format => {:message => 'does not match the expected format'}
+  validates :email, presence: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i, message: 'does not match the expected format' }
   validates :name, :presence => true, :format => {:with => /\A\w+\z/, :message => 'can contain only letters, numbers, and underscores'}
   validates :version, :presence => true, :uniqueness => { :scope => :name }
   before_validation(:if => :simulator_source_changed?){ FileUtils.rm_rf location }
