@@ -9,8 +9,8 @@ class Profile
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator
 
-  field :size
-  field :assignment
+  field :size, type: Integer
+  field :assignment, type: String
   field :sample_count, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
   
