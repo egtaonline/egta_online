@@ -17,7 +17,7 @@ class Simulation
   field :error_message, default: ''
   field :created_at
   field :profile_assignment
-  field :number, :type=>Integer
+  field :number, type: Integer
   field :files, type: Array, default: []
   sequence :number
   index({ state: 1 })

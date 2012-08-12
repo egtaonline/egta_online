@@ -25,7 +25,7 @@ gem "airbrake"
 
 # Database
 gem 'mongoid'
-
+gem 'mongoid-sequence', :github => 'cblock/mongoid-sequence'
 gem "state_machine"
 gem "devise"
 gem "yettings"

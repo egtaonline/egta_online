@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/cblock/mongoid-sequence.git
+  revision: b97ac2c3442181b2808d8bd022ef82bab238aaaa
+  specs:
+    mongoid-sequence (0.2)
+      activesupport (~> 3.1)
+      mongoid (>= 3.0.0.rc)
+      moped (>= 1.0.0.rc)
+
+GIT
   remote: git://github.com/jnicklas/carrierwave-mongoid.git
   revision: 28a9b718d42b8aba47d2eb951f73bd9d872b6eb0
   branch: mongoid-3.0
@@ -351,6 +360,7 @@ DEPENDENCIES
   kaminari
   mongoid
   mongoid-rspec
+  mongoid-sequence!
   net-scp
   net-ssh
   oj

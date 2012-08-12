@@ -3,41 +3,49 @@ require 'spec_helper'
 describe DataParser do
   ### Integration test, consider pulling to cucumber and writing unit tests
   describe 'perform' do
+    let(:simulation){ double('simulation') }
+    let(:simulations){ [simulation] }
+    
     context 'multiple valid observations' do
-      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 3, size: 2) }
-      
-      before(:each) do
-        DataParser.perform(3, "#{Rails.root}/db/3")
+      before do
+        Simulation.stub(:where).with({ number: 3 }).and_return(simulations)
+        ObservationProcessor.stub(:process_file) do | file, sim |
+          simulation.stub(:files).and_return(['observation1.json','observation2.json'])
+        end
       end
       
-      it{ simulation.reload.state.should eql('complete') }
-      it{ simulation.reload.files.should eql(['observation1.json','observation2.json']) }
-      it{ profile.reload.sample_count.should eql(2) }
+      it 'completes successfully' do
+        simulation.should_receive(:finish!)
+        DataParser.perform(3, "#{Rails.root}/db/3")
+      end
     end
     
     context 'some failures' do
-      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 4, size: 3) }
+      before do
+        Simulation.stub(:where).with({ number: 4 }).and_return(simulations)
+        ObservationProcessor.stub(:process_file) do | file, sim |
+          simulation.stub(:files).and_return(['string_observation.json'])
+        end
+      end
       
-      before(:each) do
+      it 'does a reasonable job with partial completeness' do
+        simulation.should_receive(:finish!)
         DataParser.perform(4, "#{Rails.root}/db/4")
       end
-      it { simulation.reload.state.should eql('complete') }
-      it { simulation.reload.files.should eql(['string_observation.json']) }
-      it { profile.reload.sample_count.should eql(1) }
     end
     
     context 'all failures' do
-      let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-      let!(:simulation){ Fabricate(:simulation, profile: profile, number: 5, size: 3) }
+      before do
+        Simulation.stub(:where).with({ number: 5 }).and_return(simulations)
+        ObservationProcessor.stub(:process_file) do | file, sim |
+          simulation.stub(:files).and_return([])
+        end
+      end
       
-      before(:each) do
+      it 'fails the simulation if there are no valid files' do
+        simulation.should_receive(:failure!)
         DataParser.perform(5, "#{Rails.root}/db/5")
       end
-      it { simulation.reload.state.should eql('failed') }
-      it { simulation.reload.files.should eql([]) }
-      it { profile.reload.sample_count.should eql(0) }
     end
   end
 end

@@ -56,7 +56,7 @@ class Profile
     end
     fhash.each do |key, value|
       fhash[key] = value.compact
-      fhash[key] = fhash[key].to_scale.mean if fhash[key].size > 0
+      fhash[key] = fhash[key].reduce(:+)/fhash[key].size
     end
     fhash
   end

@@ -12,15 +12,15 @@ describe SymmetryGroup do
   let(:symmetry_group){ Fabricate(:symmetry_group_with_players) }
   subject{ symmetry_group }
   
-  its(:payoff) { should eql(symmetry_group.players.map{ |player| player.payoff }.reduce(:+)/symmetry_group.players.count) }
-  its(:payoff_sd) { should eql(symmetry_group.players.map{ |player| player.payoff }.to_scale.sd) }
+  its(:payoff) { should eql(symmetry_group.players.map{ |player| player.payoff }.reduce(:+).to_f/symmetry_group.players.count) }
+  its(:payoff_sd) { should eql(Math.sqrt(symmetry_group.players.map{ |player| player.payoff**2.0 }.reduce(:+).to_f/symmetry_group.players.count-(symmetry_group.players.map{ |player| player.payoff }.reduce(:+).to_f/symmetry_group.players.count)**2.0)) }
   
   describe "payoff_for" do
     before do
       symmetry_group.players.create(payoff: 234, observation_id: 2, features: {})
-      symmetry_group.players.create(payoff: 244, observation_id: 2, features: {})
+      symmetry_group.players.create(payoff: 245, observation_id: 2, features: {})
     end
     
-    it { symmetry_group.payoff_for(2).should eql(239.0) }
+    it { symmetry_group.payoff_for(2).should eql(239.5) }
   end
 end

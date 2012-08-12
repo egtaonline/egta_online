@@ -15,7 +15,7 @@ class SymmetryGroup
   def payoff_for(observation_id)
     payoffs_in_observation = players.where(observation_id: observation_id).collect{ |player| player.payoff }
     if payoffs_in_observation.count > 0
-      payoffs_in_observation.to_scale.mean
+      payoffs_in_observation.reduce(:+).to_f/payoffs_in_observation.count
     else
       "FAIL"
     end
@@ -23,15 +23,13 @@ class SymmetryGroup
   
   def payoff
     if players.count > 0
-      @payoffs = players.map{ |player| player.payoff }.to_scale
-      @payoffs.mean
+      players.map{ |player| player.payoff }.reduce(:+).to_f/players.count
     end
   end
   
   def payoff_sd
     if players.count > 0
-      @payoffs = players.map{ |player| player.payoff }.to_scale
-      @payoffs.sd 
+      Math.sqrt(players.map{ |player| player.payoff**2.0 }.reduce(:+).to_f/players.count-payoff**2.0)
     end
   end
 end

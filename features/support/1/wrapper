@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -S /bin/sh
+#PBS -A wellman_flux
+#PBS -q flux
+#PBS -l nodes=1,pmem=1000mb,walltime=00:04:00,qos=flux
+#PBS -N egta-equity_sim
+#PBS -o /home/wellmangroup/many-agent-simulations/simulations/516614/out
+#PBS -e /home/wellmangroup/many-agent-simulations/simulations/516614/error
+#PBS -M bcassell@umich.edu
+
+mkdir /tmp/${PBS_JOBID}
+cp -r /home/wellmangroup/many-agent-simulations/equity_sim-test/equity_sim/* /tmp/${PBS_JOBID}
+cp -r /home/wellmangroup/many-agent-simulations/simulations/516614 /tmp/${PBS_JOBID}
+cd /tmp/${PBS_JOBID}
+script/batch 516614 4
+cp -r /tmp/${PBS_JOBID}/516614 /home/wellmangroup/many-agent-simulations/simulations
+chmod -R ug+rw /home/wellmangroup/many-agent-simulations/simulations/516614
+rm -rf /tmp/${PBS_JOBID}
