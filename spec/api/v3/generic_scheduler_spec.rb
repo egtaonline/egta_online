@@ -85,20 +85,20 @@ describe "/api/v3/generic_schedulers", :type => :api do
     let(:url) {"/api/v3/generic_schedulers/#{@scheduler.id}"}
      
     it "should create a profile if the profile name is valid" do
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
       Profile.where(:assignment => "Bidder: 2 A; Seller: 2 B").count.should == 1
     end
     it "should only add the profile once, even if you invoke it multiple times" do
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
       Profile.where(:assignment => "Bidder: 2 A; Seller: 2 B").count.should eql(1)
       Scheduler.last.profiles.count.should eql(1)
     end
     it "should only add the profile once, even if you invoke it multiple times with rearrangements to the name" do
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 A, 1 B; Seller: 2 B", :sample_count => 10
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 B, 1 A; Seller: 2 B", :sample_count => 10
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 B, 1 A", :sample_count => 10
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Seller: 2 B; Bidder: 1 A, 1 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 1 A, 1 B; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 1 B, 1 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Seller: 2 B; Bidder: 1 B, 1 A", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Seller: 2 B; Bidder: 1 A, 1 B", :sample_count => 10
       Profile.where(:assignment => "Bidder: 1 A, 1 B; Seller: 2 B").count.should eql(1)
       Scheduler.last.profiles.count.should eql(1)
     end
@@ -109,7 +109,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
     
     context "the profile exists" do
       before :each do
-        post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+        post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
         @profile = Scheduler.last.profiles.last
         post "#{url}/remove_profile.json", :auth_token => token, :profile_id => @profile.id
         @scheduler.reload
@@ -127,8 +127,8 @@ describe "/api/v3/generic_schedulers", :type => :api do
     
     context "another profile exists" do
       before :each do
-        post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
-        post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 B; Seller: 2 B", :sample_count => 20
+        post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+        post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 B; Seller: 2 B", :sample_count => 20
         @profile = Scheduler.last.profiles.first
         @other_profile = Scheduler.last.profiles.last
         post "#{url}/remove_profile.json", :auth_token => token, :profile_id => @profile.id
@@ -155,7 +155,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
     let(:url) {"/api/v3/generic_schedulers/234"}
      
     it "should error out if the scheduler is invalid" do
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
       Profile.where(:name => "Bidder: 2 A; Seller: 2 B").count.should == 0
       last_response.status.should eql(404)      
     end
@@ -165,7 +165,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
     let(:url) {"/api/v3/generic_schedulers/#{@scheduler.id}"}
   
     it "should not create a profile if the profile name is invalid" do
-      post "#{url}/add_profile.json", :auth_token => token, :profile_name => "Bidder: 1 A1 C; Seller: 2 B", :sample_count => 10
+      post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 1 A1 C; Seller: 2 B", :sample_count => 10
       Profile.count.should == 0
       last_response.status.should eql(422)
     end

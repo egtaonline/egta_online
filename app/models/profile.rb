@@ -10,7 +10,7 @@ class Profile
   belongs_to :simulator
 
   field :size
-  field :assignment, type: Hash
+  field :assignment
   field :sample_count, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
   
