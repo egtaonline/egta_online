@@ -13,23 +13,16 @@ class SymmetryGroup
   validates :strategy, presence: true, uniqueness: { scope: :role }
   
   def payoff_for(observation_id)
-    payoffs_in_observation = players.where(observation_id: observation_id).collect{ |player| player.payoff }
-    if payoffs_in_observation.count > 0
-      payoffs_in_observation.reduce(:+).to_f/payoffs_in_observation.count
-    else
-      "FAIL"
-    end
+    players.where(observation_id: observation_id).avg(:payoff)
   end
   
   def payoff
-    if players.count > 0
-      players.map{ |player| player.payoff }.reduce(:+).to_f/players.count
-    end
+    players.avg(:payoff)
   end
   
   def payoff_sd
     if players.count > 0
-      Math.sqrt(players.map{ |player| player.payoff**2.0 }.reduce(:+).to_f/players.count-payoff**2.0)
+      Math.sqrt(players.sum{ |player| player.payoff**2.0 }/players.count-payoff**2.0)
     end
   end
 end
