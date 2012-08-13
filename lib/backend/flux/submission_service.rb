@@ -17,7 +17,7 @@ class SubmissionService
         simulation.fail "unknown submission failure"
       end
     rescue Exception => e
-      simulation.fail "failed in the submission step: #{e.message}"
+      simulation.fail "failed in the submission step: #{e}"
     end
   end
 end
