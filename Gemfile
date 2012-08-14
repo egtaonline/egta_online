@@ -46,6 +46,7 @@ group :production do
 end
 
 group :development do
+  gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
   gem 'rvm-capistrano'
   gem 'thin'
   gem 'quiet_assets'

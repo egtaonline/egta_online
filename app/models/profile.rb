@@ -18,7 +18,7 @@ class Profile
   
   # TODO: find the right indexes
   index ({ simulator_id: 1, configuration: 1, size: 1 })
-  index({ sample_count: 1 })
+  index ({ _id: 1, sample_count: 1, assignment: 1 })
 
   validates_presence_of :simulator
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
@@ -59,5 +59,15 @@ class Profile
       fhash[key] = fhash[key].reduce(:+)/fhash[key].size
     end
     fhash
+  end
+  
+  def as_json(options={})
+    if options[:granularity] == 'summary'
+      {
+        id: self.id,
+        sample_count: self.sample_count,
+        symmetry_groups: self.symmetry_groups.collect{ |symmetry_group| { role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff, payoff_sd: symmetry_group.payoff_sd } }
+      }
+    end
   end
 end

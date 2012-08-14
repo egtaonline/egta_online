@@ -62,7 +62,7 @@ class GamesController < ApplicationController
       format.html
       # come back and speed up sample issue
       format.xml { @profiles = game.display_profiles }
-      format.json { @object = game; @granularity = params[:granularity]; @granularity ||= "summary"; @adjusted = params[:adjusted]; render "api/v3/games/show" }
+      format.json { render :json => game, granularity: (params[:granularity] || "summary") }
     end
   end
   

@@ -20,7 +20,19 @@ class Game
   def display_profiles
     query_hash = { :sample_count.gt => 0, :assignment => strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count}
-    profiles.where(query_hash)
+    # profiles.where(query_hash)
+    profiles
+  end
+  
+  def as_json(options={})
+    {
+      id: self.id,
+      name: self.name,
+      simulator_fullname: self.simulator_fullname,
+      configuration: self.configuration,
+      roles: self.roles.collect{ |role| { name: role.name, strategies: role.strategies, count: role.count } },
+      profiles: self.display_profiles.batch_size(500).collect{ |profile| profile.as_json(options) }
+    }
   end
   
   private

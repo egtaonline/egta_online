@@ -6,7 +6,7 @@ case @granularity
 when "summary"
   attribute :sample_count
   child :symmetry_groups do |profile|
-    extends "api/v3/profiles/symmetry_group"
+    attributes :role, :strategy, :count, :payoff, :payoff_sd
   end
   attribute :features
 when "observation"
