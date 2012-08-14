@@ -66,7 +66,7 @@ class Profile
       {
         id: self.id,
         sample_count: self.sample_count,
-        symmetry_groups: self.symmetry_groups.collect{ |symmetry_group| { role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff, payoff_sd: symmetry_group.payoff_sd } }
+        #symmetry_groups: self.symmetry_groups.collect{ |symmetry_group| { role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff, payoff_sd: symmetry_group.payoff_sd } }
       }
     end
   end

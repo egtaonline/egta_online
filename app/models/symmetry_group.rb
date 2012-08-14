@@ -7,6 +7,8 @@ class SymmetryGroup
   field :count, type: Integer
   field :role
   field :strategy
+  field :payoff, type: Float
+  field :payoff_sd, type: Float
   
   validates :count, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :role, presence: true
