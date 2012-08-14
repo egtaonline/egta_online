@@ -25,6 +25,7 @@ gem "airbrake"
 
 # Database
 gem 'mongoid'
+gem 'mongoid_rails_migrations', :github => 'acechase/mongoid_rails_migrations'
 gem 'mongoid-sequence', :github => 'cblock/mongoid-sequence'
 gem "state_machine"
 gem "devise"

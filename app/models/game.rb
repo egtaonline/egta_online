@@ -30,7 +30,7 @@ class Game
       simulator_fullname: self.simulator_fullname,
       configuration: self.configuration,
       roles: self.roles.collect{ |role| { name: role.name, strategies: role.strategies, count: role.count } },
-      profiles: Profile.collection.find(display_profiles).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.payoff' => 1).to_a
+      profiles: Profile.collection.find(display_profiles).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1)
     }
   end
   

@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/acechase/mongoid_rails_migrations.git
+  revision: dcdcd5869049fda3fe86b801ae6f7dc859c9490b
+  specs:
+    mongoid_rails_migrations (0.0.14)
+      activesupport (>= 3.0.0)
+      bundler (>= 1.0.0)
+      rails (>= 3.0.0)
+      railties (>= 3.0.0)
+
+GIT
   remote: git://github.com/cblock/mongoid-sequence.git
   revision: b97ac2c3442181b2808d8bd022ef82bab238aaaa
   specs:
@@ -367,6 +377,7 @@ DEPENDENCIES
   mongoid
   mongoid-rspec
   mongoid-sequence!
+  mongoid_rails_migrations!
   net-scp
   net-ssh
   oj

@@ -3,8 +3,8 @@
 class Profile
   include Mongoid::Document
   
-  embeds_many :symmetry_groups
-  embeds_many :features_observations
+  embeds_many :symmetry_groups, as: :role_strategy_partitionable
+  embeds_many :observations
 
   has_many :simulations, :dependent => :destroy
   belongs_to :simulator
@@ -12,6 +12,7 @@ class Profile
   field :size, type: Integer
   field :assignment, type: String
   field :sample_count, type: Integer, default: 0
+  field :features, type: Hash
   field :configuration, type: Hash, default: {}
   
   attr_accessible :assignment, :configuration

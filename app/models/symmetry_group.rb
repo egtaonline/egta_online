@@ -1,8 +1,10 @@
 class SymmetryGroup
   include Mongoid::Document
   
-  embedded_in :profile
+  embedded_in :role_strategy_partitionable, polymorphic: true
   embeds_many :players
+  
+  accepts_nested_attributes_for :players
   
   field :count, type: Integer
   field :role
@@ -14,17 +16,17 @@ class SymmetryGroup
   validates :role, presence: true
   validates :strategy, presence: true, uniqueness: { scope: :role }
   
-  def payoff_for(observation_id)
-    players.where(observation_id: observation_id).avg(:payoff)
-  end
-  
-  def payoff
-    players.avg(:payoff)
-  end
-  
-  def payoff_sd
-    if players.count > 0
-      Math.sqrt(players.sum{ |player| player.payoff**2.0 }/players.count-payoff**2.0)
-    end
-  end
+  # def payoff_for(observation_id)
+  #    players.where(observation_id: observation_id).avg(:payoff)
+  #  end
+  #  
+  #  def payoff
+  #    players.avg(:payoff)
+  #  end
+  #  
+  #  def payoff_sd
+  #    if players.count > 0
+  #      Math.sqrt(players.sum{ |player| player.payoff**2.0 }/players.count-payoff**2.0)
+  #    end
+  #  end
 end
