@@ -9,7 +9,6 @@ class Api::V3::BaseController < ActionController::Base
   end
   
   def show
-    puts "CALLED"
     respond_with(@object)
   end
   
