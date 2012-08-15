@@ -12,7 +12,7 @@ when "summary"
 when "observation"
   node :observations do |profile|
     1.upto(profile.sample_count).collect do |i|
-      { symmetry_groups: profile.symmetry_groups.collect { |symmetry_group| {role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff_for(i) } }, features: profile.features_observations.where(observation_id: i).first.features }
+      { symmetry_groups: profile.symmetry_groups.collect { |symmetry_group| {role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff_for(i) } }, features: profile.features_observations.where(observation_id: i).first.try(:features) }
     end
   end
 when "full"
@@ -20,7 +20,7 @@ when "full"
     1.upto(profile.sample_count).collect do |i|
       { symmetry_groups: profile.symmetry_groups.collect do |symmetry_group|
           { role: symmetry_group.role, strategy: symmetry_group.strategy, players: symmetry_group.players.where(observation_id: i).collect{ |player| { payoff: player.payoff, features: player.features } } }
-        end, features: profile.features_observations.where(observation_id: i).first.features
+        end, features: profile.features_observations.where(observation_id: i).first.try(:features)
       }
     end
   end

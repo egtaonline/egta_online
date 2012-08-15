@@ -55,7 +55,7 @@ class Profile
       end
     end
     fhash.each do |key, value|
-      fhash[key] = fhash[key].to_scale.mean
+      fhash[key] = fhash[key].to_scale.try(:mean)
     end
     fhash
   end
