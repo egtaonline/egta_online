@@ -19,9 +19,11 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_pass http://unicorn;
+    proxy_read_timeout 1800;
+    proxy_send_timeout 1800;
   }
 
-  error_page 500 502 503 504 /500.html;
+  error_page 500 502 503 /500.html;
   client_max_body_size 4G;
   keepalive_timeout 10;
 }
