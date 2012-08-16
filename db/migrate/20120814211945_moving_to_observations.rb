@@ -3,11 +3,10 @@ class MovingToObservations < Mongoid::Migration
     Profile.where(:sample_count.gt => 0).each do |profile|
       profile.observations.destroy_all
       if profile.symmetry_groups.count == 0
-        p profile.inspect
-        if profile["role_instances"] == []
+        p profile.id
+        if profile["role_instances"] == [] || profile["role_instances"] == nil || profile['sample_records'] == nil || profile['sample_records'] == []
           profile.destroy
-        elsif profile["role_instances"] == nil
-          profile.destroy
+          p 'destroy'
         else
           total_count = 0
           profile.assignment.split("; ").each do |role|
@@ -31,14 +30,35 @@ class MovingToObservations < Mongoid::Migration
               flag ||= role_strategy_hash[symmetry.role].detect{ |strategy| strategy["name"] == symmetry.strategy }["count"] != symmetry.count
             end
           end
-      end
-      observation_ids = profile['symmetry_groups'].collect { |s| s['players'].collect{ |p| p['observation_id'] } }.flatten.uniq
-      observation_ids.each do |oid|
-        symmetry_groups = profile['symmetry_groups'].collect do |s|
-          { role: s['role'], strategy: s['strategy'], count: s['count'], players: s['players'].select{ |p| p['observation_id'] == oid }.collect{ |p| { payoff: p['payoff'], features: p['features'] } } }
+          profile.features_observations.destroy_all
+          profile["sample_records"].each do |sample_record|
+            count += 1
+            profile.features_observations.create(features: sample_record["features"], observation_id: count)
+            profile.symmetry_groups.each do |symmetry_group|
+              payoff = sample_record["payoffs"][symmetry_group.role][symmetry_group.strategy]
+              symmetry_group.players << 1.upto(symmetry_group.count).collect{ |i| Player.new(payoff: payoff, observation_id: count) }
+            end
+          end
+          profile.save
+          flag = false
+          profile.symmetry_groups.each do |symmetry_group|
+            flag ||= (symmetry_group.payoff.round(5) != (profile["sample_records"].map{ |s| s["payoffs"][symmetry_group.role][symmetry_group.strategy] }.to_scale.mean).round(5))
+            if flag
+              puts "players #{symmetry_group.players.collect{|player| player.payoff}}"
+              puts "sample_records #{profile["sample_records"].collect{ |s| s["payoffs"][symmetry_group.role][symmetry_group.strategy] }}"
+            end
+          end
+          profile.unset("sample_records") unless flag
         end
-        features = profile['features_observations'].select{ |f| f['observation_id'] == oid }.first.features if profile['features_observations']
-        profile.observations.create!(features: features, symmetry_groups: symmetry_groups)
+      else
+        observation_ids = profile['symmetry_groups'].collect { |s| s['players'].collect{ |p| p['observation_id'] } }.flatten.uniq
+        observation_ids.each do |oid|
+          symmetry_groups = profile['symmetry_groups'].collect do |s|
+            { role: s['role'], strategy: s['strategy'], count: s['count'], players: s['players'].select{ |p| p['observation_id'] == oid }.collect{ |p| { payoff: p['payoff'], features: p['features'] } } }
+          end
+          features = profile['features_observations'].select{ |f| f['observation_id'] == oid }.first.features if (profile['features_observations'].try(:count) != nil && profile['features_observations'].count > 0)
+          profile.observations.create!(features: features, symmetry_groups: symmetry_groups)
+        end
       end
     end
   end

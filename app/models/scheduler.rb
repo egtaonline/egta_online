@@ -14,17 +14,9 @@ class Scheduler
   field :size, type: Integer
   field :default_samples, type: Integer
   embeds_many :roles, as: :role_owner, order: :name.asc
+  
   validates_numericality_of :default_samples, integer_only: true
-  
-  scope :scheduling_profile, ->(profile_id) { active.where(profile_ids: profile_id) }
-  
   before_save(:on => :create){self.simulator_fullname = self.simulator.fullname}
-  
-  has_and_belongs_to_many :profiles, :inverse_of => nil do
-    def with_role_and_strategy(role, strategy)
-      where(assignment: Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
-    end
-  end
   
   belongs_to :simulator
   validates_uniqueness_of :name

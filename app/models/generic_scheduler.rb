@@ -3,8 +3,8 @@ class GenericScheduler < Scheduler
   
   field :sample_hash, :type => Hash, :default => {}
   
-  def required_samples(profile_id)
-    val = sample_hash[profile_id.to_s]
+  def required_samples(profile)
+    val = sample_hash[profile.id.to_s]
     val == nil ? 0 : val
   end
   
@@ -14,21 +14,17 @@ class GenericScheduler < Scheduler
   
   def remove_role(role_name)
     roles.where(name: role_name).destroy_all
-    invalid_profiles = self.profiles.where(assignment: Regexp.new("#{role_name}: ")).to_a
-    self.profiles -= invalid_profiles
+    Profile.where(scheduler_ids: self.id, assignment: Regexp.new("#{role_name}: ")).pull(:scheduler_ids, self.id)
     hash = {}
-    self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}
-    self.sample_hash = hash
-    self.save
+    Profile.where(scheduler_ids: self.id).each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
+    self.update_attribute(:sample_hash, hash)
   end
 
   def remove_strategy(role, strategy_name)
-    invalid_profiles = self.profiles.with_role_and_strategy(role, strategy_name).to_a
-    self.profiles -= invalid_profiles
+    Profile.where(scheduler_ids: self.id).with_role_and_strategy(role, strategy_name).pull(:scheduler_ids, self.id)
     hash = {}
-    self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}
-    self.sample_hash = hash
-    self.save
+    Profile.where(scheduler_ids: self.id).each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
+    self.update_attribute(:sample_hash, hash)
   end
   
   def add_profile(assignment, sample_count=self["default_samples"])
@@ -41,7 +37,7 @@ class GenericScheduler < Scheduler
         flag &&= profile.symmetry_groups.where(role: r.name).collect{ |s| s.count }.reduce(:+) == r.count
       end
       if flag
-        self.profiles << profile
+        profile.schedulers << self
         sample_hash[profile.id.to_s] = sample_count
         self.save!
         profile.try_scheduling

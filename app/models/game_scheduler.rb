@@ -4,8 +4,8 @@ class GameScheduler < Scheduler
   validates_numericality_of :default_samples, :size, greater_than: 0
   validates_presence_of :size
 
-  def required_samples(profile_id)
-    (self.profiles.find(profile_id) rescue nil) == nil ? 0 : default_samples
+  def required_samples(profile)
+    profile.scheduler_ids.include?(self.id) ? default_samples : 0
   end
   
   def profile_space

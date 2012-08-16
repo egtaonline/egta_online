@@ -24,4 +24,6 @@ EgtaOnline::Application.configure do
 
   # Do not compress assets
   config.assets.compress = false
+  
+  config.middleware.use ::Rack::PerftoolsProfiler, :mode => :cputime, :bundler => true
 end

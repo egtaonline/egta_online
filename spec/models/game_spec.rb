@@ -30,8 +30,8 @@ describe Game do
         game.add_strategy("All", "A")
       end
       
-      it { game.display_profiles.count.should eql(1) }
-      it { game.display_profiles.first.should eql(profile) }
+      it { Profile.where(game.display_query).count.should eql(1) }
+      it { Profile.where(game.display_query).first.should eql(profile) }
     end
   #   
   #   context "role-symmetric game" do

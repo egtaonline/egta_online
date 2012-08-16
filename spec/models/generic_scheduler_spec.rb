@@ -11,9 +11,9 @@ describe GenericScheduler do
       scheduler.add_profile(profile.assignment, 20)
       scheduler.add_profile(profile1.assignment, 10)
     end
-    it {scheduler.required_samples(profile.id).should eql(20)}
-    it {scheduler.required_samples(profile1.id).should eql(10)}
-    it {scheduler.required_samples(profile2.id).should eql(0)}
+    it {scheduler.required_samples(profile).should eql(20)}
+    it {scheduler.required_samples(profile1).should eql(10)}
+    it {scheduler.required_samples(profile2).should eql(0)}
   end
   
   describe "#remove_role" do
@@ -32,10 +32,10 @@ describe GenericScheduler do
         scheduler.remove_role("All")
       end
     
-      it { scheduler.profiles.count.should eql(1) }
-      it { scheduler.profiles.last.assignment.should eql(profile1.assignment) }
-      it { scheduler.required_samples(profile1.id).should eql(20) }
-      it { scheduler.required_samples(profile.id).should eql(0)}
+      it { Profile.where(scheduler_ids: scheduler.id).count.should eql(1) }
+      it { Profile.where(scheduler_ids: scheduler.id).last.assignment.should eql(profile1.assignment) }
+      it { scheduler.required_samples(profile1).should eql(20) }
+      it { scheduler.required_samples(profile).should eql(0)}
     end
 
     context "simulator" do
@@ -49,10 +49,10 @@ describe GenericScheduler do
         simulator.remove_role("All")
       end
     
-      it { scheduler.profiles.count.should eql(1) }
-      it { scheduler.profiles.last.assignment.should eql(profile1.assignment) }
-      it { scheduler.required_samples(profile1.id).should eql(20) }
-      it { scheduler.required_samples(profile.id).should eql(0)}
+      it { Profile.where(scheduler_ids: scheduler.id).count.should eql(1) }
+      it { Profile.where(scheduler_ids: scheduler.id).last.assignment.should eql(profile1.assignment) }
+      it { scheduler.required_samples(profile1).should eql(20) }
+      it { scheduler.required_samples(profile).should eql(0)}
     end
   end
   
@@ -74,10 +74,10 @@ describe GenericScheduler do
         scheduler.remove_strategy("All", "A")
       end
     
-      it { scheduler.profiles.count.should eql(2) }
-      it { scheduler.profiles.last.assignment.should eql(profile2.assignment) }
-      it { scheduler.required_samples(profile2.id).should eql(20) }
-      it { scheduler.required_samples(profile.id).should eql(0) }
+      it { Profile.where(scheduler_ids: scheduler.id).count.should eql(2) }
+      it { Profile.where(scheduler_ids: scheduler.id).last.assignment.should eql(profile2.assignment) }
+      it { scheduler.required_samples(profile2).should eql(20) }
+      it { scheduler.required_samples(profile).should eql(0) }
     end
     
     context "simulator" do
@@ -92,10 +92,10 @@ describe GenericScheduler do
         simulator.remove_strategy("All", "A")
       end
     
-      it { scheduler.profiles.count.should eql(2) }
-      it { scheduler.profiles.last.assignment.should eql(profile2.assignment) }
-      it { scheduler.required_samples(profile2.id).should eql(20) }
-      it { scheduler.required_samples(profile.id).should eql(0)}
+      it { Profile.where(scheduler_ids: scheduler.id).count.should eql(2) }
+      it { Profile.where(scheduler_ids: scheduler.id).last.assignment.should eql(profile2.assignment) }
+      it { scheduler.required_samples(profile2).should eql(20) }
+      it { scheduler.required_samples(profile).should eql(0)}
     end
   end
 end

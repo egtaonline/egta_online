@@ -26,6 +26,16 @@ class Profile
   validates_uniqueness_of :assignment, scope: [:simulator_id, :configuration]
   delegate :fullname, :to => :simulator, :prefix => true
 
+  has_and_belongs_to_many :games, index: true, inverse_of: nil
+  
+  has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
+    def with_max_samples
+      @target.max{ |x, y| x.required_samples(id) <=> y.required_samples(id) }
+    end
+  end
+  
+  scope :with_role_and_strategy, ->(role, strategy){ elem_match(symmetry_groups: { role: role, strategy: strategy }) }
+  
   after_create :find_games
   
   def strategies_for(role_name)

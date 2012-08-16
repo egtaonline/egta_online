@@ -62,7 +62,7 @@ class GamesController < ApplicationController
       format.html
       # come back and speed up sample issue
       format.xml { @profiles = game.display_profiles }
-      format.json { render :json => game, granularity: (params[:granularity] || "summary") }
+      format.json { render :text => Profile.collection.find(game.display_profiles).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
     end
   end
   
