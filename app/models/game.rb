@@ -15,7 +15,7 @@ class Game
   
   index [[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]]
   validates_presence_of :simulator, :name, :size, :configuration, :simulator_fullname
-  validates_numericality_of :size, only_integer: true, greater_than: 1
+  validates_numericality_of :size, only_integer: true, greater_than: 0
   
   def display_profiles
     query_hash = { :sample_count.gt => 0, :assignment => strategy_regex }
