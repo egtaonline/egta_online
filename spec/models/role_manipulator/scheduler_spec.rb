@@ -17,19 +17,17 @@ describe RoleManipulator::Scheduler do
       
       before(:each) do
         scheduler.add_role('All', 2)
-        scheduler.profiles << profile
-        scheduler.save
-        scheduler.reload
+        profile.schedulers << scheduler
       end
       
       it 'removes profiles if the role is non-empty' do
         scheduler.remove_role('All')
-        scheduler.profiles.should == []
+        Profile.where(:scheduler_ids => scheduler.id).count.should eql(0)
       end
       
       it 'does not remove profiles if the role does not exist' do
         scheduler.remove_role('Market Maker')
-        scheduler.profiles.should == [profile]
+        Profile.where(:scheduler_ids => scheduler.id).to_a.should eql([profile])
       end
     end
     

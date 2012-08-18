@@ -7,11 +7,10 @@ When /^the data is parsed$/ do
   DataParser.perform(1, 'features/support/1')
 end
 
-Then /^the symmetry group of the profile will have (\d+) players$/ do |arg1|
-  @profile.reload.symmetry_groups.first.players.count.should eql(arg1.to_i)
+Then /^the simulation will have the status complete$/ do
+  pending # express the regexp above with the code you wish you had
 end
 
-Then /^the profile will have matching correct features observations for each of the observations$/ do
-  @profile.features_observations.first.features.should eql({"average_equity_premium"=>-1.2220978801483e-05, "average_dividend"=>1.9945048426565801, "average_signal"=>0.0100216213779099})
-  @profile.features_observations[1].features.should eql({"average_equity_premium"=>0.299871911686234e-03, "average_dividend"=>2.05274775315298, "average_signal"=>-0.671875465181085e-02})
+Then /^the profile will have valid observations$/ do
+  pending # express the regexp above with the code you wish you had
 end

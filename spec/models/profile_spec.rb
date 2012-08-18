@@ -2,8 +2,37 @@ require 'spec_helper'
 
 describe Profile do
   it { should embed_many :symmetry_groups }
-  it { should embed_many :features_observations }
+  it { should embed_many :observations }
   it { should have_field :configuration }
+  
+  describe 'scopes' do
+    let(:matching_profile){ Fabricate(:profile) }
+    let(:non_matching_profile){ Fabricate(:profile) }
+    
+    describe 'with_game' do
+      let(:game_to_match){ Fabricate(:game) }
+      let(:other_game){ Fabricate(:game) }
+      
+      before do
+        matching_profile.games << game_to_match
+        non_matching_profile.games << other_game
+      end
+      
+      it { Profile.with_game(game_to_match).to_a.should eql([matching_profile]) }
+    end
+    
+    describe 'with_scheduler' do
+      let(:scheduler_to_match){ Fabricate(:hierarchical_deviation_scheduler) }
+      let(:other_scheduler){ Fabricate(:game_scheduler) }
+      
+      before do
+        matching_profile.schedulers << scheduler_to_match
+        non_matching_profile.schedulers << other_scheduler
+      end
+      
+      it { Profile.with_scheduler(scheduler_to_match).to_a.should eql([matching_profile]) }
+    end
+  end
   
   describe "uniqueness validation" do
     let!(:existing_profile){ Fabricate(:profile, assignment: "A: 1 StratA, 1 StratB; B: 2 StratC") }
@@ -36,25 +65,4 @@ describe Profile do
     end
     it { ProfileScheduler.should have_scheduled(profile.id).in(5 * 60) }
   end
-  
-  # 
-  # describe "sample record observations work" do
-  #   let!(:profile){Fabricate(:profile, :name => "All: 2 A")}
-  #   let!(:sample_record){Fabricate(:sample_record, :profile => profile, :payoffs => {"All"=>{"A"=>2}})}
-  #   let!(:sample_record1){Fabricate(:sample_record, :profile => profile, :payoffs => {"All"=>{"A"=>3}})}
-  #   let!(:sample_record2){Fabricate(:sample_record, :profile => profile, :payoffs => {"All"=>{"A"=>4}})}
-  #   
-  #   it "should dynamically update counts and payoffs" do
-  #     profile.reload
-  #     profile.sample_records.count.should eql(3)
-  #     profile.sample_count.should eql(3)
-  #     profile.role_instances.first.strategy_instances.first.payoff.should eql(3.0)
-  #     profile.role_instances.first.strategy_instances.first.payoff_sd.should eql(1.0)
-  #     profile.sample_records.last.destroy
-  #     profile.reload
-  #     profile.sample_count.should eql(2)
-  #     profile.role_instances.first.strategy_instances.first.payoff.should eql(2.5)
-  #     profile.role_instances.first.strategy_instances.first.payoff_sd.round(3).should eql(0.707)
-  #   end
-  # end
 end

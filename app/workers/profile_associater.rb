@@ -14,15 +14,14 @@ class ProfileAssociater
         profile = scheduler.simulator.profiles.find_or_create_by(configuration: scheduler.configuration, assignment: assignment)
         profile_ids << profile.id if profile.valid?
       end
-      scheduler.add_to_set(:profile_ids, profile_ids)
+      Profile.where(:_id.in => profile_ids).add_to_set(:scheduler_ids, scheduler.id)
       profile_ids.each { |pid| Resque.enqueue_in(5.minutes, ProfileScheduler, pid) }
     end
   end
   
   def self.new_assignments(scheduler)
     assignments = scheduler.profile_space
-    scheduler.profiles -= scheduler.profiles.where(:assignment.nin => assignments)
-    scheduler.save
-    assignments -= scheduler.profiles.collect{ |profile| profile.assignment }
+    Profile.where(:scheduler_ids => scheduler.id, :assignment.nin => assignments).pull(:scheduler_ids, scheduler.id)
+    assignments -= Profile.where(:scheduler_ids => scheduler.id).collect{ |profile| profile.assignment }
   end
 end

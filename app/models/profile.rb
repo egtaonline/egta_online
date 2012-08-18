@@ -1,5 +1,3 @@
-# Each Profile instance represents a single possible Strategy set for a Game.
-
 class Profile
   include Mongoid::Document
   
@@ -16,8 +14,7 @@ class Profile
   field :configuration, type: Hash, default: {}
   
   attr_accessible :assignment, :configuration
-  
-  # TODO: find the right indexes
+
   index ({ simulator_id: 1, configuration: 1, size: 1 })
   index ({ _id: 1, sample_count: 1, assignment: 1 })
 
@@ -34,6 +31,8 @@ class Profile
     end
   end
   
+  scope :with_game, ->(game){ where(game_ids: game.id) }
+  scope :with_scheduler, ->(scheduler){ where(scheduler_ids: scheduler.id) }
   scope :with_role_and_strategy, ->(role, strategy){ elem_match(symmetry_groups: { role: role, strategy: strategy }) }
   
   after_create :find_games
