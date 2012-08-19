@@ -6,16 +6,12 @@ describe ProfileScheduler do
     let(:profile_id){ Moped::BSON::ObjectId.from_time(Time.now) }
     
     context 'flawless victory' do
-      let(:profile){ double(id: profile_id, sample_count: 20, scheduled?: false) }
+      let(:profile){ double(id: profile_id, sample_count: 20, scheduled?: false, schedulers: schedulers) }
       let(:scheduler1) { double('scheduler1') }
       let(:scheduler2) { double('scheduler2') }
-      
+      let(:schedulers) { double(with_max_samples: scheduler1) }      
       before do
         Profile.should_receive(:find).with(profile_id).and_return(profile)
-        schedulers = [scheduler1, scheduler2]
-        scheduler2.should_receive(:required_samples).with(profile).and_return(5)
-        scheduler1.should_receive(:required_samples).with(profile).and_return(10)
-        Scheduler.should_receive(:scheduling_profile).with(profile_id).and_return(schedulers)
         scheduler1.should_receive(:schedule_profile).with(profile)
       end
       

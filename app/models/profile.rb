@@ -15,34 +15,24 @@ class Profile
   
   attr_accessible :assignment, :configuration
 
-  index ({ simulator_id: 1, configuration: 1, size: 1 })
-  index ({ _id: 1, sample_count: 1, assignment: 1 })
+  index ({ simulator_id: 1, configuration: 1, size: 1, sample_count: 1 })
 
   validates_presence_of :simulator
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
   validates_uniqueness_of :assignment, scope: [:simulator_id, :configuration]
   delegate :fullname, :to => :simulator, :prefix => true
-
-  has_and_belongs_to_many :games, index: true, inverse_of: nil
   
   has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
     def with_max_samples
       @target.max{ |x, y| x.required_samples(self) <=> y.required_samples(self) }
     end
   end
-  
-  scope :with_game, ->(game){ where(game_ids: game.id) }
+
   scope :with_scheduler, ->(scheduler){ where(scheduler_ids: scheduler.id) }
   scope :with_role_and_strategy, ->(role, strategy){ elem_match(symmetry_groups: { role: role, strategy: strategy }) }
   
-  after_create :find_games
-  
   def strategies_for(role_name)
     symmetry_groups.where(role: role_name).collect{ |s| s.strategy }.uniq
-  end
-  
-  def find_games
-    Resque.enqueue(GameAssociater, id)
   end
 
   def try_scheduling

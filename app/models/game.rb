@@ -11,16 +11,15 @@ class Game
   
   embeds_many :roles, as: :role_owner
   belongs_to :simulator
-  has_and_belongs_to_many :profiles
   
   index({ simulator_id: 1, configuration: 1, size: 1 })
   validates_presence_of :simulator, :name, :size, :configuration, :simulator_fullname
   validates_numericality_of :size, only_integer: true, greater_than: 0
-  
-  def display_query
-    query_hash = { :games_id => self.id, :sample_count => { '$gt' => 0 }, :assignment => strategy_regex }
+
+  def profiles
+    query_hash = { :simulator_id => self.simulator_id, :configuration => self.configuration, :size => self.size, :sample_count => { '$gt' => 0 }, :assignment => strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count }
-    query_hash
+    Profile.collection.find(query_hash)
   end
   
   def as_json(options={})
@@ -30,7 +29,7 @@ class Game
        \"simulator_fullname\": \"#{self.simulator_fullname}\",
        \"configuration\": #{self.configuration},
        \"roles\": #{self.roles.collect{ |role| "{ \"name\": \"#{role.name}\", \"strategies\": #{ role.strategies }, \"count\": #{role.count} }" }.join(", ") },
-       \"profiles\": #{Profile.collection.find(display_query).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
+       \"profiles\": #{profiles.select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).inspect }
     }"
   end
   
