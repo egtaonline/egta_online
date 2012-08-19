@@ -46,7 +46,7 @@ class GenericScheduler < Scheduler
         self.save!
         profile.try_scheduling
       else
-        profile.errors.add(assignment: "cannot be scheduled by this scheduler due to mismatch on role partition.")
+        profile.errors.add(:assignment, "cannot be scheduled by this scheduler due to mismatch on role partition.")
       end
     end
     profile
