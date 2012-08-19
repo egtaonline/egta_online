@@ -31,7 +31,11 @@ class Scheduler
   end
   
   def schedule_profile(profile)
-    samples_to_schedule = [samples_per_simulation, required_samples(profile.id)-profile.sample_count].min
+    samples_to_schedule = [samples_per_simulation, required_samples(profile)-profile.sample_count].min
     self.simulations.create!(size: samples_to_schedule, state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
+  end
+  
+  def profiles
+    Profile.where(scheduler_ids: self.id)
   end
 end

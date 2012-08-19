@@ -117,7 +117,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
       
       it "should remove the profile from the scheduler" do
         @scheduler.profiles.count.should eql(0)
-        @scheduler.required_samples(@profile.id).should eql(0)
+        @scheduler.required_samples(@profile).should eql(0)
       end
       
       it "should not destroy the profile" do
@@ -137,11 +137,11 @@ describe "/api/v3/generic_schedulers", :type => :api do
       
       it "should remove the profile from the scheduler" do
         @scheduler.profiles.count.should eql(1)
-        @scheduler.required_samples(@profile.id).should eql(0)
+        @scheduler.required_samples(@profile).should eql(0)
       end
       
       it "should not remove the other profile" do
-        @scheduler.required_samples(@other_profile.id).should eql(20)
+        @scheduler.required_samples(@other_profile).should eql(20)
       end
       
       it "should not destroy either profile" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SchedulerObserver do
   shared_examples "resets profiles" do
-    it { scheduler.profile_ids.should == [] }
+    it { Profile.where(scheduler_ids: scheduler.id).count.should == 0 }
   end
   
   shared_examples "gathers new profiles" do
@@ -10,7 +10,7 @@ describe SchedulerObserver do
   end
   
   shared_examples "schedules profiles" do
-    it { scheduler.profile_ids.each{ |p| ProfileScheduler.should have_scheduled(p) } }
+    it { scheduler.profiles.each{ |p| ProfileScheduler.should have_scheduled(p.id) } }
   end
   
   [GameScheduler, HierarchicalScheduler, DeviationScheduler, HierarchicalDeviationScheduler, GenericScheduler].each do |scheduler_class|

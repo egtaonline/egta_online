@@ -4,7 +4,17 @@ class ObservationProcessor
   end
   
   def process_files(simulation, files)
-    
+    profile = simulation.profile
+    validated = ObservationValidator.validate_all(profile, @location, files)
+    if validated == []
+      simulation.fail "No valid payoff files were found."
+    else
+      validated.each do |json|
+        profile.observations.create!(json)
+      end
+      profile.update_symmetry_group_payoffs
+      simulation.finish!
+    end
   end
   # def self.process_file(file_name, simulation)
   #   file = file_name.split('/').last

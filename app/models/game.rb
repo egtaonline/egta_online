@@ -18,7 +18,7 @@ class Game
   validates_numericality_of :size, only_integer: true, greater_than: 0
   
   def display_query
-    query_hash = { :_id => { '$in' => self.profile_ids}, :sample_count => { '$gt' => 0 }, :assignment => strategy_regex }
+    query_hash = { :games_id => self.id, :sample_count => { '$gt' => 0 }, :assignment => strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count }
     query_hash
   end
@@ -30,7 +30,7 @@ class Game
        \"simulator_fullname\": \"#{self.simulator_fullname}\",
        \"configuration\": #{self.configuration},
        \"roles\": #{self.roles.collect{ |role| "{ \"name\": \"#{role.name}\", \"strategies\": #{ role.strategies }, \"count\": #{role.count} }" }.join(", ") },
-       \"profiles\": #{Profile.collection.find(display_profiles).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
+       \"profiles\": #{Profile.collection.find(display_query).select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
     }"
   end
   

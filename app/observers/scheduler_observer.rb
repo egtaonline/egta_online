@@ -1,7 +1,7 @@
 class SchedulerObserver < Mongoid::Observer
   def around_update(scheduler)
     reset_flag = scheduler.configuration_changed? || scheduler.size_changed?
-    Profile.where(scheduler_ids: scheduler.id).pull(:scheduler_id, scheduler.id) if reset_flag
+    Profile.where(scheduler_ids: scheduler.id).pull(:scheduler_ids, scheduler.id) if reset_flag
     schedule_flag = scheduler.active_changed? && scheduler.active
     schedule_flag ||= scheduler.is_a?(GameScheduler) && scheduler.default_samples_changed?
     yield

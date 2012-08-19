@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe ObservationProcessor do
   describe '#process_files' do
-    context 'all valid files' do
-      let(:profile){ Fabricate(assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-      let(:simulation){ Fabricate(profile: profile, number: 1) }
-      subject { ObservationProcessor.new("features/support") }
-      
-      before do
-        subject.process_files(simulation, files)
-      end
-      
-      it { }
-    end
-  end  
+    # context 'all valid files' do
+    #   let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+    #   let(:simulation){ Fabricate(:simulation, profile: profile, number: 1) }
+    #   subject { ObservationProcessor.new("features/support") }
+    #   
+    #   before do
+    #     subject.process_files(simulation, files)
+    #   end
+    #   
+    #   it { }
+    # end
+  end
   # describe 'process_file' do
   #   let(:features){ double('features') }
   #   let(:profile){ double(assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2', features_observations: features) }

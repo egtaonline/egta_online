@@ -49,9 +49,9 @@ class GenericScheduler < Scheduler
   end
   
   def remove_profile(profile_id)
-    self.profiles = self.profiles.where(:_id.ne => profile_id)
+    Profile.find(profile_id).pull(:scheduler_ids, self.id)
     hash = {}
-    self.profile_ids.each {|p_id| hash[p_id.to_s] = self.sample_hash[p_id.to_s]}
+    Profile.where(scheduler_ids: self.id).each {|p| hash[p.id.to_s] = self.sample_hash[p.id.to_s]}
     self.sample_hash = hash
     self.save
   end
@@ -61,7 +61,7 @@ class GenericScheduler < Scheduler
   def add_strategies_to_game(game)
     roles.each do |role|
       game.add_role(role.name, role.count)
-      profiles.collect{ |profile| profile.strategies_for(role.name) }.flatten.uniq.each do |strategy|
+      Profile.where(scheduler_id: self.id).collect{ |profile| profile.strategies_for(role.name) }.flatten.uniq.each do |strategy|
         game.add_strategy(role.name, strategy)
       end
     end

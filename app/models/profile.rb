@@ -27,7 +27,7 @@ class Profile
   
   has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
     def with_max_samples
-      @target.max{ |x, y| x.required_samples(id) <=> y.required_samples(id) }
+      @target.max{ |x, y| x.required_samples(self) <=> y.required_samples(self) }
     end
   end
   
@@ -49,26 +49,8 @@ class Profile
     Resque.enqueue_in(5.minutes, ProfileScheduler, id)
   end
 
-  def create_player(role, strategy, payoff, pfeatures)
-    symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff.to_f, features: pfeatures)
-  end
-  
   def scheduled?
     simulations.active.count > 0
-  end
-  
-  def features
-    fhash = Hash.new{ |hash,key| hash[key] = [] }
-    features_observations.each do |f|
-      f.features.each do |key, value|
-        fhash[key] << value
-      end
-    end
-    fhash.each do |key, value|
-      fhash[key] = value.compact
-      fhash[key] = fhash[key].reduce(:+)/fhash[key].size
-    end
-    fhash
   end
   
   def as_json(options={})
@@ -79,5 +61,26 @@ class Profile
         #symmetry_groups: self.symmetry_groups.collect{ |symmetry_group| { role: symmetry_group.role, strategy: symmetry_group.strategy, count: symmetry_group.count, payoff: symmetry_group.payoff, payoff_sd: symmetry_group.payoff_sd } }
       }
     end
+  end
+  
+  def update_symmetry_group_payoffs
+    self.sample_count = self.observations.count
+    self.symmetry_groups.each do |symmetry_group|
+      payoffs = observations.collect { |o| o.symmetry_groups.where(role: symmetry_group.role, strategy: symmetry_group.strategy).first.players.collect { |p| p.payoff } }.flatten
+      symmetry_group.payoff = payoffs.reduce(:+)/payoffs.count
+      symmetry_group.payoff_sd = Math.sqrt(payoffs.collect{ |p| p**2.0 }.reduce(:+)/payoffs.count-symmetry_group.payoff**2.0)
+      symmetry_group.save!
+    end
+    new_features = Hash.new { |hash, key| hash[key] = [] }
+    observations.each do |observation|
+      observation.features.each do |name, value|
+        new_features[name] << value
+      end
+    end
+    new_features.each do |key, value|
+      new_features[key] = value.reduce(:+)/value.size
+    end
+    self.features = new_features
+    self.save!
   end
 end

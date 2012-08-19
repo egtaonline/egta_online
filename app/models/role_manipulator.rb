@@ -61,7 +61,7 @@ module RoleManipulator
     end
     
     def remove_role(role_name)
-      self.update_attribute(:profile_ids, []) if roles.where(name: role_name).first
+      self.profiles.pull(:scheduler_ids, self.id) if roles.where(name: role_name).first
       super
     end
   end

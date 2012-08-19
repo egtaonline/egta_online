@@ -13,8 +13,8 @@ describe ProfileScheduler do
       before do
         Profile.should_receive(:find).with(profile_id).and_return(profile)
         schedulers = [scheduler1, scheduler2]
-        scheduler2.should_receive(:required_samples).with(profile_id).and_return(5)
-        scheduler1.should_receive(:required_samples).with(profile_id).and_return(10)
+        scheduler2.should_receive(:required_samples).with(profile).and_return(5)
+        scheduler1.should_receive(:required_samples).with(profile).and_return(10)
         Scheduler.should_receive(:scheduling_profile).with(profile_id).and_return(schedulers)
         scheduler1.should_receive(:schedule_profile).with(profile)
       end
