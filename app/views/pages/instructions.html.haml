@@ -17,9 +17,9 @@
   Your simulator will be invoked by calling script/batch [simulation folder] [number of samples to gather].  Accordingly, at the top folder of your simulator you should have a folder named script that contains a shell script named batch that sets up your simulation environment and takes these two command line arguments.  Here is an example of one such script:
 
       #!/bin/bash
-      
+
       module load java
-      
+
       export CLASSPATH=$CLASSPATH:/home/wellmangroup/many-agent-simulations/epp_sim/lib/jmarketsim.jar
       export CLASSPATH=$CLASSPATH:/home/wellmangroup/many-agent-simulations/epp_sim/lib/commons-math-2.1.jar
       /home/wellmangroup/opt/local/jruby/bin/jruby --server --fast -Ilib lib/main.rb "$@"
@@ -110,9 +110,9 @@
   The web interface will automatically detect the names of your feature files.  If a feature with the same name already exists for that game, these samples will be associated with that feature.  If no such feature exists, one will be created automatically.  If you wish to use these features for control variates, make sure to edit them in the web interface to add an expected value.
 
   ### Upload your simulator
-  
+
   Once your simulator is ready, ensure you have the proper directory structure and create a .zip file of the simulator to upload in the web form.  If you have everything in place, when I unzip your simulator I should get the following structure:
-  
+
       [simulator name]/
         [script]/
           batch

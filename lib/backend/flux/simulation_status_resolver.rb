@@ -2,7 +2,7 @@ class SimulationStatusResolver
   def initialize(flux_proxy, destination="#{Rails.root}/tmp/data")
     @flux_proxy, @destination = flux_proxy, destination
   end
-  
+
   def act_on_status(status, simulation)
     case status
     when "R"
@@ -17,9 +17,9 @@ class SimulationStatusResolver
       end
     end
   end
-  
+
   private
-  
+
   def check_for_errors(location)
     File.exists?(location+'/error') ? File.open(location+"/error").read(Yetting.error_store) : 'Files were not found on remote server.'
   end

@@ -1,17 +1,17 @@
 class GenericScheduler < Scheduler
   include RoleManipulator::RolePartition
-  
-  field :sample_hash, :type => Hash, :default => {}
-  
+
+  field :sample_hash, type: Hash, default: {}
+
   def required_samples(profile)
     val = sample_hash[profile.id.to_s]
     val == nil ? 0 : val
   end
-  
+
   def add_role(role_name, count)
     roles.find_or_create_by(name: role_name, count: count)
   end
-  
+
   def remove_role(role_name)
     roles.where(name: role_name).destroy_all
     Profile.where(scheduler_ids: self.id, assignment: Regexp.new("#{role_name}: ")).pull(:scheduler_ids, self.id)
@@ -26,7 +26,7 @@ class GenericScheduler < Scheduler
     Profile.where(scheduler_ids: self.id).each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
     self.update_attribute(:sample_hash, hash)
   end
-  
+
   def add_profile(assignment, sample_count=self["default_samples"])
     assignment = assignment.assignment_sort
     profile = simulator.profiles.find_or_create_by(configuration: self.configuration,
@@ -47,7 +47,7 @@ class GenericScheduler < Scheduler
     end
     profile
   end
-  
+
   def remove_profile(profile_id)
     Profile.find(profile_id).pull(:scheduler_ids, self.id)
     hash = {}
@@ -55,9 +55,9 @@ class GenericScheduler < Scheduler
     self.sample_hash = hash
     self.save
   end
-  
+
   protected
-  
+
   def add_strategies_to_game(game)
     roles.each do |role|
       game.add_role(role.name, role.count)

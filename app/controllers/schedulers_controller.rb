@@ -1,7 +1,7 @@
 class SchedulersController < ApplicationController
   respond_to :html, :json
-  before_filter :merge, :only => [:create, :update]
-  
+  before_filter :merge, only: [:create, :update]
+
   # These exposures are so that we can treat all different schedulers as scheduler in views, allowing view reuse where it's helpful
   expose(:schedulers){model_name.classify.constantize.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:scheduler) do
@@ -14,7 +14,7 @@ class SchedulersController < ApplicationController
       proxy.new(params[model_name])
     end
   end
-  
+
   expose(:profiles){Profile.where(scheduler_ids: scheduler.id).order_by(params[:sort], params[:direction]).page(params[:page])}
 
   def create
@@ -55,9 +55,9 @@ class SchedulersController < ApplicationController
       format.js {render "simulator_selector/update_configuration"}
     end
   end
-  
-  private 
-  
+
+  private
+
   def merge
     params[model_name] = params[model_name].merge(params[:selector])
   end

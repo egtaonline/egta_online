@@ -6,7 +6,7 @@ class ObservationValidator
     end
     validated_files.compact
   end
-  
+
   def self.validate(profile, file_name)
     begin
       json = Oj.load_file(file_name, mode: :compat)
@@ -27,9 +27,9 @@ class ObservationValidator
       nil
     end
   end
-  
+
   private
-  
+
   def self.numeralize(hash)
     return nil if !hash
     return_hash = {}
@@ -38,7 +38,7 @@ class ObservationValidator
     end
     return_hash
   end
-  
+
   def self.clean_players(players)
     players.collect do |player|
       { payoff: player['payoff'].to_f, features: numeralize(player['features'])}

@@ -23,11 +23,11 @@ Spork.prefork do
 
     config.include Mongoid::Matchers
     config.before(:each) do
-      Mongoid.default_session.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+      Mongoid.purge!
     end
     
     config.before(:all) do
-      Mongoid.default_session.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+      Mongoid.purge!
     end
     
     config.before(:each, :type => :request) do

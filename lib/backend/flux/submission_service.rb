@@ -2,7 +2,7 @@ class SubmissionService
   def initialize(login_connection)
     @login_connection = login_connection
   end
-  
+
   def submit(simulation)
     begin
       job_return = @login_connection.exec!("qsub -V -r n #{Yetting.deploy_path}/simulations/#{simulation.number}/wrapper")

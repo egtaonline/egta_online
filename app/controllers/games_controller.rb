@@ -1,15 +1,15 @@
 class GamesController < ApplicationController
   respond_to :html
-  before_filter :merge, :only => :create
-  
+  before_filter :merge, only: :create
+
   expose(:games){Game.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:game)
-  
+
   def create
     game.save
     respond_with(game)
   end
-  
+
   def update
     game.save
     respond_with(game)
@@ -19,7 +19,7 @@ class GamesController < ApplicationController
     game.destroy
     respond_with(game)
   end
-  
+
   def update_configuration
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|
@@ -41,7 +41,7 @@ class GamesController < ApplicationController
     game.remove_role(params[:role])
     respond_with(game)
   end
-  
+
   def remove_strategy
     game.remove_strategy(params[:role], params[:strategy_name])
     respond_with(game)
@@ -60,12 +60,12 @@ class GamesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render :text => game.profiles.select(:sample_count => 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
+      format.json { render text: game.profiles.select(sample_count: 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).to_a }
     end
   end
-  
-  private 
-  
+
+  private
+
   def merge
     params[:game] = params[:game].merge(params[:selector])
   end

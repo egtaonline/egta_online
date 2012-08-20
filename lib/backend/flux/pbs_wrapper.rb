@@ -9,8 +9,8 @@ class PbsWrapper
     sim_path = "#{Yetting.deploy_path}/simulations"
     walltime = simulation.size*scheduler.time_per_sample
     pbs_wall_time = [ walltime/3600, (walltime/60) % 60, walltime % 60 ].map{ |time| "%02d" % time }.join(":")
-    
-    
+
+
     document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh

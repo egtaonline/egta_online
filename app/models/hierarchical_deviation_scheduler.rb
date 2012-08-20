@@ -1,10 +1,10 @@
 class HierarchicalDeviationScheduler < DeviationScheduler
   include HierarchicalReduction
-  
+
   field :agents_per_player, type: Integer
   validates_presence_of :agents_per_player
   validate :divisibility
-  
+
   def profile_space
     if roles.reduce(0){|sum, r| sum + r.count}*agents_per_player != size || roles.collect{|r| r.strategies.count}.min < 1
       return []
@@ -21,7 +21,7 @@ class HierarchicalDeviationScheduler < DeviationScheduler
     end
     deviations = {}
     deviating_roles.each do |role|
-      deviation = role.strategies.product(roles.where(:name => role.name).first.strategies.repeated_combination(role.count-1).to_a)
+      deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.count-1).to_a)
       deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
     end
     profs = []
@@ -45,9 +45,9 @@ class HierarchicalDeviationScheduler < DeviationScheduler
     end
     profs.uniq
   end
-  
+
   protected
-  
+
   def add_strategies_to_game(game)
     super
     deviating_roles.each{ |r| r.strategies.each{ |s| add_strategy(r.name, s) } }

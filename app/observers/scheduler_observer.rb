@@ -8,7 +8,7 @@ class SchedulerObserver < Mongoid::Observer
     if reset_flag && scheduler.is_a?(GameScheduler)
       Resque.enqueue(ProfileAssociater, scheduler.id)
     elsif schedule_flag
-      Profile.where(:scheduler_ids => scheduler.id).each { |profile| profile.try_scheduling }
+      Profile.where(scheduler_ids: scheduler.id).each { |profile| profile.try_scheduling }
     end
   end
 end

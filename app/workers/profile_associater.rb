@@ -16,10 +16,10 @@ class ProfileAssociater
     Profile.where(:_id.in => profile_ids).add_to_set(:scheduler_ids, scheduler.id)
     profile_ids.each { |pid| Resque.enqueue_in(5.minutes, ProfileScheduler, pid) }
   end
-  
+
   def self.new_assignments(scheduler)
     assignments = scheduler.profile_space
-    Profile.where(:scheduler_ids => scheduler.id, :assignment.nin => assignments).pull(:scheduler_ids, scheduler.id)
-    assignments -= Profile.where(:scheduler_ids => scheduler.id).collect{ |profile| profile.assignment }
+    Profile.where(scheduler_ids: scheduler.id, :assignment.nin => assignments).pull(:scheduler_ids, scheduler.id)
+    assignments -= Profile.where(scheduler_ids: scheduler.id).collect{ |profile| profile.assignment }
   end
 end

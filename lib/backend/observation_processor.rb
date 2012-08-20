@@ -2,7 +2,7 @@ class ObservationProcessor
   def initialize(location="#{Rails.root}/tmp/data/")
     @location = location
   end
-  
+
   def process_files(simulation, files)
     profile = simulation.profile
     validated = ObservationValidator.validate_all(profile, @location, files)

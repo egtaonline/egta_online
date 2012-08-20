@@ -13,7 +13,7 @@ class User
 
   validates :email, presence: true, uniqueness: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i }
   validates_presence_of :encrypted_password
-  
+
   ## Rememberable
   field :remember_created_at, type: Time
 
@@ -30,6 +30,6 @@ class User
   index({ email: 1 }, { unique: true, background: true })
   attr_accessible :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
   validates :email, presence: true, uniqueness: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i }
-  
+
   before_save :ensure_authentication_token
 end

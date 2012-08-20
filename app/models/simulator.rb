@@ -1,30 +1,30 @@
 class Simulator
   require 'find'
-  
+
   include Mongoid::Document
   include RoleManipulator::Base
   mount_uploader :simulator_source, SimulatorUploader
 
-  embeds_many :roles, :as => :role_owner
-  has_many :profiles, :dependent => :destroy do
+  embeds_many :roles, as: :role_owner
+  has_many :profiles, dependent: :destroy do
     def with_role_and_strategy(role, strategy)
       where(assignment: Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
     end
   end
-  has_many :schedulers, :dependent => :destroy
-  has_many :games, :dependent => :destroy
+  has_many :schedulers, dependent: :destroy
+  has_many :games, dependent: :destroy
 
   field :name
   field :description
   field :version
-  field :configuration, :type => Hash, :default => {}
+  field :configuration, type: Hash, default: {}
   field :email
-  
+
   validates :email, presence: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i, message: 'does not match the expected format' }
-  validates :name, :presence => true, :format => {:with => /\A\w+\z/, :message => 'can contain only letters, numbers, and underscores'}
-  validates :version, :presence => true, :uniqueness => { :scope => :name }
-  before_validation(:if => :simulator_source_changed?){ FileUtils.rm_rf location }
-  validate :simulator_setup, :if => :simulator_source_changed?
+  validates :name, presence: true, format: { with: /\A\w+\z/, message: 'can contain only letters, numbers, and underscores'}
+  validates :version, presence: true, uniqueness: { scope: :name }
+  before_validation(if: :simulator_source_changed?){ FileUtils.rm_rf location }
+  validate :simulator_setup, if: :simulator_source_changed?
 
   def simulator_setup
     begin
@@ -67,7 +67,7 @@ class Simulator
     super
     profiles.with_role_and_strategy(role_name, strategy_name).destroy_all
   end
-  
+
   def remove_role(role_name)
     schedulers.each do |scheduler|
       scheduler.remove_role(role_name)
