@@ -6,22 +6,22 @@ EgtaOnline::Application.routes.draw do
 
   namespace :api do
     namespace :v3 do
-      resources :generic_schedulers, :except => ["new", "edit"] do
+      resources :generic_schedulers, except: ["new", "edit"] do
         member do
           post :add_profile, :remove_profile, :add_role, :remove_role
         end
       end
-      resources :simulators, :games, :only => [:show, :index] do
+      resources :simulators, :games, only: [:show, :index] do
         member do
           post :add_strategy, :remove_strategy, :add_role, :remove_role
         end
       end
-      resources :profiles, :only => :show
+      resources :profiles, only: :show
     end
   end
 
-  resources :profiles, :only => :show
-  resources :simulations, :only => [:index, :show]
+  resources :profiles, only: :show
+  resources :simulations, only: [:index, :show]
   resources :schedulers do
     collection do
       post :update_configuration
@@ -39,7 +39,7 @@ EgtaOnline::Application.routes.draw do
       post :update_configuration
     end
   end
-  
+
   resources :generic_schedulers do
     member do
       post :add_role, :remove_role
@@ -48,7 +48,7 @@ EgtaOnline::Application.routes.draw do
       post :update_configuration
     end
   end
-  
+
   resources :game_schedulers, :hierarchical_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
@@ -57,7 +57,7 @@ EgtaOnline::Application.routes.draw do
       post :update_configuration
     end
   end
-  
+
   resources :games do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role, :calculate_cv_coefficients
@@ -65,7 +65,7 @@ EgtaOnline::Application.routes.draw do
     collection do
       post :update_configuration
     end
-    resources :features, :only => [:create, :destroy]
+    resources :features, only: [:create, :destroy]
   end
 
   resources :simulators do
@@ -73,9 +73,9 @@ EgtaOnline::Application.routes.draw do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end
   end
-  
-  root :to => 'high_voltage/pages#show', :id => 'home'
+
+  root to: 'high_voltage/pages#show', id: 'home'
   authenticate :user do
-    mount Resque::Server, :at => "/background_workers"
+    mount Resque::Server, at: "/background_workers"
   end
 end

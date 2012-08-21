@@ -1,6 +1,6 @@
 class SampleRecordsToSymmetryGroups < Mongoid::Migration
   def self.up
-    Simulator.where(:_id => '4f60d65a4a98060bec000002').destroy_all
+    Simulator.where(_id: '4f60d65a4a98060bec000002').destroy_all
     profiles = Profile.where(:sample_count.gt => 0, :sample_records.ne => nil).limit(100)
     while profiles.count != 0
       puts profiles.count

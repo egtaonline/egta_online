@@ -1,10 +1,7 @@
 class StrategyRemover
   @queue = :profile_actions
   def self.perform(scheduler_id)
-    scheduler = Scheduler.find(scheduler_id) rescue nil
-    if scheduler != nil
-      names = scheduler.profile_space
-      Profile.where(:scheduler_ids => scheduler.id, :assignment.nin => names).pull(:scheduler_ids, scheduler.id)
-    end
+    scheduler = Scheduler.find(scheduler_id)
+    scheduler.remove_self_from_profiles(scheduler.profiles.where(:assignment.nin => scheduler.profile_space))
   end
 end

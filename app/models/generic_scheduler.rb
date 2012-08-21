@@ -5,7 +5,7 @@ class GenericScheduler < Scheduler
 
   def required_samples(profile)
     val = sample_hash[profile.id.to_s]
-    val == nil ? 0 : val
+    val ? val : 0
   end
 
   def add_role(role_name, count)
@@ -14,17 +14,11 @@ class GenericScheduler < Scheduler
 
   def remove_role(role_name)
     roles.where(name: role_name).destroy_all
-    Profile.where(scheduler_ids: self.id, assignment: Regexp.new("#{role_name}: ")).pull(:scheduler_ids, self.id)
-    hash = {}
-    Profile.where(scheduler_ids: self.id).each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
-    self.update_attribute(:sample_hash, hash)
+    remove_self_from_profiles(Profile.with_scheduler(self).with_role(role_name))
   end
 
   def remove_strategy(role, strategy_name)
-    Profile.where(scheduler_ids: self.id).with_role_and_strategy(role, strategy_name).pull(:scheduler_ids, self.id)
-    hash = {}
-    Profile.where(scheduler_ids: self.id).each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
-    self.update_attribute(:sample_hash, hash)
+    remove_self_from_profiles(Profile.with_scheduler(self).with_role_and_strategy(role, strategy_name))
   end
 
   def add_profile(assignment, sample_count=self["default_samples"])
@@ -49,11 +43,16 @@ class GenericScheduler < Scheduler
   end
 
   def remove_profile(profile_id)
-    Profile.find(profile_id).pull(:scheduler_ids, self.id)
-    hash = {}
-    Profile.where(scheduler_ids: self.id).each {|p| hash[p.id.to_s] = self.sample_hash[p.id.to_s]}
-    self.sample_hash = hash
-    self.save
+    remove_self_from_profiles(Profile.where(_id: profile_id))
+  end
+
+  def remove_self_from_profiles(profiles_to_remove)
+    if profiles_to_remove.count != 0
+      super
+      hash = {}
+      profiles.each{ |profile| hash[profile.id.to_s] = self.sample_hash[profile.id.to_s] }
+      self.update_attribute(:sample_hash, hash)
+    end
   end
 
   protected
@@ -61,7 +60,7 @@ class GenericScheduler < Scheduler
   def add_strategies_to_game(game)
     roles.each do |role|
       game.add_role(role.name, role.count)
-      Profile.where(scheduler_id: self.id).collect{ |profile| profile.strategies_for(role.name) }.flatten.uniq.each do |strategy|
+      Profile.with_scheduler(self).collect{ |profile| profile.strategies_for(role.name) }.flatten.uniq.each do |strategy|
         game.add_strategy(role.name, strategy)
       end
     end

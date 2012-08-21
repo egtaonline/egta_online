@@ -17,7 +17,7 @@ class Game
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
   def profiles
-    query_hash = { simulator_id: self.simulator_id, configuration: self.configuration, size: self.size, sample_count: { '$gt' => 1 }, assignment: strategy_regex }
+    query_hash = { simulator_id: self.simulator_id, configuration: self.configuration, size: self.size, sample_count: { '$gt' => 0 }, assignment: strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count }
     Profile.collection.find(query_hash)
   end

@@ -47,11 +47,6 @@ class GamesController < ApplicationController
     respond_with(game)
   end
 
-  def from_scheduler
-    @game = Game.new_game_from_scheduler(params[:scheduler_id])
-    respond_with(@game)
-  end
-
   def calculate_cv_coefficients
     game.calculate_cv_coefficients
     respond_with(game)

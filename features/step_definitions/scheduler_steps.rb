@@ -76,19 +76,11 @@ Then /^I should have (\d+) profile to be scheduled$/ do |arg1|
   ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)
 end
 
-Then /^that game should match the game scheduler$/ do
-  @game = Game.last
-  @game_scheduler = Scheduler.last
-  @game.configuration.should == @game_scheduler.configuration
-  Profile.where(game_ids: @game.id).order_by(:name).to_a.should == Profile.where(scheduler_ids: @game_scheduler.id).order_by(:name).to_a
-  Profile.count.should == @game.profile_ids.size
-end
-
 Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
   @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
-  @profile_count = Profile.where(scheduler_ids: @scheduler.id).count
+  @profile_count = Profile.with_scheduler(@scheduler).count
   @profile_count.should_not eql(0)
 end
 
@@ -159,7 +151,7 @@ Given /^the simulator has a profile that does not match the scheduler with assig
 end
 
 Given /^its profiles have been sampled$/ do
-  Profile.where(scheduler_ids: @scheduler.id).update_all(sample_count: 1)
+  Profile.with_scheduler(@scheduler).update_all(sample_count: 1)
 end
 
 When /^I visit that scheduler's page$/ do

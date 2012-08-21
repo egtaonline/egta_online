@@ -6,5 +6,5 @@
       %th Requested samples
       %th= sortable "sample_count"
   %tbody
-    =render :partial => "profiles/profile", :collection => profiles
-= paginate(profiles, :remote => true)
+    =render partial: "profiles/profile", collection: profiles
+= paginate(profiles, remote: true)

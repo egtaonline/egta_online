@@ -26,6 +26,10 @@ class Simulator
   before_validation(if: :simulator_source_changed?){ FileUtils.rm_rf location }
   validate :simulator_setup, if: :simulator_source_changed?
 
+  def find_or_create_profile(configuration, assignment)
+    profiles.find_or_create_by(configuration: configuration, assignment: assignment)
+  end
+
   def simulator_setup
     begin
       system("unzip -uqq #{simulator_source.path} -d #{location}")

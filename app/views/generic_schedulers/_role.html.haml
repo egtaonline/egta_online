@@ -1,4 +1,4 @@
 %tr
   %td= role.name
   %td= role.count
-  %td= link_to 'Remove Role', url_for(:action => :remove_role, :role => role.name), :method => :post, :id => "remove-#{role.name}", :class => 'btn btn-danger'
+  %td= link_to 'Remove Role', url_for(action: :remove_role, role: role.name), method: :post, id: "remove-#{role.name}", class: 'btn btn-danger'

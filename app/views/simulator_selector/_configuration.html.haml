@@ -2,6 +2,6 @@
   .control-group.string.required
     %abbr{"title"=>"required"}
       *
-    = label :selector, "configuration[#{x}]", x.humanize, :class => "string required control-label"
+    = label :selector, "configuration[#{x}]", x.humanize, class: "string required control-label"
     .controls
-      = text_field :selector, "configuration[#{x}]", :value => y, :class => "string required"
+      = text_field :selector, "configuration[#{x}]", value: y, class: "string required"

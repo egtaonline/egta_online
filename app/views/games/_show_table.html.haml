@@ -2,12 +2,10 @@
   %h3 Game Configuration
   = u.attribute :name
   = u.attribute :size
-  = u.attribute :simulator_fullname, :label => "Simulator"
+  = u.attribute :simulator_fullname, label: "Simulator"
   %h3 Simulator Configuration
-  = render :partial => "parameter", :collection => game.configuration.to_a
-= link_to "Edit Game", edit_game_path(game.id), :class => 'btn btn-primary'
-- if game.roles.size == 1 && game.roles.first.name == "All"
-  = link_to "Download EGAT XML", url_for(:action => "show", :format => "xml"), :class => 'btn btn-primary'
-= link_to "Download JSON", url_for(:action => "show", :format => "json"), :class => 'btn btn-primary'
-= link_to "Download JSON with Aggregated Observations", url_for(:action => "show", :format => "json", :granularity => 'observation'), :class => 'btn btn-primary'
-= link_to "Download JSON with Unaggregated Observations", url_for(:action => "show", :format => "json", :granularity => 'full'), :class => 'btn btn-primary'
+  = render partial: "parameter", collection: game.configuration.to_a
+= link_to "Edit Game", edit_game_path(game.id), class: 'btn btn-primary'
+= link_to "Download JSON", url_for(action: "show", format: "json"), class: 'btn btn-primary'
+= link_to "Download JSON with Aggregated Observations", url_for(action: "show", format: "json", granularity: 'observation'), class: 'btn btn-primary'
+= link_to "Download JSON with Unaggregated Observations", url_for(action: "show", format: "json", granularity: 'full'), class: 'btn btn-primary'

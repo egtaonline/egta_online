@@ -24,6 +24,14 @@ class Scheduler
   validates_numericality_of :process_memory, :time_per_sample, :nodes, only_integer: true
   validates_numericality_of :samples_per_simulation, only_integer: true, greater_than: 0
 
+  def find_or_create_profile(assignment)
+    profile = simulator.find_or_create_profile(configuration, assignment)
+    if profile.valid?
+      profile.add_to_set(:scheduler_ids, id)
+      profile.try_scheduling
+    end
+  end
+
   def create_game_to_match
     game = Game.create!(name: name, size: size, simulator_id: simulator_id, configuration: configuration)
     add_strategies_to_game(game)
@@ -36,6 +44,10 @@ class Scheduler
   end
 
   def profiles
-    Profile.where(scheduler_ids: self.id)
+    Profile.with_scheduler(self)
+  end
+
+  def remove_self_from_profiles(profiles_to_remove)
+    profiles_to_remove.pull(:scheduler_ids, id)
   end
 end
