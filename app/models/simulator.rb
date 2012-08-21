@@ -77,6 +77,6 @@ class Simulator
       scheduler.remove_role(role_name)
     end
     super
-    profiles.where(assignment: Regexp.new("#{role_name}: ")).destroy_all
+    profiles.with_role(role_name).destroy_all
   end
 end

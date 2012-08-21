@@ -6,24 +6,9 @@ class HierarchicalDeviationScheduler < DeviationScheduler
   validate :divisibility
 
   def profile_space
-    if roles.reduce(0){|sum, r| sum + r.count}*agents_per_player != size || roles.collect{|r| r.strategies.count}.min < 1
-      return []
-    end
-    first_ar = nil
-    all_other_ars = []
-    roles.each do |role|
-      combinations = role.strategies.repeated_combination(role.count)
-      if first_ar == nil
-        first_ar = combinations.collect{|c| [role.name].concat(c) }
-      else
-        all_other_ars << combinations.collect{|c| [role.name].concat(c) }
-      end
-    end
-    deviations = {}
-    deviating_roles.each do |role|
-      deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.count-1).to_a)
-      deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
-    end
+    return [] if space_undefined?
+    first_ar, all_other_ars = arrays_to_cross
+    deviations = get_deviations
     profs = []
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
       first_ar.concat(deviations[roles.first.name])

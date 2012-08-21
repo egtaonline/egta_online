@@ -38,11 +38,7 @@ class DeviationScheduler < GameScheduler
   def profile_space
     return [] if invalid_role_partition?
     first_rc, all_other_rcs = subgame_combinations
-    deviations = {}
-    deviating_roles.each do |role|
-      deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.count-1).to_a)
-      deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
-    end
+    deviations = get_deviations
     return first_rc.concat(deviations[roles.first.name]).collect{ |r| format_role(r) } if single_role?
     profs = []
     first_rc.product(*all_other_rcs).each do |prof|
@@ -66,5 +62,14 @@ class DeviationScheduler < GameScheduler
   def add_strategies_to_game(game)
     super
     deviating_roles.each{ |r| r.strategies.each{ |s| add_strategy(r.name, s) } }
+  end
+
+  def get_deviations
+    deviations = {}
+    deviating_roles.each do |role|
+      deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.count-1).to_a)
+      deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
+    end
+    deviations
   end
 end
