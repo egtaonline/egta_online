@@ -41,22 +41,17 @@ gem "show_for", :git => "git://github.com/plataformatec/show_for.git"
 gem 'high_voltage'
 gem "capistrano"
 gem 'draper'
-
-group :production do
-  gem 'unicorn'
-end
+gem 'thin'
 
 group :development do
   gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
-  gem 'rvm-capistrano'
-  gem 'thin'
   gem 'quiet_assets'
+  gem 'debugger'
 end
 
 group :test, :development do
   gem "rspec-rails"
   gem 'spork', '~> 1.0rc'
-  gem 'debugger'
 end
 
 group :test do
@@ -71,7 +66,6 @@ group :test do
   gem "guard-rspec"
   gem "guard-cucumber"
   gem "guard-spork"
-  
   gem "resque_spec"
   gem "mongoid-rspec"
 end
