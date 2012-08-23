@@ -9,6 +9,7 @@ class SimulationStatusService
     if output != "" && output != nil
       output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
     end
+    puts parsed_output
     parsed_output
   end
 end
