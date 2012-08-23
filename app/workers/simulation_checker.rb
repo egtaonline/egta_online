@@ -3,8 +3,6 @@ class SimulationChecker
   @queue = :nyx_queuing
 
   def self.perform
-    Simulation.active.each do |simulation|
-      Backend.update_simulation(simulation)
-    end
+    Backend.update_simulations
   end
 end

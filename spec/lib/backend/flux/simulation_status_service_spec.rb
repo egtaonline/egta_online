@@ -5,21 +5,22 @@ describe SimulationStatusService do
     let(:simulation){ double(job_id: 123456) }
     let(:status_connection){ double('status connection') }
     let(:simulation_status_service){ SimulationStatusService.new(status_connection) }
-    
+
     context 'job present' do
       before do
-        status_connection.should_receive(:exec!).with("qstat -a | grep 123456 | grep egta-").and_return("123456.nyx.engi     bcassell flux     egta-epp_sim             26276   --   --    --  24:00 Q -- ")
+        status_connection.should_receive(:exec!).with("qstat -a | grep egta-").and_return("123456.nyx.engi     bcassell flux     egta-epp_sim             26276   --   --    --  24:00 Q -- \n123457.nyx.engi     bcassell flux     egta-epp_sim             26278   --   --    --  24:00 C -- ")
       end
-      
-      it{ simulation_status_service.get_status(simulation).should eql("Q") }
+
+      it{ simulation_status_service.get_statuses['123456'].should eql("Q") }
+      it{ simulation_status_service.get_statuses['123457'].should eql("C") }
     end
-    
+
     context 'job absent' do
       before do
-        status_connection.should_receive(:exec!).with("qstat -a | grep 123456 | grep egta-").and_return(nil)
+        status_connection.should_receive(:exec!).with("qstat -a | grep egta-").and_return(nil)
       end
-      
-      it{ simulation_status_service.get_status(simulation).should eql(nil) }
+
+      it{ simulation_status_service.get_statuses['123456'].should eql(nil) }
     end
   end
 end

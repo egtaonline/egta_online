@@ -13,11 +13,11 @@ module Backend
   def self.reset
     self.configuration ||= Configuration.new
   end
-  
+
   def self.prepare_simulator(simulator)
-    backend_implementation.prepare_simulator(simulator) 
+    backend_implementation.prepare_simulator(simulator)
   end
-  
+
   def self.prepare_simulation(simulation, directory="#{Rails.root}/tmp/simulations")
     backend_implementation.prepare_simulation(simulation, directory)
   end
@@ -26,8 +26,8 @@ module Backend
     backend_implementation.schedule_simulation(simulation)
   end
 
-  def self.update_simulation(simulation)
-    backend_implementation.update_simulation(simulation)    
+  def self.update_simulations
+    backend_implementation.update_simulations
   end
 
   class Configuration
@@ -39,9 +39,9 @@ module Backend
       @queue_quantity = 30
     end
   end
-  
+
   private
-  
+
   def self.backend_implementation
     self.configuration.backend_implementation
   end

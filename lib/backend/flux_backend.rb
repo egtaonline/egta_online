@@ -4,7 +4,7 @@ Dir["#{Rails.root}/lib/backend/flux/*"].each {|file| require file }
 
 class FluxBackend
   attr_accessor :flux_active_limit
-  
+
   def setup_connections
     @flux_proxy = DRbObject.new_with_uri('druby://localhost:30000')
     @submission_service = SubmissionService.new(@flux_proxy)
@@ -12,12 +12,14 @@ class FluxBackend
     @simulation_status_resolver = SimulationStatusResolver.new(@flux_proxy)
     @status_service = SimulationStatusService.new(@flux_proxy)
   end
-  
-  def update_simulation(simulation)
-    status = @status_service.get_status(simulation)
-    @simulation_status_resolver.act_on_status(status, simulation)
+
+  def update_simulations
+    status = @status_service.get_statuses
+    Simulation.active.each do |simulation|
+      @simulation_status_resolver.act_on_status(status[simulation.job_id], simulation)
+    end
   end
-  
+
   def prepare_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
     if (flux_count+1 <= flux_active_limit || cac_count > flux_count/6)
       simulation['flux'] = true
@@ -25,7 +27,7 @@ class FluxBackend
     end
     PbsWrapper.create_wrapper(simulation, src_dir)
   end
-  
+
   def schedule_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
     begin
       response = @flux_proxy.upload!("#{src_dir}/#{simulation.number}", "#{Yetting.deploy_path}/simulations", recursive: true)
@@ -38,7 +40,7 @@ class FluxBackend
       simulation.fail "could not complete the transfer to remote host.  Speak to Ben to resolve."
     end
   end
-  
+
   def prepare_simulator(simulator)
     @simulator_prep_service.cleanup_simulator(simulator)
     begin
@@ -52,13 +54,13 @@ class FluxBackend
     end
     @simulator_prep_service.prepare_simulator(simulator)
   end
-  
+
   private
-  
+
   def flux_count
     Simulation.where(active: true, flux: true).count
   end
-  
+
   def cac_count
     Simulation.where(active: true, flux: false).count
   end
