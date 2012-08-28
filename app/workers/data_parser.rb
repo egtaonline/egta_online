@@ -3,7 +3,7 @@ class DataParser
   @queue = :nyx_actions
 
   def self.perform(number, location="#{Rails.root}/tmp/data/")
-    simulation = Simulation.where(number: number).first
+    simulation = Simulation.find(number)
     files = Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }
     processor = ObservationProcessor.new(location)
     processor.process_files(simulation, files)

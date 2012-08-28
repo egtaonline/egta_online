@@ -16,7 +16,7 @@ class SimulationPrepService
   private
 
   def create_folder(simulation)
-    FileUtils.mkdir("#{@directory}/#{simulation.number}")
+    FileUtils.mkdir("#{@directory}/#{simulation.id}")
   end
 
   def generate_spec(simulation)

@@ -7,6 +7,6 @@ class SpecGenerator
       symmetry_group.count.times{ spec[:assignment][symmetry_group.role] << symmetry_group.strategy }
     end
     spec[:configuration] = profile.configuration
-    Oj.to_file("#{directory}/#{simulation.number}/simulation_spec.json", spec, indent: 2)
+    Oj.to_file("#{directory}/#{simulation.id}/simulation_spec.json", spec, indent: 2)
   end
 end

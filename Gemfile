@@ -23,6 +23,8 @@ gem "resque-loner"
 # Error reporting
 gem "airbrake"
 
+gem 'celluloid'
+
 # Database
 gem 'mongoid'
 gem 'mongoid_rails_migrations', :github => 'acechase/mongoid_rails_migrations'
@@ -30,7 +32,6 @@ gem 'mongoid-sequence', :github => 'cblock/mongoid-sequence'
 gem "state_machine"
 gem "devise"
 gem "yettings"
-gem "foreman"
 gem "net-ssh", :require => 'net/ssh'
 gem "net-scp", :require => 'net/scp'
 gem "kaminari"
@@ -43,10 +44,13 @@ gem "capistrano"
 gem 'draper'
 gem 'thin'
 
+group :production do
+  gem "foreman"
+end
+
 group :development do
   gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
   gem 'quiet_assets'
-  gem 'debugger'
 end
 
 group :test, :development do

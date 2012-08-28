@@ -17,8 +17,8 @@ class Simulation
   field :error_message, default: ''
   field :created_at
   field :profile_assignment
-  field :number, type: Integer
-  sequence :number
+  field :_id, type: Integer
+  sequence :_id
   index({ state: 1 })
 
   scope :pending, where(state: 'pending')

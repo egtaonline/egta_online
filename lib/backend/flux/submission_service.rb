@@ -5,7 +5,7 @@ class SubmissionService
 
   def submit(simulation)
     begin
-      job_return = @login_connection.exec!("qsub -V -r n #{Yetting.deploy_path}/simulations/#{simulation.number}/wrapper")
+      job_return = @login_connection.exec!("qsub -V -r n #{Yetting.deploy_path}/simulations/#{simulation.id}/wrapper")
       if job_return != nil
         job_return = job_return.split(".").first
         if job_return =~ /\A\d+\z/
