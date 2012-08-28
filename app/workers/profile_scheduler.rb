@@ -1,5 +1,4 @@
 class ProfileScheduler
-  include Resque::Plugins::UniqueJob
   @queue = :profile_actions
 
   def self.perform(profile_id)

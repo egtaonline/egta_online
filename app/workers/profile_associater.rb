@@ -18,7 +18,7 @@ class ProfileAssociater
       profile_ids.each { |pid| Resque.enqueue_in(5.minutes, ProfileScheduler, pid) }
     end
   end
-  
+
   def self.new_assignments(scheduler)
     assignments = scheduler.profile_space
     scheduler.profiles -= scheduler.profiles.where(:assignment.nin => assignments)

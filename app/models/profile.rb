@@ -2,7 +2,7 @@
 
 class Profile
   include Mongoid::Document
-  
+
   embeds_many :symmetry_groups
   embeds_many :features_observations
 
@@ -13,9 +13,9 @@ class Profile
   field :assignment
   field :sample_count, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
-  
+
   attr_accessible :assignment, :configuration
-  
+
   # TODO: find the right indexes
   index ([[:simulator_id,  Mongo::ASCENDING], [:configuration, Mongo::ASCENDING], [:size, Mongo::ASCENDING]])
   index :sample_count
@@ -26,11 +26,11 @@ class Profile
   delegate :fullname, :to => :simulator, :prefix => true
 
   after_create :find_games
-  
+
   def strategies_for(role_name)
     symmetry_groups.where(role: role_name).collect{ |s| s.strategy }.uniq
   end
-  
+
   def find_games
     Resque.enqueue(GameAssociater, id)
   end
@@ -42,11 +42,11 @@ class Profile
   def create_player(role, strategy, payoff, pfeatures)
     symmetry_groups.where(role: role, strategy: strategy).first.players.create(payoff: payoff.to_f, features: pfeatures)
   end
-  
+
   def scheduled?
-    simulations.active.count > 0
+    simulations.scheduled.count > 0
   end
-  
+
   def features
     fhash = Hash.new{ |hash,key| hash[key] = [] }
     features_observations.each do |f|
