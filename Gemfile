@@ -17,7 +17,6 @@ platform :jruby do
   gem 'jruby-openssl'
 end
 gem "haml-rails"
-gem 'rabl'
 
 # JS framework
 gem 'jquery-rails'

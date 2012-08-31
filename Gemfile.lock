@@ -221,9 +221,6 @@ GEM
     posix-spawn (0.3.6)
     quiet_assets (1.0.0)
       rails (~> 3.1)
-    rabl (0.7.0)
-      activesupport (>= 2.3.14)
-      multi_json (~> 1.0)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -379,7 +376,6 @@ DEPENDENCIES
   mongoid_rails_migrations!
   oj
   quiet_assets
-  rabl
   rack-perftools_profiler
   rails (~> 3.2)
   rb-fsevent
