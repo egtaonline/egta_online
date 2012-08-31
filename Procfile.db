@@ -1,3 +1,0 @@
-mongo: sudo mongod
-redis: sudo redis-server
-mongoose: python /home/deployment/sleepy.mongoose/httpd.py

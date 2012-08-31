@@ -1,3 +1,3 @@
 %tr
   %td= strategy
-  %td= link_to 'Remove Strategy', url_for(:action => :remove_strategy, :role => role.name, :strategy_name => strategy), :data => { :confirm => 'Are you sure?  Deleting this strategy will destroy all profiles that include it.  This can lead to data loss!' }, :method => :post, :class => 'btn btn-mini btn-warning'
+  %td= link_to 'Remove Strategy', url_for(action: :remove_strategy, role: role.name, strategy_name: strategy), data: { confirm: 'Are you sure?  Deleting this strategy will destroy all profiles that include it.  This can lead to data loss!' }, method: :post, class: 'btn btn-mini btn-warning'

@@ -36,11 +36,11 @@ module EgtaOnline
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
     config.mongoid.preload_models = false
-    config.mongoid.observers = :game_observer, :player_observer, :profile_observer, :scheduler_observer
+    config.mongoid.observers = :game_observer, :profile_observer, :scheduler_observer
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     config.generators do |g|
-      g.test_framework :rspec, :fixture => true
+      g.test_framework :rspec, fixture: true
       g.fixture_replacement :fabrication
       g.template_engine :haml
     end

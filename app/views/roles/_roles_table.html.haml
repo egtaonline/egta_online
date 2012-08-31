@@ -6,9 +6,9 @@
       %th Count
       %th Strategy Set
   %tbody
-    =render :partial => "roles/role", :collection => role_owner.roles, :locals => {:role_owner => role_owner}
+    =render partial: "roles/role", collection: role_owner.roles, locals: {role_owner: role_owner}
 -if role_owner.unassigned_player_count > 0
-  =form_tag url_for(:action=> "add_role", :id => role_owner.id), :method=>:post do
+  =form_tag url_for(action: "add_role", id: role_owner.id), method: :post do
     = select_tag "role", options_for_select(role_owner.available_roles)
     = number_field_tag "role_count", role_owner.unassigned_player_count, in: 1..role_owner.unassigned_player_count
-    = submit_tag "Add Role", :class => 'btn btn-primary'
+    = submit_tag "Add Role", class: 'btn btn-primary'

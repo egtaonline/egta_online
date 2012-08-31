@@ -1,4 +1,3 @@
-require "util/sequence"
 require 'util/assignment_sorting'
 require 'util/object_numerism'
 require 'backend/spec_generator'

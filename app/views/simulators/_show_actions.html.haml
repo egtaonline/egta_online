@@ -5,7 +5,7 @@
       %th Name
       %th Strategy Set
   %tbody
-    =render :partial => "role", :collection => simulator.roles
-    =form_tag url_for(:action=> "add_role", :id => simulator.id), :method=>:post do
+    =render partial: "role", collection: simulator.roles
+    =form_tag url_for(action: "add_role", id: simulator.id), method: :post do
       %td= text_field_tag :role
-      %td= submit_tag "Add Role", :class => 'btn btn-primary'
+      %td= submit_tag "Add Role", class: 'btn btn-primary'

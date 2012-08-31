@@ -4,10 +4,10 @@ class GameScheduler < Scheduler
   validates_numericality_of :default_samples, :size, greater_than: 0
   validates_presence_of :size
 
-  def required_samples(profile_id)
-    (self.profiles.find(profile_id) rescue nil) == nil ? 0 : default_samples
+  def required_samples(profile)
+    profile.scheduler_ids.include?(self.id) ? default_samples : 0
   end
-  
+
   def profile_space
     return [] if invalid_role_partition?
     first_rc, all_other_rcs = subgame_combinations
@@ -19,22 +19,22 @@ class GameScheduler < Scheduler
     end
     profs
   end
-  
+
   protected
-  
+
   def format_role(role)
     strats = role.drop(1)
     "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
   end
-  
+
   def invalid_role_partition?
     (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
   end
-  
+
   def single_role?
     (roles.size == 1) | (roles.map{ |r| r.strategies.count }.reduce(:+) == roles.first.strategies.count)
   end
-  
+
   def subgame_combinations
     rcs = roles.collect{ |role| role.strategies.repeated_combination(role.count).collect{|c| [role.name].concat(c) } }
     return rcs[0], rcs.drop(1)

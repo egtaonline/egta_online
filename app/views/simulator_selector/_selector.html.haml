@@ -2,8 +2,8 @@
   %p Cannot construct this object without a simulator defined
 -else
   .control-group
-    = label :selector, :simulator_id, :class =>"control-label"
+    = label :selector, :simulator_id, class: "control-label"
     - simulators = Simulator.all.to_a
     .controls
       = collection_select :selector, :simulator_id, simulators, :id, :fullname
-  #param= render :partial => "simulator_selector/configuration", :object => simulators.first.configuration
+  #param= render partial: "simulator_selector/configuration", object: simulators.first.configuration

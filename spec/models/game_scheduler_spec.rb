@@ -9,11 +9,11 @@ describe GameScheduler do
       let!(:profile2){ Fabricate(:profile, :assignment => 'All: 2 B', :simulator => scheduler.simulator) }
       
       before do
-        scheduler.profiles << profile
+        profile.schedulers << scheduler
       end
       
-      it {scheduler.required_samples(profile.id).should eql(scheduler.default_samples)}
-      it {scheduler.required_samples(profile2.id).should eql(0)}
+      it {scheduler.required_samples(profile).should eql(scheduler.default_samples)}
+      it {scheduler.required_samples(profile2).should eql(0)}
     end
     
     describe '#profile_space' do

@@ -76,20 +76,11 @@ Then /^I should have (\d+) profile to be scheduled$/ do |arg1|
   ProfileScheduler.should have_scheduled(Profile.last.id).in(5 * 60)
 end
 
-Then /^that game should match the game scheduler$/ do
-  @game = Game.last
-  @game_scheduler = Scheduler.last
-  @game.configuration.should == @game_scheduler.configuration
-  Profile.where(:_id.in => @game.profile_ids).order_by(:name).to_a.should == Profile.where(:_id.in => @game_scheduler.profile_ids).order_by(:name).to_a
-  Profile.count.should == @game.profile_ids.size
-end
-
 Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
   @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
-  @scheduler.reload
-  @profile_count = Profile.count
+  @profile_count = Profile.with_scheduler(@scheduler).count
   @profile_count.should_not eql(0)
 end
 
@@ -160,7 +151,7 @@ Given /^the simulator has a profile that does not match the scheduler with assig
 end
 
 Given /^its profiles have been sampled$/ do
-  @scheduler.profiles.each { |p| p.update_attribute(:sample_count, 1) }
+  Profile.with_scheduler(@scheduler).update_all(sample_count: 1)
 end
 
 When /^I visit that scheduler's page$/ do
@@ -255,7 +246,7 @@ When /^I remove the deviation strategy (\w+) on role (\w+) from the scheduler$/ 
 end
 
 Then /^the scheduler should have (\d+) profiles$/ do |count|
-  @scheduler.reload.profile_ids.count.should eql(count.to_i)
+  @scheduler.profiles.count.should eql(count.to_i)
 end
 
 When /^I remove the role (\w+) from the scheduler$/ do |role|

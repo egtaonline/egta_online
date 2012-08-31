@@ -3,11 +3,11 @@ require 'spec_helper'
 describe PbsWrapper do
   describe 'create_wrapper' do
     let(:scheduler){ double(simulator: double(name: 'fake', fullname: 'fake-totally', email: "test@test.com"), process_memory: 1000, time_per_sample: 300) }
-    
+
     context 'flux' do
-      let(:simulation){ double(flux: true, scheduler: scheduler, scheduler_nodes: 1, number: 3, size: 30) }
+      let(:simulation){ double(flux: true, scheduler: scheduler, scheduler_nodes: 1, _id: 3, id: 3, size: 30) }
       let(:src_dir){ 'tmp/simulations' }
-    
+
       before do
         document = <<HEREDOC
 #!/bin/bash
@@ -31,14 +31,14 @@ rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")
         f.should_receive(:write).with(document)
-        File.should_receive(:open).with("#{src_dir}/#{simulation.number}/wrapper", 'w').and_yield(f)
+        File.should_receive(:open).with("#{src_dir}/#{simulation.id}/wrapper", 'w').and_yield(f)
       end
-      
+
       it{ PbsWrapper.create_wrapper(simulation, src_dir) }
     end
-    
+
     context 'cac' do
-      let(:simulation){ double(flux: false, scheduler: scheduler, scheduler_nodes: 1, number: 3, size: 30) }
+      let(:simulation){ double(flux: false, scheduler: scheduler, scheduler_nodes: 1, _id: 3, id: 3, size: 30) }
       let(:src_dir){ 'tmp/simulations' }
 
       before do
@@ -64,14 +64,14 @@ rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")
         f.should_receive(:write).with(document)
-        File.should_receive(:open).with("#{src_dir}/#{simulation.number}/wrapper", 'w').and_yield(f)
+        File.should_receive(:open).with("#{src_dir}/#{simulation.id}/wrapper", 'w').and_yield(f)
       end
 
       it{ PbsWrapper.create_wrapper(simulation, src_dir) }
     end
-    
+
     context 'multi-node' do
-      let(:simulation){ double(flux: false, scheduler: scheduler, scheduler_nodes: 2, number: 3, size: 30) }
+      let(:simulation){ double(flux: false, scheduler: scheduler, scheduler_nodes: 2, _id: 3, id: 3, size: 30) }
       let(:src_dir){ 'tmp/simulations' }
 
       before do
@@ -97,7 +97,7 @@ rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")
         f.should_receive(:write).with(document)
-        File.should_receive(:open).with("#{src_dir}/#{simulation.number}/wrapper", 'w').and_yield(f)
+        File.should_receive(:open).with("#{src_dir}/#{simulation.id}/wrapper", 'w').and_yield(f)
       end
 
       it{ PbsWrapper.create_wrapper(simulation, src_dir) }

@@ -3,8 +3,8 @@
     %tr
       %th= sortable "state"
       %th= sortable "profile_name", "Profile"
-      %th= sortable "number"
+      %th= sortable "_id", "Folder Number"
       %th= sortable "job_id"
   %tbody
     =render simulations
-=paginate simulations, :remote => true
+=paginate simulations, remote: true

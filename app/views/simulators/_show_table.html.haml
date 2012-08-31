@@ -3,6 +3,6 @@
   = u.attribute :name
   = u.attribute :email
   = u.attribute :version
-  = u.attribute :description, :if_blank => "None"
-  = render :partial => "schedulers/parameter", :collection => simulator.configuration.to_a
-= link_to "Edit Simulator", edit_simulator_path(simulator.id), :class => 'btn btn-primary'
+  = u.attribute :description, if_blank: "None"
+  = render partial: "schedulers/parameter", collection: simulator.configuration.to_a
+= link_to "Edit Simulator", edit_simulator_path(simulator.id), class: 'btn btn-primary'

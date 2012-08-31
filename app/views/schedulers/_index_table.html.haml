@@ -6,5 +6,5 @@
       %th= sortable("simulator_fullname", "Simulator")
       %th= sortable("active", "Active?")
   %tbody
-    =render :partial => "scheduler", :collection => schedulers
-=paginate schedulers, :remote => true
+    =render partial: "scheduler", collection: schedulers
+=paginate schedulers, remote: true

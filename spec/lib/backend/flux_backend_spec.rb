@@ -19,11 +19,11 @@ describe FluxBackend do
     end
 
     describe '#schedule_simulation' do
-      let(:simulation){ double(number: 3) }
+      let(:simulation){ double(_id: 3, id: 3) }
 
       before do
         submission_service.should_receive(:submit).with(simulation)
-        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.number}", "#{Yetting.deploy_path}/simulations", recursive: true).and_return("")
+        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.id}", "#{Yetting.deploy_path}/simulations", recursive: true).and_return("")
       end
 
       it { subject.schedule_simulation(simulation) }

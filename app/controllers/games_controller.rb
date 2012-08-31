@@ -1,15 +1,15 @@
 class GamesController < ApplicationController
   respond_to :html
-  before_filter :merge, :only => :create
-  
+  before_filter :merge, only: :create
+
   expose(:games){Game.order_by(params[:sort], params[:direction]).page(params[:page])}
   expose(:game)
-  
+
   def create
     game.save
     respond_with(game)
   end
-  
+
   def update
     game.save
     respond_with(game)
@@ -19,7 +19,7 @@ class GamesController < ApplicationController
     game.destroy
     respond_with(game)
   end
-  
+
   def update_configuration
     @simulator = Simulator.find(params[:simulator_id])
     respond_to do |format|
@@ -41,15 +41,10 @@ class GamesController < ApplicationController
     game.remove_role(params[:role])
     respond_with(game)
   end
-  
+
   def remove_strategy
     game.remove_strategy(params[:role], params[:strategy_name])
     respond_with(game)
-  end
-
-  def from_scheduler
-    @game = Game.new_game_from_scheduler(params[:scheduler_id])
-    respond_with(@game)
   end
 
   def calculate_cv_coefficients
@@ -60,14 +55,12 @@ class GamesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      # come back and speed up sample issue
-      format.xml { @profiles = game.display_profiles }
-      format.json { @object = game; @granularity = params[:granularity]; @granularity ||= "summary"; @adjusted = params[:adjusted]; render "api/v3/games/show" }
+      format.json { send_data GamePresenter.new(game).to_json(granularity: params[:granularity]), type: 'text/json', filename: "#{game.id}.json" }
     end
   end
-  
-  private 
-  
+
+  private
+
   def merge
     params[:game] = params[:game].merge(params[:selector])
   end
