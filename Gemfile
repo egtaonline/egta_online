@@ -29,11 +29,10 @@ gem 'celluloid'
 gem 'mongoid'
 gem 'mongoid_rails_migrations', :github => 'acechase/mongoid_rails_migrations'
 gem 'mongoid-sequence', :github => 'cblock/mongoid-sequence'
+
 gem "state_machine"
 gem "devise"
 gem "yettings"
-gem "net-ssh", :require => 'net/ssh'
-gem "net-scp", :require => 'net/scp'
 gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', :github => "jnicklas/carrierwave-mongoid", :branch => 'mongoid-3.0', :require => 'carrierwave/mongoid'
@@ -41,7 +40,6 @@ gem "simple_form"
 gem "show_for", :git => "git://github.com/plataformatec/show_for.git"
 gem 'high_voltage'
 gem "capistrano"
-gem 'draper'
 gem 'thin'
 
 group :production do

@@ -22,17 +22,6 @@ class Game
     Profile.collection.find(query_hash)
   end
 
-  def as_json(options={})
-    "{
-       \"id\": \"#{self.id}\",
-       \"name\": \"#{self.name}\",
-       \"simulator_fullname\": \"#{self.simulator_fullname}\",
-       \"configuration\": #{self.configuration},
-       \"roles\": #{self.roles.collect{ |role| "{ \"name\": \"#{role.name}\", \"strategies\": #{ role.strategies }, \"count\": #{role.count} }" }.join(", ") },
-       \"profiles\": #{profiles.select(sample_count: 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).inspect }
-    }"
-  end
-
   private
 
   def strategy_regex

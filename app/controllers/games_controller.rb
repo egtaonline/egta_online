@@ -55,7 +55,7 @@ class GamesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render text: game.profiles.select(sample_count: 1, 'symmetry_groups.role' => 1, 'symmetry_groups.strategy' => 1, 'symmetry_groups.count' => 1, 'symmetry_groups.players.payoff' => 1).entries }
+      format.json { send_data GamePresenter.new(game).to_json(granularity: params[:granularity]), type: 'text/json', filename: "#{game.id}.json" }
     end
   end
 

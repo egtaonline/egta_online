@@ -30,6 +30,18 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
     respond_with(@scheduler)
   end
 
+  def show
+    begin
+      render json: Scheduler.collection.find(_id: Moped::BSON::ObjectId(params[:id])).select(name: 1, simulator_id: 1, configuration: 1, active: 1, process_memory: 1, time_per_sample: 1, size: 1, samples_per_simulation: 1, nodes: 1, sample_hash: 1).to_json, status: 200
+    rescue
+      render json: {error: "the generic_scheduler you were looking for could not be found"}.to_json, status: 404
+    end
+  end
+
+  def index
+    render json: "{generic_schedulers:#{GenericScheduler.collection.find.select(name: 1, simulator_fullname: 1, configuration: 1, size: 1).to_json}}", status: 200
+  end
+
   def find
     respond_with(GenericScheduler.where(params[:criteria]))
   end
