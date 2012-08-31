@@ -13,6 +13,9 @@ platform :ruby do
   gem 'rdiscount'
   gem 'thin'
 end
+platform :jruby do
+  gem 'jruby-openssl'
+end
 gem "haml-rails"
 gem 'rabl'
 
