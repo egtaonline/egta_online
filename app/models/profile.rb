@@ -24,7 +24,7 @@ class Profile
 
   has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
     def with_max_samples
-      @target.max{ |x, y| x.required_samples(@base) <=> y.required_samples(@base) }
+      @target.active.max{ |x, y| x.required_samples(@base) <=> y.required_samples(@base) }
     end
   end
 
