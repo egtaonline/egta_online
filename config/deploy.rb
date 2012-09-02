@@ -134,19 +134,17 @@ end
 namespace :foreman do
   desc "Start the application services"
   task :start, roles: :app do
-    sudo "start #{application}1"
-    sudo "start #{application}2"
+    sudo "start egtao"
   end
 
   desc "Stop the application services"
   task :stop, roles: :app do
-    sudo "stop #{application}2"
-    sudo "stop #{application}1"
+    sudo "stop egtao"
   end
 
   desc "Restart the application services"
   task :restart, roles: :app do
-    run "sudo stop #{application}2; sudo stop #{application}1; sudo start #{application}1; sudo start #{application}2"
+    run "sudo stop egtao; sudo start egtao"
   end
 
   desc "Display logs for a certain process - arg example: PROCESS=web-1"
