@@ -2,7 +2,6 @@ require 'bundler/capistrano'
 
 load "config/recipes/base"
 load "config/recipes/nginx"
-load "config/recipes/unicorn"
 load "config/recipes/nodejs"
 load "config/recipes/rbenv"
 load 'deploy/assets'
