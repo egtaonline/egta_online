@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   respond_to :html
   before_filter :merge, only: :create
 
-  expose(:games){Game.order_by(params[:sort]+" "+params[:direction]).page(params[:page])}
+  expose(:games){Game.page(params[:page])}
   expose(:game)
 
   def create

@@ -3,7 +3,7 @@ class SchedulersController < ApplicationController
   before_filter :merge, only: [:create, :update]
 
   # These exposures are so that we can treat all different schedulers as scheduler in views, allowing view reuse where it's helpful
-  expose(:schedulers){model_name.classify.constantize.order_by(params[:sort]+" "+params[:direction]).page(params[:page])}
+  expose(:schedulers){model_name.classify.constantize.page(params[:page])}
   expose(:scheduler) do
     proxy = model_name.classify.constantize
     if id = params["#{model_name}_id"] || params[:id]
@@ -15,7 +15,7 @@ class SchedulersController < ApplicationController
     end
   end
 
-  expose(:profiles){Profile.with_scheduler(scheduler).order_by(params[:sort], params[:direction]).page(params[:page])}
+  expose(:profiles){Profile.with_scheduler(scheduler).page(params[:page])}
 
   def create
     scheduler.save
