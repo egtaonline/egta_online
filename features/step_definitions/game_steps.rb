@@ -59,3 +59,7 @@ end
 Given /^that simulator has a game that does not match the scheduler$/ do
   @game = Fabricate(:game, simulator: @simulator, configuration: @scheduler.configuration.merge({ other_key: 'other_value' }), size: @scheduler.size)
 end
+
+Given /^3 games exist$/ do
+  @objects = [Fabricate(:game, size: 5), Fabricate(:game, size: 4), Fabricate(:game, size: 6)]
+end

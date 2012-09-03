@@ -254,3 +254,12 @@ When /^I remove the role (\w+) from the scheduler$/ do |role|
     click_link "remove-#{role}"
   end
 end
+
+Given /^3 schedulers exist$/ do
+  simulators = [Fabricate(:simulator, name: 'real', version: 'realest'), Fabricate(:simulator, name: 'fake', version: 'less'), Fabricate(:simulator, name: 'fake', version: 'more')]
+  @objects = simulators.collect{ |simulator| Fabricate(:game_scheduler, simulator: simulator) }
+end
+
+When /^I visit the (\w+) index page$/ do |arg|
+  visit "/#{arg}"
+end

@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def sort_column
-    (model_name.camelize.constantize.attribute_method?(params[:sort].to_s) || params[:sort].to_s == "name" || params[:sort].to_s == "sample_count") ? params[:sort] : ""
+    params[:sort] ||= default
+    model_name.camelize.constantize.attribute_method?(params[:sort]) ? params[:sort] : default
   end
 end

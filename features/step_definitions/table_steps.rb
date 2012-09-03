@@ -40,3 +40,7 @@ Then /^I should( not)? see the following table rows( in any order)?:?$/ do |nega
     end
   end.send(expectation, be_true)
 end
+
+When /^I click on the (\w+) header$/ do |arg|
+  click_link arg.titleize
+end
