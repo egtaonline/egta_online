@@ -31,7 +31,7 @@ class ObservationValidator
   private
 
   def self.numeralize(hash)
-    return nil if !hash
+    return {} if !hash
     return_hash = {}
     hash.each do |key, value|
       return_hash[key] = ( value.numeric? ? value.to_f : ( value.is_a?(Hash) ? numeralize(value) : value ) )
