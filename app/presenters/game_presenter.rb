@@ -42,7 +42,7 @@ class GamePresenter
   def json_start
     "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
     "\"configuration\":#{@game.configuration.to_json}," <<
-    "\"roles\":#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }," <<
+    "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]," <<
     "\"profiles\":"
   end
 
