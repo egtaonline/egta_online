@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   respond_to :html
   before_filter :merge, only: :create
 
-  expose(:games){Game.page(params[:page])}
+  expose(:games){ Game.order_by("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:game)
 
   def create
@@ -63,5 +63,9 @@ class GamesController < ApplicationController
 
   def merge
     params[:game] = params[:game].merge(params[:selector])
+  end
+
+  def default
+    "name"
   end
 end

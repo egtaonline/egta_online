@@ -44,3 +44,13 @@ end
 When /^I click on the (\w+) header$/ do |arg|
   click_link arg.titleize
 end
+
+Then /^I should see the (\w+) sorted by (\w+) in ascending order$/ do |arg1, arg2|
+  arg2 = "simulator_fullname" if arg2 == "simulator"
+  step 'I should see the following table rows:', table("| #{@objects.collect{ |o| o[arg2] }.sort.join(" |\n| ")} |")
+end
+
+Then /^I should see the (\w+) sorted by (\w+) in descending order$/ do |arg1, arg2|
+  arg2 = "simulator_fullname" if arg2 == "simulator"
+  step 'I should see the following table rows:', table("| #{@objects.collect{ |o| o[arg2] }.sort.reverse.join(" |\n| ")} |")
+end

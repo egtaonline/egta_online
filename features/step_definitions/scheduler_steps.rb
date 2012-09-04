@@ -135,7 +135,7 @@ When /^I add the deviating strategy (\w+) to the role (\w+) on the scheduler$/ d
   end
 end
 
-Then /^I should see the profiles (.*)$/ do |profiles|
+Then /^I should see these profiles: (.*)$/ do |profiles|
   eval(profiles).each do |profile|
     page.should have_content(profile)
   end
@@ -262,4 +262,23 @@ end
 
 When /^I visit the (\w+) index page$/ do |arg|
   visit "/#{arg}"
+end
+
+Then /^I should see the (schedulers|games) in the default order$/ do |arg|
+  step 'I should see the following table rows:', table("| #{@objects.collect{ |o| o.simulator_fullname }.join(" |\n| ")} |")
+end
+
+Given /^that generic_scheduler has 3 profiles$/ do
+  @objects = [Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 1 A, 1 B", sample_count: 10),
+    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 A", sample_count: 5),
+    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 B", sample_count: 20)
+    ]
+end
+
+When /^I visit that generic_scheduler's page$/ do
+  visit "/generic_schedulers/#{@scheduler.id}"
+end
+
+Then /^I should see the profiles in the default order$/ do
+  step 'I should see the following table rows:', table("| #{@objects.collect{ |o| o.assignment }.join(" |\n| ")} |")
 end

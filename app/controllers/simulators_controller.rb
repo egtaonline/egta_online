@@ -1,7 +1,7 @@
 class SimulatorsController < ApplicationController
   respond_to :html
 
-  expose(:simulators){ Simulator.page(params[:page]) }
+  expose(:simulators){ Simulator.order_by("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:simulator)
 
   def create
@@ -37,5 +37,11 @@ class SimulatorsController < ApplicationController
   def remove_strategy
     simulator.remove_strategy(params[:role], params[:strategy_name])
     respond_with(simulator)
+  end
+
+  private
+
+  def default
+    "name"
   end
 end

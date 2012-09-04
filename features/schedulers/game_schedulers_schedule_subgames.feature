@@ -6,8 +6,8 @@ Scenario Outline: No prior profiles
   And a fleshed out simulator with an empty <class> of size 2 exists
   When I add the role <role> with size <role_size> and the strategies <strategies> to the scheduler
   And I add the role <role2> with size <role_size2> and the strategies <strategies2> to the scheduler
-  Then I should see the profiles <profiles>
-  
+  Then I should see these profiles: <profiles>
+
   Examples:
   | class                  | role  | role_size | strategies | role2  | role_size2 | strategies2 | profiles                                                                                                                             |
   | game_scheduler         | All   | 2         | A, B       |        |            |             | ["All: 2 A", "All: 1 A, 1 B", "All: 2 B"]                                                                                            |
@@ -23,7 +23,7 @@ Scenario Outline: Schedulers find and reuse matching profiles
   When I add the role <role> with size <role_size> and the strategies <strategies> to the scheduler
   And I add the role <role2> with size <role_size2> and the strategies <strategies2> to the scheduler
   Then there should be <profile_count> profiles
-  
+
   Examples:
   | class                  | assignment                    | assignment2                   | role  | role_size | strategies | role2  | role_size2 | strategies2 | profile_count |
   | game_scheduler         | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             |
@@ -44,7 +44,7 @@ Scenario Outline: Removing a strategy or role should trim the set of profiles to
   When I remove the role <role> from the scheduler
   Then the scheduler should have 0 profiles
   And there should be <profile_count> profiles
-  
+
   Examples:
   | class                  | assignment                    | assignment2                   | role  | role_size | strategies | role2  | role_size2 | strategies2 | profile_count | strategy | profile_set_size |
   | game_scheduler         | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             | A        |                1 |

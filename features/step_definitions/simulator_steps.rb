@@ -91,3 +91,11 @@ end
 Given /^a simulator exists$/ do
   @simulator = Fabricate(:simulator)
 end
+
+Given /^3 simulators exist$/ do
+  @objects = [Fabricate(:simulator, description: 'Second'), Fabricate(:simulator, description: 'First'), Fabricate(:simulator, description: 'Third')]
+end
+
+Then /^I should see the simulators in the default order$/ do
+step 'I should see the following table rows:', table("| #{@objects.collect{ |o| o.name }.join(" |\n| ")} |")
+end

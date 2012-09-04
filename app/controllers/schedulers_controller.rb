@@ -15,7 +15,7 @@ class SchedulersController < ApplicationController
     end
   end
 
-  expose(:profiles){Profile.with_scheduler(scheduler).page(params[:page])}
+  expose(:profiles){ Profile.order_by("#{sort_column} #{sort_direction}").page(params[:page]) }
 
   def create
     scheduler.save
@@ -64,5 +64,14 @@ class SchedulersController < ApplicationController
 
   def default
     "name"
+  end
+
+  def sort_column
+    if params[:id]
+      params[:sort] ||= "assignment"
+      Profile.attribute_method?(params[:sort]) ? params[:sort] : "assignment"
+    else
+      super
+    end
   end
 end
