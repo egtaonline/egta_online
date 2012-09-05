@@ -10,7 +10,7 @@ class Profile
   field :size, type: Integer
   field :assignment, type: String
   field :sample_count, type: Integer, default: 0
-  field :features, type: Hash
+  field :features, type: Hash, default: {}
   field :configuration, type: Hash, default: {}
 
   attr_accessible :assignment, :configuration
