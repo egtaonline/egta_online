@@ -269,9 +269,9 @@ Then /^I should see the (schedulers|games) in the default order$/ do |arg|
 end
 
 Given /^that generic_scheduler has 3 profiles$/ do
-  @objects = [Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 1 A, 1 B", sample_count: 10),
-    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 A", sample_count: 5),
-    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 B", sample_count: 20)
+  @objects = [Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 1 A, 1 B", sample_count: 10, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 A", sample_count: 5, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 B", sample_count: 20, scheduler_ids: [@scheduler.id])
     ]
 end
 
