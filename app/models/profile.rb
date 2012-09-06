@@ -10,7 +10,6 @@ class Profile
   field :size, type: Integer
   field :assignment, type: String
   field :sample_count, type: Integer, default: 0
-  field :features, type: Hash, default: {}
   field :configuration, type: Hash, default: {}
 
   attr_accessible :assignment, :configuration
@@ -53,22 +52,6 @@ class Profile
         symmetry_group.payoff_sd = Math.sqrt([payoffs.collect{ |p| p**2.0 }.reduce(:+)/payoffs.count-symmetry_group.payoff**2.0, 0].max)
         symmetry_group.save!
       end
-      new_features = Hash.new { |hash, key| hash[key] = [] }
-      observations.each do |observation|
-        observation.features ||= {}
-        observation.save
-        observation.features.each do |name, value|
-          new_features[name] << value
-        end
-      end
-      final_features = {}
-      new_features.each do |key, value|
-        value = value.compact
-        if value.size > 0
-          final_features[key] = value.reduce(:+)/value.size
-        end
-      end
-      self.features = final_features
       self.save!
     end
   end
