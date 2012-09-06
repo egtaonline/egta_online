@@ -54,6 +54,8 @@ class Profile
     end
     new_features = Hash.new { |hash, key| hash[key] = [] }
     observations.each do |observation|
+      observation.features ||= {}
+      observation.save
       observation.features.each do |name, value|
         new_features[name] << value
       end
