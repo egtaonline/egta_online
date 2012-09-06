@@ -61,10 +61,14 @@ class Profile
           new_features[name] << value
         end
       end
+      final_features = {}
       new_features.each do |key, value|
-        new_features[key] = value.reduce(:+)/value.size
+        value = value.compact
+        if value.size > 0
+          final_features[key] = value.reduce(:+)/value.size
+        end
       end
-      self.features = new_features
+      self.features = final_features
       self.save!
     end
   end
