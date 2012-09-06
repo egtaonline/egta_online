@@ -46,24 +46,26 @@ class Profile
 
   def update_symmetry_group_payoffs
     self.sample_count = self.observations.count
-    self.symmetry_groups.each do |symmetry_group|
-      payoffs = observations.collect { |o| o.symmetry_groups.where(role: symmetry_group.role, strategy: symmetry_group.strategy).first.players.collect { |p| p.payoff } }.flatten
-      symmetry_group.payoff = payoffs.reduce(:+)/payoffs.count
-      symmetry_group.payoff_sd = Math.sqrt(payoffs.collect{ |p| p**2.0 }.reduce(:+)/payoffs.count-symmetry_group.payoff**2.0)
-      symmetry_group.save!
-    end
-    new_features = Hash.new { |hash, key| hash[key] = [] }
-    observations.each do |observation|
-      observation.features ||= {}
-      observation.save
-      observation.features.each do |name, value|
-        new_features[name] << value
+    if self.sample_count > 0
+      self.symmetry_groups.each do |symmetry_group|
+        payoffs = observations.collect { |o| o.symmetry_groups.where(role: symmetry_group.role, strategy: symmetry_group.strategy).first.players.collect { |p| p.payoff } }.flatten
+        symmetry_group.payoff = payoffs.reduce(:+)/payoffs.count
+        symmetry_group.payoff_sd = Math.sqrt([payoffs.collect{ |p| p**2.0 }.reduce(:+)/payoffs.count-symmetry_group.payoff**2.0, 0].max)
+        symmetry_group.save!
       end
+      new_features = Hash.new { |hash, key| hash[key] = [] }
+      observations.each do |observation|
+        observation.features ||= {}
+        observation.save
+        observation.features.each do |name, value|
+          new_features[name] << value
+        end
+      end
+      new_features.each do |key, value|
+        new_features[key] = value.reduce(:+)/value.size
+      end
+      self.features = new_features
+      self.save!
     end
-    new_features.each do |key, value|
-      new_features[key] = value.reduce(:+)/value.size
-    end
-    self.features = new_features
-    self.save!
   end
 end
