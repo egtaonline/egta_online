@@ -1,5 +1,5 @@
 class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
-  before_filter :find_scheduler, only: [:add_profile, :add_role, :remove_role, :remove_profile, :update, :destroy]
+  before_filter :find_scheduler, only: [:show, :add_profile, :add_role, :remove_role, :remove_profile, :update, :destroy]
   before_filter :find_profile, only: :remove_profile
 
   def create
@@ -32,9 +32,9 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
 
   def show
     begin
-      render json: Scheduler.collection.find(_id: Moped::BSON::ObjectId(params[:id])).select(name: 1, simulator_id: 1, configuration: 1, active: 1, process_memory: 1, time_per_sample: 1, size: 1, samples_per_simulation: 1, nodes: 1, sample_hash: 1).to_json, status: 200
+      render json: GenericSchedulerPresenter.new(@scheduler).to_json, status: 200
     rescue
-      render json: {error: "the generic_scheduler you were looking for could not be found"}.to_json, status: 404
+      render json: {error: "rendering the generic_scheduler failed.  Email Ben."}.to_json, status: 404
     end
   end
 
@@ -74,7 +74,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
     begin
       @scheduler = GenericScheduler.find(params[:id])
     rescue
-      respond_with({ error: "the scheduler you were looking for could not be found" }, status: 404, location: nil)
+      respond_with({ error: "the generic_scheduler you were looking for could not be found" }, status: 404, location: nil)
     end
   end
 
