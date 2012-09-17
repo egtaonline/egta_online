@@ -18,6 +18,7 @@ class Simulation
   field :created_at
   field :profile_assignment
   field :_id, type: Integer
+  field :flux, type: Boolean, default: false
   sequence :_id
   index({ state: 1 })
 
