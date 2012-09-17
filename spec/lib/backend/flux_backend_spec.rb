@@ -61,15 +61,17 @@ describe FluxBackend do
     let(:simulation){ double(flux: false) }
 
     before do
-      subject.flux_active_limit = 120
+      subject.flux_active_limit = 60
       PbsWrapper.should_receive(:create_wrapper).with(simulation, "#{Rails.root}/tmp/simulations")
     end
 
     context 'flux is oversubscribed' do
 
       before do
-        Simulation.stub(:where).with({active: true, flux: true}).and_return(stub(count: 121))
-        Simulation.stub(:where).with({active: true, flux: false}).and_return(stub(count: 0))
+        actives = double('actives')
+        actives.stub(:where).with(flux: true).and_return(stub(count: 61))
+        actives.stub(:where).with(flux: false).and_return(stub(count: 0))
+        Simulation.stub(:active).and_return(actives)
       end
 
       it 'does not change flux to true' do
@@ -81,8 +83,10 @@ describe FluxBackend do
 
     context 'flux is undersubscribed' do
       before do
-        Simulation.stub(:where).with({active: true, flux: true}).and_return(stub(count: 100))
-        Simulation.stub(:where).with({active: true, flux: false}).and_return(stub(count: 0))
+        actives = double('actives')
+        actives.stub(:where).with(flux: true).and_return(stub(count: 50))
+        actives.stub(:where).with(flux: false).and_return(stub(count: 0))
+        Simulation.stub(:active).and_return(actives)
       end
 
       it 'changes flux to true' do
@@ -94,8 +98,10 @@ describe FluxBackend do
 
     context 'flux is oversubscribed, but so is cac' do
       before do
-        Simulation.stub(:where).with({active: true, flux: true}).and_return(stub(count: 120))
-        Simulation.stub(:where).with({active: true, flux: false}).and_return(stub(count: 21))
+        actives = double('actives')
+        actives.stub(:where).with(flux: true).and_return(stub(count: 61))
+        actives.stub(:where).with(flux: false).and_return(stub(count: 21))
+        Simulation.stub(:active).and_return(actives)
       end
 
       it 'changes flux to true' do

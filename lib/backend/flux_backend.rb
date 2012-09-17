@@ -21,7 +21,7 @@ class FluxBackend
   end
 
   def prepare_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
-    if (flux_count+1 <= flux_active_limit || cac_count > flux_count/6)
+    if ( 3*cac_count > flux_count-@flux_active_limit )
       simulation['flux'] = true
       simulation.save
     end
@@ -58,10 +58,10 @@ class FluxBackend
   private
 
   def flux_count
-    Simulation.where(active: true, flux: true).count
+    Simulation.active.where(flux: true).count
   end
 
   def cac_count
-    Simulation.where(active: true, flux: false).count
+    Simulation.active.where(flux: false).count
   end
 end
