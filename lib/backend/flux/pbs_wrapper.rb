@@ -1,8 +1,8 @@
 class PbsWrapper
   def self.create_wrapper(simulation, src_dir)
     scheduler = simulation.scheduler
-    allocation = simulation.flux ? 'wellman_flux' : 'cac'
-    queue = simulation.flux ? 'flux' : 'cac'
+    allocation = simulation['flux'] ? 'wellman_flux' : 'cac'
+    queue = simulation['flux'] ? 'flux' : 'cac'
     simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     extra_args = simulation.scheduler_nodes > 1 ? " ${PBS_NODEFILE}" : ""
