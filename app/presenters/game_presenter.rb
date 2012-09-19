@@ -5,6 +5,8 @@ class GamePresenter
 
   def to_json(options={})
     case options[:granularity]
+    when "structure"
+      structure
     when "full"
       full
     when "observations"
@@ -12,6 +14,12 @@ class GamePresenter
     else
       summary
     end
+  end
+
+  def structure
+    "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
+    "\"configuration\":#{@game.configuration.to_json}," <<
+    "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]}"
   end
 
   def summary

@@ -9,6 +9,7 @@ describe PbsWrapper do
       let(:src_dir){ 'tmp/simulations' }
 
       before do
+        simulation.stub(:[]).with('flux').and_return(true)
         document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh
@@ -42,6 +43,7 @@ HEREDOC
       let(:src_dir){ 'tmp/simulations' }
 
       before do
+        simulation.stub(:[]).with('flux').and_return(false)
         document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh
@@ -75,6 +77,7 @@ HEREDOC
       let(:src_dir){ 'tmp/simulations' }
 
       before do
+        simulation.stub(:[]).with('flux').and_return(false)
         document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh
