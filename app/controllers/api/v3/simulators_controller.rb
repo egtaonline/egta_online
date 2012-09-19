@@ -6,7 +6,7 @@ class Api::V3::SimulatorsController < Api::V3::BaseController
   include Api::V3::RoleManipulator
 
   def index
-    render json: "{simulators:#{Simulator.collection.find.select(name: 1, version: 1).to_json}}", status: 200
+    render json: "{\"simulators\":#{Simulator.collection.find.select(name: 1, version: 1).to_json}}", status: 200
   end
 
   def show

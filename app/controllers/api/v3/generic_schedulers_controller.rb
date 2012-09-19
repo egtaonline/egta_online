@@ -39,7 +39,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   end
 
   def index
-    render json: "{generic_schedulers:#{GenericScheduler.collection.find.select(name: 1, simulator_fullname: 1, configuration: 1, size: 1).to_json}}", status: 200
+    render json: "{\"generic_schedulers\":#{GenericScheduler.collection.find.select(name: 1, simulator_fullname: 1, configuration: 1, size: 1).to_json}}", status: 200
   end
 
   def find

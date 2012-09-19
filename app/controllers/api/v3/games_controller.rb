@@ -53,7 +53,7 @@ class Api::V3::GamesController < Api::V3::BaseController
   end
 
   def index
-    render json: "{games:#{Game.collection.find.select(name: 1, simulator_fullname: 1, configuration: 1, size: 1).to_json}}", status: 200
+    render json: "{\"games\":#{Game.collection.find.select(name: 1, simulator_fullname: 1, configuration: 1, size: 1).to_json}}", status: 200
   end
 
   def show
