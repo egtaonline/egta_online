@@ -15,6 +15,7 @@ class Profile
   attr_accessible :assignment, :configuration
 
   index ({ simulator_id: 1, configuration: 1, size: 1, sample_count: 1 })
+  index ({ assignment: 1 })
 
   validates_presence_of :simulator
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
