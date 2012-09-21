@@ -29,7 +29,7 @@ class GenericScheduler < Scheduler
                                                    assignment: assignment)
     logger.warn profile.inspect
     logger.warn "#{Time.now} checking validity"
-    if profile.validated?
+    if profile.errors.messages.empty?
       logger.warn "#{Time.now} testing validity"
       flag = profile.size == self.size
       roles.each do |r|
