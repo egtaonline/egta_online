@@ -55,7 +55,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
       profile = @scheduler.add_profile(params[:assignment], params[:sample_count].to_i)
       logger.warn "Inspecting profile:"
       logger.warn profile.inspect
-      if profile.valid?
+      if profile.errors.messages.empty?
         respond_with(profile, location: profile_path(profile))
       else
         respond_with(profile)
