@@ -1,6 +1,6 @@
 class ProfilePresenter
   def initialize(profile)
-    @query = Profile.collection.find(_id: Moped::BSON::ObjectId(profile.id))
+    @query = Profile.collection.find(_id: profile.id)
   end
 
   def to_json(options={})

@@ -59,7 +59,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
       logger.warn profile.inspect
       if profile.errors.messages.empty?
         logger.warn Time.now
-        respond_with(profile, location: profile_path(profile))
+        render json: ProfilePresenter.new(profile).to_json, status: 201
       else
         respond_with(profile)
       end
