@@ -12,8 +12,6 @@ class Profile
   field :sample_count, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
 
-  attr_accessible :assignment, :configuration
-
   index ({ simulator_id: 1, configuration: 1, size: 1, sample_count: 1 })
   index ({ sample_count: 1 })
   index ({ assignment: 1 })
