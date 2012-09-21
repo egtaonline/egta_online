@@ -27,7 +27,7 @@ class GenericScheduler < Scheduler
     logger.warn "#{Time.now} creating"
     profile = Profile.find_or_create_by(simulator_id: self.simulator_id, configuration: self.configuration,
                                                    assignment: assignment)
-    puts profile.inspect
+    logger.warn profile.inspect
     logger.warn "#{Time.now} checking validity"
     if profile.valid?
       logger.warn "#{Time.now} testing validity"
