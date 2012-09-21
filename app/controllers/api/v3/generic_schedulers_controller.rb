@@ -47,15 +47,18 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   end
 
   def add_profile
+    logger.warn Time.now
     if params[:sample_count].to_i == 0
       respond_with({ error: "the provided sample count was either not a number or 0" }, status: 406, location: nil)
     elsif @scheduler.unassigned_player_count > 0
       respond_with({ error: "the selected scheduler has an incomplete role partition, #{@scheduler.unassigned_player_count} player(s) have not yet been assigned" }, status: 406, location: nil)
     else
+      logger.warn Time.now
       profile = @scheduler.add_profile(params[:assignment], params[:sample_count].to_i)
-      logger.warn "Inspecting profile:"
+      logger.warn "#{Time.now} Inspecting profile:"
       logger.warn profile.inspect
       if profile.errors.messages.empty?
+        logger.warn Time.now
         respond_with(profile, location: profile_path(profile))
       else
         respond_with(profile)
