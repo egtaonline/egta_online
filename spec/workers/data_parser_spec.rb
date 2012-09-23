@@ -4,7 +4,7 @@ describe DataParser do
   ### Integration test, consider pulling to cucumber and writing unit tests
   describe 'perform' do
     let(:profile){ double(assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
-    let(:simulation){ double(profile: profile) }
+    let(:simulation){ double(profile: profile, state: 'running') }
 
     context 'multiple valid observations' do
       before do

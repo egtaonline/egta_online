@@ -4,8 +4,10 @@ class DataParser
 
   def self.perform(number, location="#{Rails.root}/tmp/data/#{number}")
     simulation = Simulation.find(number)
-    files = Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }
-    processor = ObservationProcessor.new(location)
-    processor.process_files(simulation, files)
+    if simulation.state != 'complete'
+      files = Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }
+      processor = ObservationProcessor.new(location)
+      processor.process_files(simulation, files)
+    end
   end
 end
