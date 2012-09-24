@@ -1,0 +1,13 @@
+%tr
+  %td= reduced_role.name
+  %td= reduced_role.count
+  %td= reduced_role.reduced_count
+  %td
+    %table
+      =render partial: "strategy/strategy", collection: reduced_role.strategies, locals: {role: reduced_role}
+      -if (role_owner.available_strategies(reduced_role.name)) != []
+        =form_tag url_for(action: :add_strategy, id: role_owner.id, role: reduced_role.name), method: :post do
+          %tr
+            %td= select_tag "#{reduced_role.name}_strategy", options_for_select(role_owner.available_strategies(reduced_role.name))
+            %td= submit_tag "Add Strategy", {id: reduced_role.name, class: 'btn btn-mini btn-info'}
+  %td= link_to 'Remove Role', url_for(action: :remove_role, role: reduced_role.name), method: :post, id: "remove-#{reduced_role.name}", class: 'btn btn-danger'

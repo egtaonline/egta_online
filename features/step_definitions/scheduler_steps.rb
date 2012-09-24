@@ -111,6 +111,12 @@ Given /^a fleshed out simulator with an empty (\w+) of size (\d+) exists$/ do |s
   @scheduler.configuration.should_not eql(nil)
 end
 
+Given /^a fleshed out simulator with an empty (\w+)$/ do |scheduler|
+  step 'a fleshed out simulator exists'
+  @scheduler_class = scheduler
+  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: 4)
+end
+
 When /^I add the role (.*) with size (.*) and the strategies (.*) to the scheduler$/ do |role, size, strategies|
   if role =~ /^\S+$/
     strategies.split(", ").each{ |strategy| @simulator.add_strategy(role, strategy) }

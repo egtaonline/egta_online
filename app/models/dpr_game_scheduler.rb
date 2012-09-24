@@ -1,3 +1,3 @@
-class DPRGameScheduler
+class DprGameScheduler < AbstractionScheduler
 
 end

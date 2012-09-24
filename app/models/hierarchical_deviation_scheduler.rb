@@ -1,12 +1,8 @@
-class HierarchicalDeviationScheduler < DeviationScheduler
+class HierarchicalDeviationScheduler < AbstractionScheduler
   include HierarchicalReduction
-
-  field :agents_per_player, type: Integer
-  validates_presence_of :agents_per_player
-  validate :divisibility
+  include Deviations
 
   def profile_space
-    return [] if space_undefined?
     first_ar, all_other_ars = arrays_to_cross
     deviations = get_deviations
     profs = []

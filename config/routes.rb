@@ -31,7 +31,7 @@ EgtaOnline::Application.routes.draw do
       post :create_game_to_match
     end
   end
-  resources :deviation_schedulers, :hierarchical_deviation_schedulers do
+  resources :deviation_schedulers, :hierarchical_deviation_schedulers, :dpr_deviation_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role, :add_deviating_strategy, :remove_deviating_strategy
     end
@@ -49,7 +49,7 @@ EgtaOnline::Application.routes.draw do
     end
   end
 
-  resources :game_schedulers, :hierarchical_schedulers do
+  resources :game_schedulers, :hierarchical_schedulers, :dpr_game_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end

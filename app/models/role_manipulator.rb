@@ -1,7 +1,7 @@
 module RoleManipulator
   module Base
-    def add_role(name, count=nil)
-      roles.find_or_create_by(name: name, count: count)
+    def add_role(name, count=nil, reduced_count=count)
+      roles.find_or_create_by(name: name, count: count, reduced_count: count)
     end
 
     def remove_role(role_name)

@@ -16,6 +16,8 @@ module NavigationHelpers
       "/#{$1.parameterize('_').pluralize}/#{$1.parameterize('_').camelize.constantize.last.id}"
     when /^the first (.*)'s page$/i
       "/#{$1.parameterize('_').pluralize}/#{$1.parameterize('_').camelize.constantize.first.id}"
+    when /^that scheduler's page$/i
+      "/#{@scheduler_class}s/#{@scheduler.id}"
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

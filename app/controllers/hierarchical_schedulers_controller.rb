@@ -1,2 +1,2 @@
-class HierarchicalSchedulersController < GameSchedulersController
+class HierarchicalSchedulersController < AbstractionSchedulersController
 end

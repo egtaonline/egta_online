@@ -1,0 +1,2 @@
+class DprGameSchedulersController < AbstractionSchedulersController
+end

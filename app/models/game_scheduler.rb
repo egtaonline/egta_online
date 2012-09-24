@@ -1,12 +1,8 @@
 class GameScheduler < Scheduler
   include RoleManipulator::Scheduler
+  include Sampling::Simple
 
-  validates_numericality_of :default_samples, :size, greater_than: 0
   validates_presence_of :size
-
-  def required_samples(profile)
-    profile.scheduler_ids.include?(self.id) ? default_samples : 0
-  end
 
   def profile_space
     return [] if invalid_role_partition?

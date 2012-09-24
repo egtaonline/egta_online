@@ -4,15 +4,15 @@ describe HierarchicalDeviationScheduler do
   before do
     ResqueSpec.reset!
   end
-  
+
   describe "#unassigned_player_count" do
-    let(:scheduler){ Fabricate(:hierarchical_deviation_scheduler, :size => 4, :agents_per_player => 2) }
+    let(:scheduler){ Fabricate(:hierarchical_deviation_scheduler, :size => 4) }
     before(:each) do
       scheduler.add_role("Bidder", 1)
     end
-    it {scheduler.unassigned_player_count.should eql(1)}
+    it {scheduler.unassigned_player_count.should eql(3)}
   end
-  
+
   describe "#add_deviating_strategy" do
     context "symmetric" do
       let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
@@ -31,7 +31,7 @@ describe HierarchicalDeviationScheduler do
         Profile.with_scheduler(scheduler).collect{|p| p.assignment}.should eql(["All: 120 B", "All: 60 A, 60 B"])
       end
     end
-    
+
     context "role-symmetric" do
       let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler, :agents_per_player => 40)}
       it "should create the correct set of profiles" do
@@ -60,7 +60,7 @@ describe HierarchicalDeviationScheduler do
       end
     end
   end
-  
+
   describe "#remove_deviating_strategy" do
     let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler, :agents_per_player => 40)}
     it "should remove the relevant profiles from the scheduler, but not from the system" do

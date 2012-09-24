@@ -3,8 +3,8 @@
   %thead
     %tr
       %th Name
-      %th Full Game Count
-      %th Reduced Game Count
+      %th Full Count
+      %th Reduced Count
       %th Strategy Set
   %tbody
     =render partial: "roles/reduced_role", collection: role_owner.roles, locals: {role_owner: role_owner}
@@ -12,4 +12,5 @@
   =form_tag url_for(action: "add_role", id: role_owner.id), method: :post do
     = select_tag "role", options_for_select(role_owner.available_roles)
     = number_field_tag "role_count", role_owner.unassigned_player_count, in: 1..role_owner.unassigned_player_count
+    = number_field_tag "reduced_count", role_owner.unassigned_player_count, in: 1..role_owner.unassigned_player_count
     = submit_tag "Add Role", class: 'btn btn-primary'

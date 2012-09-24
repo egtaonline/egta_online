@@ -6,6 +6,7 @@ class Role
   field :strategies, type: Array, default: []
   field :name
   field :count, type: Integer
+  field :reduced_count, type: Integer, default: ->{ count }
 
   validates :name, presence: true,
                    uniqueness: true,
