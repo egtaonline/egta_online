@@ -11,12 +11,26 @@ class DeviationScheduler < GameScheduler
     deviating_roles.where(name: name).destroy_all
   end
 
+  def add_strategy(role_name, strategy_name)
+    role = deviating_roles.where(name: role_name).first
+    if !role.strategies.include?(strategy_name)
+      role_i = roles.find_or_create_by(name: role_name)
+      role_i.strategies << strategy_name
+      role_i.strategies.sort!
+      role_i.save!
+      Resque.enqueue(ProfileAssociater, self.id)
+    end
+  end
+
   def add_deviating_strategy(role_name, strategy_name)
-    role_i = deviating_roles.find_or_create_by(name: role_name)
-    role_i.strategies << strategy_name
-    role_i.strategies.sort!
-    role_i.save!
-    Resque.enqueue(ProfileAssociater, self.id)
+    role = roles.where(name: role_name).first
+    if !role.strategies.include?(strategy_name)
+      role_i = deviating_roles.find_or_create_by(name: role_name)
+      role_i.strategies << strategy_name
+      role_i.strategies.sort!
+      role_i.save!
+      Resque.enqueue(ProfileAssociater, self.id)
+    end
   end
 
   def remove_deviating_strategy(role_name, strategy_name)

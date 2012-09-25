@@ -76,9 +76,9 @@ namespace :deploy do
     run <<-CMD
       rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids #{latest_release}/simulator_uploads &&
       mkdir -p #{latest_release}/log
-      touch #{latest_release}/log/production.log && chmod 0666 #{latest_release}/log/production.log &&
       mkdir -p #{latest_release}/public &&
       mkdir -p #{latest_release}/tmp &&
+      ln -s #{shared_path}/log #{latest_release}/log &&
       ln -s #{shared_path}/system #{latest_release}/public/system &&
       ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
       ln -s #{shared_path}/simulator_uploads #{latest_release}/simulator_uploads &&
