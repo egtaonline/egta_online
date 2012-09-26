@@ -58,7 +58,7 @@ module Deviations
   def get_deviations
     {}.tap do |deviations|
       deviating_roles.each do |role|
-        deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.count-1).to_a)
+        deviation = role.strategies.product(roles.where(name: role.name).first.strategies.repeated_combination(role.reduced_count-1).to_a)
         deviations[role.name] = deviation.collect {|a| [role.name].concat ([a[0]].push(*a[1]).sort) }
       end
     end

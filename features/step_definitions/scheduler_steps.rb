@@ -81,7 +81,6 @@ Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   @scheduler_class = scheduler
   @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
   @profile_count = Profile.with_scheduler(@scheduler).count
-  @profile_count.should_not eql(0)
 end
 
 When /^I edit a parameter of that scheduler$/ do
@@ -103,11 +102,7 @@ end
 Given /^a fleshed out simulator with an empty (\w+) of size (\d+) exists$/ do |scheduler, size|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
-  if scheduler == 'hierarchical_scheduler' || scheduler == 'hierarchical_deviation_scheduler'
-    @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: 4, agents_per_player: 2)
-  else
-    @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
-  end
+  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
   @scheduler.configuration.should_not eql(nil)
 end
 
@@ -124,12 +119,25 @@ When /^I add the role (.*) with size (.*) and the strategies (.*) to the schedul
     with_resque do
       select role, from: "role"
       fill_in "role_count", with: size
+      fill_in "reduced_count", with: size if @scheduler.is_a?(AbstractionScheduler)
       click_button "Add Role"
       strategies.split(", ").each do |strategy|
         select strategy, from: "#{role}_strategy"
         click_button "Add Strategy"
       end
     end
+  end
+end
+
+When /^I add the role All with the strategy A to the scheduler$/ do
+  @simulator.add_strategy("All", "A")
+  visit "/#{@scheduler_class}s/#{@scheduler.id}"
+  with_resque do
+    select "All", from: "role"
+    fill_in "role_count", with: @scheduler.size
+    click_button "Add Role"
+    select "A", from: "All_strategy"
+    click_button "Add Strategy"
   end
 end
 
@@ -145,6 +153,7 @@ Then /^I should see these profiles: (.*)$/ do |profiles|
   eval(profiles).each do |profile|
     page.should have_content(profile)
   end
+  Profile.all.collect { |p| puts p.assignment }
   Profile.count.should eql(eval(profiles).size)
 end
 
@@ -179,33 +188,7 @@ Then /^I should see all the profiles of the scheduler that have been sampled$/ d
   end
 end
 
-When /^I configure a new (hierarchical_scheduler|hierarchical_deviation_scheduler) at creation$/ do |klass|
-  visit "/#{klass}s/new"
-  @config = {'Name' => 'Test1',
-             'Full game size' => '2',
-             'Agents per player' => '1',
-             'Default samples' => '30',
-             'Samples per simulation' => '15',
-             'Process memory' => '1000',
-             'Time per sample' => '40'}
-  @config.each { |key, value| fill_in key, :with => value }
-  click_button "Create #{klass.classify}"
-end
-
-When /^I edit the configuration of the (hierarchical_scheduler|hierarchical_deviation_scheduler)$/ do |klass|
-  visit "/#{klass}s/#{@scheduler.id}/edit"
-  @config = {'Name' => 'Test2',
-             'Full game size' => '32',
-             'Agents per player' => '16',
-             'Default samples' => '20',
-             'Samples per simulation' => '11',
-             'Process memory' => '1040',
-             'Time per sample' => '41'}
-  @config.each { |key, value| fill_in key, :with => value }
-  click_button "Update #{klass.classify}"
-end
-
-When /^I configure a new (game_scheduler|deviation_scheduler|generic_scheduler) at creation$/ do |klass|
+When /^I configure a new (\w+) at creation$/ do |klass|
   visit "/#{klass}s/new"
   @config = {'Name' => 'Test1',
              'Game size' => '2',
@@ -217,7 +200,7 @@ When /^I configure a new (game_scheduler|deviation_scheduler|generic_scheduler) 
   click_button "Create #{klass.classify}"
 end
 
-When /^I edit the configuration of the (game_scheduler|deviation_scheduler|generic_scheduler)$/ do |klass|
+When /^I edit the configuration of the (\w+)$/ do |klass|
   visit "/#{klass}s/#{@scheduler.id}/edit"
   @config = {'Name' => 'Test5',
              'Game size' => '7',

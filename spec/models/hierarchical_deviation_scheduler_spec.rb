@@ -6,7 +6,7 @@ describe HierarchicalDeviationScheduler do
   end
 
   describe "#unassigned_player_count" do
-    let(:scheduler){ Fabricate(:hierarchical_deviation_scheduler, :size => 4) }
+    let(:scheduler){ Fabricate(:hierarchical_deviation_scheduler, size: 4) }
     before(:each) do
       scheduler.add_role("Bidder", 1)
     end
@@ -17,7 +17,7 @@ describe HierarchicalDeviationScheduler do
     context "symmetric" do
       let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
       before(:each) do
-        scheduler.add_role("All", 2)
+        scheduler.add_role("All", 120, 2)
         scheduler.add_deviating_strategy("All", "A")
       end
       it "should not lead to profile creation if there are no strategies on the target roles" do
@@ -33,10 +33,10 @@ describe HierarchicalDeviationScheduler do
     end
 
     context "role-symmetric" do
-      let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler, :agents_per_player => 40)}
+      let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
       it "should create the correct set of profiles" do
-        scheduler.add_role("Bidder", 2)
-        scheduler.add_role("Seller", 1)
+        scheduler.add_role("Bidder", 80, 2)
+        scheduler.add_role("Seller", 40, 1)
         scheduler.add_strategy("Bidder", "A")
         scheduler.add_strategy("Bidder", "B")
         scheduler.add_deviating_strategy("Bidder", "C")
@@ -62,10 +62,10 @@ describe HierarchicalDeviationScheduler do
   end
 
   describe "#remove_deviating_strategy" do
-    let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler, :agents_per_player => 40)}
+    let!(:scheduler){Fabricate(:hierarchical_deviation_scheduler)}
     it "should remove the relevant profiles from the scheduler, but not from the system" do
-      scheduler.add_role("Bidder", 2)
-      scheduler.add_role("Seller", 1)
+      scheduler.add_role("Bidder", 80, 2)
+      scheduler.add_role("Seller", 40, 1)
       scheduler.add_strategy("Bidder", "A")
       scheduler.add_strategy("Bidder", "B")
       scheduler.add_deviating_strategy("Bidder", "C")

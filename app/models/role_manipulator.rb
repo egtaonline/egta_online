@@ -1,7 +1,7 @@
 module RoleManipulator
   module Base
     def add_role(name, count=nil, reduced_count=count)
-      roles.find_or_create_by(name: name, count: count, reduced_count: count)
+      roles.find_or_create_by(name: name, count: count, reduced_count: reduced_count)
     end
 
     def remove_role(role_name)
@@ -63,6 +63,17 @@ module RoleManipulator
     def remove_role(role_name)
       remove_self_from_profiles(self.profiles) if roles.where(name: role_name).first
       super
+    end
+
+    def add_strategies_to_game(game)
+      roles.each do |r|
+        game.roles.create!(name: r.name, count: r.count)
+        r.strategies.each{ |s| game.add_strategy(r.name, s) }
+      end
+    end
+
+    def invalid_role_partition?
+      (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
     end
   end
 end

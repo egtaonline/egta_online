@@ -3,16 +3,19 @@ class HierarchicalDeviationScheduler < AbstractionScheduler
   include Deviations
 
   def profile_space
+    return [] if invalid_role_partition?
+    multiples = {}
+    roles.each { |r| multiples[r.name] = r.count/r.reduced_count }
     first_ar, all_other_ars = arrays_to_cross
     deviations = get_deviations
     profs = []
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
       first_ar.concat(deviations[roles.first.name])
-      profs = first_ar.collect {|r| format_role(r) }
+      profs = first_ar.collect {|r| format_role(r, multiples[r[0]]) }
     else
       first_ar.product(*all_other_ars).each do |prof|
         prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| format_role(r) }.join("; ")
+        profs << prof.collect {|r| format_role(r, multiples[r[0]]) }.join("; ")
       end
       all_other_ars << first_ar
 
@@ -20,7 +23,7 @@ class HierarchicalDeviationScheduler < AbstractionScheduler
         non_deviations = all_other_ars.select{|val| val[0][0] != key}
         value.product(*non_deviations).each do |prof|
           prof.sort!{|x, y| x[0] <=> y[0]}
-          profs << prof.collect {|r| format_role(r) }.join("; ")
+          profs << prof.collect {|r| format_role(r, multiples[r[0]]) }.join("; ")
         end
       end
     end

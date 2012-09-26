@@ -69,13 +69,13 @@ describe RoleManipulator::Scheduler do
 
   describe HierarchicalScheduler do
     it_behaves_like "a role-based scheduler" do
-      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2, agents_per_player: 1) }
+      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2) }
     end
   end
 
   describe HierarchicalDeviationScheduler do
     it_behaves_like "a role-based scheduler" do
-      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2, agents_per_player: 1) }
+      let(:scheduler){ Fabricate(:hierarchical_scheduler, size: 2) }
     end
   end
 end

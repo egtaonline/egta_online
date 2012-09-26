@@ -5,7 +5,7 @@ Scenario Outline: Creating a new scheduler
   And a simulator exists
   When I configure a new <class> at creation
   Then I should see the configured values on that scheduler
-  
+
   Examples:
   | class                            |
   | game_scheduler                   |

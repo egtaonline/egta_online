@@ -9,7 +9,7 @@ Scenario Outline: Creating a game from a scheduler with roles and strategies
   Then I should see a game that matches that scheduler
   When I request a representation of the game
   Then I should see all the profiles of the scheduler that have been sampled
-  
+
   Examples:
   | class                            |
   | game_scheduler                   |

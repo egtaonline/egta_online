@@ -23,10 +23,6 @@ class GameScheduler < Scheduler
     "#{role[0]}: " + strats.uniq.collect{|s| "#{strats.count(s)} #{s}" }.join(", ")
   end
 
-  def invalid_role_partition?
-    (roles.collect{ |role| role.count }.reduce(:+) != size) | roles.detect{ |r| r.strategies.count == 0 }
-  end
-
   def single_role?
     (roles.size == 1) | (roles.map{ |r| r.strategies.count }.reduce(:+) == roles.first.strategies.count)
   end
@@ -34,12 +30,5 @@ class GameScheduler < Scheduler
   def subgame_combinations
     rcs = roles.collect{ |role| role.strategies.repeated_combination(role.count).collect{|c| [role.name].concat(c) } }
     return rcs[0], rcs.drop(1)
-  end
-
-  def add_strategies_to_game(game)
-    roles.each do |r|
-      game.roles.create!(name: r.name, count: r.count)
-      r.strategies.each{ |s| game.add_strategy(r.name, s) }
-    end
   end
 end
