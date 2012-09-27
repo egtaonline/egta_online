@@ -40,6 +40,6 @@ class AbstractionScheduler < Scheduler
   end
 
   def dehasherize(profile)
-    profile.collect{ |role, strategy_hash| "#{role}: "+strategy_hash.collect{ |strategy, count| "#{count} #{strategy}" }.join(", ") }.join("; ")
+    profile.sort.collect{ |role, strategy_hash| "#{role}: "+strategy_hash.sort.collect{ |strategy, count| "#{count} #{strategy}" }.join(", ") }.join("; ")
   end
 end
