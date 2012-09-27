@@ -13,6 +13,8 @@ Scenario Outline: No prior profiles
   | game_scheduler         | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | ["Buyer: 1 Bid1; Seller: 1 Ask1", "Buyer: 1 Bid2; Seller: 1 Ask1", "Buyer: 1 Bid1; Seller: 1 Ask2", "Buyer: 1 Bid2; Seller: 1 Ask2"] |
   | hierarchical_scheduler | All   | 2         | A, B       |        |            |             | ["All: 2 A", "All: 1 A, 1 B", "All: 2 B"]                                                                                            |
   | hierarchical_scheduler | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | ["Buyer: 1 Bid1; Seller: 1 Ask1", "Buyer: 1 Bid2; Seller: 1 Ask1", "Buyer: 1 Bid1; Seller: 1 Ask2", "Buyer: 1 Bid2; Seller: 1 Ask2"] |
+  | dpr_game_scheduler     | All   | 2         | A, B       |        |            |             | ["All: 2 A", "All: 1 A, 1 B", "All: 2 B"]                                                                                            |
+  | dpr_game_scheduler     | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | ["Buyer: 1 Bid1; Seller: 1 Ask1", "Buyer: 1 Bid2; Seller: 1 Ask1", "Buyer: 1 Bid1; Seller: 1 Ask2", "Buyer: 1 Bid2; Seller: 1 Ask2"] |
 
 Scenario Outline: Schedulers find and reuse matching profiles
   Given I am signed in
@@ -29,6 +31,9 @@ Scenario Outline: Schedulers find and reuse matching profiles
   | game_scheduler         | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             |
   | hierarchical_scheduler | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             |
   | hierarchical_scheduler | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             |
+  | dpr_game_scheduler     | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             |
+  | dpr_game_scheduler     | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             |
+
 
 Scenario Outline: Removing a strategy or role should trim the set of profiles to be scheduled without destroying the profiles
   Given I am signed in
@@ -50,3 +55,5 @@ Scenario Outline: Removing a strategy or role should trim the set of profiles to
   | game_scheduler         | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             | Bid1     |                2 |
   | hierarchical_scheduler | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             | A        |                1 |
   | hierarchical_scheduler | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             | Bid1     |                2 |
+  | dpr_game_scheduler     | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             | A        |                1 |
+  | dpr_game_scheduler     | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             | Bid1     |                2 |

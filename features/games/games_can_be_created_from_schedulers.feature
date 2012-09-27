@@ -1,5 +1,6 @@
 Feature: Games can be created from schedulers
 
+@wip
 Scenario Outline: Creating a game from a scheduler with roles and strategies
   Given I am signed in
   And a fleshed out simulator with a non-empty <class> exists
@@ -17,3 +18,5 @@ Scenario Outline: Creating a game from a scheduler with roles and strategies
   | deviation_scheduler              |
   | hierarchical_deviation_scheduler |
   | generic_scheduler                |
+  | dpr_game_scheduler               |
+  | dpr_deviation_scheduler          |

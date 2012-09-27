@@ -1,0 +1,12 @@
+#roles= render partial: "roles/reduced_roles_table", locals: {role_owner: scheduler}
+%h3 Deviating Roles and Strategies
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Full Count
+      $th Reduced Count
+      %th Strategy Set
+  %tbody
+    =render partial: "role", collection: scheduler.deviating_roles, locals: {role_owner: scheduler}
+#profiles= render "profiles/index"

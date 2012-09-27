@@ -11,6 +11,7 @@ Scenario Outline: No prior profiles
   | class                            | profiles                      |
   | deviation_scheduler              | ["All: 2 A", "All: 1 A, 1 B"] |
   | hierarchical_deviation_scheduler | ["All: 2 A", "All: 1 A, 1 B"] |
+  | dpr_deviation_scheduler          | ["All: 2 A", "All: 1 A, 1 B"] |
 
 Scenario Outline: Schedulers find and reuse matching profiles
   Given I am signed in
@@ -25,6 +26,7 @@ Scenario Outline: Schedulers find and reuse matching profiles
   | class                            | assignment    | assignment2 |
   | deviation_scheduler              | All: 1 A, 1 B | All: 2 A    |
   | hierarchical_deviation_scheduler | All: 1 A, 1 B | All: 2 A    |
+  | dpr_deviation_scheduler          | All: 1 A, 1 B | All: 2 A    |
 
 Scenario Outline: Removing a strategy or role should trim the set of profiles to be scheduled without destroying the profiles
   Given I am signed in
@@ -44,3 +46,4 @@ Scenario Outline: Removing a strategy or role should trim the set of profiles to
   | class                            | assignment  | assignment2   |
   | deviation_scheduler              | All: 2 A    | All: 1 A, 1 B |
   | hierarchical_deviation_scheduler | All: 2 A    | All: 1 A, 1 B |
+  | dpr_deviation_scheduler          | All: 2 A    | All: 1 A, 1 B |

@@ -1,0 +1,13 @@
+%tr
+  %td= role.name
+  %td= role.count
+  %td= role.reduced_count
+  %td
+    %table
+      =render partial: "deviation_schedulers/strategy", collection: role.strategies, locals: {role: role}
+      -if (role_owner.available_strategies(role.name)) != []
+        =form_tag url_for(action: :add_deviating_strategy, id: role_owner.id, role: role.name), method: :post do
+          %tr
+            %td= select_tag "strategy", options_for_select(role_owner.available_strategies(role.name)), {id: "dev_#{role.name}_strategy"}
+            %td= submit_tag "Add Strategy", {id: "dev_#{role.name}", class: 'btn btn-mini btn-info'}
+  %td.take_up_space= link_to 'Remove Role', "", method: :post, class: 'btn btn-danger'

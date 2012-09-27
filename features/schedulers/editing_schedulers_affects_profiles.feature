@@ -13,3 +13,5 @@ Scenario Outline: A scheduler with existing profiles has its configuration edite
     | hierarchical_scheduler           |
     | deviation_scheduler              |
     | hierarchical_deviation_scheduler |
+    | dpr_game_scheduler               |
+    | dpr_deviation_scheduler          |

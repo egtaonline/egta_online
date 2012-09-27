@@ -13,6 +13,8 @@ Scenario Outline: Creating a new scheduler
   | deviation_scheduler              |
   | hierarchical_deviation_scheduler |
   | generic_scheduler                |
+  | dpr_game_scheduler               |
+  | dpr_deviation_scheduler          |
 
 Scenario Outline: Editing an existing scheduler
   Given I am signed in
@@ -27,3 +29,5 @@ Scenario Outline: Editing an existing scheduler
   | deviation_scheduler              |
   | hierarchical_deviation_scheduler |
   | generic_scheduler                |
+  | dpr_game_scheduler               |
+  | dpr_deviation_scheduler          |

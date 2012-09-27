@@ -4,10 +4,10 @@ class HierarchicalDeviationScheduler < AbstractionScheduler
 
   def profile_space
     return [] if invalid_role_partition?
+    deviations = get_deviations
     multiples = {}
     roles.each { |r| multiples[r.name] = r.count/r.reduced_count }
     first_ar, all_other_ars = arrays_to_cross
-    deviations = get_deviations
     profs = []
     if roles.size == 1 || roles.reduce(0){|sum, r| sum + r.strategies.count} == roles.first.strategies.count
       first_ar.concat(deviations[roles.first.name])

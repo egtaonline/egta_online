@@ -8,3 +8,13 @@ Fabricator(:dpr_game_scheduler) do
   time_per_sample 40
   configuration {|g| g.simulator.configuration }
 end
+
+Fabricator(:dpr_game_scheduler_with_profiles, from: :dpr_game_scheduler) do
+  after_create do |scheduler|
+    scheduler.add_role("All", 4, 2)
+    scheduler.add_strategy("All", "A")
+    scheduler.add_strategy("All", "B")
+    ProfileAssociater.perform scheduler.id
+    scheduler.reload
+  end
+end
