@@ -1,7 +1,5 @@
 EgtaOnline::Application.routes.draw do
 
-  resources :deviation_schedulers
-
   devise_for :users
 
   namespace :api do
@@ -49,7 +47,7 @@ EgtaOnline::Application.routes.draw do
     end
   end
 
-  resources :game_schedulers, :hierarchical_schedulers, :dpr_game_schedulers do
+  resources :game_schedulers, :dpr_game_schedulers, :hierarchical_schedulers do
     member do
       post :add_strategy, :remove_strategy, :add_role, :remove_role
     end

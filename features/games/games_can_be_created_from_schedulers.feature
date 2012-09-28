@@ -1,9 +1,10 @@
 Feature: Games can be created from schedulers
 
-@wip
-Scenario Outline: Creating a game from a scheduler with roles and strategies
+Background:
   Given I am signed in
-  And a fleshed out simulator with a non-empty <class> exists
+
+Scenario Outline: Creating a game from a scheduler with roles and strategies
+  Given a fleshed out simulator with a non-empty <class> exists
   And its profiles have been sampled
   When I visit that scheduler's page
   And I follow "Create Game to Match"
@@ -19,4 +20,17 @@ Scenario Outline: Creating a game from a scheduler with roles and strategies
   | hierarchical_deviation_scheduler |
   | generic_scheduler                |
   | dpr_game_scheduler               |
+  | dpr_deviation_scheduler          |
+
+Scenario Outline: Creating a game from a deviation scheduler adds the deviating strategy
+  Given a fleshed out simulator with an empty <class>
+  And that scheduler has target and deviating strategies
+  When I visit that scheduler's page
+  And I follow "Create Game to Match"
+  Then I should see a game with all the specified strategies
+
+  Examples:
+  | class                            |
+  | deviation_scheduler              |
+  | hierarchical_deviation_scheduler |
   | dpr_deviation_scheduler          |

@@ -83,6 +83,19 @@ Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   @profile_count = Profile.with_scheduler(@scheduler).count
 end
 
+Given /^that scheduler has target and deviating strategies$/ do
+  @scheduler.add_role("All", @scheduler.size, @scheduler.size)
+  @scheduler.add_strategy("All", "A123")
+  @scheduler.add_deviating_strategy("All", "B456")
+end
+
+Then /^I should see a game with all the specified strategies$/ do
+  current_path.should eql(game_path(Game.last))
+  page.should have_content('A123')
+  page.should have_content('B456')
+end
+
+
 When /^I edit a parameter of that scheduler$/ do
   visit "/#{@scheduler_class}s/#{@scheduler.id}/edit"
   fill_in "Parm1", with: 12345

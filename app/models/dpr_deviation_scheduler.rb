@@ -27,4 +27,9 @@ class DprDeviationScheduler < AbstractionDeviationScheduler
     end
     prof_hashes.uniq.collect{ |profile| dehasherize(profile) }
   end
+
+  def add_strategies_to_game(game)
+    super
+    deviating_roles.each{ |r| r.strategies.each{ |s| game.add_strategy(r.name, s) } }
+  end
 end

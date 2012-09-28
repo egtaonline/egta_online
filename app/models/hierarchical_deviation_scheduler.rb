@@ -16,6 +16,6 @@ class HierarchicalDeviationScheduler < AbstractionDeviationScheduler
 
   def add_strategies_to_game(game)
     super
-    deviating_roles.each{ |r| r.strategies.each{ |s| add_strategy(r.name, s) } }
+    deviating_roles.each{ |r| r.strategies.each{ |s| game.add_strategy(r.name, s) } }
   end
 end
