@@ -4,6 +4,7 @@ class GamesController < ApplicationController
 
   expose(:games){ Game.order_by("#{sort_column} #{sort_direction}").page(params[:page]) }
   expose(:game)
+  expose(:profile_counts){ game.profile_counts }
 
   def create
     game.save

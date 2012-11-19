@@ -22,6 +22,11 @@ class Game
     Profile.collection.find(query_hash)
   end
 
+  def profile_counts
+    selected = profiles.select(sample_count: 1).map{|p| p["sample_count"]}
+    [selected.size, selected.reduce(:+)]
+  end
+
   private
 
   def strategy_regex

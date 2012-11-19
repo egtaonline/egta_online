@@ -1,2 +1,3 @@
 #roles= render partial: "roles/roles_table", locals: {role_owner: game}
+%p="#{profile_counts[0]} profile(s) and #{profile_counts[1]} observation(s) as currently configured."
 = link_to "Analyze JSON in EGAT", "http://egat.eecs.umich.edu/create-process.jsp?objecturl=http://d-108-249.eecs.umich.edu/api/v3/games/#{game.id}.json?auth_token=#{current_user.authentication_token}",class: 'btn btn-primary'
