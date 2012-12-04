@@ -15,6 +15,7 @@ EgtaOnline::Application.routes.draw do
         end
       end
       resources :profiles, only: :show
+      resources :schedulers, only: :show
     end
   end
 
