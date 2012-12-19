@@ -31,12 +31,13 @@ module Backend
   end
 
   class Configuration
-    attr_accessor :backend_implementation, :queue_periodicity, :queue_quantity
+    attr_accessor :backend_implementation, :queue_periodicity, :queue_quantity, :queue_max
 
     def initialize
       @backend_implementation = FluxBackend.new
       @queue_periodicity = 5.minutes
       @queue_quantity = 30
+      @queue_max = 999
     end
   end
 

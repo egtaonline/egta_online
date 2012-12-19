@@ -22,6 +22,10 @@ class Simulation
   sequence :_id
   index({ state: 1 })
 
+  def self.simulation_limit
+    [Backend.configuration.queue_quantity, Backend.configuration.queue_max-Simulation.active.count].min
+  end
+
   scope :pending, where(state: 'pending')
   scope :queued, where(state: 'queued')
   scope :running, where(state: 'running')
@@ -32,7 +36,7 @@ class Simulation
   scope :finished, where(:state.in=>['complete', 'failed'])
   scope :recently_finished, where(:state.in=>['complete', 'failed'], :updated_at.gt => (Time.current-86400))
   scope :scheduled, where(:state.in=>['pending','queued','running'])
-  scope :queueable, pending.order_by([[:created_at, :asc]]).limit(Backend.configuration.queue_quantity)
+  scope :queueable, pending.order_by([[:created_at, :asc]]).limit(simulation_limit)
   validates_presence_of :state, on: :create, message: "can't be blank"
   validates_presence_of :profile
   validates_numericality_of :size, only_integer: true, greater_than: 0

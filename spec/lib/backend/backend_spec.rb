@@ -11,6 +11,7 @@ describe Backend do
     its(:backend_implementation){ should_not eql(nil) }
     its(:queue_periodicity){ should == 5.minutes }
     its(:queue_quantity){ should eql(30) }
+    its(:queue_max){ should eql(999) }
   end
 
   describe 'the SRG configuration works' do
@@ -18,6 +19,7 @@ describe Backend do
       Backend.configure do |config|
         config.queue_periodicity = 5.minutes
         config.queue_quantity = 30
+        config.queue_max = 999
         config.backend_implementation.flux_active_limit = 120
         if !Rails.env.test?
           config.backend_implementation.setup_connections
@@ -74,5 +76,6 @@ describe Backend do
     its(:backend_implementation){ subject.class.should eql(FluxBackend) }
     its(:queue_periodicity){ should == 5.minutes }
     its(:queue_quantity){ should eql(30) }
+    its(:queue_max){ should eql(999) }
   end
 end
