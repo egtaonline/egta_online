@@ -1,33 +1,24 @@
 require 'spec_helper'
 
 describe Simulation do
-  before(:each) do
-    ResqueSpec.reset!
-  end
-
-  context "a simulation has failed" do
-    let!(:simulation){ Fabricate(:simulation) }
-
-    before(:each) do
-      simulation.failure!
+  let(:simulation){ Fabricate(:simulation) }
+  
+  describe 'a simulation fails' do
+    before do
+      ResqueSpec.reset!
+      simulation.fail("could not transfer")
     end
-
+    
     it "enqueues a check for rescheduling" do
       ProfileScheduler.should have_schedule_size_of(1)
       ProfileScheduler.should have_scheduled(simulation.profile.id).in(5 * 60)
     end
   end
 
-  context "a simulation has failed" do
-    let!(:simulation){ Fabricate(:simulation) }
-
-    before(:each) do
-      simulation.fail("count not transfer")
-    end
-
-    it "enqueues a check for rescheduling" do
-      ProfileScheduler.should have_schedule_size_of(1)
-      ProfileScheduler.should have_scheduled(simulation.profile.id).in(5 * 60)
+  describe 'deleting a simulation from the database' do
+    it "calls the backend cleanup routine" do
+      Backend.should_receive(:clean_simulation).with(simulation)
+      simulation.destroy
     end
   end
 end

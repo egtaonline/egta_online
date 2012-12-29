@@ -41,6 +41,10 @@ class FluxBackend
     end
   end
 
+  def clean_simulation(simulation)
+    @flux_proxy.exec!("rm -rf #{Yetting.deploy_path}/simulations/#{simulation.id}")
+  end
+
   def prepare_simulator(simulator)
     @simulator_prep_service.cleanup_simulator(simulator)
     begin

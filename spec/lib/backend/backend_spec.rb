@@ -59,6 +59,13 @@ describe Backend do
       end
     end
 
+    describe 'clean_simulation' do
+      it 'passes the message along to the backend implementation' do
+        Backend.configuration.backend_implementation.should_receive(:clean_simulation).with(simulation)
+        Backend.clean_simulation simulation
+      end
+    end
+
     describe 'prepare_simulator' do
       let(:simulator){ double('simulator') }
 
