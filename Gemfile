@@ -43,7 +43,7 @@ gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem "simple_form"
-gem "show_for", :git => "git://github.com/plataformatec/show_for.git"
+gem "show_for"
 gem 'high_voltage'
 gem "capistrano"
 
