@@ -9,8 +9,8 @@ describe "BaseController", :type => :api do
       let(:url){"/api/v3/#{described_class.to_s.tableize}/1234"}
       it "returns an appropriate 404" do
         get "#{url}.json", :auth_token => token
-        last_response.status.should eql(404)
-        last_response.body.should eql({:error => "the #{described_class.to_s.tableize.singularize} you were looking for could not be found"}.to_json)
+        response.status.should eql(404)
+        response.body.should eql({:error => "the #{described_class.to_s.tableize.singularize} you were looking for could not be found"}.to_json)
       end
     end
   end

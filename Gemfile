@@ -64,7 +64,7 @@ group :test do
   gem 'simplecov', :require => false
   gem "capybara"
   gem "rb-fsevent"
-  gem "capybara-webkit"
+  gem "poltergeist"
   gem "growl"
   gem "cucumber-rails"
   gem "capybara-screenshot"

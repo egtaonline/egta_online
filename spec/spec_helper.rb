@@ -13,10 +13,11 @@ Spork.prefork do
   require "rails/mongoid"
   Spork.trap_class_method(Rails::Mongoid, :load_models)
   require 'capybara/rspec'
+  require 'capybara/poltergeist'
   require 'fabrication'
   require 'resque_spec/scheduler'
   Capybara.default_selector = :css
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :poltergeist
   
   RSpec.configure do |config|
 
@@ -44,7 +45,7 @@ Spork.prefork do
     end
     
     config.mock_with :rspec
-
+    config.order = "random"
   end
 end
 
