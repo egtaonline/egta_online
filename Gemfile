@@ -45,7 +45,6 @@ gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem "simple_form"
 gem "show_for"
 gem 'high_voltage'
-gem "capistrano"
 
 group :production do
   gem "foreman"
@@ -53,6 +52,7 @@ end
 
 group :development do
   gem 'quiet_assets'
+  gem 'capistrano'
 end
 
 group :test, :development do
