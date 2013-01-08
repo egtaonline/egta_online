@@ -42,7 +42,12 @@ class Simulation
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
   before_save(on: :create){ self.profile_assignment = self.profile.assignment }
-
+  before_destroy :cleanup
+  
+  def cleanup
+    Backend.clean_simulation(self)
+  end
+  
   state_machine :state, initial: :pending do
     state :pending
     state :queued

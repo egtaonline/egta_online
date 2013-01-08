@@ -21,9 +21,9 @@ describe "/api/v3/generic_schedulers", :type => :api do
         scheduler = GenericScheduler.last
         scheduler.simulator.should == simulator
         route = "/api/v3/generic_schedulers/#{scheduler.id}"
-        last_response.status.should eql(201)
-        last_response.headers["Location"].should eql(route)
-        last_response.body.should eql(scheduler.to_json)
+        response.status.should eql(201)
+        response.headers["Location"].should eql(route)
+        response.body.should eql(scheduler.to_json)
       end
     end
     
@@ -35,17 +35,17 @@ describe "/api/v3/generic_schedulers", :type => :api do
                                                           :time_per_sample => 120, :samples_per_simulation => 30,
                                                           :default_samples => 30, :configuration => simulator.configuration,
                                                           :nodes => 1}
-        last_response.status.should eql(422)
+        response.status.should eql(422)
         errors = {"errors" => {"process_memory" => ["can't be blank","is not a number"]}}.to_json
-        last_response.body.should eql(errors)
+        response.body.should eql(errors)
       end
       
       it "invalid request" do
         simulator = Simulator.last
         post "#{url}.json", :auth_token => token
-        last_response.status.should eql(422)
+        response.status.should eql(422)
         errors = {"errors" => {"default_samples" => ["is not a number"], "process_memory"=>["can't be blank","is not a number"],"name"=>["can't be blank"],"time_per_sample"=>["can't be blank","is not a number"],"samples_per_simulation"=>["can't be blank","is not a number"], "configuration" => ["can't be blank"], "size" => ["can't be blank"]}}.to_json
-        last_response.body.should eql(errors)
+        response.body.should eql(errors)
       end
     end
   end
@@ -57,17 +57,17 @@ describe "/api/v3/generic_schedulers", :type => :api do
        put "#{url}.json", :auth_token => token, :scheduler => {:time_per_sample => 60}
        @scheduler.reload
        @scheduler.time_per_sample.should eql(60)
-       last_response.status.should eql(204)
-       last_response.body.should eql("")
+       response.status.should eql(204)
+       response.body.should eql("")
      end
      
      it "unsuccessful JSON" do
        put "#{url}.json", :auth_token => token, :scheduler => {:time_per_sample => ""}
-       last_response.status.should eql(422)
+       response.status.should eql(422)
        @scheduler.reload
        @scheduler.time_per_sample.should eql(60)
        errors = {"errors" => {:time_per_sample => ["can't be blank","is not a number"]}}.to_json
-       last_response.body.should eql(errors)
+       response.body.should eql(errors)
      end
    end
    
@@ -77,7 +77,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
      it "JSON" do
        delete "#{url}.json", :auth_token => token
        Scheduler.where(:id => @scheduler.id).count.should == 0
-       last_response.status.should eql(204)
+       response.status.should eql(204)
      end
    end
    
@@ -157,7 +157,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
     it "should error out if the scheduler is invalid" do
       post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 2 A; Seller: 2 B", :sample_count => 10
       Profile.where(:name => "Bidder: 2 A; Seller: 2 B").count.should == 0
-      last_response.status.should eql(404)      
+      response.status.should eql(404)      
     end
   end
    
@@ -167,7 +167,7 @@ describe "/api/v3/generic_schedulers", :type => :api do
     it "should not create a profile if the profile name is invalid" do
       post "#{url}/add_profile.json", :auth_token => token, :assignment => "Bidder: 1 A1 C; Seller: 2 B", :sample_count => 10
       Profile.count.should == 0
-      last_response.status.should eql(422)
+      response.status.should eql(422)
     end
   end
 end

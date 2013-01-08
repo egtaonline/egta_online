@@ -26,6 +26,10 @@ module Backend
     backend_implementation.schedule_simulation(simulation)
   end
 
+  def self.clean_simulation(simulation)
+    backend_implementation.clean_simulation(simulation)
+  end
+
   def self.update_simulations
     backend_implementation.update_simulations
   end

@@ -15,7 +15,8 @@ Spork.prefork do
   require 'cucumber/rails'
   require 'resque_spec/scheduler'
   Capybara.default_selector = :css
-  Capybara.javascript_driver = :webkit
+  require 'capybara/poltergeist'
+  Capybara.javascript_driver = :poltergeist
   require 'cucumber/rspec/doubles'
   ActionController::Base.allow_rescue = false
   World(ResqueSpec::Helpers)
