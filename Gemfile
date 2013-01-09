@@ -6,16 +6,11 @@ gem 'rails', '~> 3.2'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
-platform :ruby do
-  gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
-  gem 'twitter-bootstrap-rails'
-  gem 'oj'
-  gem 'rdiscount'
-  gem 'thin'
-end
-platform :jruby do
-  gem 'jruby-openssl'
-end
+gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
+gem 'twitter-bootstrap-rails'
+gem 'oj'
+gem 'rdiscount'
+gem 'thin'
 gem "haml-rails"
 
 # JS framework
@@ -45,6 +40,7 @@ gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem "simple_form"
 gem "show_for"
 gem 'high_voltage'
+gem 'puma'
 
 group :production do
   gem "foreman"
@@ -53,6 +49,7 @@ end
 group :development do
   gem 'quiet_assets'
   gem 'capistrano'
+  gem 'thin'
 end
 
 group :test, :development do

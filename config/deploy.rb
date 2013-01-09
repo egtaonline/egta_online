@@ -5,12 +5,16 @@ load "config/recipes/base"
 load "config/recipes/nginx"
 load "config/recipes/nodejs"
 load "config/recipes/rbenv"
+load "config/recipes/mongodb"
+load "config/recipes/redis"
+load "config/recipes/foreman"
+load "config/recipes/puma"
 load 'deploy/assets'
 
 set :stages, %w(staging production)
 set :default_stage, 'staging'
-
-# set :deploy_via, :remote_cache
+set :rails_env, 'production'
+set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, 'git'
@@ -27,8 +31,7 @@ after 'deploy', 'deploy:cleanup'
 # set :deploy_to, "/home/deployment"
 #
 # set :scm, :git
-# set :repository,  "git@github.com:egtaonline/egta_online.git"
-# set :branch, "origin/master"
+set :repository,  "git@github.com:egtaonline/egta_online.git"
 # set :migrate_target,  :current
 # set :ssh_options,     { forward_agent: true }
 # set :rails_env,       "production"
@@ -143,32 +146,3 @@ after 'deploy', 'deploy:cleanup'
 #   end
 # end
 #
-# namespace :foreman do
-#   desc "Start the application services"
-#   task :start, roles: :app do
-#     sudo "start egtao"
-#   end
-#
-#   desc "Stop the application services"
-#   task :stop, roles: :app do
-#     sudo "stop egtao"
-#   end
-#
-#   desc "Restart the application services"
-#   task :restart, roles: :app do
-#     run "sudo stop egtao; sudo start egtao"
-#   end
-#
-#   desc "Display logs for a certain process - arg example: PROCESS=web-1"
-#   task :logs, roles: :app do
-#     run "cd #{current_path}/log && cat #{ENV["PROCESS"]}.log"
-#   end
-#
-#   desc "Export the Procfile to upstart scripts"
-#   task :export, roles: :app do
-#     # 5 resque workers, 1 resque scheduler
-#     run "cd /home/deployment/current && #{sudo} bundle exec foreman export upstart /etc/init -a #{application} -u #{user} -l #{shared_path}/log  -f /home/deployment/current/Procfile"
-#   end
-# end
-#
-# after 'deploy:finalize_update', 'foreman:restart'
