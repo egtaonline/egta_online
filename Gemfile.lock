@@ -17,6 +17,13 @@ GIT
       mongoid (>= 3.0.0.rc)
       moped (>= 1.0.0.rc)
 
+GIT
+  remote: git://github.com/puma/puma.git
+  revision: 2f7d2ee49d3c589ac53d9f0d0c41dd376c975271
+  specs:
+    puma (2.0.0.b4)
+      rack (~> 1.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -55,7 +62,7 @@ GEM
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
     builder (3.0.4)
-    capistrano (2.11.2)
+    capistrano (2.13.5)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -147,7 +154,7 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     high_voltage (1.1.1)
-    highline (1.6.11)
+    highline (1.6.15)
     hike (1.2.1)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
@@ -195,7 +202,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.5.2)
+    net-ssh (2.6.2)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
     nokogiri (1.5.6)
@@ -213,10 +220,6 @@ GEM
       multi_json (~> 1.0)
     polyglot (0.3.3)
     posix-spawn (0.3.6)
-    puma (1.6.3)
-      rack (~> 1.2)
-    puma (1.6.3-java)
-      rack (~> 1.2)
     quiet_assets (1.0.0)
       rails (~> 3.1)
     rack (1.4.1)
@@ -379,7 +382,7 @@ DEPENDENCIES
   mongoid_rails_migrations!
   oj
   poltergeist
-  puma
+  puma!
   quiet_assets
   rack-perftools_profiler
   rails (~> 3.2)

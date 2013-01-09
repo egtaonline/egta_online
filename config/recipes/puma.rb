@@ -1,20 +1,23 @@
-namespace :puma do
-  desc "Start puma"
-  task :start, :roles => :app do
-    puma_env = fetch(:rack_env, fetch(:rails_env, "production"))
-    run "cd #{current_path} && #{fetch(:bundle_cmd, "bundle")} exec puma -e #{rails_env} -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock'", :pty => false
+set :shared_children, shared_children << 'tmp/sockets'
+
+namespace :deploy do
+  desc "Start the application"
+  task :start, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec puma -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock' >> #{shared_path}/log/puma-#{stage}.log 2>&1 &", :pty => false
   end
 
-  desc "Stop puma"
-  task :stop, :roles => :app do
-    run "cd #{current_path} && #{fetch(:bundle_cmd, "bundle")} exec pumactl -S #{shared_path}/sockets/puma.state stop"
+  desc "Stop the application"
+  task :stop, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state stop"
   end
 
-  desc "Restart puma"
-  task :restart, :roles => :app do
-    run "cd #{current_path} && #{fetch(:bundle_cmd, "bundle")} exec pumactl -S #{shared_path}/sockets/puma.state restart"
+  desc "Restart the application"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state restart"
   end
-  after "deploy:stop", "puma:stop"
-  after "deploy:start", "puma:start"
-  after "deploy:restart", "puma:restart"
+
+  desc "Status of the application"
+  task :status, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state stats"
+  end
 end

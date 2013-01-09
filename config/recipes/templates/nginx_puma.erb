@@ -1,13 +1,11 @@
 upstream egtaonline {
-  server unix:///tmp/puma.<%= application %>.sock fail_timeout=0;
+  server unix://<%= shared_path %>/sockets/puma.sock fail_timeout=0;
 }
 
 server {
   listen 80;
   server_name egtaonline;
   root <%= current_path %>/public;
-  access_log <%= current_path %>/log/nginx.access.log;
-  error_log <%= current_path %>/log/nginx.error.log info;
 
   location ^~ /assets/ {
     gzip_static on;
@@ -15,9 +13,8 @@ server {
     add_header Cache-Control public;
   }
 
-  if (-f $document_root/maintenance.html) {
-    rewrite  ^(.*)$  /maintenance.html last;
-    break;
+  if (-f $document_root/system/maintenance.html) {
+      return 503;
   }
 
   location / {
@@ -54,8 +51,13 @@ server {
       break;
     }
   }
+  error_page 503 @maintenance;
+  location @maintenance {
+      rewrite  ^(.*)$  /system/maintenance.html last;
+      break;
+  }
 
-  error_page 500 502 503 /500.html;
+  error_page 500 502 /500.html;
   client_max_body_size 4G;
   keepalive_timeout 10;
 }

@@ -40,7 +40,7 @@ gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem "simple_form"
 gem "show_for"
 gem 'high_voltage'
-gem 'puma'
+gem 'puma', github: 'puma/puma'
 
 group :production do
   gem "foreman"
