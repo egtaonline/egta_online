@@ -13,8 +13,7 @@ load 'deploy/assets'
 
 set :stages, %w(staging production)
 set :default_stage, 'staging'
-set :rails_env, 'production'
-set :deploy_via, :remote_cache
+#set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, 'git'
@@ -23,7 +22,7 @@ set :application, 'egtaonline'
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after 'deploy', 'deploy:cleanup'
+# after 'deploy', 'deploy:cleanup'
 # server "d-108-249.eecs.umich.edu", :web, :app, :db, primary: true
 #
 # set :user, "deployment"
@@ -31,7 +30,7 @@ after 'deploy', 'deploy:cleanup'
 # set :deploy_to, "/home/deployment"
 #
 # set :scm, :git
-set :repository,  "git@github.com:egtaonline/egta_online.git"
+# set :repository,  "git@github.com:egtaonline/egta_online.git"
 # set :migrate_target,  :current
 # set :ssh_options,     { forward_agent: true }
 # set :rails_env,       "production"

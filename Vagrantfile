@@ -8,6 +8,8 @@ Vagrant::Config.run do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = 'precise64'
+  config.vm.network :hostonly, "33.33.33.10"
+  config.vm.host_name = "vagrant"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.

@@ -66,3 +66,9 @@ test:
         - localhost:27017
       options:
         consistency: :strong
+staging:
+  sessions:
+    default:
+      hosts:
+        - 127.0.0.1:27017
+      database: egt_web_interface_production

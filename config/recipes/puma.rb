@@ -2,7 +2,7 @@ namespace :puma do
   desc "Start puma"
   task :start, :roles => :app do
     puma_env = fetch(:rack_env, fetch(:rails_env, "production"))
-    run "cd #{current_path} && #{fetch(:bundle_cmd, "bundle")} exec puma -d -e #{puma_env} -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock'", :pty => false
+    run "cd #{current_path} && #{fetch(:bundle_cmd, "bundle")} exec puma -e #{rails_env} -b 'unix://#{shared_path}/sockets/puma.sock' -S #{shared_path}/sockets/puma.state --control 'unix://#{shared_path}/sockets/pumactl.sock'", :pty => false
   end
 
   desc "Stop puma"
