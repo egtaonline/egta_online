@@ -25,6 +25,6 @@ namespace :foreman do
     run "cd /home/#{user}/#{application}/current && #{sudo} bundle exec foreman export upstart /etc/init -a resque-farm -u #{user} -l #{shared_path}/log  -f /home/#{user}/#{application}/current/Procfile"
   end
 
-#  after 'deploy:finalize_update', 'foreman:export'
-#  after 'deploy:finalize_update', 'foreman:restart'
+  after 'deploy:finalize_update', 'foreman:export'
+  after 'deploy:finalize_update', 'foreman:restart'
 end

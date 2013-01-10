@@ -1,4 +1,4 @@
-set :shared_children, shared_children << 'tmp/sockets'
+set :shared_children, shared_children << 'sockets'
 
 namespace :deploy do
   desc "Start the application"
@@ -20,4 +20,11 @@ namespace :deploy do
   task :status, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state stats"
   end
+end
+
+namespace :puma do
+  task :setup do
+    "mkdir #{shared_path}/sockets"
+  end
+  after "deploy:setup", "puma:setup"
 end
