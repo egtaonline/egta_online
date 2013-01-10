@@ -21,6 +21,10 @@ gem 'resque', :require => 'resque/server'
 gem 'resque-scheduler', :require => 'resque_scheduler'
 gem "resque-loner"
 
+gem 'sidekiq', '~> 2.6.4'
+gem 'sidekiq-unique-jobs'
+gem 'kiqstand'
+
 # Error reporting
 gem "airbrake"
 
