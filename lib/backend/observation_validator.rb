@@ -1,5 +1,5 @@
 class ObservationValidator
-  def self.validate_all(profile, location, files)
+  def validate_all(profile, location, files)
     validated_files = []
     files.each do |file|
       validated_files << validate(profile, location+"/"+file)
@@ -7,7 +7,7 @@ class ObservationValidator
     validated_files.compact
   end
 
-  def self.validate(profile, file_name)
+  def validate(profile, file_name)
     begin
       json = Oj.load_file(file_name, mode: :compat)
       json['players'].each do |player|
@@ -30,7 +30,7 @@ class ObservationValidator
 
   private
 
-  def self.numeralize(hash)
+  def numeralize(hash)
     return {} if !hash
     return_hash = {}
     hash.each do |key, value|
@@ -39,7 +39,7 @@ class ObservationValidator
     return_hash
   end
 
-  def self.clean_players(players)
+  def clean_players(players)
     players.collect do |player|
       { payoff: player['payoff'].to_f, features: numeralize(player['features'])}
     end

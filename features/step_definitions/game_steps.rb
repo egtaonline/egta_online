@@ -1,21 +1,3 @@
-Then /^the last game should have (\d+) profiles$/ do |arg1|
-  Game.last.profiles.size.should == arg1.to_i
-end
-
-Given /^the last game has the strategy "([^"]*)"$/ do |arg1|
-  game = Game.last
-  game.add_strategy("All", arg1)
-  game.save!
-end
-
-When /^I delete the strategy "([^"]*)" from that game$/ do |arg1|
-  Game.last.delete_strategy_by_name("All", arg1)
-end
-
-Then /^the first game should have (\d+) profiles$/ do |arg1|
-  Game.first.profiles.size.should == arg1.to_i
-end
-
 Given /^a game that matches those profiles exists$/ do
   @profiles = @simulator.profiles
   with_resque do
@@ -50,14 +32,6 @@ Then /^I should have those profiles$/ do
       page.should have_content("\"role\":\"#{sgroup.role}\",\"strategy\":\"#{sgroup.strategy}\",\"count\":#{sgroup.count}")
     end
   end
-end
-
-Given /^that simulator has a game that matches the scheduler$/ do
-  @game = Fabricate(:game, simulator: @simulator, configuration: @scheduler.configuration, size: @scheduler.size)
-end
-
-Given /^that simulator has a game that does not match the scheduler$/ do
-  @game = Fabricate(:game, simulator: @simulator, configuration: @scheduler.configuration.merge({ other_key: 'other_value' }), size: @scheduler.size)
 end
 
 Given /^3 games exist$/ do

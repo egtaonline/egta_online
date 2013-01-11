@@ -1,8 +1,8 @@
 class DataParser
-  include Resque::Plugins::UniqueJob
-  @queue = :nyx_actions
+  include Sidekiq::Worker
+  sidekiq_options unique: true
 
-  def self.perform(number, location="#{Rails.root}/tmp/data/#{number}")
+  def perform(number, location="#{Rails.root}/tmp/data/#{number}")
     simulation = Simulation.find(number)
     if simulation.state != 'complete'
       files = Dir.entries(location).keep_if{ |name| name =~ /\A(.*)observation(.)*.json\z/ }

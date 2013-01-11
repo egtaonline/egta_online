@@ -5,7 +5,7 @@ Spork.prefork do
     require 'simplecov'
     SimpleCov.start 'rails'
   end
-  
+
   ENV["RAILS_ENV"] ||= 'test'
 
   require File.expand_path("../../config/environment", __FILE__)
@@ -18,7 +18,7 @@ Spork.prefork do
   require 'resque_spec/scheduler'
   Capybara.default_selector = :css
   Capybara.javascript_driver = :poltergeist
-  
+
   RSpec.configure do |config|
 
 
@@ -26,11 +26,11 @@ Spork.prefork do
     config.before(:each) do
       Mongoid.purge!
     end
-    
+
     config.before(:all) do
       Mongoid.purge!
     end
-    
+
     config.before(:each, :type => :request) do
       ResqueSpec.reset!
       user = Fabricate(:user)
@@ -39,11 +39,11 @@ Spork.prefork do
       fill_in 'Password', :with => user.password
       click_button 'Sign in'
     end
-    
+
     config.after(:each, :type => :request) do
       visit "/users/sign_out"
     end
-    
+
     config.mock_with :rspec
     config.order = "random"
   end
@@ -54,7 +54,7 @@ Spork.each_run do
     require 'simplecov'
     SimpleCov.start 'rails'
   end
-  
+
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
   Dir[Rails.root.join("app/workers/*")].each {|f| require f}
   Dir["#{Rails.root}/lib/util/*", "#{Rails.root}/lib/backend/*.rb", "#{Rails.root}/lib/backend/flux/*.rb"].each do |file|
