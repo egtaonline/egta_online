@@ -15,7 +15,6 @@ Spork.prefork do
   require 'capybara/rspec'
   require 'capybara/poltergeist'
   require 'fabrication'
-  require 'resque_spec/scheduler'
   Capybara.default_selector = :css
   Capybara.javascript_driver = :poltergeist
 

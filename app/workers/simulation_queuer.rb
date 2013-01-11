@@ -1,7 +1,8 @@
 class SimulationQueuer
-  @queue = :nyx_queuing
+  include Sidekiq::Worker
+  sidekiq_options unique: true, queue: 'cluster'
 
-  def self.perform
+  def perform
     prep_service = SimulationPrepService.new
     prep_service.cleanup
     Simulation.queueable.each do |simulation|
