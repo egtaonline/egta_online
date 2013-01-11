@@ -4,7 +4,6 @@ describe RoleManipulator::Scheduler do
   shared_examples 'a role-based scheduler' do
     describe '#add_strategy' do
       before(:each) do
-        ResqueSpec.reset!
         scheduler.add_role('All', 2)
         scheduler.add_strategy('All', 'A')
       end
@@ -33,7 +32,6 @@ describe RoleManipulator::Scheduler do
 
     describe '#remove_strategy' do
       before(:each) do
-        ResqueSpec.reset!
         scheduler.add_role('A', 2)
       end
 

@@ -22,7 +22,7 @@ module Deviations
       role_i.strategies << strategy_name
       role_i.strategies.sort!
       role_i.save!
-      Resque.enqueue(ProfileAssociater, self.id)
+      ProfileAssociater.perform_async(self.id)
     end
   end
 
@@ -33,7 +33,7 @@ module Deviations
       role_i.strategies << strategy_name
       role_i.strategies.sort!
       role_i.save!
-      Resque.enqueue(ProfileAssociater, self.id)
+      ProfileAssociater.perform_async(self.id)
     end
   end
 
@@ -41,7 +41,7 @@ module Deviations
     role_i = deviating_roles.where(name: role_name).first
     role_i.strategies.delete(strategy_name)
     self.save
-    Resque.enqueue(StrategyRemover, self.id)
+    StrategyRemover.perform_async(self.id)
   end
 
   def deviating_strategies_for(role_name)

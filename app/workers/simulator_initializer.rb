@@ -1,7 +1,8 @@
 class SimulatorInitializer
-  @queue = :nyx_actions
+  include Sidekiq::Worker
+  sidekiq_options unique: true, queue: 'backend'
 
-  def self.perform(simulator_id)
+  def perform(simulator_id)
     simulator = Simulator.find(simulator_id) rescue nil
     if simulator != nil
       Backend.prepare_simulator(simulator)

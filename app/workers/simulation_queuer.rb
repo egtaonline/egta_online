@@ -1,6 +1,6 @@
 class SimulationQueuer
   include Sidekiq::Worker
-  sidekiq_options unique: true, queue: 'cluster'
+  sidekiq_options unique: true, queue: 'backend'
 
   def perform
     prep_service = SimulationPrepService.new

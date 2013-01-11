@@ -13,13 +13,11 @@ Spork.prefork do
   end
   require 'fabrication'
   require 'cucumber/rails'
-  require 'resque_spec/scheduler'
   Capybara.default_selector = :css
   require 'capybara/poltergeist'
   Capybara.javascript_driver = :poltergeist
   require 'cucumber/rspec/doubles'
   ActionController::Base.allow_rescue = false
-  World(ResqueSpec::Helpers)
 end
 
 Spork.each_run do
@@ -27,5 +25,4 @@ Spork.each_run do
     require 'simplecov'
     SimpleCov.start 'rails'
   end
-  ResqueSpec.reset!
 end

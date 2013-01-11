@@ -42,29 +42,29 @@ When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
 end
 
 Given /^(?:|I )am on (.+)$/ do |page_name|
-  with_resque do
+  with_sidekiq do
     visit path_to(page_name)
   end
 end
 
 When /^(?:|I )go to (.+)$/ do |page_name|
-  with_resque do
+  with_sidekiq do
     visit path_to(page_name)
   end
 end
 
 When /^(?:|I )press "([^"]*)"$/ do |button|
-  with_resque do
+  with_sidekiq do
     click_button(button)
   end
 end
 
-When /^(?:|I )press "([^"]*)" without resque$/ do |button|
+When /^(?:|I )press "([^"]*)" without sidekiq$/ do |button|
   click_button(button)
 end
 
 When /^(?:|I )follow "([^"]*)"$/ do |link|
-  with_resque do
+  with_sidekiq do
     click_link(link)
   end
 end
@@ -197,7 +197,7 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|
-  with_resque do
+  with_sidekiq do
     current_path = URI.parse(current_url).path
     if current_path.respond_to? :should
       current_path.should == path_to(page_name)

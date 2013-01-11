@@ -52,12 +52,12 @@ module RoleManipulator
 
     def add_strategy(role, strategy_name)
       super
-      Resque.enqueue(ProfileAssociater, self.id)
+      ProfileAssociater.perform_async(self.id)
     end
 
     def remove_strategy(role_name, strategy_name)
       role = super
-      Resque.enqueue(StrategyRemover, self.id) if role != nil
+      StrategyRemover.perform_async(self.id) if role != nil
     end
 
     def remove_role(role_name)

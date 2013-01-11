@@ -21,7 +21,7 @@ end
 When /^I edit a parameter of that scheduler$/ do
   visit "/#{@scheduler_class}s/#{@scheduler.id}/edit"
   fill_in "Parm1", with: 12345
-  with_resque do
+  with_sidekiq do
     click_button "Update #{@scheduler.class}"
   end
 end
@@ -51,7 +51,7 @@ When /^I add the role (.*) with size (.*) and the strategies (.*) to the schedul
   if role =~ /^\S+$/
     strategies.split(", ").each{ |strategy| @simulator.add_strategy(role, strategy) }
     visit "/#{@scheduler_class}s/#{@scheduler.id}"
-    with_resque do
+    with_sidekiq do
       select role, from: "role"
       fill_in "role_count", with: size
       fill_in "reduced_count", with: size if @scheduler.is_a?(AbstractionScheduler)
@@ -67,7 +67,7 @@ end
 When /^I add the role All with the strategy A to the scheduler$/ do
   @simulator.add_strategy("All", "A")
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
-  with_resque do
+  with_sidekiq do
     select "All", from: "role"
     fill_in "role_count", with: @scheduler.size
     click_button "Add Role"
@@ -78,7 +78,7 @@ end
 
 When /^I add the deviating strategy (\w+) to the role (\w+) on the scheduler$/ do |strategy, role|
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
-  with_resque do
+  with_sidekiq do
     select strategy, from: "dev_#{role}_strategy"
     click_button "dev_#{role}"
   end
@@ -157,14 +157,14 @@ end
 
 When /^I remove the strategy (\w+) on role (\w+) from the scheduler$/ do |strategy, role|
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
-  with_resque do
+  with_sidekiq do
     click_link "remove-#{role}-#{strategy}"
   end
 end
 
 When /^I remove the deviation strategy (\w+) on role (\w+) from the scheduler$/ do |strategy, role|
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
-  with_resque do
+  with_sidekiq do
     click_link "remove-dev-#{role}-#{strategy}"
   end
 end
@@ -174,7 +174,7 @@ Then /^the scheduler should have (\d+) profiles$/ do |count|
 end
 
 When /^I remove the role (\w+) from the scheduler$/ do |role|
-  with_resque do
+  with_sidekiq do
     click_link "remove-#{role}"
   end
 end

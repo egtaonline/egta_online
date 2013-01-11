@@ -31,7 +31,6 @@ Spork.prefork do
     end
 
     config.before(:each, :type => :request) do
-      ResqueSpec.reset!
       user = Fabricate(:user)
       visit "/"
       fill_in 'Email', :with => user.email

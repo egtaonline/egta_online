@@ -1,6 +1,6 @@
 class ProfileScheduler
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: true, queue: 'data'
 
   def perform(profile_id)
     profile = Profile.find(profile_id)

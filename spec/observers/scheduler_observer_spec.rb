@@ -13,10 +13,6 @@ describe SchedulerObserver do
     describe scheduler_class do
       let(:scheduler){ Fabricate("#{scheduler_class.to_s.underscore}_with_profiles".to_sym) }
 
-      before(:each) do
-        ResqueSpec.reset!
-      end
-
       context "when size has changed" do
         before(:each) do
           scheduler.update_attribute(:size, 6)
@@ -48,7 +44,6 @@ describe SchedulerObserver do
         before do
           profile_array.each{ |p| p.should_receive(:try_scheduling) }
           Profile.should_receive(:with_scheduler).with(scheduler).and_return(profile_array)
-          Resque.stub(:enqueue)
         end
 
         it "when the scheduler becomes active" do

@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe "DeviationSchedulers" do
-
-  before do
-    ResqueSpec.reset!
-  end
-
   shared_examples 'a deviation scheduler' do
     describe '#add_role' do
       before(:each) do

@@ -6,7 +6,7 @@ class SchedulerObserver < Mongoid::Observer
     schedule_flag ||= scheduler.default_samples_changed?
     yield
     if reset_flag && !scheduler.is_a?(GenericScheduler)
-      Resque.enqueue(ProfileAssociater, scheduler.id)
+      ProfileAssociater.perform_async(scheduler.id)
     elsif schedule_flag
       Profile.with_scheduler(scheduler).each { |profile| profile.try_scheduling }
     end

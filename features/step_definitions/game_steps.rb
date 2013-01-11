@@ -1,6 +1,6 @@
 Given /^a game that matches those profiles exists$/ do
   @profiles = @simulator.profiles
-  with_resque do
+  with_sidekiq do
     @game = Fabricate(:game, simulator: @simulator, size: @profiles.first.size)
   end
 end
@@ -10,7 +10,7 @@ When /^I visit that game's page$/ do
 end
 
 When /^add the strategies of those profiles to the game$/ do
-  with_resque do
+  with_sidekiq do
     select "#{@profiles.first.symmetry_groups.first.role}", from: "role"
     fill_in "role_count", with: "#{@profiles.first.size}"
     click_button "Add Role"
