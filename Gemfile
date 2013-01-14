@@ -19,8 +19,9 @@ gem 'jquery-rails'
 # Background Processing
 gem 'sidekiq', '~> 2.6.4'
 gem 'sidekiq-unique-jobs'
+gem 'sidekiq-failures'
 gem 'kiqstand'
-gem 'whenever'
+gem 'clockwork'
 gem 'slim'
 gem 'sinatra', :require => nil
 

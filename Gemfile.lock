@@ -89,7 +89,8 @@ GEM
       timers (>= 1.0.0)
     childprocess (0.3.6)
       ffi (~> 1.0, >= 1.0.6)
-    chronic (0.9.0)
+    clockwork (0.4.1)
+      tzinfo
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -300,6 +301,11 @@ GEM
       multi_json (~> 1)
       redis (~> 3)
       redis-namespace
+    sidekiq-failures (0.1.0)
+      sidekiq (>= 2.2.1)
+      sinatra
+      slim
+      sprockets
     sidekiq-unique-jobs (2.3.2)
       sidekiq (>= 2.2.0)
     simple_form (2.0.1)
@@ -348,9 +354,6 @@ GEM
     warden (1.2.1)
       rack (>= 1.0)
     websocket (1.0.6)
-    whenever (0.8.2)
-      activesupport (>= 2.3.4)
-      chronic (>= 0.6.3)
     xpath (0.1.4)
       nokogiri (~> 1.3)
     yettings (0.1.1)
@@ -366,6 +369,7 @@ DEPENDENCIES
   capybara-screenshot
   carrierwave-mongoid
   celluloid
+  clockwork
   coffee-rails
   cucumber-rails
   decent_exposure
@@ -397,6 +401,7 @@ DEPENDENCIES
   sass-rails
   show_for
   sidekiq (~> 2.6.4)
+  sidekiq-failures
   sidekiq-unique-jobs
   simple_form
   simplecov
@@ -407,5 +412,4 @@ DEPENDENCIES
   thin
   twitter-bootstrap-rails
   uglifier
-  whenever
   yettings
