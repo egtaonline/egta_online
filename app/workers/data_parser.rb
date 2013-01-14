@@ -1,6 +1,6 @@
 class DataParser
   include Sidekiq::Worker
-  sidekiq_options unique: true, queue: 'data'
+  sidekiq_options unique: true, queue: 'high_concurrency'
 
   def perform(number, location="#{Rails.root}/tmp/data/#{number}")
     simulation = Simulation.find(number)

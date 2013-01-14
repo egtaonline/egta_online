@@ -22,10 +22,6 @@ Then /^I should see the simulator's name and default configuration$/ do
   page.should_not have_content "error"
 end
 
-Then /^the simulator should be eventually be set up on the server$/ do
-  SimulatorInitializer.should have_queued(Simulator.last.id)
-end
-
 Given /^a fleshed out simulator exists$/ do
   @simulator = Fabricate(:simulator_with_strategies)
 end

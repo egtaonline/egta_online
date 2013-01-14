@@ -16,13 +16,9 @@ describe HierarchicalDeviationScheduler do
         scheduler.add_role("All", 120, 2)
         scheduler.add_deviating_strategy("All", "A")
       end
-      # it "should not lead to profile creation if there are no strategies on the target roles" do
-      #   ResqueSpec.perform_all(:profile_actions)
-      #   Profile.count.should eql(0)
-      # end
+
       it "should lead to profile creation if there are strategies on the target role" do
         scheduler.add_strategy("All", "B")
-#        ResqueSpec.perform_all(:profile_actions)
         Profile.count.should eql(2)
         Profile.with_scheduler(scheduler).collect{|p| p.assignment}.should eql(["All: 120 B", "All: 60 A, 60 B"])
       end
@@ -39,7 +35,6 @@ describe HierarchicalDeviationScheduler do
         scheduler.add_strategy("Seller", "D")
         scheduler.add_deviating_strategy("Seller", "B")
         scheduler.add_deviating_strategy("Seller", "C")
-#        ResqueSpec.perform_all(:profile_actions)
         Profile.count.should eql(11)
         ret = ["Bidder: 80 A; Seller: 40 D",
                "Bidder: 40 A, 40 B; Seller: 40 D",
@@ -101,9 +96,7 @@ describe HierarchicalDeviationScheduler do
       scheduler.add_strategy("Seller", "D")
       scheduler.add_deviating_strategy("Seller", "B")
       scheduler.add_deviating_strategy("Seller", "C")
-      #  ResqueSpec.perform_all(:profile_actions)
       scheduler.remove_deviating_strategy("Seller", "C")
-      #  ResqueSpec.perform_all(:profile_actions)
       scheduler.reload
       Profile.with_scheduler(scheduler).count.should eql(8)
       Profile.count.should eql(11)

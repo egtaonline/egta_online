@@ -1,6 +1,6 @@
 class ProfileAssociater
   include Sidekiq::Worker
-  sidekiq_options queue: 'data'
+  sidekiq_options queue: 'profile_space'
 
   def perform(scheduler_id)
     scheduler = Scheduler.find(scheduler_id)

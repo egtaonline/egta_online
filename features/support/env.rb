@@ -13,6 +13,7 @@ Spork.prefork do
   end
   require 'fabrication'
   require 'cucumber/rails'
+  require 'sidekiq/testing/inline'
   Capybara.default_selector = :css
   require 'capybara/poltergeist'
   Capybara.javascript_driver = :poltergeist

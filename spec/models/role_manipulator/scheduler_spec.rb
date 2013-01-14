@@ -3,12 +3,11 @@ require 'spec_helper'
 describe RoleManipulator::Scheduler do
   shared_examples 'a role-based scheduler' do
     describe '#add_strategy' do
-      before(:each) do
+      it 'triggers the profile space calculations' do
+        ProfileAssociater.should_receive(:perform_async).with(scheduler.id)
         scheduler.add_role('All', 2)
         scheduler.add_strategy('All', 'A')
       end
-
-      it { ProfileAssociater.should have_queued(scheduler.id) }
     end
 
     describe '#remove_role' do
@@ -36,19 +35,17 @@ describe RoleManipulator::Scheduler do
       end
 
       context 'when role is present on the scheduler' do
-        before(:each) do
+        it 'triggers profile space calculations' do
+          StrategyRemover.should_receive(:perform_async).with(scheduler.id)
           scheduler.remove_strategy('A', 'B')
         end
-
-        it { StrategyRemover.should have_queued(scheduler.id) }
       end
 
       context 'when role is not present on the scheduler' do
-        before(:each) do
+        it 'does not trigger profile space calculations' do
+          StrategyRemover.should_not_receive(:perform_async)
           scheduler.remove_strategy('B', 'C')
         end
-
-        it { StrategyRemover.should_not have_queued(scheduler.id) }
       end
     end
   end

@@ -24,24 +24,24 @@ describe "DeviationSchedulers" do
 
     describe '#add_deviating_strategy' do
       before(:each) do
+        ProfileAssociater.should_receive(:perform_async).with(scheduler.id)
         scheduler.add_role('All', scheduler.size)
         scheduler.add_deviating_strategy('All', 'A')
       end
 
       it { scheduler.deviating_roles.where(name: 'All').first.strategies.first.should eql('A') }
       it { scheduler.roles.where(name: 'All').first.strategies.count.should eql(0) }
-      it { ProfileAssociater.should have_queued(scheduler.id) }
     end
 
     describe '#remove_deviating_strategy' do
       before(:each) do
+        StrategyRemover.should_receive(:perform_async).with(scheduler.id)
         scheduler.add_role('All', 2)
         scheduler.add_deviating_strategy('All', 'A')
         scheduler.remove_deviating_strategy('All', 'A')
       end
 
       it { scheduler.deviating_roles.where(name: 'All').first.strategies.count.should eql(0) }
-      it { StrategyRemover.should have_queued(scheduler.id) }
     end
 
     describe '#deviating_strategies_for' do

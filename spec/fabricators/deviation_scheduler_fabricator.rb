@@ -10,11 +10,10 @@ Fabricator(:deviation_scheduler) do
 end
 
 Fabricator(:deviation_scheduler_with_profiles, from: :deviation_scheduler) do
-  after_create do |scheduler| 
+  after_create do |scheduler|
     scheduler.add_role("All", scheduler.size)
     scheduler.add_strategy("All", "A")
     scheduler.add_deviating_strategy("All", "B")
-    ProfileAssociater.perform scheduler.id
     scheduler.reload
   end
 end

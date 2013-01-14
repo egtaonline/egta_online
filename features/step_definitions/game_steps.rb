@@ -1,8 +1,6 @@
 Given /^a game that matches those profiles exists$/ do
   @profiles = @simulator.profiles
-  with_sidekiq do
-    @game = Fabricate(:game, simulator: @simulator, size: @profiles.first.size)
-  end
+  @game = Fabricate(:game, simulator: @simulator, size: @profiles.first.size)
 end
 
 When /^I visit that game's page$/ do
@@ -10,15 +8,13 @@ When /^I visit that game's page$/ do
 end
 
 When /^add the strategies of those profiles to the game$/ do
-  with_sidekiq do
-    select "#{@profiles.first.symmetry_groups.first.role}", from: "role"
-    fill_in "role_count", with: "#{@profiles.first.size}"
-    click_button "Add Role"
-    strategies = @profiles.collect{ |profile| profile.symmetry_groups.collect{ |group| group.strategy } }.flatten.uniq
-    strategies.each do |strategy|
-      select strategy, from: "#{@profiles.first.symmetry_groups.first.role}_strategy"
-      click_button "Add Strategy"
-    end
+  select "#{@profiles.first.symmetry_groups.first.role}", from: "role"
+  fill_in "role_count", with: "#{@profiles.first.size}"
+  click_button "Add Role"
+  strategies = @profiles.collect{ |profile| profile.symmetry_groups.collect{ |group| group.strategy } }.flatten.uniq
+  strategies.each do |strategy|
+    select strategy, from: "#{@profiles.first.symmetry_groups.first.role}_strategy"
+    click_button "Add Strategy"
   end
 end
 

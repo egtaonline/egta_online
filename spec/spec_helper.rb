@@ -1,14 +1,15 @@
 require 'spork'
 
 Spork.prefork do
+
   unless ENV['DRB']
     require 'simplecov'
     SimpleCov.start 'rails'
   end
 
   ENV["RAILS_ENV"] ||= 'test'
-
   require File.expand_path("../../config/environment", __FILE__)
+  require 'sidekiq/testing/inline'
   require 'rspec/rails'
   require "rails/mongoid"
   Spork.trap_class_method(Rails::Mongoid, :load_models)
