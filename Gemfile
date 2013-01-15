@@ -10,7 +10,6 @@ gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler'
 gem 'twitter-bootstrap-rails'
 gem 'oj'
 gem 'rdiscount'
-gem 'thin'
 gem "haml-rails"
 
 # JS framework
