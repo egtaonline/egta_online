@@ -19,7 +19,7 @@ set :scm, 'git'
 set :application, 'egtaonline'
 
 default_run_options[:pty] = true
-ssh_options[:forward_agent] = true
+set :ssh_options, {:forward_agent => true}
 
 namespace :web do
   desc "Disable requests to the app, show maintenance page"

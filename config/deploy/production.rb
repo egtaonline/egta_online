@@ -1,4 +1,4 @@
-set :user, 'bcassell'
+set :user, 'deployment'
 set :rails_env, 'production'
 server 'egtaonline.eecs.umich.edu', :web, :app, :db, primary: true
 set :deploy_via, :remote_cache

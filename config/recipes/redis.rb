@@ -9,7 +9,7 @@ DOTDEB
     put dotdeb,"/tmp/dotdeb"
     run "#{sudo} mv /tmp/dotdeb /etc/apt/sources.list.d/dotdeb.org.list"
     run "wget http://www.dotdeb.org/dotdeb.gpg"
-    run "cat dotdeb.gpg | sudo apt-key add -"
+    run "cat dotdeb.gpg | #{sudo} apt-key add -"
     run "#{sudo} apt-get update"
     run "#{sudo} apt-get -y install redis-server"
   end
