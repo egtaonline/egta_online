@@ -9,12 +9,12 @@ namespace :puma do
   end
 
   desc "Stop puma"
-  task :stop, :roles => lambda { fetch(:puma_role) }, :on_no_matching_servers => :continue do
+  task :stop do
     run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state stop"
   end
 
   desc "Restart puma"
-  task :restart, :roles => lambda { fetch(:puma_role) }, :on_no_matching_servers => :continue do
+  task :restart do
     run "cd #{current_path} && RAILS_ENV=#{stage} bundle exec pumactl -S #{shared_path}/sockets/puma.state restart"
   end
 
