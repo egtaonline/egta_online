@@ -60,7 +60,6 @@ namespace :deploy do
     # save empty folders
     run <<-CMD
       rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids #{latest_release}/simulator_uploads &&
-      mkdir -p #{latest_release}/log
       mkdir -p #{latest_release}/public &&
       mkdir -p #{latest_release}/tmp &&
       ln -s #{shared_path}/log #{latest_release}/log &&

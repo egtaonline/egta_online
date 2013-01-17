@@ -1,6 +1,6 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
-require 'puma/capistrano'
+#require 'puma/capistrano'
 
 load "config/recipes/base"
 load "config/recipes/nginx"
@@ -9,7 +9,7 @@ load "config/recipes/rbenv"
 load "config/recipes/mongodb"
 load "config/recipes/redis"
 load "config/recipes/foreman"
-#load "config/recipes/puma"
+load "config/recipes/puma"
 load 'deploy/assets'
 
 set :stages, %w(staging production)
