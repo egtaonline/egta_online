@@ -36,7 +36,7 @@ class Profile
   end
 
   def try_scheduling
-    Resque.enqueue_in(5.minutes, ProfileScheduler, id)
+    ProfileScheduler.perform_in(5.minutes, id)
   end
 
   def scheduled?

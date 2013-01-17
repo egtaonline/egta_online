@@ -5,7 +5,7 @@ class ObservationProcessor
 
   def process_files(simulation, files)
     profile = simulation.profile
-    validated = ObservationValidator.validate_all(profile, @location, files)
+    validated = ObservationValidator.new.validate_all(profile, @location, files)
     if validated == []
       simulation.fail "No valid payoff files were found."
     else

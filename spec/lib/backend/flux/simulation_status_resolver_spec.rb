@@ -23,7 +23,7 @@ describe SimulationStatusResolver do
         flux_proxy.should_receive(:download!).with("#{Yetting.deploy_path}/simulations/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
         File.should_receive(:exists?).with("#{Rails.root}/tmp/data/3/error").and_return(true)
         File.should_receive(:open).with("#{Rails.root}/tmp/data/3/error").and_return(double(read: nil))
-        Resque.should_receive(:enqueue).with(DataParser, 3)
+        DataParser.should_receive(:perform_async).with(3)
       end
 
       it{ status_resolver.act_on_status("C", simulation) }

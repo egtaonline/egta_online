@@ -47,7 +47,7 @@ class Simulator
       if File.basename(path) == "defaults.json"
         begin
           self.configuration = Oj.load_file(path)['configuration']
-          Resque.enqueue(SimulatorInitializer, self.id)
+          SimulatorInitializer.perform_async(self.id)
         rescue Oj::ParseError => se
           errors.add(:simulator_source, "had a malformed defaults.json file.")
         end

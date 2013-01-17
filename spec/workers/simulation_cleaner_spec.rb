@@ -14,7 +14,7 @@ describe SimulationCleaner do
       Simulation.should_receive(:stale).and_return(stale_simulations)
       Simulation.should_receive(:recently_finished).and_return(finished_simulations)
     end
-    
-    it { SimulationCleaner.perform }
+
+    it { subject.perform }
   end
 end

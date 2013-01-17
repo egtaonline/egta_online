@@ -4,14 +4,9 @@ describe Simulation do
   let(:simulation){ Fabricate(:simulation) }
 
   describe 'a simulation fails' do
-    before do
-      ResqueSpec.reset!
-      simulation.fail("could not transfer")
-    end
-
     it "enqueues a check for rescheduling" do
-      ProfileScheduler.should have_schedule_size_of(1)
-      ProfileScheduler.should have_scheduled(simulation.profile.id).in(5 * 60)
+      simulation.profile.should_receive(:try_scheduling)
+      simulation.fail("could not transfer")
     end
   end
 

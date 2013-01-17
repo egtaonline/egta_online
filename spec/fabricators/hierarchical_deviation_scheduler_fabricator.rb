@@ -14,7 +14,5 @@ Fabricator(:hierarchical_deviation_scheduler_with_profiles, from: :hierarchical_
     scheduler.add_role("All", 120, 2)
     scheduler.add_strategy("All", "A")
     scheduler.add_deviating_strategy("All", "B")
-    ProfileAssociater.perform scheduler.id
-    scheduler.reload
   end
 end

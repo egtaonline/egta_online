@@ -42,31 +42,19 @@ When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
 end
 
 Given /^(?:|I )am on (.+)$/ do |page_name|
-  with_resque do
-    visit path_to(page_name)
-  end
+  visit path_to(page_name)
 end
 
 When /^(?:|I )go to (.+)$/ do |page_name|
-  with_resque do
-    visit path_to(page_name)
-  end
+  visit path_to(page_name)
 end
 
 When /^(?:|I )press "([^"]*)"$/ do |button|
-  with_resque do
-    click_button(button)
-  end
-end
-
-When /^(?:|I )press "([^"]*)" without resque$/ do |button|
   click_button(button)
 end
 
 When /^(?:|I )follow "([^"]*)"$/ do |link|
-  with_resque do
-    click_link(link)
-  end
+  click_link(link)
 end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
@@ -197,13 +185,11 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|
-  with_resque do
-    current_path = URI.parse(current_url).path
-    if current_path.respond_to? :should
-      current_path.should == path_to(page_name)
-    else
-      assert_equal path_to(page_name), current_path
-    end
+  current_path = URI.parse(current_url).path
+  if current_path.respond_to? :should
+    current_path.should == path_to(page_name)
+  else
+    assert_equal path_to(page_name), current_path
   end
 end
 

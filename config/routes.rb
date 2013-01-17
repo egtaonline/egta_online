@@ -74,7 +74,9 @@ EgtaOnline::Application.routes.draw do
   end
 
   root to: 'high_voltage/pages#show', id: 'home'
+
+  require 'sidekiq/web'
   authenticate :user do
-    mount Resque::Server, at: "/background_workers"
+    mount Sidekiq::Web, at: "/background_workers"
   end
 end

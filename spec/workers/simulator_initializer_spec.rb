@@ -7,7 +7,7 @@ describe SimulatorInitializer do
       Simulator.should_receive(:find).with(1).and_return(simulator)
       Backend.should_receive(:prepare_simulator).with(simulator)
     end
-    
-    it { SimulatorInitializer.perform(1) }
+
+    it { subject.perform(1) }
   end
 end

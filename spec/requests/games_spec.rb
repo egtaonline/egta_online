@@ -11,7 +11,7 @@ describe "Games" do
       page.should have_content(game.size)
     end
   end
-  
+
   describe "GET /games/:id" do
     it "displays the relevant game" do
       game = Fabricate(:game)
@@ -21,7 +21,7 @@ describe "Games" do
       page.should have_content(game.size)
     end
   end
-  
+
   describe "GET /games/new" do
     it "should render the new game form" do
       visit new_game_path
@@ -30,7 +30,7 @@ describe "Games" do
       page.should have_content("Game size")
     end
   end
-    
+
   context "GET /games/:id/edit" do
     it "should show the edit page for the game" do
       game = Fabricate(:game)
@@ -52,10 +52,6 @@ describe "Games" do
   end
 
   describe "POST /games" do
-    before(:each) do
-      ResqueSpec.reset!
-    end
-    
     it "creates a game" do
       Fabricate(:simulator)
       visit new_game_path
@@ -77,7 +73,7 @@ describe "Games" do
       Game.count.should eql(0)
     end
   end
-  
+
   describe "POST /games/:id/add_role" do
     it "should add the required role" do
       game = Fabricate(:game)
@@ -90,7 +86,7 @@ describe "Games" do
       Game.last.roles.count.should eql(1)
     end
   end
-  
+
   describe "POST /games/:id/remove_role" do
     it "removes the relevant role" do
       game = Fabricate(:game)
@@ -119,7 +115,7 @@ describe "Games" do
       Game.last.roles.last.strategies.last.should eql("Strat1")
     end
   end
-  
+
   describe "POST /games/:id/remove_strategy" do
     it "adds the relevant strategy" do
       game = Fabricate(:game)
@@ -133,7 +129,7 @@ describe "Games" do
       Game.last.roles.last.strategies.count.should eql(0)
     end
   end
-  
+
   describe "POST /games/update_configuration", :js => true do
     it "should update parameter info" do
       sim1 = Fabricate(:simulator, :configuration => {"Parm1"=>"2","Parm2"=>"3"})

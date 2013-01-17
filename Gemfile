@@ -16,9 +16,13 @@ gem "haml-rails"
 gem 'jquery-rails'
 
 # Background Processing
-gem 'resque', :require => 'resque/server'
-gem 'resque-scheduler', :require => 'resque_scheduler'
-gem "resque-loner"
+gem 'sidekiq', '~> 2.6.4'
+gem 'sidekiq-unique-jobs'
+gem 'sidekiq-failures'
+gem 'kiqstand'
+gem 'clockwork'
+gem 'slim'
+gem 'sinatra', :require => nil
 
 # Error reporting
 gem "airbrake"
@@ -68,6 +72,5 @@ group :test do
   gem "guard-rspec"
   gem "guard-cucumber"
   gem "guard-spork"
-  gem "resque_spec"
   gem "mongoid-rspec"
 end

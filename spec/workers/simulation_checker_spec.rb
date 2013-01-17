@@ -5,7 +5,7 @@ describe SimulationChecker do
   describe 'perform' do
     it 'asks the backend to check each simulation' do
       Backend.should_receive(:update_simulations)
-      SimulationChecker.perform
+      subject.perform
     end
   end
 end

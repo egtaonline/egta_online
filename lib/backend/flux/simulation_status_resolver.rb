@@ -11,7 +11,7 @@ class SimulationStatusResolver
       begin
         @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation.id}", @destination, recursive: true)
         error_message = check_for_errors("#{@destination}/#{simulation.id}")
-        error_message ? simulation.fail(error_message) : Resque.enqueue(DataParser, simulation.id)
+        error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation.id)
       rescue
         simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve."
       end

@@ -1,7 +1,8 @@
 class ProfileScheduler
-  @queue = :profile_actions
+  include Sidekiq::Worker
+  sidekiq_options unique: true, queue: 'high_concurrency'
 
-  def self.perform(profile_id)
+  def perform(profile_id)
     profile = Profile.find(profile_id)
     unless profile.scheduled?
       scheduler = profile.schedulers.with_max_samples

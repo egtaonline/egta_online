@@ -1,7 +1,8 @@
 class SimulationChecker
-  @queue = :nyx_queuing
+  include Sidekiq::Worker
+  sidekiq_options unique: true, queue: 'backend'
 
-  def self.perform
+  def perform
     Backend.update_simulations
   end
 end

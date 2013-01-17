@@ -1,17 +1,17 @@
 namespace :foreman do
   desc "Start the application services"
   task :start, roles: :app do
-    sudo "#{sudo} start resque-farm"
+    sudo "#{sudo} start sidekiq"
   end
 
   desc "Stop the application services"
   task :stop, roles: :app do
-    sudo "#{sudo} stop resque-farm"
+    sudo "#{sudo} stop sidekiq"
   end
 
   desc "Restart the application services"
   task :restart, roles: :app do
-    run "#{sudo} stop resque-farm; #{sudo} start resque-farm"
+    run "#{sudo} stop sidekiq; #{sudo} start sidekiq"
   end
 
   desc "Display logs for a certain process - arg example: PROCESS=web-1"
@@ -21,8 +21,7 @@ namespace :foreman do
 
   desc "Export the Procfile to upstart scripts"
   task :export, roles: :app do
-    # 5 resque workers, 1 resque scheduler
-    run "cd /home/#{user}/#{application}/current && #{sudo} bundle exec foreman export upstart /etc/init -a resque-farm -u #{user} -l #{shared_path}/log  -f /home/#{user}/#{application}/current/Procfile"
+    run "cd /home/#{user}/#{application}/current && #{sudo} bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l #{shared_path}/log  -f /home/#{user}/#{application}/current/Procfile"
   end
 
 #  after 'deploy:finalize_update', 'foreman:export'
