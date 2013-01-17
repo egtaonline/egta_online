@@ -19,11 +19,11 @@ namespace :foreman do
     run "cd #{current_path}/log && cat #{ENV["PROCESS"]}.log"
   end
 
-  desc "Export the Procfile to upstart scripts"
-  task :export, roles: :app do
-    run "cd /home/#{user}/#{application}/current && #{sudo} bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l #{shared_path}/log  -f /home/#{user}/#{application}/current/Procfile"
-  end
+  # desc "Export the Procfile to upstart scripts"
+  # task :export, roles: :app do
+  #   run "cd /home/#{user}/#{application}/current && rbenv #{sudo} bundle exec foreman export upstart /etc/init -a sidekiq -u #{user} -l #{shared_path}/log  -f /home/#{user}/#{application}/current/Procfile"
+  # end
 
 #  after 'deploy:finalize_update', 'foreman:export'
-#  after 'deploy:finalize_update', 'foreman:restart'
+  after 'deploy:finalize_update', 'foreman:restart'
 end
