@@ -4,7 +4,7 @@ server 'egtaonline.eecs.umich.edu', :web, :app, :db, primary: true
 set :deploy_via, :remote_cache
 set :scm, :git
 set :repository,  "git@github.com:egtaonline/egta_online.git"
-set :branch, 'master'
+set :branch, 'origin/master'
 set :migrate_target,  :current
 set :deploy_to, "/home/#{user}/#{application}"
 set :normalize_asset_timestamps, false
@@ -99,6 +99,3 @@ end
 def run_rake(cmd)
   run "cd #{current_path}; #{rake} #{cmd}"
 end
-
-
-after 'deploy', 'deploy:cleanup'
