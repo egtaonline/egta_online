@@ -15,4 +15,14 @@ class SymmetryGroup
   validates :count, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :role, presence: true
   validates :strategy, presence: true, uniqueness: { scope: :role }
+
+  def payoffs
+    players.collect { |p| p.payoff }
+  end
+  
+  def update_statistics(payoffs)
+    self.payoff = ArrayMath.average(payoffs)
+    self.payoff_sd = ArrayMath.std_dev(payoffs)
+    self.save!
+  end
 end

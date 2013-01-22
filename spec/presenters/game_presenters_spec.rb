@@ -25,7 +25,7 @@ describe GamePresenter do
                                      { payoff: 10.0, features: { pfeature3: -14, pfeature4: 0.47 } }
                                      ], payoff: 10.0, payoff_sd: 0.0 }
                                    ])
-    profile.update_symmetry_group_payoffs
+    ProfileStatisticsUpdater.update(profile)
   end
 
   describe '#to_json' do

@@ -6,4 +6,8 @@ class Observation
   field :features, type: Hash, default: {}
 
   accepts_nested_attributes_for :symmetry_groups
+  
+  def find_symmetry_group(role, strategy)
+    symmetry_groups.find_by(role: role, strategy: strategy)
+  end
 end

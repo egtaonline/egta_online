@@ -42,17 +42,13 @@ class Profile
   def scheduled?
     simulations.scheduled.count > 0
   end
-
-  def update_symmetry_group_payoffs
+  
+  def update_sample_count
     self.sample_count = self.observations.count
-    if self.sample_count > 0
-      self.symmetry_groups.each do |symmetry_group|
-        payoffs = observations.collect { |o| o.symmetry_groups.where(role: symmetry_group.role, strategy: symmetry_group.strategy).first.players.collect { |p| p.payoff } }.flatten
-        symmetry_group.payoff = payoffs.reduce(:+)/payoffs.count
-        symmetry_group.payoff_sd = Math.sqrt([payoffs.collect{ |p| p**2.0 }.reduce(:+)/payoffs.count-symmetry_group.payoff**2.0, 0].max)
-        symmetry_group.save!
-      end
-      self.save!
-    end
+    self.save!
+  end
+  
+  def payoffs_for(symmetry_group)
+    observations.collect { |o| o.find_symmetry_group(symmetry_group.role, symmetry_group.strategy).payoffs }.flatten
   end
 end

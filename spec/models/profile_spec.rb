@@ -14,4 +14,23 @@ describe Profile do
       new_profile.errors[:assignment].should eql(["is already taken"])
     end
   end
+  
+  describe '#update_sample_count' do
+    it 'sets the sample count field to the number of observations' do
+      profile = Fabricate(:profile)
+      profile.observations << Observation.new
+      profile.update_sample_count
+      profile.reload.sample_count.should == 1
+    end
+  end
+  
+  describe '#payoffs_for' do
+    it 'returns an array of all the payoffs matching the appropriate symmetry_group' do
+      profile = Fabricate(:profile)
+      symmetry_group = profile.symmetry_groups.first
+      profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 100}, {payoff: 200}]}])
+      profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 100}, {payoff: 200}]}])
+      profile.reload.payoffs_for(symmetry_group).should == [100.0, 200.0, 100.0, 200.0]
+    end
+  end
 end

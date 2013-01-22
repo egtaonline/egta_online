@@ -12,7 +12,7 @@ class ObservationProcessor
       validated.each do |json|
         profile.observations.create!(json)
       end
-      profile.update_symmetry_group_payoffs
+      ProfileStatisticsUpdater.update(profile)
       simulation.finish!
     end
   end

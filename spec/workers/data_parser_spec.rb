@@ -16,7 +16,7 @@ describe DataParser do
         validator.should_receive(:validate_all).with(profile, "#{Rails.root}/db/3", ['observation1.json', 'observation2.json']).and_return([double('fake_json'), double('more fake_json')])
         Simulation.stub(:find).with(3).and_return(simulation)
         profile.stub_chain(:observations, :create!)
-        profile.should_receive(:update_symmetry_group_payoffs)
+        ProfileStatisticsUpdater.should_receive(:update).with(profile)
       end
 
       it 'completes successfully' do
@@ -30,7 +30,7 @@ describe DataParser do
         validator.should_receive(:validate_all).with(profile, "#{Rails.root}/db/4", ['broken_payoff_observation1.json', 'nan_observation.json', 'string_observation.json']).and_return([double('fake_json')])
         Simulation.stub(:find).with(4).and_return(simulation)
         profile.stub_chain(:observations, :create!)
-        profile.should_receive(:update_symmetry_group_payoffs)
+        ProfileStatisticsUpdater.should_receive(:update).with(profile)
       end
 
       it 'does a reasonable job with partial completeness' do
