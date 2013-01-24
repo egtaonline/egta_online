@@ -1,6 +1,6 @@
 class SimulationCleaner
   include Sidekiq::Worker
-  sidekiq_options queue: 'high_concurrency'
+  sidekiq_options queue: 'backend'
 
   def perform
     Simulation.stale.destroy_all
