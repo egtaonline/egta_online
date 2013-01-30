@@ -43,11 +43,9 @@ describe FluxBackend do
     end
     
     describe '#clean_simulation' do
-      let(:simulation){ double(_id: 3, id: 3) }
-      
       it 'calls for removal on flux' do
-        flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.deploy_path}/simulations/#{simulation.id}")
-        subject.clean_simulation(simulation)
+        flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.deploy_path}/simulations/3")
+        subject.clean_simulation(3)
       end
     end
 

@@ -45,7 +45,7 @@ class Simulation
   before_destroy :cleanup
   
   def cleanup
-    Backend.clean_simulation(self)
+    SimulationCleanup.perform_async(id)
   end
   
   state_machine :state, initial: :pending do
