@@ -4,26 +4,15 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 require 'rubygems'
-require 'spork'
+require 'simplecov'
 
-Spork.prefork do
-  unless ENV['DRB']
-    require 'simplecov'
-    SimpleCov.start 'rails'
-  end
-  require 'fabrication'
-  require 'cucumber/rails'
-  require 'sidekiq/testing/inline'
-  Capybara.default_selector = :css
-  require 'capybara/poltergeist'
-  Capybara.javascript_driver = :poltergeist
-  require 'cucumber/rspec/doubles'
-  ActionController::Base.allow_rescue = false
-end
+SimpleCov.start 'rails'
 
-Spork.each_run do
-  if ENV['DRB']
-    require 'simplecov'
-    SimpleCov.start 'rails'
-  end
-end
+require 'fabrication'
+require 'cucumber/rails'
+require 'sidekiq/testing/inline'
+Capybara.default_selector = :css
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+require 'cucumber/rspec/doubles'
+ActionController::Base.allow_rescue = false

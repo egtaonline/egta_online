@@ -59,7 +59,6 @@ end
 
 group :test, :development do
   gem "rspec-rails"
-  gem 'spork', '~> 1.0rc'
 end
 
 group :test do
@@ -73,6 +72,5 @@ group :test do
   gem "fabrication"
   gem "guard-rspec"
   gem "guard-cucumber"
-  gem "guard-spork"
   gem "mongoid-rspec"
 end
