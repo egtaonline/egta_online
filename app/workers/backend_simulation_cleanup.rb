@@ -1,4 +1,4 @@
-class SimulationCleanup
+class BackendSimulationCleanup
   include Sidekiq::Worker
   sidekiq_options queue: 'backend'
 

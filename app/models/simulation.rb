@@ -43,11 +43,12 @@ class Simulation
 
   before_save(on: :create){ self.profile_assignment = self.profile.assignment }
   before_destroy :cleanup
-  
+
   def cleanup
-    SimulationCleanup.perform_async(id)
+    LocalSimulationCleanup.perform_async(id)
+    BackendSimulationCleanup.perform_async(id)
   end
-  
+
   state_machine :state, initial: :pending do
     state :pending
     state :queued
