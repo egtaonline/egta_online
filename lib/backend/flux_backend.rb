@@ -15,7 +15,8 @@ class FluxBackend
 
   def update_simulations
     status = @status_service.get_statuses
-    Simulation.active.each do |simulation|
+    simulations = Simulation.active.only(:job_id).to_a
+    simulations.each do |simulation|
       @simulation_status_resolver.act_on_status(status[simulation.job_id.to_s], simulation)
     end
   end

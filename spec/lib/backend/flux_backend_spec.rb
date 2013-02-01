@@ -41,7 +41,7 @@ describe FluxBackend do
 
       it { subject.prepare_simulator(simulator) }
     end
-    
+
     describe '#clean_simulation' do
       it 'calls for removal on flux' do
         flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.deploy_path}/simulations/3")
@@ -50,10 +50,12 @@ describe FluxBackend do
     end
 
     describe '#update_simulations' do
-      let(:simulation){ double(job_id: '123') }
+      let(:simulation){double(job_id: 123)}
 
       before do
-        Simulation.should_receive(:active).and_return([simulation])
+        criteria = double('Criteria')
+        criteria.should_receive(:only).with(:job_id).and_return([simulation])
+        Simulation.should_receive(:active).and_return(criteria)
       end
 
       it "calls update_simulation on the status service" do
