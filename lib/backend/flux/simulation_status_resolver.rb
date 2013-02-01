@@ -3,17 +3,18 @@ class SimulationStatusResolver
     @flux_proxy, @destination = flux_proxy, destination
   end
 
-  def act_on_status(status, simulation)
+  def act_on_status(status, simulation_id)
+    simulation = Simulation.find(simulation_id) rescue return
     case status
     when "R"
-      simulation.start!
+      simulation.start! rescue nil
     when "C", "", nil
       begin
-        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation.id}", @destination, recursive: true)
-        error_message = check_for_errors("#{@destination}/#{simulation.id}")
-        error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation.id)
+        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation_id}", @destination, recursive: true)
+        error_message = check_for_errors("#{@destination}/#{simulation_id}")
+        error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
       rescue
-        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve."
+        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve." rescue nil
       end
     end
   end

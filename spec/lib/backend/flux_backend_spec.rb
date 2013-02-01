@@ -50,7 +50,7 @@ describe FluxBackend do
     end
 
     describe '#update_simulations' do
-      let(:simulation){double(job_id: 123)}
+      let(:simulation){double(job_id: 123, id: 1)}
 
       before do
         criteria = double('Criteria')
@@ -60,7 +60,7 @@ describe FluxBackend do
 
       it "calls update_simulation on the status service" do
         simulation_status_service.should_receive(:get_statuses).and_return({ '123' => "C" })
-        status_resolver.should_receive(:act_on_status).with("C", simulation)
+        status_resolver.should_receive(:act_on_status).with("C", 1)
         subject.update_simulations
       end
     end
