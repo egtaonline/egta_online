@@ -19,16 +19,16 @@ describe PbsWrapper do
 #PBS -N egta-fake
 #PBS -W umask=0007
 #PBS -W group_list=wellman
-#PBS -o #{Yetting.deploy_path}/simulations/3/out
-#PBS -e #{Yetting.deploy_path}/simulations/3/error
+#PBS -o #{Yetting.simulations_path}/3/out
+#PBS -e #{Yetting.simulations_path}/3/error
 #PBS -M test@test.com
 umask 0007
 mkdir /tmp/${PBS_JOBID}
 cp -r #{Yetting.deploy_path}/fake-totally/fake/* /tmp/${PBS_JOBID}
-cp -r #{Yetting.deploy_path}/simulations/3 /tmp/${PBS_JOBID}
+cp -r #{Yetting.simulations_path}/3 /tmp/${PBS_JOBID}
 cd /tmp/${PBS_JOBID}
 script/batch 3 30
-cp -r /tmp/${PBS_JOBID}/3 #{Yetting.deploy_path}/simulations
+cp -r /tmp/${PBS_JOBID}/3 #{Yetting.simulations_path}
 rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")
@@ -54,16 +54,16 @@ HEREDOC
 #PBS -N egta-fake
 #PBS -W umask=0007
 #PBS -W group_list=wellman
-#PBS -o #{Yetting.deploy_path}/simulations/3/out
-#PBS -e #{Yetting.deploy_path}/simulations/3/error
+#PBS -o #{Yetting.simulations_path}/3/out
+#PBS -e #{Yetting.simulations_path}/3/error
 #PBS -M test@test.com
 umask 0007
 mkdir /tmp/${PBS_JOBID}
 cp -r #{Yetting.deploy_path}/fake-totally/fake/* /tmp/${PBS_JOBID}
-cp -r #{Yetting.deploy_path}/simulations/3 /tmp/${PBS_JOBID}
+cp -r #{Yetting.simulations_path}/3 /tmp/${PBS_JOBID}
 cd /tmp/${PBS_JOBID}
 script/batch 3 30
-cp -r /tmp/${PBS_JOBID}/3 #{Yetting.deploy_path}/simulations
+cp -r /tmp/${PBS_JOBID}/3 #{Yetting.simulations_path}
 rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")
@@ -89,16 +89,16 @@ HEREDOC
 #PBS -N egta-fake
 #PBS -W umask=0007
 #PBS -W group_list=wellman
-#PBS -o #{Yetting.deploy_path}/simulations/3/out
-#PBS -e #{Yetting.deploy_path}/simulations/3/error
+#PBS -o #{Yetting.simulations_path}/3/out
+#PBS -e #{Yetting.simulations_path}/3/error
 #PBS -M test@test.com
 umask 0007
 mkdir /tmp/${PBS_JOBID}
 cp -r #{Yetting.deploy_path}/fake-totally/fake/* /tmp/${PBS_JOBID}
-cp -r #{Yetting.deploy_path}/simulations/3 /tmp/${PBS_JOBID}
+cp -r #{Yetting.simulations_path}/3 /tmp/${PBS_JOBID}
 cd /tmp/${PBS_JOBID}
 script/batch 3 30 ${PBS_NODEFILE}
-cp -r /tmp/${PBS_JOBID}/3 #{Yetting.deploy_path}/simulations
+cp -r /tmp/${PBS_JOBID}/3 #{Yetting.simulations_path}
 rm -rf /tmp/${PBS_JOBID}
 HEREDOC
         f = double("file")

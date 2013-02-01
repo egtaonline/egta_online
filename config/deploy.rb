@@ -10,7 +10,7 @@ load "config/recipes/mongodb"
 load "config/recipes/redis"
 load "config/recipes/foreman"
 load "config/recipes/puma"
-load 'deploy/assets'
+#load 'deploy/assets'
 
 set :stages, %w(staging production)
 set :default_stage, 'staging'

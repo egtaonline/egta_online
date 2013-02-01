@@ -23,7 +23,7 @@ describe FluxBackend do
 
       before do
         submission_service.should_receive(:submit).with(simulation)
-        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.id}", "#{Yetting.deploy_path}/simulations", recursive: true).and_return("")
+        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.id}", Yetting.simulations_path, recursive: true).and_return("")
       end
 
       it { subject.schedule_simulation(simulation) }
@@ -44,7 +44,7 @@ describe FluxBackend do
 
     describe '#clean_simulation' do
       it 'calls for removal on flux' do
-        flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.deploy_path}/simulations/3")
+        flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.simulations_path}/3")
         subject.clean_simulation(3)
       end
     end

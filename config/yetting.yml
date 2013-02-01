@@ -3,12 +3,14 @@ development:
     flux_login: 'flux-login.engin.umich.edu'
     transfer: 'flux-xfer.engin.umich.edu'
     deploy_path: "/home/wellmangroup/many-agent-simulations"
+    simulations_path: "/home/bcassell/simulations"
     error_store: 512
 staging:
     nyx_login: 'nyx-login.engin.umich.edu'
     flux_login: 'flux-login.engin.umich.edu'
     transfer: 'flux-xfer.engin.umich.edu'
     deploy_path: "/home/wellmangroup/many-agent-simulations"
+    simulations_path: "/home/bcassell/simulations"
     error_store: 512
 
 test:
@@ -16,6 +18,7 @@ test:
     flux_login: "d-108-200.eecs.umich.edu"
     transfer: "d-108-200.eecs.umich.edu"
     deploy_path: "/Users/bcassell/testing"
+    simulations_path: "/home/bcassell/testing"
     error_store: 128
 
 production:
@@ -23,4 +26,5 @@ production:
     flux_login: 'flux-login.engin.umich.edu'
     transfer: 'flux-xfer.engin.umich.edu'
     deploy_path: "/home/wellmangroup/many-agent-simulations"
+    simulations_path: "/home/bcassell/simulations"
     error_store: 1024

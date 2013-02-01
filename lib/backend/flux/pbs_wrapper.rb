@@ -6,7 +6,7 @@ class PbsWrapper
     simulator = simulation.scheduler.simulator
     root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
     extra_args = simulation.scheduler_nodes > 1 ? " ${PBS_NODEFILE}" : ""
-    sim_path = "#{Yetting.deploy_path}/simulations"
+    sim_path = Yetting.simulations_path
     walltime = simulation.size*scheduler.time_per_sample
     pbs_wall_time = [ walltime/3600, (walltime/60) % 60, walltime % 60 ].map{ |time| "%02d" % time }.join(":")
 

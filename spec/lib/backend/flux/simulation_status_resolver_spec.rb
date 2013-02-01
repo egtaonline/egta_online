@@ -22,7 +22,7 @@ describe SimulationStatusResolver do
     context 'simulation completed successfully' do
       before do
         Simulation.should_receive(:find).with(3).and_return(simulation)
-        flux_proxy.should_receive(:download!).with("#{Yetting.deploy_path}/simulations/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
+        flux_proxy.should_receive(:download!).with("#{Yetting.simulations_path}/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
         File.should_receive(:exists?).with("#{Rails.root}/tmp/data/3/error").and_return(true)
         File.should_receive(:open).with("#{Rails.root}/tmp/data/3/error").and_return(double(read: nil))
         DataParser.should_receive(:perform_async).with(3)
@@ -36,7 +36,7 @@ describe SimulationStatusResolver do
     context 'simulation did not complete successfully' do
       before do
         Simulation.should_receive(:find).with(3).and_return(simulation)
-        flux_proxy.stub(:download!).with("#{Yetting.deploy_path}/simulations/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
+        flux_proxy.stub(:download!).with("#{Yetting.simulations_path}/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
         File.stub(:exists?).with("#{Rails.root}/tmp/data/3/error").and_return(true)
         File.should_receive(:open).with("#{Rails.root}/tmp/data/3/error").and_return(double(read: 'I has error'))
         simulation.should_receive(:fail).with('I has error')

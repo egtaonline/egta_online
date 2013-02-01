@@ -10,7 +10,7 @@ class SimulationStatusResolver
       simulation.start! rescue nil
     when "C", "", nil
       begin
-        @flux_proxy.download!("#{Yetting.deploy_path}/simulations/#{simulation_id}", @destination, recursive: true)
+        @flux_proxy.download!("#{Yetting.simulations_path}/#{simulation_id}", @destination, recursive: true)
         error_message = check_for_errors("#{@destination}/#{simulation_id}")
         error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
       rescue

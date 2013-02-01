@@ -31,7 +31,7 @@ class FluxBackend
 
   def schedule_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
     begin
-      response = @flux_proxy.upload!("#{src_dir}/#{simulation.id}", "#{Yetting.deploy_path}/simulations", recursive: true)
+      response = @flux_proxy.upload!("#{src_dir}/#{simulation.id}", Yetting.simulations_path, recursive: true)
       if response == "" || response == nil || response == "\n" || response == "true"
         @submission_service.submit(simulation)
       else
@@ -43,7 +43,7 @@ class FluxBackend
   end
 
   def clean_simulation(simulation_number)
-    @flux_proxy.exec!("rm -rf #{Yetting.deploy_path}/simulations/#{simulation_number}")
+    @flux_proxy.exec!("rm -rf #{Yetting.simulations_path}/#{simulation_number}")
   end
 
   def prepare_simulator(simulator)
