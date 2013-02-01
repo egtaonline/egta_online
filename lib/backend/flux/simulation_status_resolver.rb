@@ -7,14 +7,14 @@ class SimulationStatusResolver
     simulation = Simulation.find(simulation_id) rescue return
     case status
     when "R"
-      simulation.start! rescue nil
+      simulation.start!
     when "C", "", nil
       begin
         @flux_proxy.download!("#{Yetting.simulations_path}/#{simulation_id}", @destination, recursive: true)
         error_message = check_for_errors("#{@destination}/#{simulation_id}")
         error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
       rescue
-        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve." rescue nil
+        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve."
       end
     end
   end
