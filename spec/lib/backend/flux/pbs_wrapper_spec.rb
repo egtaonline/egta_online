@@ -18,7 +18,7 @@ describe PbsWrapper do
 #PBS -l nodes=1,pmem=1000mb,walltime=02:30:00,qos=flux
 #PBS -N egta-fake
 #PBS -W umask=0007
-#PBS -W group_list=wellmangroup
+#PBS -W group_list=wellman
 #PBS -o #{Yetting.deploy_path}/simulations/3/out
 #PBS -e #{Yetting.deploy_path}/simulations/3/error
 #PBS -M test@test.com
@@ -53,7 +53,7 @@ HEREDOC
 #PBS -l nodes=1,pmem=1000mb,walltime=02:30:00,qos=cac
 #PBS -N egta-fake
 #PBS -W umask=0007
-#PBS -W group_list=wellmangroup
+#PBS -W group_list=wellman
 #PBS -o #{Yetting.deploy_path}/simulations/3/out
 #PBS -e #{Yetting.deploy_path}/simulations/3/error
 #PBS -M test@test.com
@@ -88,7 +88,7 @@ HEREDOC
 #PBS -l nodes=2,pmem=1000mb,walltime=02:30:00,qos=cac
 #PBS -N egta-fake
 #PBS -W umask=0007
-#PBS -W group_list=wellmangroup
+#PBS -W group_list=wellman
 #PBS -o #{Yetting.deploy_path}/simulations/3/out
 #PBS -e #{Yetting.deploy_path}/simulations/3/error
 #PBS -M test@test.com
