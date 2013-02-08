@@ -357,7 +357,6 @@ GEM
     websocket (1.0.6)
     xpath (0.1.4)
       nokogiri (~> 1.3)
-    yettings (0.1.1)
 
 PLATFORMS
   java
@@ -413,4 +412,3 @@ DEPENDENCIES
   state_machine
   twitter-bootstrap-rails
   uglifier
-  yettings

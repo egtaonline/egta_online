@@ -1,5 +1,5 @@
 class SimulationStatusResolver
-  def initialize(flux_proxy, destination="#{Rails.root}/tmp/data")
+  def initialize(flux_proxy, destination)
     @flux_proxy, @destination = flux_proxy, destination
   end
 

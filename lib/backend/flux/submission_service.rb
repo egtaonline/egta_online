@@ -3,9 +3,9 @@ class SubmissionService
     @login_connection = login_connection
   end
 
-  def submit(simulation)
+  def submit(simulation, job_location=Yetting.flux_simulations_path)
     begin
-      job_return = @login_connection.exec!("qsub -V -r n #{Yetting.simulations_path}/#{simulation.id}/wrapper")
+      job_return = @login_connection.exec!("qsub -V -r n #{job_location}/#{simulation.id}/wrapper")
       if job_return != nil
         job_return = job_return.split(".").first
         if job_return =~ /\A\d+\z/
