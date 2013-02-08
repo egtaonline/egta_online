@@ -14,10 +14,10 @@ describe FluxBackend do
 
     before do
       DRbObject.stub(:new_with_uri).with('druby://localhost:30000').and_return(flux_proxy)
-      SubmissionService.stub(:new).with(flux_proxy).and_return(submission_service)
-      SimulatorPrepService.stub(:new).with(flux_proxy).and_return(simulator_prep_service)
+      SubmissionService.stub(:new).with(flux_proxy, "fake/remote/path").and_return(submission_service)
+      SimulatorPrepService.stub(:new).with(flux_proxy, "fake/simulators/path").and_return(simulator_prep_service)
       SimulationStatusService.stub(:new).with(flux_proxy).and_return(simulation_status_service)
-      SimulationStatusResolver.stub(:new).with(flux_proxy, "fake/local/path").and_return(status_resolver)
+      SimulationStatusResolver.stub(:new).with("fake/local/path").and_return(status_resolver)
       subject.flux_simulations_path = "fake/remote/path"
       subject.simulations_path = "fake/local/path"
       subject.simulators_path = "fake/simulators/path"

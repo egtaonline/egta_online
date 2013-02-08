@@ -10,9 +10,9 @@ class FluxBackend
 
   def setup_connections
     @flux_proxy = DRbObject.new_with_uri('druby://localhost:30000')
-    @submission_service = SubmissionService.new(@flux_proxy)
-    @simulator_prep_service = SimulatorPrepService.new(@flux_proxy)
-    @simulation_status_resolver = SimulationStatusResolver.new(@flux_proxy, @simulations_path)
+    @submission_service = SubmissionService.new(@flux_proxy, @flux_simulations_path)
+    @simulator_prep_service = SimulatorPrepService.new(@flux_proxy, @simulators_path)
+    @simulation_status_resolver = SimulationStatusResolver.new(@simulations_path)
     @status_service = SimulationStatusService.new(@flux_proxy)
   end
 

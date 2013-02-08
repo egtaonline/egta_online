@@ -1,10 +1,15 @@
-require 'spec_helper'
+require 'backend/flux/simulation_status_resolver'
+
+class Simulation
+end
+
+class DataParser
+end
 
 describe SimulationStatusResolver do
   describe '#act_on_status' do
     let(:simulation){ double(_id: 3, id: 3) }
-    let(:flux_proxy){ double('flux_proxy') }
-    let(:status_resolver){ SimulationStatusResolver.new(flux_proxy) }
+    let(:status_resolver){ SimulationStatusResolver.new("fake/local/path") }
 
     context 'simulation is running' do
       before do
@@ -16,15 +21,19 @@ describe SimulationStatusResolver do
     end
 
     context 'simulation is queued' do
+      before do
+        Simulation.should_not_receive(:start!)
+        Simulation.should_not_receive(:fail)
+      end
+      
       it{ status_resolver.act_on_status("Q", simulation.id) }
     end
 
     context 'simulation completed successfully' do
       before do
         Simulation.should_receive(:find).with(3).and_return(simulation)
-        flux_proxy.should_receive(:download!).with("#{Yetting.simulations_path}/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
-        File.should_receive(:exists?).with("#{Rails.root}/tmp/data/3/error").and_return(true)
-        File.should_receive(:open).with("#{Rails.root}/tmp/data/3/error").and_return(double(read: nil))
+        File.should_receive(:exists?).with("fake/local/path/3/error").and_return(true)
+        File.should_receive(:open).with("fake/local/path/3/error").and_return(double(read: nil))
         DataParser.should_receive(:perform_async).with(3)
       end
 
@@ -36,9 +45,8 @@ describe SimulationStatusResolver do
     context 'simulation did not complete successfully' do
       before do
         Simulation.should_receive(:find).with(3).and_return(simulation)
-        flux_proxy.stub(:download!).with("#{Yetting.simulations_path}/#{simulation.id}", "#{Rails.root}/tmp/data", recursive: true).and_return('')
-        File.stub(:exists?).with("#{Rails.root}/tmp/data/3/error").and_return(true)
-        File.should_receive(:open).with("#{Rails.root}/tmp/data/3/error").and_return(double(read: 'I has error'))
+        File.stub(:exists?).with("fake/local/path/3/error").and_return(true)
+        File.should_receive(:open).with("fake/local/path/3/error").and_return(double(read: 'I has error'))
         simulation.should_receive(:fail).with('I has error')
       end
 

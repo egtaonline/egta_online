@@ -1,6 +1,8 @@
 class SimulationStatusResolver
-  def initialize(flux_proxy, destination)
-    @flux_proxy, @destination = flux_proxy, destination
+  ERROR_LIMIT = 1024
+
+  def initialize(simulations_path)
+    @simulations_path = simulations_path
   end
 
   def act_on_status(status, simulation_id)
@@ -9,19 +11,14 @@ class SimulationStatusResolver
     when "R"
       simulation.start!
     when "C", "", nil
-      begin
-        @flux_proxy.download!("#{Yetting.simulations_path}/#{simulation_id}", @destination, recursive: true)
-        error_message = check_for_errors("#{@destination}/#{simulation_id}")
-        error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
-      rescue
-        simulation.fail "could not complete the transfer from remote host.  Speak to Ben to resolve."
-      end
+      error_message = check_for_errors("#{@simulations_path}/#{simulation_id}")
+      error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
     end
   end
 
   private
 
   def check_for_errors(location)
-    File.exists?(location+'/error') ? File.open(location+"/error").read(Yetting.error_store) : 'Files were not found on remote server.'
+    File.exists?(location+'/error') ? File.open(location+"/error").read(ERROR_LIMIT) : 'Files were not found on remote server.'
   end
 end
