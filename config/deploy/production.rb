@@ -62,6 +62,7 @@ namespace :deploy do
       rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids #{latest_release}/simulator_uploads &&
       mkdir -p #{latest_release}/public &&
       mkdir -p #{latest_release}/tmp &&
+      mkdir -p #{shared_path}/simulator_uploads &&
       ln -s #{shared_path}/log #{latest_release}/log &&
       ln -s #{shared_path}/system #{latest_release}/public/system &&
       ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
