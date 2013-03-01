@@ -11,8 +11,8 @@ describe SpecGenerator do
 
     it 'creates a simulation_spec.json file' do
       Oj.should_receive(:to_file).with("#{Rails.root}/tmp/simulations/#{simulation.id}/simulation_spec.json",
-                                       { assignment: { 'Bidder' => ['Shade1', 'Shade1', 'Shade2'], 'Seller' => ['FirstPrice', 'FirstPrice', 'FirstPrice', 'SecondPrice'] },
-                                         configuration: profile.configuration },
+                                       { "assignment" => { 'Bidder' => ['Shade1', 'Shade1', 'Shade2'], 'Seller' => ['FirstPrice', 'FirstPrice', 'FirstPrice', 'SecondPrice'] },
+                                         "configuration" => profile.configuration },
                                        indent: 2)
       SpecGenerator.generate(simulation)
     end

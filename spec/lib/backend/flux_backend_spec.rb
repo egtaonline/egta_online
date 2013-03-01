@@ -32,7 +32,7 @@ describe FluxBackend do
       before do
         submission_service.should_receive(:submit).with(simulation)
         remote_command = "[ -f \"fake/remote/path/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\""
-        flux_proxy.should_receive(:exec!).with(remote_command).and_return("exists")
+        flux_proxy.should_receive(:exec!).with(remote_command).and_return("exists\n")
       end
 
       it { subject.schedule_simulation(simulation) }
