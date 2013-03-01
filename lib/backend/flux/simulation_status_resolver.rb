@@ -19,6 +19,6 @@ class SimulationStatusResolver
   private
 
   def check_for_errors(location)
-    File.exists?(location+'/error') ? File.open(location+"/error").read(ERROR_LIMIT) : 'Files were not found on remote server.'
+    File.exists?(location+'/error') ? File.open(location+"/error").read(ERROR_LIMIT) : 'Files were not found in NFS.'
   end
 end
