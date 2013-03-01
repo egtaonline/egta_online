@@ -40,7 +40,7 @@ class FluxBackend
     if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists"
       @submission_service.submit(simulation)
     else
-      simulation.fail "could not complete the transfer via NFS.  Speak to Ben to resolve."
+      simulation.fail "could not complete the transfer via NFS: #{@flux_simulations_path}/#{simulation.id}/wrapper.  Speak to Ben to resolve."
     end
   end
 
