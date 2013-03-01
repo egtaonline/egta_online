@@ -1,15 +1,18 @@
 require 'drb/drb'
-
-Dir["#{Rails.root}/lib/backend/flux/*"].each {|file| require file }
+require 'backend/flux/pbs_wrapper'
+require 'backend/flux/submission_service'
+require 'backend/flux/simulator_prep_service'
+require 'backend/flux/simulation_status_service'
+require 'backend/flux/simulation_status_resolver'
 
 class FluxBackend
-  attr_accessor :flux_active_limit
+  attr_accessor :flux_active_limit, :simulations_path, :flux_simulations_path, :simulators_path
 
   def setup_connections
     @flux_proxy = DRbObject.new_with_uri('druby://localhost:30000')
-    @submission_service = SubmissionService.new(@flux_proxy)
-    @simulator_prep_service = SimulatorPrepService.new(@flux_proxy)
-    @simulation_status_resolver = SimulationStatusResolver.new(@flux_proxy)
+    @submission_service = SubmissionService.new(@flux_proxy, @flux_simulations_path)
+    @simulator_prep_service = SimulatorPrepService.new(@flux_proxy, @simulators_path)
+    @simulation_status_resolver = SimulationStatusResolver.new(@simulations_path)
     @status_service = SimulationStatusService.new(@flux_proxy)
   end
 
@@ -21,43 +24,42 @@ class FluxBackend
     end
   end
 
-  def prepare_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
+  def prepare_simulation(simulation)
     if ( 3*cac_count > flux_count-@flux_active_limit )
       simulation['flux'] = true
       simulation.save
     end
-    PbsWrapper.create_wrapper(simulation, src_dir)
+    PbsWrapper.create_wrapper(simulation, @simulations_path)
   end
 
-  def schedule_simulation(simulation, src_dir="#{Rails.root}/tmp/simulations")
+  def schedule_simulation(simulation)
     begin
-      response = @flux_proxy.upload!("#{src_dir}/#{simulation.id}", Yetting.simulations_path, recursive: true)
-      if response == "" || response == nil || response == "\n" || response == "true"
-        @submission_service.submit(simulation)
+      if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists"
+        @submission_service.submit(simulation, @flux_simulations_path)
       else
-        simulation.fail "could not complete the transfer to remote host.  Speak to Ben to resolve."
+        simulation.fail "could not complete the transfer via NFS.  Speak to Ben to resolve."
       end
     rescue
-      simulation.fail "could not complete the transfer to remote host.  Speak to Ben to resolve."
+      simulation.fail "could not complete the transfer via NFS.  Speak to Ben to resolve."
     end
   end
 
   def clean_simulation(simulation_number)
-    @flux_proxy.exec!("rm -rf #{Yetting.simulations_path}/#{simulation_number}")
+    FileUtils.rm_rf "#{@simulations_path}/#{simulation_number}"
   end
 
   def prepare_simulator(simulator)
     @simulator_prep_service.cleanup_simulator(simulator)
     begin
-      @flux_proxy.upload!(simulator.simulator_source.path, "#{Yetting.deploy_path}/#{simulator.name}.zip", recursive: true)
+      @flux_proxy.upload!(simulator.simulator_source.path, "#{@simulators_path}/#{simulator.name}.zip", recursive: true)
     rescue
       puts 'failed to upload simulator'
     end
-    while @flux_proxy.exec!("[ -f \"filename\" ] && echo \"exists\" || echo \"not exists\"") == "not exists" do
+    while @flux_proxy.exec!("[ -f \"#{@simulators_path}/#{simulator.name}.zip\" ] && echo \"exists\" || echo \"not exists\"") == "not exists" do
       puts 'missing'
       sleep 1
     end
-    @simulator_prep_service.prepare_simulator(simulator)
+    @simulator_prep_service.prepare_simulator(simulator, @simulators_path)
   end
 
   private

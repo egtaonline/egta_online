@@ -1,11 +1,11 @@
 class SubmissionService
-  def initialize(login_connection)
-    @login_connection = login_connection
+  def initialize(login_connection, flux_simulations_path)
+    @login_connection, @flux_simulations_path = login_connection, flux_simulations_path
   end
 
   def submit(simulation)
     begin
-      job_return = @login_connection.exec!("qsub -V -r n #{Yetting.simulations_path}/#{simulation.id}/wrapper")
+      job_return = @login_connection.exec!("qsub -V -r n #{@flux_simulations_path}/#{simulation.id}/wrapper")
       if job_return != nil
         job_return = job_return.split(".").first
         if job_return =~ /\A\d+\z/

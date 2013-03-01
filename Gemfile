@@ -36,7 +36,6 @@ gem 'mongoid-sequence', :github => 'cblock/mongoid-sequence'
 
 gem "state_machine"
 gem "devise"
-gem "yettings"
 gem "kaminari"
 gem "decent_exposure"
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'

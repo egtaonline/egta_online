@@ -1,12 +1,16 @@
 class PbsWrapper
-  def self.create_wrapper(simulation, src_dir)
+  def initialize(simulations_path, flux_simulations_path, simulators_path)
+    @simulations_path, @flux_simulations_path, @simulators_path = simulations_path, flux_simulations_path, simulators_path
+  end
+  
+  def create_wrapper(simulation)
     scheduler = simulation.scheduler
     allocation = simulation['flux'] ? 'wellman_flux' : 'cac'
     queue = simulation['flux'] ? 'flux' : 'cac'
     simulator = simulation.scheduler.simulator
-    root_path = "#{Yetting.deploy_path}/#{simulator.fullname}/#{simulator.name}"
+    root_path = "#{@simulators_path}/#{simulator.fullname}/#{simulator.name}"
     extra_args = simulation.scheduler_nodes > 1 ? " ${PBS_NODEFILE}" : ""
-    sim_path = Yetting.simulations_path
+    sim_path = @flux_simulations_path
     walltime = simulation.size*scheduler.time_per_sample
     pbs_wall_time = [ walltime/3600, (walltime/60) % 60, walltime % 60 ].map{ |time| "%02d" % time }.join(":")
 
@@ -33,6 +37,6 @@ cp -r /tmp/${PBS_JOBID}/#{simulation.id} #{sim_path}
 rm -rf /tmp/${PBS_JOBID}
 HEREDOC
 
-    File.open("#{src_dir}/#{simulation.id}/wrapper", 'w'){ |f| f.write(document) }
+    File.open("#{@simulations_path}/#{simulation.id}/wrapper", 'w'){ |f| f.write(document) }
   end
 end

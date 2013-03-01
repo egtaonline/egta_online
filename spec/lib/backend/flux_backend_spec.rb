@@ -1,4 +1,7 @@
-require 'spec_helper'
+require 'backend/flux_backend'
+
+class Simulation
+end
 
 describe FluxBackend do
 
@@ -11,10 +14,13 @@ describe FluxBackend do
 
     before do
       DRbObject.stub(:new_with_uri).with('druby://localhost:30000').and_return(flux_proxy)
-      SubmissionService.stub(:new).with(flux_proxy).and_return(submission_service)
-      SimulatorPrepService.stub(:new).with(flux_proxy).and_return(simulator_prep_service)
+      SubmissionService.stub(:new).with(flux_proxy, "fake/remote/path").and_return(submission_service)
+      SimulatorPrepService.stub(:new).with(flux_proxy, "fake/simulators/path").and_return(simulator_prep_service)
       SimulationStatusService.stub(:new).with(flux_proxy).and_return(simulation_status_service)
-      SimulationStatusResolver.stub(:new).with(flux_proxy).and_return(status_resolver)
+      SimulationStatusResolver.stub(:new).with("fake/local/path").and_return(status_resolver)
+      subject.flux_simulations_path = "fake/remote/path"
+      subject.simulations_path = "fake/local/path"
+      subject.simulators_path = "fake/simulators/path"
       subject.setup_connections
     end
 
@@ -22,8 +28,9 @@ describe FluxBackend do
       let(:simulation){ double(_id: 3, id: 3) }
 
       before do
-        submission_service.should_receive(:submit).with(simulation)
-        flux_proxy.should_receive(:upload!).with("#{Rails.root}/tmp/simulations/#{simulation.id}", Yetting.simulations_path, recursive: true).and_return("")
+        submission_service.should_receive(:submit).with(simulation, "fake/remote/path")
+        remote_command = "[ -f \"fake/remote/path/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\""
+        flux_proxy.should_receive(:exec!).with(remote_command).and_return("exists")
       end
 
       it { subject.schedule_simulation(simulation) }
@@ -34,17 +41,17 @@ describe FluxBackend do
 
       before 'cleans up the space and uploads the simulator' do
         simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
-        flux_proxy.should_receive(:upload!).with('path/to/simulator', "#{Yetting.deploy_path}/sim.zip", recursive: true).and_return("")
-        flux_proxy.should_receive(:exec!).with("[ -f \"filename\" ] && echo \"exists\" || echo \"not exists\"")
-        simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
+        flux_proxy.should_receive(:upload!).with('path/to/simulator', "fake/simulators/path/sim.zip", recursive: true).and_return("")
+        flux_proxy.should_receive(:exec!).with("[ -f \"fake/simulators/path/sim.zip\" ] && echo \"exists\" || echo \"not exists\"")
+        simulator_prep_service.should_receive(:prepare_simulator).with(simulator, "fake/simulators/path")
       end
 
       it { subject.prepare_simulator(simulator) }
     end
 
     describe '#clean_simulation' do
-      it 'calls for removal on flux' do
-        flux_proxy.should_receive(:exec!).with("rm -rf #{Yetting.simulations_path}/3")
+      it 'calls for removal on nfs' do
+        FileUtils.should_receive(:rm_rf).with("fake/local/path/3")
         subject.clean_simulation(3)
       end
     end
@@ -71,7 +78,8 @@ describe FluxBackend do
 
     before do
       subject.flux_active_limit = 60
-      PbsWrapper.should_receive(:create_wrapper).with(simulation, "#{Rails.root}/tmp/simulations")
+      subject.simulations_path = "fake/local/path"
+      PbsWrapper.should_receive(:create_wrapper).with(simulation, "fake/local/path")
     end
 
     context 'flux is oversubscribed' do
