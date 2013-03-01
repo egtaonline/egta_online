@@ -56,7 +56,7 @@ describe Backend do
 
     describe 'prepare_simulation' do
       it 'passes the message along to the backend implementation' do
-        Backend.configuration.backend_implementation.should_receive(:prepare_simulation).with(simulation, "#{Rails.root}/tmp/simulations")
+        Backend.configuration.backend_implementation.should_receive(:prepare_simulation).with(simulation)
         Backend.prepare_simulation simulation
       end
     end

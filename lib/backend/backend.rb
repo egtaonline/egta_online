@@ -18,8 +18,8 @@ module Backend
     backend_implementation.prepare_simulator(simulator)
   end
 
-  def self.prepare_simulation(simulation, directory="#{Rails.root}/tmp/simulations")
-    backend_implementation.prepare_simulation(simulation, directory)
+  def self.prepare_simulation(simulation)
+    backend_implementation.prepare_simulation(simulation)
   end
 
   def self.schedule_simulation(simulation)
