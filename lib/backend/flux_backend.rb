@@ -37,7 +37,7 @@ class FluxBackend
   end
 
   def schedule_simulation(simulation)
-    if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists"
+    if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists\n"
       @submission_service.submit(simulation)
     else
       simulation.fail "could not complete the transfer via NFS: #{@flux_simulations_path}/#{simulation.id}/wrapper.  Speak to Ben to resolve."

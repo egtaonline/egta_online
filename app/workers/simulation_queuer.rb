@@ -6,7 +6,7 @@ class SimulationQueuer
     prep_service = SimulationPrepService.new
     to_be_queued = Simulation.queueable.to_a
     to_be_queued.each{ |simulation| prep_service.prepare_simulation(simulation) }
-    sleep 60
+    sleep 3
     to_be_queued.each{ |simulation| Backend.schedule_simulation(simulation) }
   end
 end
