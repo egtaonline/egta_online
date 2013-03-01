@@ -1,16 +1,12 @@
 class SimulationPrepService
-  def initialize(directory="#{Rails.root}/tmp/simulations")
+  def initialize(directory=Backend.backend_implementation.simulations_path)
     @directory = directory
-  end
-
-  def cleanup
-    FileUtils.rm_rf(Dir["#{@directory}/*"])
   end
 
   def prepare_simulation(simulation)
     create_folder(simulation)
     generate_spec(simulation)
-    Backend.prepare_simulation(simulation, @directory)
+    Backend.prepare_simulation(simulation)
   end
 
   private

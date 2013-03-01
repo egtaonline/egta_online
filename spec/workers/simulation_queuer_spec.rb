@@ -8,7 +8,6 @@ describe SimulationQueuer do
 
     before do
       SimulationPrepService.should_receive(:new).and_return(prep_service)
-      prep_service.should_receive(:cleanup)
       Simulation.stub(:queueable).and_return([simulation1, simulation2])
       prep_service.should_receive(:prepare_simulation).with(simulation1)
       Backend.should_receive(:schedule_simulation).with(simulation1)
