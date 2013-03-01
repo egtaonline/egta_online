@@ -14,6 +14,7 @@ class FluxBackend
     @simulator_prep_service = SimulatorPrepService.new(@flux_proxy, @simulators_path)
     @simulation_status_resolver = SimulationStatusResolver.new(@simulations_path)
     @status_service = SimulationStatusService.new(@flux_proxy)
+    @pbs_wrapper = PbsWrapper.new(@simulations_path, @flux_simulations_path, @simulators_path)
   end
 
   def update_simulations
@@ -29,7 +30,7 @@ class FluxBackend
       simulation['flux'] = true
       simulation.save
     end
-    PbsWrapper.create_wrapper(simulation, @simulations_path)
+    @pbs_wrapper.create_wrapper(simulation)
   end
 
   def schedule_simulation(simulation)

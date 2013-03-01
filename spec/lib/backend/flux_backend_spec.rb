@@ -11,6 +11,7 @@ describe FluxBackend do
     let(:simulator_prep_service){ double('simulator_prep_service') }
     let(:simulation_status_service){ double('simulation_status_service') }
     let(:status_resolver){ double('status_resolver') }
+    let(:pbs_wrapper){ double('pbs_wrapper') }
 
     before do
       DRbObject.stub(:new_with_uri).with('druby://localhost:30000').and_return(flux_proxy)
@@ -18,6 +19,7 @@ describe FluxBackend do
       SimulatorPrepService.stub(:new).with(flux_proxy, "fake/simulators/path").and_return(simulator_prep_service)
       SimulationStatusService.stub(:new).with(flux_proxy).and_return(simulation_status_service)
       SimulationStatusResolver.stub(:new).with("fake/local/path").and_return(status_resolver)
+      PbsWrapper.stub(:new).with("fake/local/path", "fake/remote/path", "fake/simulators/path").and_return(pbs_wrapper)
       subject.flux_simulations_path = "fake/remote/path"
       subject.simulations_path = "fake/local/path"
       subject.simulators_path = "fake/simulators/path"
@@ -71,60 +73,60 @@ describe FluxBackend do
         subject.update_simulations
       end
     end
-  end
 
-  describe '#prepare_simulation' do
-    let(:simulation){ double(flux: false) }
-
-    before do
-      subject.flux_active_limit = 60
-      subject.simulations_path = "fake/local/path"
-      PbsWrapper.should_receive(:create_wrapper).with(simulation, "fake/local/path")
-    end
-
-    context 'flux is oversubscribed' do
+    describe '#prepare_simulation' do
+      let(:pbs_wrapper){ double('pbs_wrapper') }
+      let(:simulation){ double(flux: false) }
 
       before do
-        actives = double('actives')
-        actives.stub(:where).with(flux: true).and_return(stub(count: 61))
-        actives.stub(:where).with(flux: false).and_return(stub(count: 0))
-        Simulation.stub(:active).and_return(actives)
+        subject.flux_active_limit = 60
+        pbs_wrapper.should_receive(:create_wrapper).with(simulation)
       end
 
-      it 'does not change flux to true' do
-        simulation.should_not_receive(:[]).with('flux')
-        simulation.should_not_receive(:save)
-        subject.prepare_simulation(simulation)
-      end
-    end
+      context 'flux is oversubscribed' do
 
-    context 'flux is undersubscribed' do
-      before do
-        actives = double('actives')
-        actives.stub(:where).with(flux: true).and_return(stub(count: 50))
-        actives.stub(:where).with(flux: false).and_return(stub(count: 0))
-        Simulation.stub(:active).and_return(actives)
-      end
+        before do
+          actives = double('actives')
+          actives.stub(:where).with(flux: true).and_return(stub(count: 61))
+          actives.stub(:where).with(flux: false).and_return(stub(count: 0))
+          Simulation.stub(:active).and_return(actives)
+        end
 
-      it 'changes flux to true' do
-        simulation.should_receive(:[]=).with('flux', true)
-        simulation.should_receive(:save)
-        subject.prepare_simulation(simulation)
-      end
-    end
-
-    context 'flux is oversubscribed, but so is cac' do
-      before do
-        actives = double('actives')
-        actives.stub(:where).with(flux: true).and_return(stub(count: 61))
-        actives.stub(:where).with(flux: false).and_return(stub(count: 21))
-        Simulation.stub(:active).and_return(actives)
+        it 'does not change flux to true' do
+          simulation.should_not_receive(:[]).with('flux')
+          simulation.should_not_receive(:save)
+          subject.prepare_simulation(simulation)
+        end
       end
 
-      it 'changes flux to true' do
-        simulation.should_receive(:[]=).with('flux', true)
-        simulation.should_receive(:save)
-        subject.prepare_simulation(simulation)
+      context 'flux is undersubscribed' do
+        before do
+          actives = double('actives')
+          actives.stub(:where).with(flux: true).and_return(stub(count: 50))
+          actives.stub(:where).with(flux: false).and_return(stub(count: 0))
+          Simulation.stub(:active).and_return(actives)
+        end
+
+        it 'changes flux to true' do
+          simulation.should_receive(:[]=).with('flux', true)
+          simulation.should_receive(:save)
+          subject.prepare_simulation(simulation)
+        end
+      end
+
+      context 'flux is oversubscribed, but so is cac' do
+        before do
+          actives = double('actives')
+          actives.stub(:where).with(flux: true).and_return(stub(count: 61))
+          actives.stub(:where).with(flux: false).and_return(stub(count: 21))
+          Simulation.stub(:active).and_return(actives)
+        end
+
+        it 'changes flux to true' do
+          simulation.should_receive(:[]=).with('flux', true)
+          simulation.should_receive(:save)
+          subject.prepare_simulation(simulation)
+        end
       end
     end
   end
