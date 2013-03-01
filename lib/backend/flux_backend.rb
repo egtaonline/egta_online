@@ -31,6 +31,9 @@ class FluxBackend
       simulation.save
     end
     @pbs_wrapper.create_wrapper(simulation)
+    File.chmod(0775, "#{@flux_simulations_path}/#{simulation.id}")
+    File.chmod(0775, "#{@flux_simulations_path}/#{simulation.id}/wrapper")
+    File.chmod(0775, "#{@flux_simulations_path}/#{simulation.id}/simulation.json")
   end
 
   def schedule_simulation(simulation)

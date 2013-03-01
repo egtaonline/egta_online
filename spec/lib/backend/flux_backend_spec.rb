@@ -76,11 +76,12 @@ describe FluxBackend do
 
     describe '#prepare_simulation' do
       let(:pbs_wrapper){ double('pbs_wrapper') }
-      let(:simulation){ double(flux: false) }
+      let(:simulation){ double(flux: false, id: 3) }
 
       before do
         subject.flux_active_limit = 60
         pbs_wrapper.should_receive(:create_wrapper).with(simulation)
+        File.stub(:chmod)
       end
 
       context 'flux is oversubscribed' do
