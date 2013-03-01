@@ -34,13 +34,9 @@ class FluxBackend
   end
 
   def schedule_simulation(simulation)
-    begin
-      if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists"
-        @submission_service.submit(simulation, @flux_simulations_path)
-      else
-        simulation.fail "could not complete the transfer via NFS.  Speak to Ben to resolve."
-      end
-    rescue
+    if @flux_proxy.exec!("[ -f \"#{@flux_simulations_path}/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\"") == "exists"
+      @submission_service.submit(simulation)
+    else
       simulation.fail "could not complete the transfer via NFS.  Speak to Ben to resolve."
     end
   end
@@ -60,7 +56,7 @@ class FluxBackend
       puts 'missing'
       sleep 1
     end
-    @simulator_prep_service.prepare_simulator(simulator, @simulators_path)
+    @simulator_prep_service.prepare_simulator(simulator)
   end
 
   private

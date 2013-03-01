@@ -30,7 +30,7 @@ describe FluxBackend do
       let(:simulation){ double(_id: 3, id: 3) }
 
       before do
-        submission_service.should_receive(:submit).with(simulation, "fake/remote/path")
+        submission_service.should_receive(:submit).with(simulation)
         remote_command = "[ -f \"fake/remote/path/#{simulation.id}/wrapper\" ] && echo \"exists\" || echo \"not exists\""
         flux_proxy.should_receive(:exec!).with(remote_command).and_return("exists")
       end
@@ -45,7 +45,7 @@ describe FluxBackend do
         simulator_prep_service.should_receive(:cleanup_simulator).with(simulator)
         flux_proxy.should_receive(:upload!).with('path/to/simulator', "fake/simulators/path/sim.zip", recursive: true).and_return("")
         flux_proxy.should_receive(:exec!).with("[ -f \"fake/simulators/path/sim.zip\" ] && echo \"exists\" || echo \"not exists\"")
-        simulator_prep_service.should_receive(:prepare_simulator).with(simulator, "fake/simulators/path")
+        simulator_prep_service.should_receive(:prepare_simulator).with(simulator)
       end
 
       it { subject.prepare_simulator(simulator) }
