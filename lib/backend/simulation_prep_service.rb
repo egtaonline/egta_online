@@ -12,6 +12,7 @@ class SimulationPrepService
   private
 
   def create_folder(simulation)
+    FileUtils.rm_rf("#{@directory}/#{simulation.id}")
     FileUtils.mkdir("#{@directory}/#{simulation.id}")
   end
 
