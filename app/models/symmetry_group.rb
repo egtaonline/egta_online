@@ -19,7 +19,7 @@ class SymmetryGroup
   def payoffs
     players.collect { |p| p.payoff }
   end
-  
+
   def update_statistics(payoffs)
     self.payoff = ArrayMath.average(payoffs)
     self.payoff_sd = ArrayMath.std_dev(payoffs)
