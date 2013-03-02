@@ -8,6 +8,7 @@ describe ProfileStatisticsUpdater do
       profile.should_receive(:symmetry_groups).and_return([symmetry_group])
       profile.should_receive(:payoffs_for).with(symmetry_group).and_return(payoffs)
       symmetry_group.should_receive(:update_statistics).with(payoffs)
+      profile.should_receive(:save!)
       ProfileStatisticsUpdater.update(profile)
     end
   end
