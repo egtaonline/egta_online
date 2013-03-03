@@ -72,4 +72,5 @@ group :test do
   gem "guard-rspec"
   gem "guard-cucumber"
   gem "mongoid-rspec"
+  gem "rspec-fire"
 end

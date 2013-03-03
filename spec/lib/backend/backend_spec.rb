@@ -38,7 +38,7 @@ describe Backend do
       Backend.reset
     end
 
-    let(:simulation){ double('simulation') }
+    let(:simulation){ fire_double('Simulation') }
 
     describe 'schedule_simulation' do
       it 'passes the message along to the backend implementation' do
@@ -69,7 +69,7 @@ describe Backend do
     end
 
     describe 'prepare_simulator' do
-      let(:simulator){ double('simulator') }
+      let(:simulator){ fire_double('Simulator') }
 
       it 'passes the message along to the backend implementation' do
         Backend.configuration.backend_implementation.should_receive(:prepare_simulator).with(simulator)

@@ -5,6 +5,5 @@ class ProfileStatisticsUpdater
       payoffs = profile.payoffs_for(symmetry_group)
       symmetry_group.update_statistics(payoffs)
     end
-    profile.save!
   end
 end

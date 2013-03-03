@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'unit_helper'
 
 SimpleCov.start 'rails'
 ENV["RAILS_ENV"] ||= 'test'

@@ -1,15 +1,17 @@
 require 'profile_statistics_updater'
+require 'spec_helper'
 
 describe ProfileStatisticsUpdater do
   describe 'update' do
+    let(:profile){ Fabricate(:profile_with_observation) }
+
     it 'updates the statistics on the profile and its symmetry groups' do
-      profile, symmetry_group, payoffs = stub, stub, stub
-      profile.should_receive(:update_sample_count)
-      profile.should_receive(:symmetry_groups).and_return([symmetry_group])
-      profile.should_receive(:payoffs_for).with(symmetry_group).and_return(payoffs)
-      symmetry_group.should_receive(:update_statistics).with(payoffs)
-      profile.should_receive(:save!)
       ProfileStatisticsUpdater.update(profile)
+      Profile.find(profile.id).symmetry_groups.first.payoff.should == 150
+      symmetry_group = profile.symmetry_groups.first
+      profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 300}, {payoff: 400}]}])
+      ProfileStatisticsUpdater.update(profile)
+      Profile.find(profile.id).symmetry_groups.first.payoff.should == 250
     end
   end
 end
