@@ -1,6 +1,5 @@
 class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   before_filter :find_scheduler, only: [:show, :add_profile, :add_role, :remove_role, :remove_profile, :update, :destroy]
-  before_filter :find_profile, only: :remove_profile
 
   def create
     # Hack to make old api compatible with new model defs
@@ -62,7 +61,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
   end
 
   def remove_profile
-    @scheduler.remove_profile(@profile.id)
+    @scheduler.remove_profile(params[:profile_id])
     respond_with(@scheduler)
   end
 
@@ -73,14 +72,6 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
       @scheduler = GenericScheduler.find(params[:id])
     rescue
       respond_with({ error: "the generic_scheduler you were looking for could not be found" }, status: 404, location: nil)
-    end
-  end
-
-  def find_profile
-    begin
-      @profile = Profile.find(params[:profile_id])
-    rescue
-      respond_with({ error: "the profile you were looking for could not be found"}, status: 404, location: nil)
     end
   end
 end
