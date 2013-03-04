@@ -56,7 +56,7 @@ class Api::V3::RoleManipulator < Api::V3::BaseController
   def find_subject
     begin
       model_name = params[:controller].singularize.split("/").last
-      @subject = params[:controller].singularize.split("/").last.classify.constantize.find(params[:id])
+      @subject = model_name.classify.constantize.find(params[:id])
     rescue
       render json: {error: "the #{model_name} you were looking for could not be found"}.to_json, status: 404
     end

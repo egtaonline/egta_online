@@ -17,9 +17,7 @@ class GamePresenter
   end
 
   def structure
-    "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
-    "\"configuration\":#{@game.configuration.to_json}," <<
-    "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]}"
+    json_base + json_end
   end
 
   def summary
@@ -48,10 +46,13 @@ class GamePresenter
   private
 
   def json_start
+    json_base + ",\"profiles\":"
+  end
+
+  def json_base
     "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
     "\"configuration\":#{@game.configuration.to_json}," <<
-    "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]," <<
-    "\"profiles\":"
+    "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]"
   end
 
   def json_end
