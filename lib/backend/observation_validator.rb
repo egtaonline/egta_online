@@ -11,24 +11,30 @@ class ObservationValidator
     begin
       json = Oj.load_file(file_name, mode: :compat)
       json['players'].each do |player|
-        return nil if (!player['payoff'].numeric? || player['payoff'].to_s == 'NaN' || player['payoff'].to_s == 'Inf')
+        return nil if payoff_invalid(player)
       end
-      return_hash = { features: numeralize(json['features']), symmetry_groups: profile.symmetry_groups.collect{ |s| { role: s.role, strategy: s.strategy, count: s.count, players: [], payoff: 0.0, payoff_sd: 0.0 } } }
-      return_hash[:symmetry_groups].each do |symmetry_group|
-        players = json['players'].select{ |player| player['role'] == symmetry_group[:role] && player['strategy'] == symmetry_group[:strategy]}
-        players ||= []
-        return nil if players.count != profile.symmetry_groups.where(role: symmetry_group[:role], strategy: symmetry_group[:strategy]).first.count
-        symmetry_group[:players] = clean_players(players)
-        symmetry_group[:payoff] = symmetry_group[:players].collect{ |player| player[:payoff] }.reduce(:+)/symmetry_group[:players].count
-        symmetry_group[:payoff_sd] = Math.sqrt(symmetry_group[:players].collect{ |player| player[:payoff]**2.0 }.reduce(:+)/symmetry_group[:players].count-symmetry_group[:payoff]**2.0)
+      return_hash = { features: numeralize(json['features']), symmetry_groups: [] }
+      profile.symmetry_groups.each do |symmetry_group|
+        players = json['players'].select{ |player| player['role'] == symmetry_group.role && player['strategy'] == symmetry_group.strategy }
+        return nil if players.count != symmetry_group.count
+        return_hash[:symmetry_groups] << build_symmetry_group_hash(symmetry_group, players)
       end
       return_hash
-    rescue Exception => e
+    rescue Oj::ParseError => e
+      puts e.message
       nil
     end
   end
 
   private
+
+  def build_symmetry_group_hash(symmetry_group, players)
+    players = clean_players(players)
+    payoffs = players.collect{ |player| player[:payoff] }
+    { count: symmetry_group.count, players: players,
+      role: symmetry_group.role, strategy: symmetry_group.strategy,
+      payoff: ArrayMath.average(payoffs), payoff_sd: ArrayMath.std_dev(payoffs) }
+  end
 
   def numeralize(hash)
     return {} if !hash
@@ -37,6 +43,10 @@ class ObservationValidator
       return_hash[key] = ( value.numeric? ? value.to_f : ( value.is_a?(Hash) ? numeralize(value) : value ) )
     end
     return_hash
+  end
+
+  def payoff_invalid(player)
+    !player['payoff'].numeric? || player['payoff'].to_s == 'NaN' || player['payoff'].to_s == 'Inf'
   end
 
   def clean_players(players)

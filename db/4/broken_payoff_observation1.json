@@ -3,7 +3,7 @@
 		{
 			"role": "Buyer",
 			"strategy": "BidValue",
-			"payoff": 'fea',
+			"payoff": "fea",
 			"features": {
 				"featureA": 0.001,
 				"featureB": [2.0, 2.1]
