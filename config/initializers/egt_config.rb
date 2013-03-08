@@ -6,6 +6,8 @@ require 'backend/observation_processor'
 require 'backend/observation_validator'
 require 'profile_statistics_updater'
 require 'util/array_math'
+require 'util/subgame_creator'
+require 'util/assignment_formatter'
 
 class Object
   def deep_copy
