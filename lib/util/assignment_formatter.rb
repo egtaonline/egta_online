@@ -1,6 +1,14 @@
 class AssignmentFormatter
+  def self.format_assignments(assignments)
+    assignments.collect{ |a| format_assignment(a) }
+  end
+
+  def self.format_assignment(assignment)
+    assignment.collect{ |rc| format_role_combination(rc) }.join('; ')
+  end
+
   def self.format_role_combination(role_combination)
-    strats = role_combination.drop(1)
-    "#{role_combination[0]}: " + strats.uniq.collect{ |s| "#{strats.count(s)} #{s}" }.join(", ")
+    strategies = role_combination.drop(1)
+    "#{role_combination[0]}: " + strategies.uniq.collect{ |s| "#{strategies.count(s)} #{s}" }.join(", ")
   end
 end

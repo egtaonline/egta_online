@@ -6,6 +6,6 @@ class GameScheduler < Scheduler
 
   def profile_space
     return [] if invalid_role_partition?
-    SubgameCreator.subgame_combinations(roles)
+    SubgameCreator.subgame_assignments(roles)
   end
 end
