@@ -3,7 +3,7 @@ require 'util/subgame_creator'
 
 describe SubgameCreator do
   describe 'subgame_profiles' do
-    let(:formatter){ fire_double('AssignmentFormatter') }
+    let(:formatter){ fire_replaced_class_double('AssignmentFormatter') }
 
     it "returns an array of profile assignments consistent with an array with a single role" do
       roles = [stub(name: 'All', strategies: ['A', 'B'], reduced_count: 2)]
