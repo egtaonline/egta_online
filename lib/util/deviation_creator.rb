@@ -10,9 +10,9 @@ class DeviationCreator
     end
     assignments.uniq
   end
-  
+
   private
-  
+
   def self.deviations_from_role(target_role, deviating_role, roles, combination_tracker)
     role_combinations = roles.collect do |role|
       if role == target_role
@@ -23,7 +23,7 @@ class DeviationCreator
     end
     role_combinations[0].product(*(role_combinations.drop(1)))
   end
-  
+
   def self.deviation_role_combinations(role, deviating_role)
     combinations = []
     RoleCombinationGenerator.combinations(role.name, role.strategies, role.reduced_count-1).each do |combination|
@@ -31,7 +31,7 @@ class DeviationCreator
     end
     combinations.uniq
   end
-  
+
   def self.fill_last_strategy(combination, strategy)
     role = combination[0]
     strategies = combination.drop(1)

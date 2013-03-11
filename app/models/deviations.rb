@@ -51,22 +51,4 @@ module Deviations
       ProfileAssociater.perform_async(self.id)
     end
   end
-
-  def get_deviations
-    deviations = {}
-    roles.each do |role|
-      deviations[role.name] = get_deviations_for_role(role)
-    end
-    deviations
-  end
-
-  def get_deviations_for_role(role)
-    deviating_strategies = deviating_roles.find_by(name: role.name).strategies
-    deviating_profiles = deviating_strategies.product(partial_role(role, role.reduced_count-1))
-    deviating_profiles.collect{ |profile| [role.name].concat(profile.flatten.sort) }
-  end
-
-  def partial_role(role, count)
-    role.strategies.repeated_combination(count).to_a
-  end
 end

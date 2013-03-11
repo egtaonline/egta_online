@@ -9,6 +9,8 @@ require 'util/array_math'
 require 'util/subgame_creator'
 require 'util/assignment_formatter'
 require 'util/deviation_creator'
+require 'util/hierarchical_creator'
+require 'util/dpr_creator'
 
 class Object
   def deep_copy
