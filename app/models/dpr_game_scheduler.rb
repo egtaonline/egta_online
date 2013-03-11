@@ -1,4 +1,6 @@
-class DprGameScheduler < AbstractionScheduler
+class DprGameScheduler < Scheduler
+  include RoleManipulator::Scheduler
+  include Sampling::Simple
 
   def profile_space
     return [] if invalid_role_partition?

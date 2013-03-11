@@ -51,7 +51,7 @@ When /^I add the role (.*) with size (.*) and the strategies (.*) to the schedul
     visit "/#{@scheduler_class}s/#{@scheduler.id}"
     select role, from: "role"
     fill_in "role_count", with: size
-    fill_in "reduced_count", with: size if @scheduler.is_a?(AbstractionScheduler)
+    fill_in "reduced_count", with: size if [HierarchicalScheduler, HierarchicalDeviationScheduler, DprGameScheduler, DprDeviationScheduler].include?(@scheduler.class)
     click_button "Add Role"
     strategies.split(", ").each do |strategy|
       select strategy, from: "#{role}_strategy"

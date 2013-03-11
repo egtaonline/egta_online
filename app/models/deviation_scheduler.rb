@@ -1,5 +1,4 @@
 class DeviationScheduler < GameScheduler
-  include SubgameScheduler
   include Deviations
 
   def profile_space

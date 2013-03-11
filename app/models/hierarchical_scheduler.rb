@@ -1,4 +1,7 @@
-class HierarchicalScheduler < AbstractionScheduler
+class HierarchicalScheduler < Scheduler
+  include RoleManipulator::Scheduler
+  include Sampling::Simple
+
   def profile_space
     return [] if invalid_role_partition?
     reduced_assignments = SubgameCreator.subgame_assignments(roles)

@@ -1,15 +1,14 @@
-class HierarchicalDeviationScheduler < AbstractionDeviationScheduler
+class HierarchicalDeviationScheduler < Scheduler
+  include RoleManipulator::Scheduler
+  include Sampling::Simple
+  include Deviations
+
   def profile_space
     return [] if invalid_role_partition?
-    prof_hashes = []
-    reduced_game_with_devs.each do |reduced_profile|
-      full_profile = {}
-      roles.each do |role|
-        full_profile[role.name] = AbstractionScheduler.fill_role(reduced_profile[role.name], role.count)
-      end
-      prof_hashes << full_profile
-    end
-    prof_hashes.uniq.collect{ |profile| dehasherize(profile) }
+    reduced_assignments = SubgameCreator.subgame_assignments(roles)
+    reduced_deviation_assignments = DeviationCreator.deviation_assignments(roles, deviating_roles)
+    expanded_assignments = HierarchicalCreator.expand_assignments(reduced_assignments + reduced_deviation_assignments, roles)
+    AssignmentFormatter.format_assignments(expanded_assignments.uniq)
   end
 
   protected
