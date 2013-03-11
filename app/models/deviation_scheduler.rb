@@ -4,24 +4,9 @@ class DeviationScheduler < GameScheduler
 
   def profile_space
     return [] if invalid_role_partition?
-    first_rc, all_other_rcs = subgame_combinations
-    deviations = get_deviations
-    return first_rc.concat(deviations[roles.first.name]).collect{ |r| format_role(r) } if single_role?
-    profs = []
-    first_rc.product(*all_other_rcs).each do |prof|
-      prof.sort!{|x, y| x[0] <=> y[0]}
-      profs << prof.collect {|r| format_role(r)}.join("; ")
-    end
-    all_other_rcs << first_rc
-
-    deviations.each do |key, value|
-      non_deviations = all_other_rcs.select{|val| val[0][0] != key}
-      value.product(*non_deviations).each do |prof|
-        prof.sort!{|x, y| x[0] <=> y[0]}
-        profs << prof.collect {|r| format_role(r)}.join("; ")
-      end
-    end
-    profs
+    subgame_assignments = SubgameCreator.subgame_assignments(roles)
+    deviation_assignments = DeviationCreator.deviation_assignments(roles, deviating_roles)
+    AssignmentFormatter.format_assignments((subgame_assignments+deviation_assignments).uniq)
   end
 
   protected

@@ -8,6 +8,7 @@ require 'profile_statistics_updater'
 require 'util/array_math'
 require 'util/subgame_creator'
 require 'util/assignment_formatter'
+require 'util/deviation_creator'
 
 class Object
   def deep_copy
