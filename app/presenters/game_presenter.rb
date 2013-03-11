@@ -1,4 +1,4 @@
-class GamePresenter
+class GamePresenter < JsonPresenter
   def initialize(game)
     @game = game
   end
@@ -53,9 +53,5 @@ class GamePresenter
     "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
     "\"configuration\":#{@game.configuration.to_json}," <<
     "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]"
-  end
-
-  def json_end
-    "}\n"
   end
 end

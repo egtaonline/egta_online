@@ -1,13 +1,7 @@
-class GenericSchedulerPresenter
-  def initialize(scheduler)
-    @scheduler = scheduler
-  end
-
-  def to_json
-    "{\"_id\":\"#{@scheduler.id}\",\"name\":\"#{@scheduler.name}\",\"simulator_id\":\"#{@scheduler.simulator_id}\",\"configuration\":#{@scheduler.configuration.to_json}," <<
-    "\"active\":#{@scheduler.active},\"process_memory\":#{@scheduler.process_memory},\"time_per_sample\":#{@scheduler.time_per_sample},\"size\":#{@scheduler.size}," <<
-    "\"roles\":[#{@scheduler.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"count\":#{role.count}}" }.join(",") }]," <<
-    "\"samples_per_simulation\":#{@scheduler.samples_per_simulation},\"nodes\":#{@scheduler.nodes},\"sample_hash\":#{sample_hash.to_json}}"
+class GenericSchedulerPresenter < SchedulerPresenter
+  def json_specialization
+    ",\"roles\":[#{@scheduler.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"count\":#{role.count}}" }.join(",") }]," <<
+    "\"samples_per_simulation\":#{@scheduler.samples_per_simulation},\"nodes\":#{@scheduler.nodes},\"sample_hash\":#{sample_hash.to_json}"
   end
 
   private
