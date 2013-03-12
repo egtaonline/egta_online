@@ -15,7 +15,7 @@ class Profile
   index ({ simulator_id: 1, configuration: 1, size: 1, sample_count: 1 })
   index ({ sample_count: 1 })
   index ({ assignment: 1 })
-
+  index ({ 'observations.u_at' => 1 })
   validates_presence_of :simulator
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
   validates_uniqueness_of :assignment, scope: [:simulator_id, :configuration]
@@ -42,12 +42,12 @@ class Profile
   def scheduled?
     simulations.scheduled.count > 0
   end
-  
+
   def update_sample_count
     self.sample_count = self.observations.count
     self.save!
   end
-  
+
   def payoffs_for(symmetry_group)
     observations.collect { |o| o.find_symmetry_group(symmetry_group.role, symmetry_group.strategy).payoffs }.flatten
   end
