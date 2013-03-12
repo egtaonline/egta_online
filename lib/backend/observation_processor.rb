@@ -13,7 +13,7 @@ class ObservationProcessor
         profile.observations.create!(json)
       end
       ProfileStatisticsUpdater.update(profile)
-      simulation.finish!
+      simulation.finish
     end
   end
 end

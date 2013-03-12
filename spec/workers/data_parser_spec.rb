@@ -20,7 +20,7 @@ describe DataParser do
       end
 
       it 'completes successfully' do
-        simulation.should_receive(:finish!)
+        simulation.should_receive(:finish)
         subject.perform(3, "#{Rails.root}/db/3")
       end
     end
@@ -34,7 +34,7 @@ describe DataParser do
       end
 
       it 'does a reasonable job with partial completeness' do
-        simulation.should_receive(:finish!)
+        simulation.should_receive(:finish)
         subject.perform(4, "#{Rails.root}/db/4")
       end
     end

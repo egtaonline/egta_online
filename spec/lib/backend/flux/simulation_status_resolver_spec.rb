@@ -14,7 +14,7 @@ describe SimulationStatusResolver do
     context 'simulation is running' do
       before do
         Simulation.should_receive(:find).with(3).and_return(simulation)
-        simulation.should_receive(:start!)
+        simulation.should_receive(:start)
       end
 
       it{ status_resolver.act_on_status("R", simulation.id) }
@@ -22,10 +22,10 @@ describe SimulationStatusResolver do
 
     context 'simulation is queued' do
       before do
-        Simulation.should_not_receive(:start!)
+        Simulation.should_not_receive(:start)
         Simulation.should_not_receive(:fail)
       end
-      
+
       it{ status_resolver.act_on_status("Q", simulation.id) }
     end
 
