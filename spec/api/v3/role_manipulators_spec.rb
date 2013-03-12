@@ -15,10 +15,10 @@ describe "Strategy adding", :type => :api do
         role_manipulator.roles.first.name.should eql("Bidder")
       end
 
-      it "should not add the role again if it already exists" do
+      it "should do nothing if it already exists" do
         role_manipulator.add_role("Bidder")
         post "#{url}/add_role.json", role_hash
-        response.status.should eql(304)
+        response.status.should eql(201)
         role_manipulator.reload.roles.count.should eql(1)
         role_manipulator.roles.first.name.should eql("Bidder")
       end
@@ -44,10 +44,10 @@ describe "Strategy adding", :type => :api do
         role_manipulator.roles.first.strategies.first.should eql("Strat1")
       end
 
-      it "should not add the strategy again if it already exists" do
+      it "should do nothing if the strategy already exists" do
         role_manipulator.add_strategy("Bidder", "Strat1")
         post "#{url}/add_strategy.json", :auth_token => token, :role => "Bidder", :strategy => "Strat1"
-        response.status.should eql(304)
+        response.status.should eql(201)
         role_manipulator.reload.roles.first.strategies.count.should eql(1)
         role_manipulator.roles.first.strategies.first.should eql("Strat1")
       end
@@ -73,9 +73,11 @@ describe "Strategy adding", :type => :api do
       end
 
       context "the role does not exist" do
-        it "informs the user of this" do
-          post "#{url}/remove_role.json", :auth_token => token, :role => "All"
-          response.status.should eql(204)
+        it "does nothing" do
+          role_manipulator.add_role("All", 2)
+          post "#{url}/remove_role.json", :auth_token => token, :role => "None"
+          response.status.should eql(201)
+          role_manipulator.reload.roles.count.should == 1
         end
       end
 
@@ -85,7 +87,7 @@ describe "Strategy adding", :type => :api do
         end
         it "removes the role" do
           post "#{url}/remove_role.json", :auth_token => token, :role => "All"
-          response.status.should eql(202)
+          response.status.should eql(201)
           role_manipulator.reload.roles.count.should == 0
         end
       end
@@ -105,9 +107,12 @@ describe "Strategy adding", :type => :api do
       end
 
       context "the role does not exist" do
-        it "informs the user of this" do
-          post "#{url}/remove_strategy.json", :auth_token => token, :role => "All", :strategy => "Strat1"
-          response.status.should eql(404)
+        it "does nothing" do
+          role_manipulator.add_role("All", 2)
+          role_manipulator.add_strategy("All", "Strat1")
+          post "#{url}/remove_strategy.json", :auth_token => token, :role => "None", :strategy => "Strat1"
+          response.status.should eql(201)
+          role_manipulator.reload.roles.first.strategies.should == ["Strat1"]
         end
       end
 
@@ -117,7 +122,7 @@ describe "Strategy adding", :type => :api do
         end
         it "removes the role" do
           post "#{url}/remove_role.json", :auth_token => token, :role => "All"
-          response.status.should eql(202)
+          response.status.should eql(201)
           role_manipulator.reload.roles.count.should == 0
         end
       end

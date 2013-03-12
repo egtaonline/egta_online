@@ -1,4 +1,4 @@
-class Api::V3::SimulatorsController < Api::V3::RoleManipulator
+class Api::V3::SimulatorsController < Api::V3::RoleManipulatorController
   def index
     render json: "{\"simulators\":#{Simulator.collection.find.select(name: 1, version: 1).to_json}}", status: 200
   end

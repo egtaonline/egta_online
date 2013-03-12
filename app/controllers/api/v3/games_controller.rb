@@ -1,4 +1,4 @@
-class Api::V3::GamesController < Api::V3::RoleManipulator
+class Api::V3::GamesController < Api::V3::RoleManipulatorController
   before_filter :find_game, only: :show
   before_filter :validate_role_count, only: :add_role
   before_filter :add_role_for_strategy, only: :add_strategy
