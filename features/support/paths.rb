@@ -12,10 +12,8 @@ module NavigationHelpers
       '/'
     when /^the sign in page$/
       '/users/sign_in'
-    when /^the last (.*)'s page$/i
-      "/#{$1.parameterize('_').pluralize}/#{$1.parameterize('_').camelize.constantize.last.id}"
-    when /^the first (.*)'s page$/i
-      "/#{$1.parameterize('_').pluralize}/#{$1.parameterize('_').camelize.constantize.first.id}"
+    when /^the (first|last) (.*)'s page$/i
+      "/#{$2.parameterize('_').pluralize}/#{$2.parameterize('_').camelize.constantize.send($1.to_sym).id}"
     when /^that scheduler's page$/i
       "/#{@scheduler_class}s/#{@scheduler.id}"
     # Add more mappings here.
