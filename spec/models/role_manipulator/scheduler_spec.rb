@@ -11,7 +11,8 @@ describe RoleManipulator::Scheduler do
     end
 
     describe '#remove_role' do
-      let(:profile){ Fabricate(:profile, simulator: scheduler.simulator) }
+      let(:simulator_instance){ Fabricate(:simulator_instance, simulator: scheduler.simulator, configuration: scheduler.configuration)}
+      let(:profile){ Fabricate(:profile, simulator_instance: simulator_instance) }
 
       before(:each) do
         scheduler.add_role('All', 2)

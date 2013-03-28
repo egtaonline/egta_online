@@ -1,6 +1,6 @@
 Given /^a game that matches those profiles exists$/ do
-  @profiles = @simulator.profiles
-  @game = Fabricate(:game, simulator: @simulator, size: @profiles.first.size)
+  @profiles = @simulator_instance.profiles
+  @game = Fabricate(:game, simulator: @simulator_instance.simulator, configuration: @simulator_instance.configuration, size: @profiles.first.size)
 end
 
 When /^I visit that game's page$/ do

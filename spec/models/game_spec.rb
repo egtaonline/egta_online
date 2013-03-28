@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Game do
 
   it { should validate_presence_of :name }
-  it { should validate_presence_of :configuration }
   it { should validate_presence_of :size }
   it { should validate_presence_of :simulator_fullname }
   it { should validate_numericality_of(:size).to_allow(only_integer: true, greater_than: 0) }
@@ -11,8 +10,8 @@ describe Game do
   describe "#display_profiles" do
     context "symmetric game" do
       let(:profile){ Fabricate(:sampled_profile, assignment: 'All: 2 A') }
-      let(:profile2){ Fabricate(:sampled_profile, simulator: profile.simulator, assignment: "All: 1 A, 1 B") }
-      let(:game){ Fabricate(:game, simulator: profile.simulator, configuration: profile.configuration, size: 2) }
+      let(:profile2){ Fabricate(:sampled_profile, simulator_instace: profile.simulator_instance, assignment: "All: 1 A, 1 B") }
+      let(:game){ Fabricate(:game, simulator: profile.simulator_instance.simulator, configuration: profile.simulator_instance.configuration, size: 2) }
 
       before(:each) do
         game.add_role("All", 2)

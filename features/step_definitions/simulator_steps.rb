@@ -29,9 +29,9 @@ Then /^I should see the default configuration of the last simulator$/ do
   @simulator2.configuration.each { |key,value| find_field(key).value.should eql(value) }
 end
 
-Given /^a fleshed out simulator with sampled profiles exists$/ do
-  @simulator = Fabricate(:simulator_with_profiles)
-  @simulator.profiles.each{|p| p.update_attribute(:sample_count, 1) }
+Given /^a fleshed out simulator instance with sampled profiles exists$/ do
+  @simulator_instance = Fabricate(:simulator_instance_with_profiles)
+  @simulator_instance.profiles.each{|p| p.update_attribute(:sample_count, 1) }
 end
 
 Given /^a simulator exists$/ do

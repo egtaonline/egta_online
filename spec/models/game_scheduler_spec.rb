@@ -4,9 +4,10 @@ describe GameScheduler do
   it { should validate_numericality_of(:default_samples).to_allow(only_integer: true) }
 
   shared_examples 'a game scheduler' do
+    let(:simulator_instance){ Fabricate(:simulator_instance, simulator: scheduler.simulator, configuration: scheduler.configuration) }
     describe '#required_samples' do
-      let!(:profile){ Fabricate(:profile, :simulator => scheduler.simulator) }
-      let!(:profile2){ Fabricate(:profile, :assignment => 'All: 2 B', :simulator => scheduler.simulator) }
+      let!(:profile){ Fabricate(:profile, :simulator_instance => simulator_instance) }
+      let!(:profile2){ Fabricate(:profile, :assignment => 'All: 2 B', :simulator_instance => simulator_instance) }
 
       before do
         profile.schedulers << scheduler

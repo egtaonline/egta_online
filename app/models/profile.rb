@@ -5,21 +5,22 @@ class Profile
   embeds_many :observations
 
   has_many :simulations, dependent: :destroy
-  belongs_to :simulator
+  belongs_to :simulator_instance
 
   field :size, type: Integer
   field :assignment, type: String
   field :sample_count, type: Integer, default: 0
-  field :configuration, type: Hash, default: {}
+  field :simulator_fullname, type: String
 
-  index ({ simulator_id: 1, configuration: 1, size: 1, sample_count: 1 })
+  index ({ simulator_instance_id: 1, size: 1, sample_count: 1 })
   index ({ sample_count: 1 })
   index ({ assignment: 1 })
   index ({ 'observations.u_at' => 1 })
-  validates_presence_of :simulator
+  validates_presence_of :simulator_instance_id
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
-  validates_uniqueness_of :assignment, scope: [:simulator_id, :configuration]
-  delegate :fullname, to: :simulator, prefix: true
+  validates_uniqueness_of :assignment, scope: :simulator_instance_id
+
+  before_save(on: :create){ self.simulator_fullname = self.simulator_instance.simulator.fullname }
 
   has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
     def with_max_samples

@@ -85,11 +85,11 @@ Then /^I should see these profiles: (.*)$/ do |profiles|
 end
 
 Given /^the simulator has a profile that matches the scheduler with the assignment (.*)$/ do |assignment|
-  @simulator.profiles.create(assignment: assignment, configuration: @scheduler.configuration)
+  @simulator.find_or_create_profile(@scheduler.configuration, assignment)
 end
 
 Given /^the simulator has a profile that does not match the scheduler with assignment (.*)$/ do |assignment|
-  @simulator.profiles.create(assignment: assignment, configuration: { gibberish: "Fake" })
+  @simulator.find_or_create_profile({ gibberish: "Fake" }, assignment)
 end
 
 Given /^its profiles have been sampled$/ do
@@ -179,9 +179,10 @@ Then /^I should see the (schedulers|games) in the default order$/ do |arg|
 end
 
 Given /^that generic_scheduler has 3 profiles$/ do
-  @objects = [Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 1 A, 1 B", sample_count: 10, scheduler_ids: [@scheduler.id]),
-    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 A", sample_count: 5, scheduler_ids: [@scheduler.id]),
-    Fabricate(:profile, simulator: @scheduler.simulator, configuration: @scheduler.configuration, assignment: "All: 2 B", sample_count: 20, scheduler_ids: [@scheduler.id])
+  simulator_instance = Fabricate(:simulator_instance, simulator: @scheduler.simulator, configuration: @scheduler.configuration)
+  @objects = [Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 1 A, 1 B", sample_count: 10, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 2 A", sample_count: 5, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 2 B", sample_count: 20, scheduler_ids: [@scheduler.id])
     ]
 end
 

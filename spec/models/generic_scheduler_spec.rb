@@ -3,9 +3,10 @@ require 'spec_helper'
 describe GenericScheduler do
   describe "#required_samples" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:profile){Fabricate(:profile, simulator: scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, assignment: 'All: 1 A, 1 B', simulator: scheduler.simulator)}
-    let!(:profile2){Fabricate(:profile, assignment: 'All: 2 B', simulator: scheduler.simulator)}
+    let(:simulator_instance){ Fabricate(:simulator_instance, simulator: scheduler.simulator, configuration: scheduler.configuration)}
+    let!(:profile){Fabricate(:profile, simulator_instance: simulator_instance)}
+    let!(:profile1){Fabricate(:profile, assignment: 'All: 1 A, 1 B', simulator_instance: simulator_instance)}
+    let!(:profile2){Fabricate(:profile, assignment: 'All: 2 B', simulator_instance: simulator_instance)}
     before do
       scheduler.add_profile(profile.assignment, 30)
       scheduler.add_profile(profile.assignment, 20)
@@ -18,8 +19,9 @@ describe GenericScheduler do
 
   describe "#remove_role" do
     let!(:scheduler){ Fabricate(:generic_scheduler) }
-    let!(:profile){ Fabricate(:profile, simulator: scheduler.simulator) }
-    let!(:profile1){ Fabricate(:profile, assignment: 'Bidder: 1 A; Seller: 1 B', simulator: scheduler.simulator) }
+    let!(:simulator_instance){ Fabricate(:simulator_instance, simulator: scheduler.simulator, configuration: scheduler.configuration)}
+    let!(:profile){ Fabricate(:profile, simulator_instance: simulator_instance) }
+    let!(:profile1){ Fabricate(:profile, assignment: 'Bidder: 1 A; Seller: 1 B', simulator_instance: simulator_instance) }
 
     context "local" do
       before :each do
@@ -59,9 +61,10 @@ describe GenericScheduler do
 
   describe "#remove_strategy" do
     let!(:scheduler){Fabricate(:generic_scheduler)}
-    let!(:profile){Fabricate(:profile, :simulator => scheduler.simulator)}
-    let!(:profile1){Fabricate(:profile, :assignment => "Bidder: 1 A; Seller: 1 B", :simulator => scheduler.simulator)}
-    let!(:profile2){Fabricate(:profile, :assignment => "All: 2 B", :simulator => scheduler.simulator)}
+    let!(:simulator_instance){ Fabricate(:simulator_instance, simulator: scheduler.simulator, configuration: scheduler.configuration)}
+    let!(:profile){Fabricate(:profile, simulator_instance: simulator_instance)}
+    let!(:profile1){Fabricate(:profile, :assignment => "Bidder: 1 A; Seller: 1 B", simulator_instance: simulator_instance)}
+    let!(:profile2){Fabricate(:profile, :assignment => "All: 2 B", simulator_instance: simulator_instance)}
 
     context "local" do
       before :each do

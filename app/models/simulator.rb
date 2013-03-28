@@ -6,13 +6,9 @@ class Simulator
   mount_uploader :simulator_source, SimulatorUploader
 
   embeds_many :roles, as: :role_owner
-  has_many :profiles, dependent: :destroy do
-    def with_role_and_strategy(role, strategy)
-      where(assignment: Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
-    end
-  end
   has_many :schedulers, dependent: :destroy
   has_many :games, dependent: :destroy
+  has_many :simulator_instances, dependent: :destroy
 
   field :name
   field :description
@@ -27,7 +23,8 @@ class Simulator
   validate :simulator_setup, if: :simulator_source_changed?
 
   def find_or_create_profile(configuration, assignment)
-    profiles.find_or_create_by(configuration: configuration, assignment: assignment)
+    simulator_instance = simulator_instances.find_or_create_by(configuration: configuration)
+    simulator_instance.profiles.find_or_create_by(assignment: assignment)
   end
 
   def simulator_setup
@@ -69,7 +66,6 @@ class Simulator
       scheduler.remove_strategy(role_name, strategy_name)
     end
     super
-    profiles.with_role_and_strategy(role_name, strategy_name).destroy_all
   end
 
   def remove_role(role_name)
@@ -77,6 +73,5 @@ class Simulator
       scheduler.remove_role(role_name)
     end
     super
-    profiles.with_role(role_name).destroy_all
   end
 end

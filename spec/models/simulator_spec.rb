@@ -33,36 +33,4 @@ describe Simulator do
       simulator.errors[:simulator_source].should include("did not find script/batch within #{simulator.location}/#{simulator.name}")
     end
   end
-
-  describe "#remove_strategy" do
-    context "simulator has a profile" do
-      let!(:simulator){Fabricate(:simulator_with_strategies)}
-      let!(:profile){Fabricate(:profile, simulator: simulator, assignment: "All: 2 #{simulator.roles.first.strategies.last}")}
-
-      it "should destroy profiles that contain the strategy" do
-        simulator.remove_strategy("All", simulator.roles.first.strategies.last)
-        Profile.count.should eql(0)
-      end
-
-      it "should not destroy profiles that do not contain the strategy" do
-        simulator.remove_strategy("All", simulator.roles.first.strategies.first)
-        Profile.count.should eql(1)
-      end
-    end
-  end
-
-  describe "#remove_role" do
-    context "simulator has a profile" do
-      let!(:simulator){Fabricate(:simulator_with_strategies)}
-      let!(:profile){Fabricate(:profile, simulator: simulator, assignment: "All: 2 #{simulator.roles.first.strategies.last}")}
-      before :each do
-        simulator.add_strategy("Alt", "AltStrat")
-        profile2 = Fabricate(:profile, simulator: simulator, assignment: "Alt: 2 #{simulator.roles.last.strategies.last}")
-      end
-      it "should destroy only profiles that contain the role" do
-        simulator.remove_role("All")
-        Profile.count.should eql(1)
-      end
-    end
-  end
 end

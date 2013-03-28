@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe GamePresenter do
   let(:game){ Fabricate(:game, size: 4) }
-  let(:profile){ Fabricate(:profile, simulator: game.simulator, configuration: game.configuration,
+  let(:simulator_instance){ Fabricate(:simulator_instance, simulator: game.simulator, configuration: game.configuration)}
+  let(:profile){ Fabricate(:profile, simulator_instance: simulator_instance,
                                      assignment: 'Role1: 2 Strat1; Role2: 1 Strat2, 1 Strat3') }
   subject{ GamePresenter.new(game) }
 

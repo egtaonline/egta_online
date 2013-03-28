@@ -1,7 +1,6 @@
 Fabricator(:profile) do
-  simulator!
+  simulator_instance!
   assignment "All: 2 A"
-  configuration { |p| p.simulator.configuration }
 end
 
 Fabricator(:sampled_profile, from: :profile) do
