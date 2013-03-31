@@ -6,8 +6,6 @@ class Simulator
   mount_uploader :simulator_source, SimulatorUploader
 
   embeds_many :roles, as: :role_owner
-  has_many :schedulers, dependent: :destroy
-  has_many :games, dependent: :destroy
   has_many :simulator_instances, dependent: :destroy
 
   field :name
@@ -21,11 +19,6 @@ class Simulator
   validates :version, presence: true, uniqueness: { scope: :name }
   before_validation(if: :simulator_source_changed?){ FileUtils.rm_rf location }
   validate :simulator_setup, if: :simulator_source_changed?
-
-  def find_or_create_profile(configuration, assignment)
-    simulator_instance = simulator_instances.find_or_create_by(configuration: configuration)
-    simulator_instance.profiles.find_or_create_by(assignment: assignment)
-  end
 
   def simulator_setup
     begin
@@ -62,15 +55,19 @@ class Simulator
   end
 
   def remove_strategy(role_name, strategy_name)
-    schedulers.each do |scheduler|
-      scheduler.remove_strategy(role_name, strategy_name)
+    simulator_instances.each do |simulator_instance|
+      simulator_instance.schedulers.each do |scheduler|
+        scheduler.remove_strategy(role_name, strategy_name)
+      end
     end
     super
   end
 
   def remove_role(role_name)
-    schedulers.each do |scheduler|
-      scheduler.remove_role(role_name)
+    simulator_instances.each do |simulator_instance|
+      simulator_instance.schedulers.each do |scheduler|
+        scheduler.remove_role(role_name)
+      end
     end
     super
   end

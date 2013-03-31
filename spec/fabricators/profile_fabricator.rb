@@ -9,7 +9,7 @@ end
 
 Fabricator(:profile_with_observation, from: :profile) do
   after_create do |profile|
-    symmetry_group = profile.symmetry_groups.first
-    profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 100}, {payoff: 200}]}])
+    observation = profile.symmetry_groups.collect{ |sgroup| { role: sgroup.role, strategy: sgroup.strategy, count: sgroup.count, players: Array.new(sgroup.count){ |i| { payoff: (i+1)*100 } } } }
+    profile.observations.create(symmetry_groups: observation)
   end
 end

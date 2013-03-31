@@ -7,7 +7,7 @@ describe "Games" do
       game = Fabricate(:game)
       visit games_path
       page.should have_content(game.name)
-      page.should have_content(game.simulator.fullname)
+      page.should have_content(game.simulator_fullname)
       page.should have_content(game.size)
     end
   end
@@ -17,7 +17,7 @@ describe "Games" do
       game = Fabricate(:game)
       visit game_path(game.id)
       page.should have_content(game.name)
-      page.should have_content(game.simulator.fullname)
+      page.should have_content(game.simulator_fullname)
       page.should have_content(game.size)
     end
   end

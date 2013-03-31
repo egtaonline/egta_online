@@ -12,16 +12,6 @@ Fabricator(:simulator_with_strategies, from: :simulator) do
   end
 end
 
-Fabricator(:simulator_with_profiles, from: :simulator) do
-  after_create do |sim|
-    sim.add_strategy("All", "A")
-    sim.add_strategy("All", "B")
-    sim.profiles.create(configuration: sim.configuration, assignment: "All: 2 A")
-    sim.profiles.create(configuration: sim.configuration, assignment: "All: 1 A, 1 B")
-    sim.profiles.create(configuration: sim.configuration, assignment: "All: 2 B")
-  end
-end
-
 Fabricator(:simulator_realistic, :from => :simulator) do
   name "epp_sim"
   version "test"

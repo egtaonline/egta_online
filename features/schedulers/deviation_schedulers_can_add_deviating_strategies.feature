@@ -16,8 +16,8 @@ Scenario Outline: No prior profiles
 Scenario Outline: Schedulers find and reuse matching profiles
   Given I am signed in
   And a fleshed out simulator with an empty <class> of size 2 exists
-  And the simulator has a profile that matches the scheduler with the assignment <assignment>
-  And the simulator has a profile that does not match the scheduler with assignment <assignment2>
+  And the scheduler's simulator instance has a profile with the assignment <assignment>
+  And a different simulator instance has a profile with the assignment <assignment2>
   When I add the role All with the strategy A to the scheduler
   And I add the deviating strategy B to the role All on the scheduler
   Then there should be 3 profiles
@@ -31,8 +31,8 @@ Scenario Outline: Schedulers find and reuse matching profiles
 Scenario Outline: Removing a strategy or role should trim the set of profiles to be scheduled without destroying the profiles
   Given I am signed in
   And a fleshed out simulator with an empty <class> of size 2 exists
-  And the simulator has a profile that matches the scheduler with the assignment <assignment>
-  And the simulator has a profile that does not match the scheduler with assignment <assignment2>
+  And the scheduler's simulator instance has a profile with the assignment <assignment>
+  And a different simulator instance has a profile with the assignment <assignment2>
   And I add the role All with the strategy A to the scheduler
   And I add the deviating strategy B to the role All on the scheduler
   When I remove the deviation strategy B on role All from the scheduler

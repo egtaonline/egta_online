@@ -20,7 +20,7 @@ class Profile
   validates_format_of :assignment, with: /\A(\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+; )*\w+:( \d+ [\w:.-]+,)* \d+ [\w:.-]+\z/
   validates_uniqueness_of :assignment, scope: :simulator_instance_id
 
-  before_save(on: :create){ self.simulator_fullname = self.simulator_instance.simulator.fullname }
+  before_validation(on: :create){ self.simulator_fullname = self.simulator_instance.simulator.fullname }
 
   has_and_belongs_to_many :schedulers, index: true, inverse_of: nil do
     def with_max_samples

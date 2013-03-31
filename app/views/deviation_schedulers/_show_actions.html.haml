@@ -9,7 +9,7 @@
     =render partial: "roles/role", collection: scheduler.roles, locals: {role_owner: scheduler}
 -if scheduler.unassigned_player_count > 0
   =form_tag url_for(action: "add_role", id: scheduler.id), method: :post do
-    = select_tag "role", options_for_select(scheduler.simulator.roles.collect{|r| r.name}-scheduler.roles.collect{|r| r.name})
+    = select_tag "role", options_for_select(scheduler.simulator_instance.simulator.roles.collect{|r| r.name}-scheduler.roles.collect{|r| r.name})
     = number_field_tag "role_count", scheduler.unassigned_player_count, in: 1..scheduler.unassigned_player_count
     = submit_tag "Add Role", class: 'btn btn-primary'
 %h3 Deviating Roles and Strategies

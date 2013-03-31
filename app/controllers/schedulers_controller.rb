@@ -18,12 +18,12 @@ class SchedulersController < ApplicationController
   expose(:profiles){ Profile.where(scheduler_ids: params[:id]).order_by("#{sort_column} #{sort_direction}").only(:assignment, :sample_count, :scheduler_ids).page(params[:page]) }
 
   def create
-    scheduler.save
+    scheduler = model_name.classify.constantize.create_with_simulator_instance(params[model_name])
     respond_with(scheduler)
   end
 
   def update
-    scheduler.save
+    scheduler = model_name.classify.constantize.find(params[:id]).update_with_simulator_instance(params[model_name])
     respond_with(scheduler)
   end
 

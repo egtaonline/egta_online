@@ -9,6 +9,6 @@
   = u.attribute :nodes, label: "Nodes required"
   = u.attribute :active
   %h3 Simulator Configuration
-  = render partial: "parameter", collection: scheduler.configuration.to_a
+  = render partial: "parameter", collection: scheduler.simulator_instance.configuration.to_a
 = link_to "Edit Scheduler", edit_generic_scheduler_path(scheduler), class: 'btn btn-primary'
 = link_to "Create Game to Match", create_game_to_match_scheduler_path(scheduler), method: :post, class: 'btn btn-primary'

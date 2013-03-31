@@ -10,23 +10,40 @@ class Scheduler
   field :samples_per_simulation, type: Integer
   field :nodes, type: Integer, default: 1
   field :simulator_fullname
-  field :configuration, type: Hash, default: {}
   field :size, type: Integer
   field :default_samples, type: Integer
   embeds_many :roles, as: :role_owner, order: :name.asc
 
   validates_numericality_of :default_samples, integer_only: true
 
-  before_save(on: :create){self.simulator_fullname = self.simulator.fullname}
+  before_save(on: :create){self.simulator_fullname = self.simulator_instance.simulator.fullname}
 
-  belongs_to :simulator
+  belongs_to :simulator_instance
   validates_uniqueness_of :name
-  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :configuration, :size
+  validates_presence_of :process_memory, :name, :time_per_sample, :samples_per_simulation, :nodes, :size, :simulator_instance_id
   validates_numericality_of :process_memory, :time_per_sample, :nodes, only_integer: true
   validates_numericality_of :samples_per_simulation, only_integer: true, greater_than: 0
 
+  def self.create_with_simulator_instance(params)
+    if params
+      simulator_id = params.delete(:simulator_id)
+      configuration = params.delete(:configuration)
+      params[:simulator_instance_id] = SimulatorInstance.find_or_create_by(simulator_id: simulator_id, configuration: configuration).id
+    end
+    create(params)
+  end
+
+  def update_with_simulator_instance(params)
+    if params
+      configuration = params.delete(:configuration)
+      params[:simulator_instance_id] = SimulatorInstance.find_or_create_by(simulator_id: simulator_instance.simulator_id, configuration: configuration).id
+    end
+    self.update_attributes(params)
+    self
+  end
+
   def find_or_create_profile(assignment)
-    profile = simulator.find_or_create_profile(configuration, assignment)
+    profile = simulator_instance.profiles.find_or_create_by(assignment: assignment)
     if profile.valid?
       profile.add_to_set(:scheduler_ids, id)
       profile.try_scheduling
@@ -34,7 +51,7 @@ class Scheduler
   end
 
   def create_game_to_match
-    game = Game.create!(name: name, size: size, simulator_id: simulator_id, configuration: configuration)
+    game = Game.create!(name: name, size: size, simulator_instance_id: simulator_instance_id)
     add_strategies_to_game(game)
     game
   end

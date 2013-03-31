@@ -3,7 +3,7 @@ class Api::V3::GenericSchedulersController < Api::V3::SchedulersController
 
   def create
     # Hack to make old api compatible with new model defs
-    scheduler = GenericScheduler.create(params[:scheduler])
+    scheduler = GenericScheduler.create_with_simulator_instance(params[:scheduler])
     if scheduler.valid?
       respond_with(scheduler, location: api_v3_generic_scheduler_path(scheduler))
     else

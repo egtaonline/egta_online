@@ -1,7 +1,9 @@
 Feature: Game schedulers schedule subgames
 
-Scenario Outline: No prior profiles
+Background:
   Given I am signed in
+
+Scenario Outline: No prior profiles
   And a fleshed out simulator with an empty <class> of size 2 exists
   When I add the role <role> with size <role_size> and the strategies <strategies> to the scheduler
   And I add the role <role2> with size <role_size2> and the strategies <strategies2> to the scheduler
@@ -17,10 +19,9 @@ Scenario Outline: No prior profiles
   | dpr_game_scheduler     | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | ["Buyer: 1 Bid1; Seller: 1 Ask1", "Buyer: 1 Bid2; Seller: 1 Ask1", "Buyer: 1 Bid1; Seller: 1 Ask2", "Buyer: 1 Bid2; Seller: 1 Ask2"] |
 
 Scenario Outline: Schedulers find and reuse matching profiles
-  Given I am signed in
   And a fleshed out simulator with an empty <class> of size 2 exists
-  And the simulator has a profile that matches the scheduler with the assignment <assignment>
-  And the simulator has a profile that does not match the scheduler with assignment <assignment2>
+  And the scheduler's simulator instance has a profile with the assignment <assignment>
+  And a different simulator instance has a profile with the assignment <assignment2>
   When I add the role <role> with size <role_size> and the strategies <strategies> to the scheduler
   And I add the role <role2> with size <role_size2> and the strategies <strategies2> to the scheduler
   Then there should be <profile_count> profiles
@@ -34,12 +35,10 @@ Scenario Outline: Schedulers find and reuse matching profiles
   | dpr_game_scheduler     | All: 2 A                      | All: 1 A, 1 B                 | All   | 2         | A, B       |        |            |             | 4             |
   | dpr_game_scheduler     | Buyer: 1 Bid1; Seller: 1 Ask1 | Buyer: 1 Bid2; Seller: 1 Ask1 | Buyer | 1         | Bid1, Bid2 | Seller | 1          | Ask1, Ask2  | 5             |
 
-
 Scenario Outline: Removing a strategy or role should trim the set of profiles to be scheduled without destroying the profiles
-  Given I am signed in
   And a fleshed out simulator with an empty <class> of size 2 exists
-  And the simulator has a profile that matches the scheduler with the assignment <assignment>
-  And the simulator has a profile that does not match the scheduler with assignment <assignment2>
+  And the scheduler's simulator instance has a profile with the assignment <assignment>
+  And a different simulator instance has a profile with the assignment <assignment2>
   And I add the role <role> with size <role_size> and the strategies <strategies> to the scheduler
   And I add the role <role2> with size <role_size2> and the strategies <strategies2> to the scheduler
   When I remove the strategy <strategy> on role <role> from the scheduler

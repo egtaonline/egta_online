@@ -13,7 +13,7 @@ class ProfileObserver < Mongoid::Observer
     end
     profile.size = total_count
   end
-  
+
   def before_validation(profile)
     profile.assignment = profile.assignment.assignment_sort
   end

@@ -1,6 +1,5 @@
 Fabricator(:game) do
-  simulator!
+  simulator_instance!
   name { Fabricate.sequence(:name) { |i| "testing#{i}" } }
   size { 2 }
-  configuration { |game| game.simulator.configuration }
 end

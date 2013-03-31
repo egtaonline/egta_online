@@ -7,7 +7,7 @@ class GamesController < ApplicationController
   expose(:profile_counts){ game.profile_counts }
 
   def create
-    game.save
+    game = Game.create_with_simulator_instance(params[:game])
     respond_with(game)
   end
 

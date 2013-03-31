@@ -3,7 +3,7 @@ class DprDeviationScheduler < Scheduler
   include Sampling::Simple
   include Deviations
 
-  def add_role(name, count, reduced_count)
+  def add_role(name, count, reduced_count=count)
     super
     deviating_roles.find_or_create_by(name: name, count: count, reduced_count: reduced_count)
   end

@@ -23,7 +23,7 @@ class GenericScheduler < Scheduler
 
   def add_profile(assignment, sample_count=self["default_samples"])
     assignment = assignment.assignment_sort
-    profile = self.simulator.find_or_create_profile(self.configuration, assignment)
+    profile = self.simulator_instance.profiles.find_or_create_by(assignment: assignment)
     if profile.errors.messages.empty?
       flag = profile.size == self.size
       roles.each do |r|

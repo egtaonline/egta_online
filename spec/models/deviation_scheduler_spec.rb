@@ -60,8 +60,8 @@ describe "DeviationSchedulers" do
 
     describe '#available_strategies' do
       before(:each) do
-        scheduler.simulator.stub(:strategies_for).with('A').and_return(['B', 'C', 'D'])
-        scheduler.simulator.stub(:strategies_for).with('E').and_return(['F', 'G', 'H'])
+        scheduler.simulator_instance.simulator.stub(:strategies_for).with('A').and_return(['B', 'C', 'D'])
+        scheduler.simulator_instance.simulator.stub(:strategies_for).with('E').and_return(['F', 'G', 'H'])
         scheduler.stub(:strategies_for).with('A').and_return(['C'])
         scheduler.stub(:deviating_strategies_for).with('A').and_return(['D'])
         scheduler.stub(:strategies_for).with('E').and_return(['H'])

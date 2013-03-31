@@ -4,8 +4,7 @@ Background:
   Given I am signed in
 
 Scenario Outline: Creating a game from a scheduler with roles and strategies
-  Given a fleshed out simulator with a non-empty <class> exists
-  And its profiles have been sampled
+  Given a <class> with sampled profiles
   When I visit that scheduler's page
   And I follow "Create Game to Match"
   Then I should see a game that matches that scheduler

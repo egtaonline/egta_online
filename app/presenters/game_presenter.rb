@@ -51,7 +51,7 @@ class GamePresenter < JsonPresenter
 
   def json_base
     "{\"_id\":\"#{@game.id}\",\"name\":\"#{@game.name}\",\"simulator_fullname\":\"#{@game.simulator_fullname}\"," <<
-    "\"configuration\":#{@game.configuration.to_json}," <<
+    "\"configuration\":#{@game.simulator_instance.configuration.to_json}," <<
     "\"roles\":[#{@game.roles.collect{ |role| "{\"name\":\"#{role.name}\",\"strategies\":#{ role.strategies },\"count\":#{role.count}}" }.join(",") }]"
   end
 end

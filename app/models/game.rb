@@ -4,20 +4,27 @@ class Game
   include RoleManipulator::Base
   include RoleManipulator::RolePartition
 
-  field :name
+  field :name, type: String
   field :size, type: Integer
-  field :simulator_fullname
-  field :configuration, type: Hash, default: {}
+  field :simulator_fullname, type: String
+
+  before_validation(on: :create){ self.simulator_fullname = self.simulator_instance.simulator.fullname }
 
   embeds_many :roles, as: :role_owner
-  belongs_to :simulator
+  belongs_to :simulator_instance
 
-  index({ simulator_id: 1, configuration: 1, size: 1 })
-  validates_presence_of :simulator, :name, :size, :simulator_fullname
+  index({ simulator_instance_id: 1, size: 1 })
+  validates_presence_of :simulator_instance_id, :name, :size, :simulator_fullname
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
+  def self.create_with_simulator_instance(params)
+    simulator_id = params.delete(:simulator_id)
+    configuration = params.delete(:configuration)
+    params[:simulator_instance_id] = SimulatorInstance.find_or_create_by(simulator_id: simulator_id, configuration: configuration).id
+    Game.create!(params)
+  end
+
   def profiles
-    simulator_instance_id = SimulatorInstance.find_or_create_by(simulator_id: simulator_id, configuration: configuration).id
     query_hash = { simulator_instance_id: simulator_instance_id, size: self.size, sample_count: { '$gt' => 0 }, assignment: strategy_regex }
     roles.each {|r| query_hash["role_#{r.name}_count"] = r.count }
     Profile.collection.find(query_hash)

@@ -1,8 +1,14 @@
 Given /^a fleshed out simulator with a non\-empty (.*) exists$/ do |scheduler|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
-  @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator: @simulator)
+  @simulator_instance = Fabricate(:simulator_instance, simulator: @simulator)
+  @scheduler = Fabricate("#{scheduler}_with_profiles".to_sym, simulator_instance: @simulator_instance)
   @profile_count = Profile.with_scheduler(@scheduler).count
+end
+
+Given /^a (.*) with sampled profiles$/ do |scheduler|
+  @scheduler_class = scheduler
+  @scheduler = Fabricate("#{scheduler}_with_sampled_profiles".to_sym)
 end
 
 Given /^that scheduler has target and deviating strategies$/ do
@@ -35,14 +41,15 @@ end
 Given /^a fleshed out simulator with an empty (\w+) of size (\d+) exists$/ do |scheduler, size|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
-  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: size.to_i)
-  @scheduler.configuration.should_not eql(nil)
+  @simulator_instance = Fabricate(:simulator_instance, simulator: @simulator)
+  @scheduler = Fabricate("#{scheduler}".to_sym, simulator_instance: @simulator_instance, size: size.to_i)
 end
 
 Given /^a fleshed out simulator with an empty (\w+)$/ do |scheduler|
   step 'a fleshed out simulator exists'
   @scheduler_class = scheduler
-  @scheduler = Fabricate("#{scheduler}".to_sym, simulator: @simulator, size: 4)
+  @simulator_instance = Fabricate(:simulator_instance, simulator: @simulator)
+  @scheduler = Fabricate("#{scheduler}".to_sym, simulator_instance: @simulator_instance, size: 4)
 end
 
 When /^I add the role (.*) with size (.*) and the strategies (.*) to the scheduler$/ do |role, size, strategies|
@@ -84,12 +91,15 @@ Then /^I should see these profiles: (.*)$/ do |profiles|
   Profile.count.should eql(eval(profiles).size)
 end
 
-Given /^the simulator has a profile that matches the scheduler with the assignment (.*)$/ do |assignment|
-  @simulator.find_or_create_profile(@scheduler.configuration, assignment)
+Given /^the scheduler's simulator instance has a profile with the assignment (.*)$/ do |assignment|
+  @simulator_instance.profiles.find_or_create_by(assignment: assignment)
+  @simulator_instance.reload
 end
 
-Given /^the simulator has a profile that does not match the scheduler with assignment (.*)$/ do |assignment|
-  @simulator.find_or_create_profile({ gibberish: "Fake" }, assignment)
+Given /^a different simulator instance has a profile with the assignment (.*)$/ do |assignment|
+  @simulator_instance2 = Fabricate(:simulator_instance, simulator: @simulator, configuration: {"other" => "gibberish"})
+  @simulator_instance2.profiles.find_or_create_by(assignment: assignment)
+  @simulator_instance2.reload
 end
 
 Given /^its profiles have been sampled$/ do
@@ -104,7 +114,7 @@ Then /^I should see a game that matches that scheduler$/ do
   current_path.should eql(game_path(Game.last))
   page.should have_content(@scheduler.name)
   page.should have_content(@scheduler.simulator_fullname)
-  @scheduler.configuration.each { |key,value| page.should have_content(key); page.should have_content(value) }
+  @scheduler.simulator_instance.configuration.each { |key,value| page.should have_content(key); page.should have_content(value) }
 end
 
 Then /^I should see all the profiles of the scheduler that have been sampled$/ do
@@ -167,7 +177,7 @@ end
 
 Given /^3 schedulers exist$/ do
   simulators = [Fabricate(:simulator, name: 'real', version: 'realest'), Fabricate(:simulator, name: 'fake', version: 'less'), Fabricate(:simulator, name: 'fake', version: 'more')]
-  @objects = simulators.collect{ |simulator| Fabricate(:game_scheduler, simulator: simulator) }
+  @objects = simulators.collect{ |simulator| Fabricate(:game_scheduler, simulator_instance: Fabricate(:simulator_instance, simulator: simulator)) }
 end
 
 When /^I visit the (\w+) index page$/ do |arg|
@@ -179,10 +189,9 @@ Then /^I should see the (schedulers|games) in the default order$/ do |arg|
 end
 
 Given /^that generic_scheduler has 3 profiles$/ do
-  simulator_instance = Fabricate(:simulator_instance, simulator: @scheduler.simulator, configuration: @scheduler.configuration)
-  @objects = [Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 1 A, 1 B", sample_count: 10, scheduler_ids: [@scheduler.id]),
-    Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 2 A", sample_count: 5, scheduler_ids: [@scheduler.id]),
-    Fabricate(:profile, simulator_instance: simulator_instance, assignment: "All: 2 B", sample_count: 20, scheduler_ids: [@scheduler.id])
+  @objects = [Fabricate(:profile, simulator_instance: @scheduler.simulator_instance, assignment: "All: 1 A, 1 B", sample_count: 10, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator_instance: @scheduler.simulator_instance, assignment: "All: 2 A", sample_count: 5, scheduler_ids: [@scheduler.id]),
+    Fabricate(:profile, simulator_instance: @scheduler.simulator_instance, assignment: "All: 2 B", sample_count: 20, scheduler_ids: [@scheduler.id])
     ]
 end
 

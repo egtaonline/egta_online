@@ -38,11 +38,11 @@ module RoleManipulator
     end
 
     def available_strategies(role_name)
-      simulator.strategies_for(role_name)-self.strategies_for(role_name)
+      simulator_instance.simulator.strategies_for(role_name)-self.strategies_for(role_name)
     end
 
     def available_roles
-      simulator.roles.collect{ |r| r.name }-roles.collect{ |r| r.name }
+      simulator_instance.simulator.roles.collect{ |r| r.name }-roles.collect{ |r| r.name }
     end
   end
 

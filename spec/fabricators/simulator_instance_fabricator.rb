@@ -1,5 +1,6 @@
 Fabricator(:simulator_instance) do
   simulator!
+  configuration { |si| si.simulator.configuration }
 end
 
 Fabricator(:simulator_instance_with_profiles, from: :simulator_instance) do

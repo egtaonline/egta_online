@@ -14,16 +14,6 @@ describe SchedulerObserver do
           Profile.with_scheduler(scheduler).count.should == 0
         end
       end
-
-      context "when configuration has changed" do
-        it "gathers the new profiles" do
-          if scheduler_class != GenericScheduler
-            ProfileAssociater.should_receive(:perform_async).with(scheduler.id)
-          end
-          scheduler.update_attribute(:configuration, { "Updated" => true })
-          Profile.with_scheduler(scheduler).count.should == 0
-        end
-      end
     end
 
     describe 'schedules profiles' do

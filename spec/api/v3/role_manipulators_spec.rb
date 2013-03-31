@@ -136,7 +136,7 @@ describe "Strategy adding", :type => :api do
   end
 
   describe Game do
-    let(:role_manipulator) {Fabricate(:game)}
+    let!(:role_manipulator) {Fabricate(:game)}
     let(:role_hash) {{:auth_token => token, :role => "Bidder", :count => 2}}
     it_behaves_like "a role manipulator"
 
