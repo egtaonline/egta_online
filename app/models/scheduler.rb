@@ -53,12 +53,14 @@ class Scheduler
   def create_game_to_match
     game = Game.create!(name: name, size: size, simulator_instance_id: simulator_instance_id)
     add_strategies_to_game(game)
-    game
   end
 
   def schedule_profile(profile)
-    samples_to_schedule = [samples_per_simulation, required_samples(profile)-profile.sample_count].min
-    self.simulations.create!(size: samples_to_schedule, state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
+    self.simulations.create!(size: samples_to_schedule(profile), state: 'pending', profile_id: profile.id) if samples_to_schedule > 0
+  end
+
+  def samples_to_schedule(profile)
+    [samples_per_simulation, required_samples(profile)-profile.sample_count].min
   end
 
   def profiles

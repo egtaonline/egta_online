@@ -7,11 +7,4 @@ class DeviationScheduler < GameScheduler
     deviation_assignments = DeviationCreator.deviation_assignments(roles, deviating_roles)
     AssignmentFormatter.format_assignments((subgame_assignments+deviation_assignments).uniq)
   end
-
-  protected
-
-  def add_strategies_to_game(game)
-    super
-    deviating_roles.each{ |r| r.strategies.each{ |s| game.add_strategy(r.name, s) } }
-  end
 end

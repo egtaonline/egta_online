@@ -51,4 +51,10 @@ module Deviations
       ProfileAssociater.perform_async(self.id)
     end
   end
+
+  def add_strategies_to_game(game)
+    super
+    deviating_roles.each{ |r| r.strategies.each{ |s| game.add_strategy(r.name, s) } }
+    game
+  end
 end

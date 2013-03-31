@@ -66,10 +66,8 @@ module RoleManipulator
     end
 
     def add_strategies_to_game(game)
-      roles.each do |r|
-        game.roles.create!(name: r.name, count: r.count)
-        r.strategies.each{ |s| game.add_strategy(r.name, s) }
-      end
+      roles.each { |r| game.roles.create!(name: r.name, count: r.count, strategies: r.strategies) }
+      game
     end
 
     def invalid_role_partition?

@@ -15,9 +15,4 @@ class DprDeviationScheduler < Scheduler
     expanded_assignments = DprCreator.expand_assignments(reduced_assignments + reduced_deviation_assignments, roles)
     AssignmentFormatter.format_assignments(expanded_assignments.uniq)
   end
-
-  def add_strategies_to_game(game)
-    super
-    deviating_roles.each{ |r| r.strategies.each{ |s| game.add_strategy(r.name, s) } }
-  end
 end

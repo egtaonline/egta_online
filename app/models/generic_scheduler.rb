@@ -63,5 +63,6 @@ class GenericScheduler < Scheduler
         game.add_strategy(role.name, strategy)
       end
     end
+    game
   end
 end
