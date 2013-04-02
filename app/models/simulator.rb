@@ -14,6 +14,8 @@ class Simulator
   field :configuration, type: Hash, default: {}
   field :email
 
+  attr_readonly :name, :version
+
   validates :email, presence: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i, message: 'does not match the expected format' }
   validates :name, presence: true, format: { with: /\A\w+\z/, message: 'can contain only letters, numbers, and underscores'}
   validates :version, presence: true, uniqueness: { scope: :name }

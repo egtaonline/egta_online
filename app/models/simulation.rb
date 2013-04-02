@@ -18,6 +18,8 @@ class Simulation
   sequence :_id
   index({ state: 1 })
 
+  attr_readonly :profile_assignment, :size
+
   def self.simulation_limit
     [Backend.configuration.queue_quantity, Backend.configuration.queue_max-Simulation.active.count].min
   end

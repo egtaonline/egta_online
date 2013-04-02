@@ -27,6 +27,8 @@ class User
   ## Token authenticatable
   field :authentication_token, type: String
 
+  attr_readonly :email
+
   index({ email: 1 }, { unique: true, background: true })
   attr_accessible :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
   validates :email, presence: true, uniqueness: true, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i }

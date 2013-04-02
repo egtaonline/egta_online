@@ -5,14 +5,12 @@ class SimulatorInstance
   field :counter, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
 
+  attr_readonly :configuration, :simulator_id
+
   belongs_to :simulator
   has_many :schedulers, dependent: :destroy
   has_many :games, dependent: :destroy
-  has_many :profiles, dependent: :destroy do
-    def with_role_and_strategy(role, strategy)
-      where(assignment: Regexp.new("#{role}:( \\d+ \\w+,)* \\d+ #{strategy}(,|;|\\z)"))
-    end
-  end
+  has_many :profiles, dependent: :destroy
 
   validates_presence_of :simulator_id
   validates_uniqueness_of :configuration, scope: :simulator_id
