@@ -19,6 +19,15 @@
 			}
 		},
 		{
+			"role": "Seller",
+			"strategy": "Shade1",
+			"payoff": null,
+			"features": {
+				"featureA": 0.003,
+				"featureB": [1.3, 1.7]
+			}
+		},
+		{
 			"role": "Buyer",
 			"strategy": "BidValue",
 			"payoff": 2990.53,

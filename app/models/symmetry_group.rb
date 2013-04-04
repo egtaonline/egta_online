@@ -1,26 +1,13 @@
 class SymmetryGroup
   include Mongoid::Document
 
-  embedded_in :role_strategy_partitionable, polymorphic: true
-  embeds_many :players
+  embedded_in :profile
 
-  accepts_nested_attributes_for :players
-
+  field :role, type: String
+  field :strategy, type: String
   field :count, type: Integer
-  field :role
-  field :strategy
   field :payoff, type: Float
   field :payoff_sd, type: Float
-
-  attr_readonly :count, :role, :strategy
-
-  validates :count, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :role, presence: true
-  validates :strategy, presence: true, uniqueness: { scope: :role }
-
-  def payoffs
-    players.collect { |p| p.payoff }
-  end
 
   def update_statistics(payoffs)
     self.payoff = ArrayMath.average(payoffs)

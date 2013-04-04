@@ -1,7 +1,7 @@
 class SimulatorInstance
   include Mongoid::Document
 
-  field :translation_table, type: Hash, default: {}
+  field :translation_table, type: Hash, default: {"payoff" => "p"}
   field :counter, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
 

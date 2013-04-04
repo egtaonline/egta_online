@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DataParser do
   ### Integration test, consider pulling to cucumber and writing unit tests
   describe 'perform' do
-    let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade1, 1 Shade2') }
+    let(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 2 Shade1, 1 Shade2') }
     let(:simulation){ Fabricate(:simulation, profile: profile, state: 'running') }
 
     context 'multiple valid observations' do

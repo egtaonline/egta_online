@@ -13,11 +13,11 @@ class ObservationValidator
       json['players'].each do |player|
         return nil if payoff_invalid(player)
       end
-      return_hash = { features: numeralize(json['features']), symmetry_groups: [] }
+      return_hash = { features: numeralize(profile.simulator_instance, json['features']), observation_symmetry_groups: [] }
       profile.symmetry_groups.each do |symmetry_group|
         players = json['players'].select{ |player| player['role'] == symmetry_group.role && player['strategy'] == symmetry_group.strategy }
         return nil if players.count != symmetry_group.count
-        return_hash[:symmetry_groups] << build_symmetry_group_hash(symmetry_group, players)
+        return_hash[:observation_symmetry_groups] << build_symmetry_group_hash(profile.simulator_instance, symmetry_group, players)
       end
       return_hash
     rescue Oj::ParseError => e
@@ -28,30 +28,28 @@ class ObservationValidator
 
   private
 
-  def build_symmetry_group_hash(symmetry_group, players)
-    players = clean_players(players)
-    payoffs = players.collect{ |player| player[:payoff] }
-    { count: symmetry_group.count, players: players,
-      role: symmetry_group.role, strategy: symmetry_group.strategy,
-      payoff: ArrayMath.average(payoffs), payoff_sd: ArrayMath.std_dev(payoffs) }
+  def build_symmetry_group_hash(simulator_instance, symmetry_group, players)
+    players = clean_players(simulator_instance, players)
+    payoffs = players.collect{ |player| player["p"] }
+    { players: players, payoff: ArrayMath.average(payoffs.compact), payoff_sd: ArrayMath.std_dev(payoffs.compact) }
   end
 
-  def numeralize(hash)
+  def numeralize(simulator_instance, hash)
     return {} if !hash
     return_hash = {}
     hash.each do |key, value|
-      return_hash[key] = ( value.numeric? ? value.to_f : ( value.is_a?(Hash) ? numeralize(value) : value ) )
+      return_hash[simulator_instance.get_storage_key(key)] = ( value.numeric? ? value.to_f : ( value.is_a?(Hash) ? numeralize(simulator_instance, value) : value ) )
     end
     return_hash
   end
 
   def payoff_invalid(player)
-    !player['payoff'].numeric? || player['payoff'].to_s == 'NaN' || player['payoff'].to_s == 'Inf'
+    player['payoff'] != nil && (!player['payoff'].numeric? || player['payoff'].to_s == 'Inf')
   end
 
-  def clean_players(players)
+  def clean_players(simulator_instance, players)
     players.collect do |player|
-      { payoff: player['payoff'].to_f, features: numeralize(player['features'])}
+      player_hash = numeralize(simulator_instance, player['features']).merge("p" => player['payoff']? player['payoff'].to_f : player['payoff'] )
     end
   end
 end

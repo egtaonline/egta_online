@@ -25,10 +25,14 @@ describe Profile do
 
   describe '#payoffs_for' do
     it 'returns an array of all the payoffs matching the appropriate symmetry_group' do
-      profile = Fabricate(:profile)
-      symmetry_group = profile.symmetry_groups.first
-      profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 100}, {payoff: 200}]}])
-      profile.observations.create(symmetry_groups: [{role: symmetry_group.role, strategy: symmetry_group.strategy, count: 2, players: [{payoff: 100}, {payoff: 200}]}])
+      profile = Fabricate(:profile, assignment: "A: 1 StratA, 1 StratB; B: 2 StratC")
+      symmetry_group = profile.symmetry_groups.last
+      profile.observations.create(observation_symmetry_groups: [{ players: [{ "p" => 100 }], payoff: 100, payoff_sd: 0.0 },
+                                                                { players: [{ "p" => 100 }], payoff: 100, payoff_sd: 0.0 },
+                                                                { players: [{ "p" => 100 }, { "p" => 200 }], payoff: 150, payoff_sd: Math.sqrt(3000) }])
+      profile.observations.create(observation_symmetry_groups: [{ players: [{ "p" => 100 }], payoff: 100, payoff_sd: 0.0 },
+                                                                { players: [{ "p" => 100 }], payoff: 100, payoff_sd: 0.0 },
+                                                                { players: [{ "p" => 100 }, { "p" => 200 }], payoff: 150, payoff_sd: Math.sqrt(3000) }])
       profile.reload.payoffs_for(symmetry_group).should == [100.0, 200.0, 100.0, 200.0]
     end
   end

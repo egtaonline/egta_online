@@ -1,7 +1,7 @@
 class Profile
   include Mongoid::Document
 
-  embeds_many :symmetry_groups, as: :role_strategy_partitionable
+  embeds_many :symmetry_groups
   embeds_many :observations
 
   has_many :simulations, dependent: :destroy
@@ -50,6 +50,7 @@ class Profile
   end
 
   def payoffs_for(symmetry_group)
-    observations.collect { |o| o.find_symmetry_group(symmetry_group.role, symmetry_group.strategy).payoffs }.flatten
+    index = symmetry_groups.index(symmetry_group)
+    observations.collect { |o| o.observation_symmetry_groups[index].payoffs }.flatten
   end
 end
