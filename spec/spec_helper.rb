@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'rspec-prof'
 require 'unit_helper'
 
 SimpleCov.start 'rails'

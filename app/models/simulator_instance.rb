@@ -1,7 +1,8 @@
 class SimulatorInstance
   include Mongoid::Document
 
-  field :translation_table, type: Hash, default: {"payoff" => "p"}
+  field :translation_table, type: Hash, default: {"payoff" => "p", "observation_symmetry_groups" => "sg",
+                                                  "features" => "f", "payoff_sd" => "sd", "players" => "n"}
   field :counter, type: Integer, default: 0
   field :configuration, type: Hash, default: {}
 

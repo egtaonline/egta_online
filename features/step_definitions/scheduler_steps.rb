@@ -102,10 +102,6 @@ Given /^a different simulator instance has a profile with the assignment (.*)$/ 
   @simulator_instance2.reload
 end
 
-Given /^its profiles have been sampled$/ do
-  Profile.with_scheduler(@scheduler).update_all(sample_count: 1)
-end
-
 When /^I visit that scheduler's page$/ do
   visit "/#{@scheduler_class}s/#{@scheduler.id}"
 end

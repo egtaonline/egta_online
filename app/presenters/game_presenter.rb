@@ -29,15 +29,15 @@ class GamePresenter < JsonPresenter
 
   def observations
     json_start +
-    @game.profiles.select('assignment' => 1, 'observations.features' => 1,
-                          'observations.observation_symmetry_groups.payoff' => 1, 'observations.observation_symmetry_groups.payoff_sd' => 1).to_json +
+    @game.profiles.select('assignment' => 1, 'observations.f' => 1,
+                          'observations.sg.p' => 1, 'observations.sg.sd' => 1).to_json +
     json_end
   end
 
   def full
     json_start +
-    @game.profiles.select('assignment' => 1, 'observations.features' => 1,
-                          'observations.observation_symmetry_groups.players' => 1).to_json +
+    @game.profiles.select('assignment' => 1, 'observations.f' => 1,
+                          'observations.sg.n' => 1).to_json +
     json_end
   end
 

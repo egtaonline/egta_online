@@ -44,7 +44,7 @@ HEREDOC
     context 'observation granularity' do
       let(:response) do
 <<HEREDOC
-{"_id":"#{game.id}","name":"#{game.name}","simulator_fullname":"#{game.simulator_fullname}","configuration":#{game.simulator_instance.configuration.to_json},"labels":#{game.simulator_instance.translation_table.to_json},"roles":[{"name":"Role1","strategies":["Strat1"],"count":2},{"name":"Role2","strategies":["Strat2", "Strat3"],"count":2}],"profiles":[{"_id":"#{profile.id}","assignment":"#{profile.assignment}","observations":[{"features":{"1":23,"2":25},"observation_symmetry_groups":[{"payoff":11.0,"payoff_sd":1.0},{"payoff":10.0,"payoff_sd":0.0},{"payoff":10.0,"payoff_sd":0.0}]}]}]}
+{"_id":"#{game.id}","name":"#{game.name}","simulator_fullname":"#{game.simulator_fullname}","configuration":#{game.simulator_instance.configuration.to_json},"labels":#{game.simulator_instance.translation_table.to_json},"roles":[{"name":"Role1","strategies":["Strat1"],"count":2},{"name":"Role2","strategies":["Strat2", "Strat3"],"count":2}],"profiles":[{"_id":"#{profile.id}","assignment":"#{profile.assignment}","observations":[{"f":{"1":23,"2":25},"sg":[{"p":11.0,"sd":1.0},{"p":10.0,"sd":0.0},{"p":10.0,"sd":0.0}]}]}]}
 HEREDOC
       end
 
@@ -53,7 +53,7 @@ HEREDOC
     context 'full granularity' do
       let(:response) do
 <<HEREDOC
-{"_id":"#{game.id}","name":"#{game.name}","simulator_fullname":"#{game.simulator_fullname}","configuration":#{game.simulator_instance.configuration.to_json},"labels":#{game.simulator_instance.translation_table.to_json},"roles":[{"name":"Role1","strategies":["Strat1"],"count":2},{"name":"Role2","strategies":["Strat2", "Strat3"],"count":2}],"profiles":[{"_id":"#{profile.id}","assignment":"#{profile.assignment}","observations":[{"features":{"1":23,"2":25},"observation_symmetry_groups":[{"players":[{"p":10.0,"3":-11,"4":0.23},{"p":12.0,"3":-9,"4":0.43}]},{"players":[{"p":10.0,"5":-11,"6":0.27}]},{"players":[{"p":10.0,"5":-14,"6":0.47}]}]}]}]}
+{"_id":"#{game.id}","name":"#{game.name}","simulator_fullname":"#{game.simulator_fullname}","configuration":#{game.simulator_instance.configuration.to_json},"labels":#{game.simulator_instance.translation_table.to_json},"roles":[{"name":"Role1","strategies":["Strat1"],"count":2},{"name":"Role2","strategies":["Strat2", "Strat3"],"count":2}],"profiles":[{"_id":"#{profile.id}","assignment":"#{profile.assignment}","observations":[{"f":{"1":23,"2":25},"sg":[{"n":[{"p":10.0,"3":-11,"4":0.23},{"p":12.0,"3":-9,"4":0.43}]},{"n":[{"p":10.0,"5":-11,"6":0.27}]},{"n":[{"p":10.0,"5":-14,"6":0.47}]}]}]}]}
 HEREDOC
       end
 

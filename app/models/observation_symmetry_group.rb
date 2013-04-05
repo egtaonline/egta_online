@@ -3,9 +3,9 @@ class ObservationSymmetryGroup
 
   embedded_in :observation
 
-  field :payoff, type: Float
-  field :payoff_sd, type: Float
-  field :players, type: Array
+  field :p, as: :payoff, type: Float
+  field :sd, as: :payoff_sd, type: Float
+  field :n, as: :players, type: Array
 
   validates_presence_of :payoff, :payoff_sd
 

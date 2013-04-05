@@ -25,11 +25,6 @@ class MoveProfilesToSimulatorInstances < Mongoid::Migration
           flag = true
         end
       end
-      if flag == false
-        profiles = simulator.profiles
-        profiles.unset(:simulator_id)
-        simulator.unset(:profile_ids)
-      end
     end
   end
 
