@@ -71,28 +71,28 @@ describe ObservationValidator do
                   }
                 }
 
-      it { subject.validate(profile, "#{Rails.root}/db/3/observation1.json").should eql(hash) }
+      it { subject.validate(profile, "#{Rails.root}/spec/support/sample_data/successful/observation1.json").should eql(hash) }
     end
 
     context 'mismatched profiles do not get processed' do
       let!(:profile){ Fabricate(:profile, assignment: 'Buyer: 2 BidValue; Seller: 1 Shade0, 1 Shade1') }
-      let(:json){ Oj.load_file("#{Rails.root}/db/3/observation1.json") }
+      let(:json){ Oj.load_file("#{Rails.root}/spec/support/sample_data/successful/observation1.json") }
 
-      it { subject.validate(profile, "#{Rails.root}/db/3/observation1.json").should eql(nil) }
+      it { subject.validate(profile, "#{Rails.root}/spec/support/sample_data/successful/observation1.json").should eql(nil) }
     end
 
     context 'non-numeric payoffs cause processing to stop' do
-      it { subject.validate(profile, "#{Rails.root}/db/4/broken_payoff_observation1.json").should eql(nil) }
+      it { subject.validate(profile, "#{Rails.root}/spec/support/sample_data/unsuccessful/broken_payoff_observation1.json").should eql(nil) }
     end
 
     context 'NaN payoffs cause processing to stop' do
-      it { subject.validate(profile, "#{Rails.root}/db/4/nan_observation.json").should eql(nil) }
+      it { subject.validate(profile, "#{Rails.root}/spec/support/sample_data/unsuccessful/nan_observation.json").should eql(nil) }
     end
 
     context 'String numeric payoffs get converted to floats' do
-      let(:json){ Oj.load_file("#{Rails.root}/db/4/string_observation.json") }
+      let(:json){ Oj.load_file("#{Rails.root}/spec/support/sample_data/unsuccessfulstring_observation.json") }
 
-      it { subject.validate(profile, "#{Rails.root}/db/4/string_observation.json")[:observation_symmetry_groups][0][:players][0]["p"].should eql(2923.43) }
+      it { subject.validate(profile, "#{Rails.root}/spec/support/sample_data/unsuccessful/string_observation.json")[:observation_symmetry_groups][0][:players][0]["p"].should eql(2923.43) }
     end
   end
 end

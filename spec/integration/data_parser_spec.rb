@@ -12,7 +12,7 @@ describe DataParser do
       end
 
       it 'completes successfully' do
-        subject.perform(3, "#{Rails.root}/db/3")
+        subject.perform(3, "#{Rails.root}/spec/support/sample_data/successful")
         profile.reload
         profile.sample_count.should == 2
         profile.symmetry_groups.first.payoff.should == (2992.73+2990.53+2990.73+2690.53)/4.0

@@ -60,7 +60,6 @@ group :test, :development do
 end
 
 group :test do
-  gem 'rspec-prof'
   gem 'simplecov', :require => false
   gem "capybara"
   gem "rb-fsevent"
