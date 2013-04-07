@@ -16,7 +16,7 @@ gem "haml-rails"
 gem 'jquery-rails'
 
 # Background Processing
-gem 'sidekiq', '~> 2.6.4'
+gem 'sidekiq', '~> 2.0'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-failures'
 gem 'kiqstand'

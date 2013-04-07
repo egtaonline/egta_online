@@ -4,12 +4,12 @@ require 'unit_helper'
 SimpleCov.start 'rails'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
-require 'sidekiq/testing/inline'
 require 'rspec/rails'
 require "rails/mongoid"
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'fabrication'
+require 'sidekiq/testing'
 Capybara.default_selector = :css
 Capybara.javascript_driver = :poltergeist
 
