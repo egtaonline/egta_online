@@ -34,7 +34,7 @@ describe SimulationStatusResolver do
         Simulation.should_receive(:find).with(3).and_return(simulation)
         File.should_receive(:exists?).with("fake/local/path/3/error").and_return(true)
         File.should_receive(:open).with("fake/local/path/3/error").and_return(double(read: nil))
-        DataParser.should_receive(:perform_async).with(3)
+        simulation.should_receive(:process)
       end
 
       it{ status_resolver.act_on_status("C", simulation.id) }

@@ -42,4 +42,14 @@ describe Simulation do
       it{ Simulation.simulation_limit.should eql(16) }
     end
   end
+
+  describe 'process' do
+    let(:simulation){ Fabricate(:simulation) }
+
+    it 'changes state to processing and triggers DataParser' do
+      DataParser.should_receive(:perform_async).with(simulation.id)
+      simulation.process
+      simulation.state.should == 'processing'
+    end
+  end
 end

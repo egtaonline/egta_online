@@ -25,12 +25,13 @@ class Simulation
   scope :pending, where(state: 'pending')
   scope :queued, where(state: 'queued')
   scope :running, where(state: 'running')
+  scope :processing, where(state: 'processing')
   scope :stale, where(:state.in=>['queued', 'complete', 'failed']).and(:updated_at.lt => (Time.current-300000))
   scope :active, where(:state.in=>['queued','running'])
   scope :recently_finished, where(:state.in=>['complete', 'failed'], :updated_at.gt => (Time.current-86400))
   scope :scheduled, where(:state.in=>['pending','queued','running'])
   scope :queueable, pending.order_by([[:created_at, :asc]]).limit(simulation_limit)
-  validates_inclusion_of :state, in: ['pending', 'queued', 'running', 'failed', 'complete']
+  validates_inclusion_of :state, in: ['pending', 'queued', 'running', 'failed', 'processing', 'complete']
   validates_presence_of :profile
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
@@ -49,6 +50,11 @@ class Simulation
   def finish
     self.update_attributes(state: 'complete')
     requeue
+  end
+
+  def process
+    self.update_attributes(state: 'processing')
+    DataParser.perform_async(id)
   end
 
   def queue_as(jid)

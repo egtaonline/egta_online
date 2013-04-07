@@ -12,7 +12,7 @@ class SimulationStatusResolver
       simulation.start
     when "C", "", nil
       error_message = check_for_errors("#{@simulations_path}/#{simulation_id}")
-      error_message ? simulation.fail(error_message) : DataParser.perform_async(simulation_id)
+      error_message ? simulation.fail(error_message) : simulation.process
     end
   end
 
