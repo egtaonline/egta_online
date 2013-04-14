@@ -40,7 +40,7 @@ class Simulation
 
   def cleanup
     LocalSimulationCleanup.perform_async(id)
-    BackendSimulationCleanup.perform_async(id)
+    # BackendSimulationCleanup.perform_async(id)
   end
 
   def start

@@ -13,7 +13,7 @@ describe Simulation do
   describe 'deleting a simulation from the database' do
     it "calls the backend cleanup routine" do
       LocalSimulationCleanup.should_receive(:perform_async).with(simulation.id)
-      BackendSimulationCleanup.should_receive(:perform_async).with(simulation.id)
+      # BackendSimulationCleanup.should_receive(:perform_async).with(simulation.id)
       simulation.destroy
     end
   end
