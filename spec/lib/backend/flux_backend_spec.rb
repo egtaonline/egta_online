@@ -61,16 +61,26 @@ describe FluxBackend do
     describe '#update_simulations' do
       let(:simulation){double(job_id: 123, id: 1)}
 
-      before do
-        criteria = double('Criteria')
-        criteria.should_receive(:only).with(:job_id).and_return([simulation])
-        Simulation.should_receive(:active).and_return(criteria)
+      context 'success' do
+        before do
+          criteria = double('Criteria')
+          criteria.should_receive(:only).with(:job_id).and_return([simulation])
+          Simulation.should_receive(:active).and_return(criteria)
+        end
+
+        it "calls update_simulation on the status service" do
+          simulation_status_service.should_receive(:get_statuses).and_return({ '123' => "C" })
+          status_resolver.should_receive(:act_on_status).with("C", 1)
+          subject.update_simulations
+        end
       end
 
-      it "calls update_simulation on the status service" do
-        simulation_status_service.should_receive(:get_statuses).and_return({ '123' => "C" })
-        status_resolver.should_receive(:act_on_status).with("C", 1)
-        subject.update_simulations
+      context 'failure' do
+        it "does nothing" do
+          simulation_status_service.should_receive(:get_statuses).and_return("failure")
+          Simulation.should_not_receive(:active)
+          subject.update_simulations
+        end
       end
     end
 

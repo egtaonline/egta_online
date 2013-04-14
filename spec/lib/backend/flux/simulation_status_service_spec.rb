@@ -15,6 +15,18 @@ describe SimulationStatusService do
       it{ simulation_status_service.get_statuses['123457'].should eql("C") }
     end
 
+    context 'connection closed' do
+      it 'understands the first type of failure' do
+        status_connection.should_receive(:exec!).with("qstat -a | grep egta-").and_return("failure, email sent")
+        simulation_status_service.get_statuses.should eql("failure")
+      end
+
+      it 'understands the second type of failure' do
+        status_connection.should_receive(:exec!).with("qstat -a | grep egta-").and_return("failure, email already sent")
+        simulation_status_service.get_statuses.should eql("failure")
+      end
+    end
+
     context 'job absent' do
       before do
         status_connection.should_receive(:exec!).with("qstat -a | grep egta-").and_return(nil)

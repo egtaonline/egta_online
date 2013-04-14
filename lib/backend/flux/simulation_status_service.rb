@@ -5,10 +5,14 @@ class SimulationStatusService
 
   def get_statuses
     output = @status_connection.exec!("qstat -a | grep egta-")
-    parsed_output = {}
-    if output != "" && output != nil
-      output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
+    unless output =~ /^failure/
+      parsed_output = {}
+      if output != "" && output != nil
+        output.split("\n").each{|line| parsed_output[line.split(".").first] = line.split(/\s+/)[9]}
+      end
+      parsed_output
+    else
+      "failure"
     end
-    parsed_output
   end
 end
