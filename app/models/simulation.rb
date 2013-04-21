@@ -19,7 +19,7 @@ class Simulation
   index({ state: 1 })
 
   def self.simulation_limit
-    [[Backend.configuration.queue_quantity, Backend.configuration.queue_max-Simulation.active.count].min, 1].max
+    [[Backend.configuration.queue_quantity, Backend.configuration.queue_max-Simulation.active.count].min, 0].max
   end
 
   scope :pending, where(state: 'pending')
