@@ -5,6 +5,6 @@ class ArrayMath
 
   def self.std_dev(array)
     return 0.0 unless array.length > 1
-    Math.sqrt(array.map{ |elem| elem**2.0 }.reduce(:+).to_f/array.length-average(array)**2.0)
+    Math.sqrt([array.map{ |elem| elem**2.0 }.reduce(:+).to_f/array.length-average(array)**2.0, 0].max)
   end
 end
