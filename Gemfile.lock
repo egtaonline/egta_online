@@ -314,8 +314,6 @@ GEM
       sinatra
       slim
       sprockets
-    sidekiq-unique-jobs (2.6.5)
-      sidekiq (~> 2.6)
     simple_form (2.0.1)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -406,7 +404,6 @@ DEPENDENCIES
   show_for
   sidekiq (~> 2.0)
   sidekiq-failures
-  sidekiq-unique-jobs
   simple_form
   simplecov
   sinatra

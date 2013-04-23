@@ -1,6 +1,6 @@
 class SimulatorInitializer
   include Sidekiq::Worker
-  sidekiq_options unique: true, queue: 'backend'
+  sidekiq_options queue: 'backend'
 
   def perform(simulator_id)
     simulator = Simulator.find(simulator_id) rescue nil

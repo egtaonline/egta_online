@@ -17,7 +17,6 @@ gem 'jquery-rails'
 
 # Background Processing
 gem 'sidekiq', '~> 2.0'
-gem 'sidekiq-unique-jobs'
 gem 'sidekiq-failures'
 gem 'kiqstand'
 gem 'clockwork'
