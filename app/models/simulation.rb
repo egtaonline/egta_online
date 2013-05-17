@@ -35,7 +35,7 @@ class Simulation
   validates_presence_of :profile
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
-  before_save(on: :create){ self.profile_assignment = self.profile.assignment }
+  before_save(on: :create){ self.profile_assignment = Profile.where(_id: self.profile_id).without(:observations).first.assignment }
   before_destroy :cleanup
 
   def cleanup
