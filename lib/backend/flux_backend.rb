@@ -28,11 +28,14 @@ class FluxBackend
   end
 
   def prepare_simulation(simulation)
+    puts 'setting flux'
     if ( 3*cac_count > flux_count-@flux_active_limit )
       simulation['flux'] = true
       simulation.save
     end
+    puts 'creating wrapper'
     @pbs_wrapper.create_wrapper(simulation)
+    puts 'changing permissions'
     File.chmod(0775, "#{@simulations_path}/#{simulation.id}")
     File.chmod(0775, "#{@simulations_path}/#{simulation.id}/wrapper")
     File.chmod(0775, "#{@simulations_path}/#{simulation.id}/simulation_spec.json")
