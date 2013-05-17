@@ -43,7 +43,7 @@ class GenericScheduler < Scheduler
   end
 
   def remove_profile(profile_id)
-    remove_self_from_profiles(Profile.where(_id: profile_id))
+    remove_self_from_profiles(Profile.where(_id: profile_id).without(:observations))
   end
 
   def remove_self_from_profiles(profiles_to_remove)

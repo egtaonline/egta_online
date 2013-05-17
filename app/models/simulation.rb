@@ -67,6 +67,6 @@ class Simulation
   end
 
   def requeue
-    self.profile.try_scheduling
+    ProfileScheduler.perform_in(5.minutes, profile_id)
   end
 end

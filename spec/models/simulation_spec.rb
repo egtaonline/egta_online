@@ -5,7 +5,7 @@ describe Simulation do
 
   describe 'a simulation fails' do
     it "enqueues a check for rescheduling" do
-      simulation.profile.should_receive(:try_scheduling)
+      ProfileScheduler.should_receive(:perform_in).with(5.minutes, simulation.profile_id)
       simulation.fail("could not transfer")
     end
   end

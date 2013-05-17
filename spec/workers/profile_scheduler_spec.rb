@@ -7,11 +7,13 @@ describe ProfileScheduler do
 
     context 'flawless victory' do
       let(:profile){ double(id: profile_id, sample_count: 20, scheduled?: false, schedulers: schedulers) }
+      let(:criteria){ double("Criteria") }
       let(:scheduler1) { double('scheduler1') }
       let(:scheduler2) { double('scheduler2') }
       let(:schedulers) { double(with_max_samples: scheduler1) }
       before do
-        Profile.should_receive(:find).with(profile_id).and_return(profile)
+        Profile.should_receive(:where).with(_id: profile_id).and_return(criteria)
+        criteria.should_receive(:without).with(:symmetry_groups, :observations).and_return([profile])
         scheduler1.should_receive(:schedule_profile).with(profile)
       end
 

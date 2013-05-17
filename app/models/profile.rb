@@ -27,7 +27,7 @@ class Profile
     end
   end
 
-  scope :with_scheduler, ->(scheduler){ where(scheduler_ids: scheduler.id) }
+  scope :with_scheduler, ->(scheduler){ where(scheduler_ids: scheduler.id).without(:observations) }
   scope :with_role, ->(role){ elem_match(symmetry_groups: { role: role }) }
   scope :with_role_and_strategy, ->(role, strategy){ elem_match(symmetry_groups: { role: role, strategy: strategy }) }
 
