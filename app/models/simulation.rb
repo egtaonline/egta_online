@@ -32,7 +32,7 @@ class Simulation
   scope :scheduled, where(:state.in=>['pending','queued','running'])
   scope :queueable, pending.order_by([[:created_at, :asc]]).limit(simulation_limit)
   validates_inclusion_of :state, in: ['pending', 'queued', 'running', 'failed', 'processing', 'complete']
-  validates_presence_of :profile
+  validates_presence_of :profile_id
   validates_numericality_of :size, only_integer: true, greater_than: 0
 
   before_save(on: :create){ self.profile_assignment = Profile.where(_id: self.profile_id).without(:observations).first.assignment }
