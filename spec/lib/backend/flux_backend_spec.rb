@@ -104,8 +104,7 @@ describe FluxBackend do
         end
 
         it 'does not change flux to true' do
-          simulation.should_not_receive(:[]).with('flux')
-          simulation.should_not_receive(:save)
+          simulation.should_not_receive(:update_attribute).with(:flux, true)
           subject.prepare_simulation(simulation)
         end
       end
@@ -119,8 +118,7 @@ describe FluxBackend do
         end
 
         it 'changes flux to true' do
-          simulation.should_receive(:[]=).with('flux', true)
-          simulation.should_receive(:save)
+          simulation.should_receive(:update_attribute).with(:flux, true)
           subject.prepare_simulation(simulation)
         end
       end
@@ -134,8 +132,7 @@ describe FluxBackend do
         end
 
         it 'changes flux to true' do
-          simulation.should_receive(:[]=).with('flux', true)
-          simulation.should_receive(:save)
+          simulation.should_receive(:update_attribute).with(:flux, true)
           subject.prepare_simulation(simulation)
         end
       end
