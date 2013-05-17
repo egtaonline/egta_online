@@ -4,11 +4,8 @@ class SimulationPrepService
   end
 
   def prepare_simulation(simulation)
-    puts 'Create Folder'
     create_folder(simulation)
-    puts 'Generate Spec'
     generate_spec(simulation)
-    puts 'Prepare'
     Backend.prepare_simulation(simulation)
   end
 
