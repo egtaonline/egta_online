@@ -14,7 +14,7 @@ describe Profile do
       new_profile.errors[:assignment].should eql(["is already taken"])
     end
   end
-  
+
   describe '#update_sample_count' do
     it 'sets the sample count field to the number of observations' do
       profile = Fabricate(:profile)
@@ -23,7 +23,7 @@ describe Profile do
       profile.reload.sample_count.should == 1
     end
   end
-  
+
   describe '#payoffs_for' do
     it 'returns an array of all the payoffs matching the appropriate symmetry_group' do
       profile = Fabricate(:profile)

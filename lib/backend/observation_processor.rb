@@ -4,15 +4,12 @@ class ObservationProcessor
   end
 
   def process_files(simulation, files)
-    profile = simulation.profile
+    profile = Profile.where(_id: simulation.profile_id).without(:observations).first
     validated = ObservationValidator.new.validate_all(profile, @location, files)
     if validated == []
       simulation.fail "No valid payoff files were found."
     else
-      validated.each do |json|
-        profile.observations.create!(json)
-      end
-      ProfileStatisticsUpdater.update(profile)
+      ProfileStatisticsUpdater.update(profile, validated)
       simulation.finish
     end
   end

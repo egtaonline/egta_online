@@ -12,7 +12,7 @@ describe GamePresenter do
     game.add_role('Role2', 2)
     game.add_strategy('Role2', 'Strat2')
     game.add_strategy('Role2', 'Strat3')
-    profile.observations.create!(features: { feature1: 23, feature2: 25 },
+    ProfileStatisticsUpdater.update(profile, [{features: { feature1: 23, feature2: 25 },
                                  symmetry_groups: [
                                    { role: 'Role1', strategy: 'Strat1', count: 2, players: [
                                      { payoff: 10.0, features: { pfeature1: -11, pfeature2: 0.23 } },
@@ -24,8 +24,7 @@ describe GamePresenter do
                                    { role: 'Role2', strategy: 'Strat3', count: 1, players: [
                                      { payoff: 10.0, features: { pfeature3: -14, pfeature4: 0.47 } }
                                      ], payoff: 10.0, payoff_sd: 0.0 }
-                                   ])
-    ProfileStatisticsUpdater.update(profile)
+                                   ]}])
   end
 
   describe '#to_json' do

@@ -44,8 +44,7 @@ class Profile
   end
 
   def update_sample_count
-    self.sample_count = self.observations.count
-    self.save!
+    set(:sample_count, self.observations.count)
   end
 
   def payoffs_for(symmetry_group)
