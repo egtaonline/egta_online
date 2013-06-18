@@ -2,11 +2,11 @@ class PbsWrapper
   def initialize(simulations_path, flux_simulations_path, simulators_path)
     @simulations_path, @flux_simulations_path, @simulators_path = simulations_path, flux_simulations_path, simulators_path
   end
-  
+
   def create_wrapper(simulation)
     scheduler = simulation.scheduler
-    allocation = simulation['flux'] ? 'wellman_flux' : 'cac'
-    queue = simulation['flux'] ? 'flux' : 'cac'
+    allocation = simulation['flux'] ? 'wellman_flux' : 'engin_flux'
+    queue =  'flux' # simulation['flux'] ? 'flux' : 'cac'
     simulator = simulation.scheduler.simulator
     root_path = "#{@simulators_path}/#{simulator.fullname}/#{simulator.name}"
     extra_args = simulation.scheduler_nodes > 1 ? " ${PBS_NODEFILE}" : ""

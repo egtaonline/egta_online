@@ -28,7 +28,7 @@ class FluxBackend
   end
 
   def prepare_simulation(simulation)
-    if ( 3*cac_count > flux_count-@flux_active_limit )
+    if ( 4*cac_count > (flux_count-@flux_active_limit) || cac_count > 100)
       simulation.set(:flux, true)
     end
     @pbs_wrapper.create_wrapper(simulation)

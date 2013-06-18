@@ -2,7 +2,7 @@ require 'backend/flux/pbs_wrapper'
 
 describe PbsWrapper do
   let(:pbs_wrapper){PbsWrapper.new("fake/local/path", "fake/remote/path", "fake/simulator/path")}
-  
+
   describe 'create_wrapper' do
     let(:scheduler){ double(simulator: double(name: 'fake', fullname: 'fake-totally', email: "test@test.com"), process_memory: 1000, time_per_sample: 300) }
 
@@ -48,9 +48,9 @@ HEREDOC
         document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh
-#PBS -A cac
-#PBS -q cac
-#PBS -l nodes=1,pmem=1000mb,walltime=02:30:00,qos=cac
+#PBS -A engin_flux
+#PBS -q flux
+#PBS -l nodes=1,pmem=1000mb,walltime=02:30:00,qos=flux
 #PBS -N egta-fake
 #PBS -W umask=0007
 #PBS -W group_list=wellman
@@ -76,15 +76,15 @@ HEREDOC
 
     context 'multi-node' do
       let(:simulation){ double(flux: false, scheduler: scheduler, scheduler_nodes: 2, _id: 3, id: 3, size: 30) }
-      
+
       before do
         simulation.stub(:[]).with('flux').and_return(false)
         document = <<HEREDOC
 #!/bin/bash
 #PBS -S /bin/sh
-#PBS -A cac
-#PBS -q cac
-#PBS -l nodes=2,pmem=1000mb,walltime=02:30:00,qos=cac
+#PBS -A engin_flux
+#PBS -q flux
+#PBS -l nodes=2,pmem=1000mb,walltime=02:30:00,qos=flux
 #PBS -N egta-fake
 #PBS -W umask=0007
 #PBS -W group_list=wellman
